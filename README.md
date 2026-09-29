@@ -206,6 +206,8 @@ python3 tools/install.py --scope user --target all --link
 
 ChatGPT では、同じ名前の Skill があると、置き換えの確認(Skill already exists)が出ます。「Replace existing」を選ぶと、同じ Skill が更新されます。重複はしません。
 
+置き換えの後は、ファイル一覧から、ChatGPT が追加した `assets/icon.svg` が消えました。画面上部のアイコンは、表示されたままでした。
+
 ### 削除する
 
 インストーラは、ファイルを削除する機能を持ちません。不要になったら、配置先の `japanese-readability-editor/` ディレクトリを、自分で削除してください。`--link` で入れた場合は、リンクだけを削除します。リンクの先にある正本は消えません。
