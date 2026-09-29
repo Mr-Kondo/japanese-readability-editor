@@ -202,7 +202,9 @@ python3 tools/install.py --scope user --target all --on-conflict backup
 python3 tools/install.py --scope user --target all --link
 ```
 
-アップロード型の環境では、`python3 tools/package.py` で作り直した ZIP を、もう一度アップロードします。
+アップロード型の環境では、新しい ZIP を、もう一度アップロードします。ZIP は、Release からダウンロードするか、`python3 tools/package.py` で作ります。
+
+ChatGPT では、同じ名前の Skill があると、置き換えの確認(Skill already exists)が出ます。「Replace existing」を選ぶと、同じ Skill が更新されます。重複はしません。ChatGPT 側で追加された `assets/icon.svg` なども、新しい ZIP の内容で置き換わります。
 
 ### 削除する
 
@@ -324,7 +326,8 @@ Plus プランのアカウントで、次を確認しました(2026-09-29)。
 - ZIP を取り込めた。`name` と `description` は、全文が保たれた。
 - `@japanese-readability-editor` で呼び出せた。
 - ChatGPT が `agents/openai.yaml` を自動生成した。`allow_implicit_invocation` が `true` なので、依頼内容に合えば自動でも使われる。
-- `openai.yaml` は `assets/icon.svg` を参照するが、ZIP には含まれない。アイコンは、壊れた画像として表示される。機能には影響しない。
+- 取り込み直後の `openai.yaml` は、`assets/icon.svg` を参照していたが、ZIP には含まれず、アイコンが壊れた画像として表示された。
+- その後、ChatGPT が `assets/icon.svg` を追加し、`openai.yaml` の短い説明文を書き換え、アイコンが表示されるようになった。`SKILL.md` の `name` と `description` は変わらなかった。
 
 Skill 機能がプラン、workspace の設定、管理者の許可に依存する点に注意してください。Enterprise と Edu では、管理者が有効化するまで表示されない場合があります。アップロード画面の名称と手順は、変わる可能性があります。
 
