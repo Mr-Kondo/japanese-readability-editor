@@ -204,7 +204,7 @@ python3 tools/install.py --scope user --target all --link
 
 アップロード型の環境では、新しい ZIP を、もう一度アップロードします。ZIP は、Release からダウンロードするか、`python3 tools/package.py` で作ります。
 
-ChatGPT では、同じ名前の Skill があると、置き換えの確認(Skill already exists)が出ます。「Replace existing」を選ぶと、同じ Skill が更新されます。重複はしません。ChatGPT 側で追加された `assets/icon.svg` なども、新しい ZIP の内容で置き換わります。
+ChatGPT では、同じ名前の Skill があると、置き換えの確認(Skill already exists)が出ます。「Replace existing」を選ぶと、同じ Skill が更新されます。重複はしません。
 
 ### 削除する
 
