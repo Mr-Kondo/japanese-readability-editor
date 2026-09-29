@@ -221,7 +221,7 @@ Skill は、依頼の内容が `description` に合うと自動で使われま�
 | 環境 | 明示的に呼ぶ方法 |
 |---|---|
 | Codex | `$japanese-readability-editor` |
-| ChatGPT Work | `@japanese-readability-editor` |
+| ChatGPT Work | `@japanese-readability-editor`(暗黙起動は不安定。6 節) |
 | Claude Code | `/japanese-readability-editor` |
 | Antigravity | `/japanese-readability-editor` |
 | Gemini Apps | `/`(今後 `@`)に続けて Skill 名 |
@@ -298,7 +298,7 @@ python3 scripts/verify_preservation.py before.md after.md
 
 | Environment | Native Agent Skill | Workspace path | User/global path | ZIP upload | Notes |
 |---|---|---|---|---|---|
-| ChatGPT Work | あり。Plus プランのアカウントで、アップロードと呼び出しを確認した(2026-09-29)※1 | 未確認 | 未確認 | 可。Plugins → Skills → Add → Upload from your computer。ZIP を取り込めた | `@skill-name` で呼べる(確認済み)。取り込み時に、ChatGPT が `agents/openai.yaml` を自動生成する ※1 |
+| ChatGPT Work | あり。Plus プランのアカウントで、アップロードと呼び出しを確認した(2026-09-29)※1 | 未確認 | 未確認 | 可。Plugins → Skills → Add → Upload from your computer。ZIP を取り込めた | `@skill-name` で呼べる(確認済み)。暗黙起動は不安定(6 節)。取り込み時に、ChatGPT が `agents/openai.yaml` を自動生成する ※1 |
 | Codex | あり | `.agents/skills/`(カレントから repo root まで探索) | `$HOME/.agents/skills/` | 不要 | `$CODEX_HOME/skills` は旧仕様。管理者向けに `/etc/codex/skills` もある。変更は自動検出、出なければ再起動。symlink 可 |
 | Claude Cowork | あり | 非対応(アップロード方式) | 非対応 | 可。Customize → Skills。ZIP の最上位にフォルダ | コード実行の有効化が必要。プランの記載は公式ページ間で異なる。`description` に200字の上限があるという記載あり |
 | Claude Code | あり | `.claude/skills/` | `~/.claude/skills/` | 不要 | `.agents/skills` は読まない。未知の frontmatter は無視される。symlink 可 |
@@ -327,9 +327,40 @@ Plus プランのアカウントで、次を確認しました(2026-09-29)。
 
 - ZIP を取り込めた。`name` と `description` は、全文が保たれた。
 - `@japanese-readability-editor` で呼び出せた。
-- ChatGPT が `agents/openai.yaml` を自動生成した。`allow_implicit_invocation` が `true` なので、依頼内容に合えば自動でも使われる。
+- ChatGPT が `agents/openai.yaml` を自動生成した。`allow_implicit_invocation` は `true` だが、実際に自動で使われる頻度は低かった(次の「暗黙起動の実測」)。
 - 取り込み直後の `openai.yaml` は、`assets/icon.svg` を参照していたが、ZIP には含まれず、アイコンが壊れた画像として表示された。
 - その後、ChatGPT が `assets/icon.svg` を追加し、`openai.yaml` の短い説明文を書き換え、アイコンが表示されるようになった。`SKILL.md` の `name` と `description` は変わらなかった。
+
+### 暗黙起動の実測
+
+`@` で指定しない場合に、Skill が自動で使われるかを調べました(2026-09-30)。条件は、次のとおりです。
+
+- Plus プラン、Work モード、既定のモデル(GPT-6 Luna、Medium)
+- 依頼ごとに新しいチャットを作り、各依頼を1回だけ実行した。
+
+使うべき依頼(6件)の結果は、次のとおりです。
+
+| 依頼 | 結果 |
+|---|---|
+| 「次の文章を読みやすくして。」と長い1文 | 使われなかった |
+| 「READMEのこの段落を校正して。」と文 | 使われなかった |
+| 「この文章、なんかAIっぽいんだよね。自然な日本語に直して。」と文 | 使われなかった |
+| 「一文が長すぎて読みにくいと言われた。直して。」と文 | **使われた** |
+| 「Issueの本文を日本語で書いて。」と内容 | 別の Skill(writing-blocks)が使われた |
+| 英語の依頼「Please proofread this Japanese paragraph…」と文 | 判別できなかった |
+
+使ってはいけない入力(4件)は、コード、JSON、短い雑談、数式です。どれも、Skill は使われませんでした。
+
+同じ文を `@japanese-readability-editor` で指定した場合は、Skill が使われました。
+
+確実に使うには、`@japanese-readability-editor` で指定してください。暗黙起動は、この条件では不安定でした。
+
+この実測の限界は、次のとおりです。
+
+- 件数が少なく、各依頼は1回だけである。
+- 「Skill が使われた」かは、「Worked for」の表示と、応答の前置きに出る Skill 名で判定した。処理の詳細は画面に出ないため、英語の依頼は判別できなかった。
+- 他のモデル、Chat モード、他のアカウントでは、確認していない。
+- `description` の長さや語句が、起動に影響するかは、検証していない。
 
 Skill 機能がプラン、workspace の設定、管理者の許可に依存する点に注意してください。Enterprise と Edu では、管理者が有効化するまで表示されない場合があります。アップロード画面の名称と手順は、変わる可能性があります。
 
@@ -569,6 +600,7 @@ CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で
 - Claude Code のプラグイン定義は、`claude plugin validate` で検証しました。`/plugin install` の実際の操作は、検証していません。
 - Skill は文章の意味を検証しません。意味の保存を保証するのは、Agent の判断と、利用者の確認です。
 - ChatGPT での実機確認では、二重否定の意味の反転、残余の条件の言い換え、文体の変更が起きました。`SKILL.md` に対策を入れましたが、誤りを完全には防げません。
+- ChatGPT の暗黙起動は、実測では不安定でした。確実に使うには、`@` で指定してください(6 節)。
 - 各製品の仕様は、確認日(2026-09-29)以降に変わる可能性があります。
 
 ## 参考にしたプロジェクト
