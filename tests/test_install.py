@@ -1,11 +1,11 @@
 """tools/install.py のテスト。"""
 
-import os
 import unittest
 from datetime import datetime
 from pathlib import Path
 
-from helpers import SKILL_DIR, SKILL_NAME, TOOLS_DIR, load_module, run_script, temporary_directory, write_skill
+from helpers import (SKILL_DIR, SKILL_NAME, TOOLS_DIR, load_module, run_script, symlinks_supported,
+                     temporary_directory, write_skill)
 
 install = load_module("install", TOOLS_DIR / "install.py")
 SCRIPT = TOOLS_DIR / "install.py"
@@ -228,11 +228,10 @@ class ConflictTest(InstallCase):
         self.assertTrue((existing.parent.parent / "skills.bak" / f"{SKILL_NAME}-20260929-123456").is_dir())
 
 
+@unittest.skipUnless(symlinks_supported(), "symlinks are not available on this system")
 class LinkTest(InstallCase):
     def test_link_creates_a_symlink_to_the_source(self):
         code, out, err = self.run_install("--scope", "workspace", "--target", "common", "--link")
-        if code != 0 and "symlink" in (out + err).lower() and os.name == "nt":
-            self.skipTest("symlinks are not available")
         self.assertEqual(code, 0, out + err)
         installed = self.workspace / ".agents" / "skills" / SKILL_NAME
         self.assertTrue(installed.is_symlink())

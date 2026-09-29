@@ -11,6 +11,12 @@ Markdown として扱うのは既定で拡張子が .md .markdown .mdx .mkd の�
 
 文の区切りは、句点・感嘆符・疑問符と括弧の対応から推定する。ASCII のピリオドでは区切らない。
 
+--extras を付けると、長さとは別に、読み流すと見落としやすい3種類の箇所を「指摘」として挙げる。
+  kanji-run        漢字が7字以上続く箇所(造語の圧縮漢語など。固有名詞・法令用語も拾う)
+  no-chain         名詞と「の」が3回以上つながる箇所
+  double-negative  「ないわけではない」のような二重否定
+これらは判定ではない。読んで引っかからなければ直さない。
+
 ネットワーク通信、ファイルの書き込み、外部コマンドの実行は行わない。
 """
 
@@ -24,12 +30,15 @@ import os
 import re
 import sys
 from dataclasses import dataclass, field
-from typing import Iterable, Iterator, List, Optional, Tuple
+from typing import Dict, Iterable, Iterator, List, Optional, Tuple
 
 PARAGRAPH_THRESHOLD = 200
 SENTENCE_THRESHOLD = 80
 DEFAULT_MAX_LOCATE = 20
 PREVIEW_LENGTH = 30
+KANJI_RUN_THRESHOLD = 7
+NO_CHAIN_COUNT = 3
+SNIPPET_MARGIN = 10
 
 MARKDOWN_SUFFIXES = (".md", ".markdown", ".mdx", ".mkd")
 DIRECTORY_SUFFIXES = MARKDOWN_SUFFIXES + (".txt",)
@@ -61,6 +70,45 @@ def is_cjk(ch: str) -> bool:
 def visible_length(text: str) -> int:
     """空白(改行・全角空白を含む)を除いた文字数。"""
     return sum(1 for ch in text if not ch.isspace())
+
+
+# --- --extras の指摘 --------------------------------------------------------
+
+_KANJI_CLASS = "\u4e00-\u9fff\u3400-\u4dbf\u3005"
+_NOUN_CLASS = _KANJI_CLASS + "\u30a1-\u30f6\u30fc"  # 漢字とカタカナ
+
+KANJI_RUN_RE = re.compile("[" + _KANJI_CLASS + "]{" + str(KANJI_RUN_THRESHOLD) + ",}")
+NO_CHAIN_RE = re.compile("(?:[" + _NOUN_CLASS + "]+の){" + str(NO_CHAIN_COUNT) + "}[" + _NOUN_CLASS + "]+")
+# 「〜ないと動かない」「〜なければならない」「〜ないわけにはいかない」は、必要条件や義務の
+# 定型で、符号の反転を計算させないので拾わない。
+DOUBLE_NEGATIVE_RE = re.compile(
+    "|".join(
+        (
+            "ない(?:わけ|こと)(?:では|でも|は|も)(?:ない|ありません)",
+            "なく(?:は|も)(?:ない|ありません)",
+            "ないとは(?:言え|いえ)(?:ない|ません)",
+            "ないとも限(?:らない|りません)",
+            "ないでもない",
+        )
+    )
+)
+EXTRA_PATTERNS = (
+    ("kanji-run", KANJI_RUN_RE),
+    ("no-chain", NO_CHAIN_RE),
+    ("double-negative", DOUBLE_NEGATIVE_RE),
+)
+EXTRA_LABELS = {
+    "kanji-run": f"kanji-run (>={KANJI_RUN_THRESHOLD} kanji in a row)",
+    "no-chain": f"no-chain (noun + の x{NO_CHAIN_COUNT}+)",
+    "double-negative": "double-negative",
+}
+
+
+def make_snippet(text: str, start: int, end: int) -> str:
+    """指摘した箇所とその前後を、短く切り出す。"""
+    left = max(0, start - SNIPPET_MARGIN)
+    right = min(len(text), end + SNIPPET_MARGIN)
+    return ("…" if left > 0 else "") + text[left:right] + ("…" if right < len(text) else "")
 
 
 # --- Markdown の前処理 ------------------------------------------------------
@@ -317,6 +365,9 @@ class FileResult:
     metrics: Metrics = field(default_factory=Metrics)
     long_paragraphs: List[Candidate] = field(default_factory=list)
     long_sentences: List[Candidate] = field(default_factory=list)
+    extras: Dict[str, List[Candidate]] = field(
+        default_factory=lambda: {kind: [] for kind, _ in EXTRA_PATTERNS}
+    )
 
 
 def make_preview(text: str) -> str:
@@ -332,6 +383,7 @@ def analyze_text(
     markdown: bool = True,
     paragraph_threshold: int = PARAGRAPH_THRESHOLD,
     sentence_threshold: int = SENTENCE_THRESHOLD,
+    extras: bool = False,
 ) -> FileResult:
     result = FileResult(path=path)
     metrics = result.metrics
@@ -356,6 +408,13 @@ def analyze_text(
                 result.long_sentences.append(
                     Candidate(path, block.line_at(offset), sentence_length, make_preview(sentence))
                 )
+            if extras:
+                for kind, pattern in EXTRA_PATTERNS:
+                    for match in pattern.finditer(sentence):
+                        result.extras[kind].append(
+                            Candidate(path, block.line_at(offset + match.start()), len(match.group()),
+                                      make_snippet(sentence, match.start(), match.end()))
+                        )
     return result
 
 
@@ -496,14 +555,29 @@ def format_locate(results: List[FileResult], limit: int, thresholds: Tuple[int, 
     return "\n".join(lines)
 
 
+def format_extras(results: List[FileResult], limit: int) -> str:
+    lines = ["pointers (info only, not verdicts):"]
+    for kind, _ in EXTRA_PATTERNS:
+        candidates = [c for r in results for c in r.extras[kind]]
+        shown, omitted = select_candidates(candidates, limit)
+        lines.append(f"{EXTRA_LABELS[kind]}: {len(candidates)}")
+        for c in shown:
+            lines.append(f"  {c.path}:{c.line}  {kind}  {c.length}  {c.preview}")
+        if omitted:
+            lines.append(f"  ... {omitted} more not shown (use --max-locate 0 for all)")
+    return "\n".join(lines)
+
+
 def build_json(results: List[FileResult], total: FileResult, locate: bool,
-               paragraph_threshold: int, sentence_threshold: int) -> dict:
+               paragraph_threshold: int, sentence_threshold: int, extras: bool = False) -> dict:
     files = []
     for result in results:
         entry = {"file": result.path, **result.metrics.to_dict()}
         if locate:
             entry["long_paragraph_candidates"] = [c.to_dict() for c in result.long_paragraphs]
             entry["long_sentence_candidates"] = [c.to_dict() for c in result.long_sentences]
+        if extras:
+            entry["pointers"] = {kind: [c.to_dict() for c in items] for kind, items in result.extras.items()}
         files.append(entry)
     return {
         "thresholds": {"paragraph": paragraph_threshold, "sentence": sentence_threshold},
@@ -529,7 +603,9 @@ def build_parser() -> argparse.ArgumentParser:
                         help="ファイル、ディレクトリ(.md/.markdown/.txt を再帰的に探す)、ワイルドカード、標準入力の -")
     parser.add_argument("--locate", action="store_true",
                         help="長い段落と長い文の位置(ファイル名・行番号・長さ・冒頭)を示す")
-    parser.add_argument("--json", action="store_true", help="JSON で出力する(--locate の候補は全件)")
+    parser.add_argument("--extras", action="store_true",
+                        help=f"連続漢字({KANJI_RUN_THRESHOLD}字以上)、名詞+「の」の{NO_CHAIN_COUNT}連、二重否定を指摘として挙げる。判定ではない")
+    parser.add_argument("--json", action="store_true", help="JSON で出力する(--locate と --extras の候補は全件)")
     parser.add_argument("--max-locate", type=int, default=DEFAULT_MAX_LOCATE, metavar="N",
                         help=f"--locate で表示する件数の上限(段落・文それぞれ)。0 で無制限。既定 {DEFAULT_MAX_LOCATE}")
     parser.add_argument("--para-threshold", type=int, default=PARAGRAPH_THRESHOLD, metavar="N",
@@ -556,7 +632,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         display = "<stdin>" if path == "-" else path
         results.append(
             analyze_text(text, display, is_markdown_path(path, args.format),
-                         args.para_threshold, args.sent_threshold)
+                         args.para_threshold, args.sent_threshold, extras=args.extras)
         )
 
     for message in errors:
@@ -568,7 +644,8 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     if results:
         if args.json:
-            payload = build_json(results, total, args.locate, args.para_threshold, args.sent_threshold)
+            payload = build_json(results, total, args.locate, args.para_threshold, args.sent_threshold,
+                                 extras=args.extras)
             print(json.dumps(payload, ensure_ascii=False, indent=2))
         else:
             if len(results) == 1:
@@ -577,6 +654,8 @@ def main(argv: Optional[List[str]] = None) -> int:
                 print(format_table(results, total, thresholds))
             if args.locate:
                 print(format_locate(results, args.max_locate, thresholds))
+            if args.extras:
+                print(format_extras(results, args.max_locate))
     return 2 if errors else 0
 
 

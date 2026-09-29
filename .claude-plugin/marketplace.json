@@ -1,0 +1,14 @@
+{
+  "name": "japanese-readability-editor",
+  "owner": {
+    "name": "Mr-Kondo"
+  },
+  "description": "日本語の文章の可読性を、意味・精度・情報量を保ったまま改善する Agent Skill。",
+  "plugins": [
+    {
+      "name": "japanese-readability-editor",
+      "source": "./",
+      "description": "日本語の文章を、意味・精度・情報量を保ったまま読みやすくする Agent Skill。"
+    }
+  ]
+}

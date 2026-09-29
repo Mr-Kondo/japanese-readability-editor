@@ -1,0 +1,12 @@
+{
+  "name": "japanese-readability-editor",
+  "description": "日本語の文章を、意味・精度・情報量を保ったまま読みやすくする Agent Skill。長すぎる段落や文、冗長、直訳調、AI特有の言い回しを直す。",
+  "author": {
+    "name": "Mr-Kondo"
+  },
+  "homepage": "https://github.com/Mr-Kondo/japanese-readability-editor",
+  "repository": "https://github.com/Mr-Kondo/japanese-readability-editor",
+  "license": "MIT",
+  "keywords": ["japanese", "writing", "readability", "proofreading", "agent-skill"],
+  "skills": ["./skill/"]
+}

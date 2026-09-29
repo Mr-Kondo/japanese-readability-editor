@@ -49,6 +49,9 @@ japanese-readability-editor/
 │   ├── package.py
 │   └── validate_skill.py
 ├── tests/
+├── .claude-plugin/                        # Claude Code プラグインの定義(正本を指すだけ)
+├── .github/workflows/                     # CI と Release
+├── LICENSE                                # MIT
 └── dist/                                  # 生成物。Git には含めない
 ```
 
@@ -59,11 +62,13 @@ japanese-readability-editor/
 | `SKILL.md` | 頻繁に使う判断とワークフロー。3つのモード、診断の順序、変更してはならないもの |
 | `references/readability-rules.md` | 各診断段階の詳しい基準。Agent が迷ったときだけ読む |
 | `assets/examples.md` | 修正前後の例。必要なときだけ読む |
-| `scripts/measure.py` | 段落・文の長さなどの計測と、修正候補の位置の表示(読み取り専用) |
+| `scripts/measure.py` | 段落・文の長さなどの計測、修正候補の位置の表示、`--extras` の指摘(読み取り専用) |
 | `scripts/verify_preservation.py` | 空白以外の文字列が同一かの検査(読み取り専用) |
 | `tools/install.py` | 各環境の配置先へコピーまたはリンクする |
 | `tools/package.py` | ZIP、SHA-256、Gemini Apps 向けの出力を生成する |
 | `tools/validate_skill.py` | Skill の構造と互換性を検証する |
+| `.claude-plugin/` | Claude Code のプラグインとして入れるための定義。`skill/` を指すだけで、Skill は複製しない |
+| `.github/workflows/` | CI(検証、テスト、パッケージ生成)と、タグを push したときの Release |
 
 ## インストール手順
 
@@ -233,6 +238,7 @@ python3 scripts/measure.py README.md
 python3 scripts/measure.py --locate README.md
 python3 scripts/measure.py --json README.md
 python3 scripts/measure.py --locate docs/*.md
+python3 scripts/measure.py --locate --extras README.md
 python3 scripts/verify_preservation.py before.md after.md
 ```
 
@@ -249,6 +255,14 @@ python3 scripts/verify_preservation.py before.md after.md
 - Markdown の記号、見出し、表、水平線
 
 英文の ASCII のピリオドは、文の区切りとして扱いません。日本語の文章を主な対象にしているためです。
+
+`--extras` を付けると、長さとは別に、読み流すと見落としやすい3種類の箇所を、指摘として挙げます。
+
+- 漢字が7字以上続く箇所(その場で作られた圧縮漢語など)
+- 名詞と「の」が3回以上つながる箇所
+- 「ないわけではない」のような二重否定
+
+これらは判定ではなく、直すかどうかは読んで決めます。「〜ないと動かない」(必要条件)や「〜なければならない」(義務)は、二重否定として拾いません。
 
 `verify_preservation.py` は、空白を除いた文字列が一致すれば終了コード 0、しなければ 1 を返します(読み込みに失敗すると 2)。
 
@@ -313,6 +327,19 @@ python3 tools/install.py --scope user --target claude-code        # ~/.claude/sk
 ```
 
 Claude Code は `.agents/skills/` を読みません。Codex などと同じプロジェクトで使う場合は、`--target all` で両方に配置します。複製を避けたい場合は、`--link` でシンボリックリンクを作れます。
+
+### プラグインとして入れる
+
+Claude Code のプラグインとしても、入れられます。
+
+```text
+/plugin marketplace add Mr-Kondo/japanese-readability-editor
+/plugin install japanese-readability-editor@japanese-readability-editor
+```
+
+プラグインの Skill は、プラグイン名を前に付けて呼びます。たとえば、`/japanese-readability-editor:japanese-readability-editor` です。
+
+定義ファイル(`.claude-plugin/`)は、`skill/` を指すだけです。Skill は複製していません。`version` を設定していないので、更新はコミットに追従します。
 
 ## 10. GitHub Copilot
 
@@ -451,6 +478,8 @@ ZIP の最上位は `japanese-readability-editor/` の1フォルダです。そ�
 
 ZIP は再現可能で、同じ入力からは同じ SHA-256 になります。`--no-gemini-apps` で、Gemini Apps 向けの出力を省けます。
 
+`v` で始まるタグを GitHub に push すると、Actions が Release を作ります(`.github/workflows/release.yml`)。Release には、ZIP、SHA-256、Gemini Apps 向けの指示文が添付されます。Release が公開されていれば、リポジトリを取得せずに ZIP を入手できます。
+
 ## 18. 検証
 
 ```bash
@@ -476,10 +505,14 @@ frontmatter は、どのエージェントの解析器でも読める、保守�
 python3 -m unittest discover -s tests -v
 ```
 
-標準ライブラリの `unittest` だけを使います。対象は、次の5つです。
+標準ライブラリの `unittest` だけを使います。対象は、次のとおりです。
 
 - `measure.py`、`verify_preservation.py`
 - `validate_skill.py`、`install.py`、`package.py`
+- `SKILL.md` の `description`(要件で挙げたトリガー語と、除外する入力を含むか、200字以内か)
+- `.claude-plugin/` の定義(正本を指し、Skill を複製していないか)
+
+CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で、検証、テスト、パッケージ生成を実行します。
 
 ## 20. 制約と非対応
 
@@ -492,8 +525,22 @@ python3 -m unittest discover -s tests -v
 - Claude Code は `.agents/skills/` を読みません。`.claude/skills/` へ別に配置します。
 - Codex の `$CODEX_HOME/skills` は使いません。
 - 計測は、日本語の文章を対象にしたヒューリスティックです。文の区切りは、句点、感嘆符、疑問符と、括弧や引用の対応から推定します。Markdown の解析は簡易で、入れ子の引用、インデントされたコードブロック、HTML の複雑な構造は正確に扱えません。
+- `--extras` は正規表現による指摘で、形態素解析を使いません。漢字の連続は、固有名詞や法令用語も拾います。「の」の連鎖は、漢字とカタカナの名詞に限ります。
+- Claude Code のプラグイン定義は、`claude plugin validate` で検証しました。`/plugin install` の実際の操作は、検証していません。
 - Skill は文章の意味を検証しません。意味の保存を保証するのは、Agent の判断と、利用者の確認です。
 - 各製品の仕様は、確認日(2026-09-29)以降に変わる可能性があります。
+
+## 参考にしたプロジェクト
+
+[coji/natural-japanese](https://github.com/coji/natural-japanese)(MIT)を参考に、次の点を取り入れました。文章は転載せず、原則として再構成しています。
+
+- 語順、読点、接続詞の射程、否定の入れ子、列挙の埋没、語形の重さの整理
+- 実文書での閾値の校正結果と、「指摘は起点であり命令ではない」という運用
+- 中間ファイルを、利用者のプロジェクトに残さない運用
+- `--extras` の3種類の指摘
+- Claude Code プラグインとしての配布、CI、Release
+
+同リポジトリは、形態素解析、AI臭さのスコア、文体の型、サブエージェントによる推敲も持ちます。このリポジトリは、標準ライブラリだけで動くことと、環境に依存しない単一の `SKILL.md` を優先して、これらは取り入れていません。
 
 ## 参照した公式資料
 

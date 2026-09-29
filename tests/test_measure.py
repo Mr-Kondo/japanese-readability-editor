@@ -279,5 +279,98 @@ class CommandLineTest(unittest.TestCase):
         self.assertEqual(path.read_bytes(), before)
 
 
+class ExtrasTest(unittest.TestCase):
+    def pointers(self, text: str):
+        result = analyze(text, extras=True)
+        return {kind: [(c.line, c.length) for c in items] for kind, items in result.extras.items()}
+
+    def test_kanji_run_threshold_is_seven(self):
+        self.assertEqual(self.pointers("初回課金転換率を見る。")["kanji-run"], [(1, 7)])
+        self.assertEqual(self.pointers("課金転換率を見る。")["kanji-run"], [])  # 6字
+
+    def test_kanji_run_stops_at_kana_and_punctuation(self):
+        self.assertEqual(self.pointers("初回課金、転換率の改善を見る。")["kanji-run"], [])
+
+    def test_kanji_run_also_catches_proper_nouns_which_is_a_known_limit(self):
+        self.assertEqual(self.pointers("東京地方裁判所で争う。")["kanji-run"], [(1, 7)])
+
+    def test_no_chain_needs_three_no_between_nouns(self):
+        self.assertEqual(len(self.pointers("運用コストの削減の実現の効果を測る。")["no-chain"]), 1)
+        self.assertEqual(self.pointers("運用コストの削減の実現を測る。")["no-chain"], [])  # 2連
+
+    def test_no_chain_is_not_triggered_by_hiragana_words(self):
+        self.assertEqual(self.pointers("私のこのものの話をする。")["no-chain"], [])
+
+    def test_no_chain_accepts_katakana_nouns(self):
+        self.assertEqual(len(self.pointers("サーバーのログのエラーの原因を調べる。")["no-chain"]), 1)
+
+    def test_double_negative_forms(self):
+        for text in ("できないわけではない。", "負荷が増えないとは言えません。", "使えなくはない。",
+                     "失敗しないとも限らない。", "知らないでもない。", "行かないことはありません。"):
+            with self.subTest(text=text):
+                self.assertEqual(len(self.pointers(text)["double-negative"]), 1)
+
+    def test_conditional_and_obligation_forms_are_not_double_negatives(self):
+        for text in ("設定しないと動かない。", "確認しなければならない。", "断らないわけにはいかない。",
+                     "行かざるを得ない。", "彼は来ないし、私も行かない。"):
+            with self.subTest(text=text):
+                self.assertEqual(self.pointers(text)["double-negative"], [])
+
+    def test_pointers_report_the_line_of_the_match(self):
+        result = self.pointers("一行目である。\n初回課金転換率を見る。\n")
+        self.assertEqual(result["kanji-run"], [(2, 7)])
+
+    def test_pointers_are_not_collected_inside_code_blocks(self):
+        text = "```\n初回課金転換率\n```\n\n本文である。\n"
+        self.assertEqual(self.pointers(text)["kanji-run"], [])
+
+    def test_extras_are_off_by_default(self):
+        self.assertEqual(analyze("初回課金転換率を見る。").extras["kanji-run"], [])
+
+    def test_snippet_marks_truncation(self):
+        snippet = measure.make_snippet("あ" * 30 + "初回課金転換率" + "い" * 30, 30, 37)
+        self.assertTrue(snippet.startswith("…") and snippet.endswith("…"))
+        self.assertIn("初回課金転換率", snippet)
+
+
+class ExtrasCommandLineTest(unittest.TestCase):
+    def setUp(self):
+        self._tmp = temporary_directory()
+        self.path = Path(self._tmp.name) / "a.md"
+        self.path.write_text("初回課金転換率を見る。\n\nできないわけではない。\n", encoding="utf-8")
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_extras_are_listed_as_information_only(self):
+        code, out, _ = run_script(SCRIPT, "--extras", str(self.path))
+        self.assertEqual(code, 0)
+        self.assertIn("pointers (info only, not verdicts)", out)
+        self.assertIn("kanji-run (>=7 kanji in a row): 1", out)
+        self.assertIn(f"{self.path}:1  kanji-run  7  ", out)
+        self.assertIn("double-negative: 1", out)
+        self.assertIn(f"{self.path}:3  double-negative  ", out)
+
+    def test_default_output_has_no_pointers(self):
+        code, out, _ = run_script(SCRIPT, "--locate", str(self.path))
+        self.assertEqual(code, 0)
+        self.assertNotIn("pointers", out)
+
+    def test_json_includes_pointers_only_when_requested(self):
+        _, plain, _ = run_script(SCRIPT, "--json", str(self.path))
+        self.assertNotIn("pointers", json.loads(plain)["files"][0])
+        code, out, _ = run_script(SCRIPT, "--json", "--extras", str(self.path))
+        entry = json.loads(out)["files"][0]
+        self.assertEqual(code, 0)
+        self.assertEqual(entry["pointers"]["kanji-run"][0]["line"], 1)
+        self.assertEqual(entry["pointers"]["no-chain"], [])
+
+    def test_extras_can_be_combined_with_locate(self):
+        code, out, _ = run_script(SCRIPT, "--locate", "--extras", str(self.path))
+        self.assertEqual(code, 0)
+        self.assertIn("long paragraphs", out)
+        self.assertIn("pointers", out)
+
+
 if __name__ == "__main__":
     unittest.main()

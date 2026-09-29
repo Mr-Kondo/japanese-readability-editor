@@ -64,6 +64,16 @@ def copy_real_skill(destination_root: Path) -> Path:
     return target
 
 
+def symlinks_supported() -> bool:
+    """シンボリックリンクを作れる環境か。Windows では権限が要ることがある。"""
+    with tempfile.TemporaryDirectory(prefix="jre-symlink-") as tmp:
+        try:
+            os.symlink(Path(tmp), Path(tmp) / "link", target_is_directory=True)
+        except (OSError, NotImplementedError):
+            return False
+    return True
+
+
 def temporary_directory() -> tempfile.TemporaryDirectory:
     return tempfile.TemporaryDirectory(prefix="jre-test-")
 
@@ -74,5 +84,6 @@ def dedent(text: str) -> str:
 
 __all__: List[str] = [
     "REPO_ROOT", "SKILL_NAME", "SKILL_DIR", "SCRIPTS_DIR", "TOOLS_DIR", "FIXTURES", "VALID_DESCRIPTION",
-    "load_module", "run_script", "write_skill", "copy_real_skill", "temporary_directory", "dedent",
+    "load_module", "run_script", "write_skill", "copy_real_skill", "symlinks_supported", "temporary_directory",
+    "dedent",
 ]

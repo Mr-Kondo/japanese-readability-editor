@@ -1,0 +1,40 @@
+name: Release
+
+# v で始まるタグを push すると、ZIP などを GitHub Release に添付する。
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Validate the skill
+        run: python tools/validate_skill.py
+
+      - name: Run the tests
+        run: python -m unittest discover -s tests
+
+      - name: Build the packages
+        run: python tools/package.py
+
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            dist/japanese-readability-editor.zip \
+            dist/japanese-readability-editor.sha256 \
+            dist/gemini-apps-instructions.md \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes
