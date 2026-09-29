@@ -65,6 +65,126 @@ japanese-readability-editor/
 | `tools/package.py` | ZIP、SHA-256、Gemini Apps 向けの出力を生成する |
 | `tools/validate_skill.py` | Skill の構造と互換性を検証する |
 
+## インストール手順
+
+取得から、動作確認、更新、削除までを、順に説明します。配置先の詳細は、15 節と 16 節にあります。
+
+### 必要なもの
+
+- Python 3.9 以上
+- Git(リポジトリを取得する場合)
+
+インストーラも検証ツールも、Python の標準ライブラリだけで動きます。追加のパッケージは要りません。
+
+### 取得する
+
+```bash
+git clone https://github.com/Mr-Kondo/japanese-readability-editor.git
+cd japanese-readability-editor
+```
+
+リポジトリの公開範囲によっては、GitHub の認証が必要です。認証済みの `gh` があれば、次のコマンドでも取得できます。
+
+```bash
+gh repo clone Mr-Kondo/japanese-readability-editor
+```
+
+### Skill を検証する
+
+```bash
+python3 tools/validate_skill.py
+```
+
+`OK:` と表示されれば、配置できる状態です。
+
+### インストールする
+
+まず `--dry-run` で、配置先を確認します。何も書き込みません。
+
+```bash
+python3 tools/install.py --scope user --target all --dry-run
+```
+
+問題がなければ、`--dry-run` を外して実行します。使う環境に合わせて、次の表から引数を選び、`python3 tools/install.py` に続けて指定します。
+
+| 使う環境 | ユーザー全体に入れる | 特定のプロジェクトに入れる |
+|---|---|---|
+| Codex、Copilot、Gemini CLI | `--scope user --target common` | `--scope workspace --target common` |
+| Claude Code | `--scope user --target claude-code` | `--scope workspace --target claude-code` |
+| Antigravity(IDE と CLI) | `--scope user --target antigravity` | `--scope workspace --target common` |
+| すべて | `--scope user --target all` | `--scope workspace --target all` |
+
+たとえば、Codex と Claude Code をユーザー全体で使う場合は、次のとおりです。
+
+```bash
+python3 tools/install.py --scope user --target codex
+python3 tools/install.py --scope user --target claude-code
+```
+
+特定のプロジェクトに入れる場合は、`--workspace` にそのプロジェクトのパスを指定します。省くと、カレントディレクトリが対象です。
+
+```bash
+python3 tools/install.py --scope workspace --target all --workspace /path/to/project
+```
+
+配置先に同名の Skill が既にある場合は、何も変更しません。上書きするときの選び方は、16 節の「安全な挙動」にあります。
+
+### 動作を確認する
+
+環境ごとに、Skill が読み込まれたかを確認します。表示されない場合は、セッションを開き直してください。
+
+| 環境 | 確認方法 |
+|---|---|
+| Codex | `/skills` の一覧に出る。`$japanese-readability-editor` で呼べる |
+| Claude Code | `/` のメニューに `japanese-readability-editor` が出る |
+| Gemini CLI | `/skills list`、または端末で `gemini skills list`。追加した直後は `/skills reload` |
+| Antigravity | `/japanese-readability-editor` で呼べる |
+| GitHub Copilot | 公式資料に確認方法の記載を見つけられなかったため、次の依頼で試す |
+
+どの環境でも、実際に依頼して確かめられます。
+
+```text
+次の文章を japanese-readability-editor で校正して。
+「このシステムは、ユーザーから入力されたデータを受け取り、それを検証したうえで、問題がなければデータベースに保存し、問題があればエラーとして呼び出し元に返す。」
+```
+
+### アップロード型の環境に入れる
+
+ChatGPT Work、Claude Cowork、Gemini Apps は、配置先のディレクトリを持ちません。次のコマンドで生成物を作り、各製品の画面からアップロードします。
+
+```bash
+python3 tools/package.py
+```
+
+| 環境 | アップロードするもの | 詳細 |
+|---|---|---|
+| ChatGPT Work | `dist/japanese-readability-editor.zip` | 6 節 |
+| Claude Cowork | `dist/japanese-readability-editor.zip` | 8 節 |
+| Gemini Apps | `dist/gemini-apps/japanese-readability-editor/`、または `dist/gemini-apps-instructions.md` の貼り付け | 11 節 |
+
+### 更新する
+
+リポジトリを更新してから、`--on-conflict` を付けて配置し直します。`backup` は、以前のものを退避してから配置します。
+
+```bash
+git pull
+python3 tools/install.py --scope user --target all --on-conflict backup
+```
+
+`--link` でインストールした場合は、複製ではなく正本へのリンクなので、`git pull` だけで反映されます。ただし、リポジトリを移動すると、リンクが切れます。
+
+```bash
+python3 tools/install.py --scope user --target all --link
+```
+
+アップロード型の環境では、`python3 tools/package.py` で作り直した ZIP を、もう一度アップロードします。
+
+### 削除する
+
+インストーラは、ファイルを削除する機能を持ちません。不要になったら、配置先の `japanese-readability-editor/` ディレクトリを、自分で削除してください。`--link` で入れた場合は、リンクだけを削除します。リンクの先にある正本は消えません。
+
+配置先は、`--dry-run` の出力で確認できます。
+
 ## 5. 共通 Skill の使い方
 
 Skill は、依頼の内容が `description` に合うと自動で使われます。名前を指定して呼ぶこともできます。
