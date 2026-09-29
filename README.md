@@ -28,6 +28,8 @@
 - 「200字以上の段落」「80字以上の文」は、修正候補を見つける目安です。合否の基準ではなく、数字を満たすだけの機械的な分割はしません。
 - 段落が長いだけなら、まず文言を変えずに、話題の境界で段落だけを分けます。このとき、空白以外の文字が変わっていないことをスクリプトで確認できます。
 - スクリプトは候補を挙げ、文字列の一致を確かめるだけです。修正の要否と方法は、Agent が判断します。
+- 書き換えた後は、元の文と突き合わせます。数値、条件の範囲、否定の数、主体、文体が同じかを確かめ、違う箇所は元に戻します。
+- 二重否定や「それ以外の場合」のような残余の条件は、原則として触りません。意味が変わりやすいためです。
 - 日本語可読性の設計原則は、次の3記事を参考に、原則と手順として再構成しました。記事の文章は転載していません。
   1. [Qiita: masakai](https://qiita.com/masakai/items/7bc5250d04c4dc8669e4)
   2. [Zenn: ncdc](https://zenn.dev/ncdc/articles/6ea029ba5ecf65)
@@ -292,7 +294,7 @@ python3 scripts/verify_preservation.py before.md after.md
 
 | Environment | Native Agent Skill | Workspace path | User/global path | ZIP upload | Notes |
 |---|---|---|---|---|---|
-| ChatGPT Work | あり(Business / Enterprise / Healthcare / Edu。管理者による有効化が必要な場合あり)※1 | 未確認 | 未確認 | 可。Plugins → Skills → Create → Upload from your computer。フォルダまたは ZIP ※1 | `@skill-name` で呼べる(公式)。Free / Plus / Pro は現行の提供対象外という記述あり ※1 |
+| ChatGPT Work | あり。Plus プランのアカウントで、アップロードと呼び出しを確認した(2026-09-29)※1 | 未確認 | 未確認 | 可。Plugins → Skills → Add → Upload from your computer。ZIP を取り込めた | `@skill-name` で呼べる(確認済み)。取り込み時に、ChatGPT が `agents/openai.yaml` を自動生成する ※1 |
 | Codex | あり | `.agents/skills/`(カレントから repo root まで探索) | `$HOME/.agents/skills/` | 不要 | `$CODEX_HOME/skills` は旧仕様。管理者向けに `/etc/codex/skills` もある。変更は自動検出、出なければ再起動。symlink 可 |
 | Claude Cowork | あり | 非対応(アップロード方式) | 非対応 | 可。Customize → Skills。ZIP の最上位にフォルダ | コード実行の有効化が必要。プランの記載は公式ページ間で異なる。`description` に200字の上限があるという記載あり |
 | Claude Code | あり | `.claude/skills/` | `~/.claude/skills/` | 不要 | `.agents/skills` は読まない。未知の frontmatter は無視される。symlink 可 |
@@ -302,16 +304,31 @@ python3 scripts/verify_preservation.py before.md after.md
 | Antigravity IDE | あり | `.agents/skills/`(旧 `.agent/skills/` も互換) | `~/.gemini/config/skills/`(旧 `~/.gemini/antigravity/skills/`) | 不要 | `/<skill-name>` で呼べる |
 | Antigravity CLI | あり | `.agents/skills/` | `~/.gemini/antigravity-cli/skills/` | 不要 | `~/.agents/skills` は自動では読まれないとする記述あり(Codelab)。未確認 |
 
-※1 OpenAI ヘルプセンターの記事を自動取得できなかったため、開発者向けドキュメントの記述と、検索結果の要約に基づきます。提供状況はプラン、workspace の設定、リリース状況に依存します。存在しない機能を前提にせず、利用前に各自の画面で確認してください。
+※1 2026-09-29 に、Plus プランのアカウントで、実際に確認しました。
+
+二次資料では、対象は Business / Enterprise / Healthcare / Edu とされていました。Free / Plus / Pro は対象外という記述もありました。今回の確認とは一致しません。
+
+OpenAI ヘルプセンターの記事は、自動取得できませんでした。提供状況は、プラン、workspace の設定、リリース状況によって変わります。管理者による有効化が必要な場合もあります。利用前に、各自の画面で確認してください。
 
 ## 6. ChatGPT Work
 
 ChatGPT のワークスペースに Skill をアップロードする方式です。`dist/japanese-readability-editor.zip` を使います。
 
 1. ZIP を用意します。最新の Release からダウンロードするか、`python3 tools/package.py` で作ります。
-2. ChatGPT の Plugins → Skills → Create → Upload from your computer で、ZIP を選びます。
+2. ChatGPT の Plugins → Skills を開き、Add → Upload from your computer で、ZIP を選びます。
 
-Skill 機能がプラン、workspace の設定、管理者の許可に依存する点に注意してください。Enterprise と Edu では、管理者が有効化するまで表示されない場合があります。アップロード画面の名称と手順は変わる可能性があります。
+アップロードできるのは、`.zip`、`.skill`、`SKILL.md` で、最大サイズは1ファイルあたり25MBです。
+
+Plus プランのアカウントで、次を確認しました(2026-09-29)。
+
+- ZIP を取り込めた。`name` と `description` は、全文が保たれた。
+- `@japanese-readability-editor` で呼び出せた。
+- ChatGPT が `agents/openai.yaml` を自動生成した。`allow_implicit_invocation` が `true` なので、依頼内容に合えば自動でも使われる。
+- `openai.yaml` は `assets/icon.svg` を参照するが、ZIP には含まれない。アイコンは、壊れた画像として表示される。機能には影響しない。
+
+Skill 機能がプラン、workspace の設定、管理者の許可に依存する点に注意してください。Enterprise と Edu では、管理者が有効化するまで表示されない場合があります。アップロード画面の名称と手順は、変わる可能性があります。
+
+書き換えの結果は、モデルの出力です。返ってきた文章は、元の文と突き合わせて確認してください。
 
 ## 7. Codex
 
@@ -535,7 +552,7 @@ CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で
 ## 20. 制約と非対応
 
 - 「未確認」と書いた項目は、公式資料で確認できていません。次の項目が該当します。
-  - ChatGPT Work(ヘルプセンターを取得できませんでした)
+  - ChatGPT Work のプラン条件と、管理者の設定(Plus プランでの動作は確認済み)
   - Gemini Apps の `scripts/` の扱いと、ZIP の可否
   - Copilot のプラン条件
   - Antigravity の `~/.agents/skills`
@@ -546,6 +563,7 @@ CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で
 - `--extras` は正規表現による指摘で、形態素解析を使いません。漢字の連続は、固有名詞や法令用語も拾います。「の」の連鎖は、漢字とカタカナの名詞に限ります。
 - Claude Code のプラグイン定義は、`claude plugin validate` で検証しました。`/plugin install` の実際の操作は、検証していません。
 - Skill は文章の意味を検証しません。意味の保存を保証するのは、Agent の判断と、利用者の確認です。
+- ChatGPT での実機確認では、二重否定の意味の反転、残余の条件の言い換え、文体の変更が起きました。`SKILL.md` に対策を入れましたが、誤りを完全には防げません。
 - 各製品の仕様は、確認日(2026-09-29)以降に変わる可能性があります。
 
 ## 参考にしたプロジェクト

@@ -306,13 +306,14 @@ class ExtrasTest(unittest.TestCase):
 
     def test_double_negative_forms(self):
         for text in ("できないわけではない。", "負荷が増えないとは言えません。", "使えなくはない。",
-                     "失敗しないとも限らない。", "知らないでもない。", "行かないことはありません。"):
+                     "失敗しないとも限らない。", "失敗率が下がらないとは限らない。", "下がらないとは限りません。",
+                     "知らないでもない。", "行かないことはありません。"):
             with self.subTest(text=text):
                 self.assertEqual(len(self.pointers(text)["double-negative"]), 1)
 
     def test_conditional_and_obligation_forms_are_not_double_negatives(self):
         for text in ("設定しないと動かない。", "確認しなければならない。", "断らないわけにはいかない。",
-                     "行かざるを得ない。", "彼は来ないし、私も行かない。"):
+                     "行かざるを得ない。", "彼は来ないし、私も行かない。", "成功するとは限らない。"):
             with self.subTest(text=text):
                 self.assertEqual(self.pointers(text)["double-negative"], [])
 
