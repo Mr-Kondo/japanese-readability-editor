@@ -94,8 +94,9 @@ class DryRunTest(InstallCase):
         code, out, _ = self.run_install("--scope", "workspace", "--target", "all", "--dry-run")
         self.assertEqual(code, 0)
         self.assertIn("[dry-run]", out)
-        self.assertIn(".agents/skills", out)
-        self.assertIn(".claude/skills", out)
+        portable = out.replace("\\", "/")  # Windows ではパスが バックスラッシュ区切りで表示される
+        self.assertIn(".agents/skills", portable)
+        self.assertIn(".claude/skills", portable)
         self.assertEqual(tree(self.workspace), [])
         self.assertEqual(tree(self.home), [])
 
