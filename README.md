@@ -155,11 +155,29 @@ python3 tools/install.py --scope workspace --target all --workspace /path/to/pro
 
 ### アップロード型の環境に入れる
 
-ChatGPT Work、Claude Cowork、Gemini Apps は、配置先のディレクトリを持ちません。次のコマンドで生成物を作り、各製品の画面からアップロードします。
+ChatGPT Work、Claude Cowork、Gemini Apps は、配置先のディレクトリを持ちません。生成物を用意して、各製品の画面からアップロードします。
+
+生成物は、次のどちらかで用意します。
+
+- [最新の Release](https://github.com/Mr-Kondo/japanese-readability-editor/releases/latest) からダウンロードする(リポジトリの取得は不要)
+- 手元で作る
+
+Release からダウンロードするコマンドは、次のとおりです。ダウンロード後に、SHA-256 を照合できます。
+
+```bash
+gh release download --repo Mr-Kondo/japanese-readability-editor --pattern 'japanese-readability-editor.*'
+shasum -a 256 -c japanese-readability-editor.sha256
+```
+
+`--pattern` は、タグを指定しないときに必須です。
+
+手元で作るコマンドは、次のとおりです。
 
 ```bash
 python3 tools/package.py
 ```
+
+Release に添付されるのは、ZIP、SHA-256、Gemini Apps 向けの指示文(`gemini-apps-instructions.md`)です。Gemini Apps 向けのフォルダは添付されないので、必要なら手元で作ります。
 
 | 環境 | アップロードするもの | 詳細 |
 |---|---|---|
@@ -290,7 +308,7 @@ python3 scripts/verify_preservation.py before.md after.md
 
 ChatGPT のワークスペースに Skill をアップロードする方式です。`dist/japanese-readability-editor.zip` を使います。
 
-1. `python3 tools/package.py` で ZIP を作ります。
+1. ZIP を用意します。最新の Release からダウンロードするか、`python3 tools/package.py` で作ります。
 2. ChatGPT の Plugins → Skills → Create → Upload from your computer で、ZIP を選びます。
 
 Skill 機能がプラン、workspace の設定、管理者の許可に依存する点に注意してください。Enterprise と Edu では、管理者が有効化するまで表示されない場合があります。アップロード画面の名称と手順は変わる可能性があります。
@@ -312,7 +330,7 @@ python3 tools/install.py --scope user --target codex
 
 Claude のアプリ(Cowork を含む)には、ZIP をアップロードします。ChatGPT Work と同じ ZIP を再利用します。
 
-1. `python3 tools/package.py` で ZIP を作ります。
+1. ZIP を用意します。最新の Release からダウンロードするか、`python3 tools/package.py` で作ります。
 2. Customize → Skills から、`dist/japanese-readability-editor.zip` を追加します。
 
 ZIP は、Skill のフォルダが最上位にある構造です。コード実行の有効化が必要です。Claude Code の `~/.claude/skills/` は、Cowork のセッションでは読み込まれません。
@@ -478,7 +496,7 @@ ZIP の最上位は `japanese-readability-editor/` の1フォルダです。そ�
 
 ZIP は再現可能で、同じ入力からは同じ SHA-256 になります。`--no-gemini-apps` で、Gemini Apps 向けの出力を省けます。
 
-`v` で始まるタグを GitHub に push すると、Actions が Release を作ります(`.github/workflows/release.yml`)。Release には、ZIP、SHA-256、Gemini Apps 向けの指示文が添付されます。Release が公開されていれば、リポジトリを取得せずに ZIP を入手できます。
+`v` で始まるタグを GitHub に push すると、Actions が Release を作ります(`.github/workflows/release.yml`)。Release には、ZIP、SHA-256、Gemini Apps 向けの指示文が添付されます。Release は、[Releases のページ](https://github.com/Mr-Kondo/japanese-readability-editor/releases)で公開されます。リポジトリを取得せずに、ZIP を入手できます。
 
 ## 18. 検証
 
