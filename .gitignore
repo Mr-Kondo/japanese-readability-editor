@@ -1,0 +1,13 @@
+# 生成物
+/dist/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+
+# このリポジトリ自体へ install.py で配置したコピー
+/.agents/
+/.claude/skills/
