@@ -35,7 +35,7 @@
   1. [Qiita: masakai](https://qiita.com/masakai/items/7bc5250d04c4dc8669e4)
   2. [Zenn: ncdc](https://zenn.dev/ncdc/articles/6ea029ba5ecf65)
   3. [Zenn: lotation](https://zenn.dev/lotation/articles/8520b50540b274)
-- 末尾の「[参考にしたプロジェクト](#参考にしたプロジェクト)」に挙げた3つのリポジトリからも、原則と手順を取り入れました。
+- 末尾の「[参考にしたプロジェクト](#23-参考にしたプロジェクト)」に挙げた3つのリポジトリからも、原則と手順を取り入れました。
 
 ## 3. ディレクトリ構成
 
@@ -54,6 +54,7 @@ japanese-readability-editor/
 │   ├── package.py
 │   └── validate_skill.py
 ├── tests/
+├── docs/                                  # 実測の記録など、README から分けた資料
 ├── .claude-plugin/                        # Claude Code プラグインの定義(正本を指すだけ)
 ├── .github/workflows/                     # CI と Release
 ├── LICENSE                                # MIT
@@ -76,9 +77,9 @@ japanese-readability-editor/
 | `.claude-plugin/` | Claude Code のプラグインとして入れるための定義。`skill/` を指すだけで、Skill は複製しない |
 | `.github/workflows/` | CI(検証、テスト、パッケージ生成)と、タグを push したときの Release |
 
-## インストール手順
+## 5. インストール手順
 
-取得から、動作確認、更新、削除までを、順に説明します。配置先の詳細は、15 節と 16 節にあります。
+取得から、動作確認、更新、削除までを、順に説明します。配置先の詳細は、17 節と 18 節にあります。
 
 ### 必要なもの
 
@@ -143,7 +144,7 @@ python3 tools/install.py --scope user --target claude-code
 python3 tools/install.py --scope workspace --target all --workspace /path/to/project
 ```
 
-配置先に同名の Skill が既にある場合は、何も変更しません。上書きするときの選び方は、16 節の「安全な挙動」にあります。
+配置先に同名の Skill が既にある場合は、何も変更しません。上書きするときの選び方は、18 節の「安全な挙動」にあります。
 
 ### 動作を確認する
 
@@ -192,9 +193,9 @@ Release に添付されるのは、ZIP、SHA-256、Gemini Apps 向けの指示�
 
 | 環境 | アップロードするもの | 詳細 |
 |---|---|---|
-| ChatGPT Work | `dist/japanese-readability-editor.zip` | 6 節 |
-| Claude Cowork | `dist/japanese-readability-editor.zip` | 8 節 |
-| Gemini Apps | `dist/gemini-apps/japanese-readability-editor/`、または `dist/gemini-apps-instructions.md` の貼り付け | 11 節 |
+| ChatGPT Work | `dist/japanese-readability-editor.zip` | 8 節 |
+| Claude Cowork | `dist/japanese-readability-editor.zip` | 10 節 |
+| Gemini Apps | `dist/gemini-apps/japanese-readability-editor/`、または `dist/gemini-apps-instructions.md` の貼り付け | 13 節 |
 
 ### 更新する
 
@@ -239,14 +240,14 @@ claude plugin update japanese-readability-editor@japanese-readability-editor
 
 配置先は、`--dry-run` の出力で確認できます。
 
-## 5. 共通 Skill の使い方
+## 6. 共通 Skill の使い方
 
 Skill は、依頼の内容が `description` に合うと自動で使われます。名前を指定して呼ぶこともできます。
 
 | 環境 | 明示的に呼ぶ方法 |
 |---|---|
 | Codex | `$japanese-readability-editor` |
-| ChatGPT Work | `@japanese-readability-editor`(暗黙起動は不安定。6 節) |
+| ChatGPT Work | `@japanese-readability-editor`(暗黙起動は不安定。8 節) |
 | Claude Code | `/japanese-readability-editor` |
 | Antigravity | `/japanese-readability-editor` |
 | Gemini Apps | `/`(今後 `@`)に続けて Skill 名 |
@@ -342,18 +343,18 @@ uv があれば、次のコマンドで、SudachiPy を自動で入れて実行�
 uv run scripts/compare_rewrite.py before.md after.md
 ```
 
-## 環境別の対応表
+## 7. 環境別の対応表
 
 `Native Agent Skill` は、その環境が Agent Skills 形式(`SKILL.md` を含むフォルダ)を直接扱えるかを表します。
 
 | Environment | Native Agent Skill | Workspace path | User/global path | ZIP upload | Notes |
 |---|---|---|---|---|---|
-| ChatGPT Work | あり。Plus プランのアカウントで、アップロードと呼び出しを確認した(2026-09-29)※1 | 未確認 | 未確認 | 可。Plugins → Skills → Add → Upload from your computer。ZIP を取り込めた | `@skill-name` で呼べる(確認済み)。暗黙起動は不安定(6 節)。取り込み時に、ChatGPT が `agents/openai.yaml` を自動生成する ※1 |
+| ChatGPT Work | あり。Plus プランのアカウントで、アップロードと呼び出しを確認した(2026-09-29)※1 | 未確認 | 未確認 | 可。Plugins → Skills → Add → Upload from your computer。ZIP を取り込めた | `@skill-name` で呼べる(確認済み)。暗黙起動は不安定(8 節)。取り込み時に、ChatGPT が `agents/openai.yaml` を自動生成する ※1 |
 | Codex | あり | `.agents/skills/`(カレントから repo root まで探索) | `$HOME/.agents/skills/` | 不要 | `$CODEX_HOME/skills` は旧仕様。管理者向けに `/etc/codex/skills` もある。変更は自動検出、出なければ再起動。symlink 可 |
 | Claude Cowork | あり | 非対応(アップロード方式) | 非対応 | 可。Customize → Skills。ZIP の最上位にフォルダ | コード実行の有効化が必要。プランの記載は公式ページ間で異なる。`description` に200字の上限があるという記載あり |
 | Claude Code | あり | `.claude/skills/` | `~/.claude/skills/` | 不要 | `.agents/skills` は読まない。未知の frontmatter は無視される。symlink 可 |
 | GitHub Copilot | あり(cloud agent、code review、CLI、app、VS Code / JetBrains の agent mode) | `.agents/skills/`、`.github/skills/`、`.claude/skills/` | `~/.agents/skills/`、`~/.copilot/skills/` | 不要 | 利用できるプランは未確認 |
-| Gemini Apps | あり(Skills。Gems は 2026-11 以降 Skills へ移行) | 非対応 | 非対応(アカウントに保存) | `SKILL.md` またはフォルダをアップロード。ZIP の可否は未確認 | `scripts/` の扱いは未確認。生成物は 11 節 |
+| Gemini Apps | あり(Skills。Gems は 2026-11 以降 Skills へ移行) | 非対応 | 非対応(アカウントに保存) | `SKILL.md` またはフォルダをアップロード。ZIP の可否は未確認 | `scripts/` の扱いは未確認。生成物は 13 節 |
 | Gemini CLI | あり | `.agents/skills/`、`.gemini/skills/` | `~/.agents/skills/`、`~/.gemini/skills/` | 不要 | 同じ階層では `.agents/skills` が優先。`/skills list` で確認 |
 | Antigravity IDE | あり | `.agents/skills/`(旧 `.agent/skills/` も互換) | `~/.gemini/config/skills/`(旧 `~/.gemini/antigravity/skills/`) | 不要 | `/<skill-name>` で呼べる |
 | Antigravity CLI | あり | `.agents/skills/` | `~/.gemini/antigravity-cli/skills/` | 不要 | `~/.agents/skills` は自動では読まれないとする記述あり(Codelab)。未確認 |
@@ -364,7 +365,7 @@ uv run scripts/compare_rewrite.py before.md after.md
 
 OpenAI ヘルプセンターの記事は、自動取得できませんでした。提供状況は、プラン、workspace の設定、リリース状況によって変わります。管理者による有効化が必要な場合もあります。利用前に、各自の画面で確認してください。
 
-## 6. ChatGPT Work
+## 8. ChatGPT Work
 
 ChatGPT のワークスペースに Skill をアップロードする方式です。`dist/japanese-readability-editor.zip` を使います。
 
@@ -381,62 +382,19 @@ Plus プランのアカウントで、次を確認しました(2026-09-29)。
 - 取り込み直後の `openai.yaml` は、`assets/icon.svg` を参照していたが、ZIP には含まれず、アイコンが壊れた画像として表示された。
 - その後、ChatGPT が `assets/icon.svg` を追加し、`openai.yaml` の短い説明文を書き換え、アイコンが表示されるようになった。`SKILL.md` の `name` と `description` は変わらなかった。
 
-### 暗黙起動の実測
-
-`@` で指定しない場合に、Skill が自動で使われるかを調べました(2026-09-30)。条件は、次のとおりです。
-
-- Plus プラン、Work モード、既定のモデル(GPT-6 Luna、Medium)
-- 依頼ごとに新しいチャットを作り、各依頼を1回だけ実行した。
-
-使うべき依頼(6件)の結果は、次のとおりです。
-
-| 依頼 | 結果 |
-|---|---|
-| 「次の文章を読みやすくして。」と長い1文 | 使われなかった |
-| 「READMEのこの段落を校正して。」と文 | 使われなかった |
-| 「この文章、なんかAIっぽいんだよね。自然な日本語に直して。」と文 | 使われなかった |
-| 「一文が長すぎて読みにくいと言われた。直して。」と文 | **使われた**(測り直しでは使われなかった。次の節) |
-| 「Issueの本文を日本語で書いて。」と内容 | 別の Skill(writing-blocks)が使われた |
-| 英語の依頼「Please proofread this Japanese paragraph…」と文 | 判別できなかった |
-
-使ってはいけない入力(4件)は、コード、JSON、短い雑談、数式です。どれも、Skill は使われませんでした。
-
-同じ文を `@japanese-readability-editor` で指定した場合は、Skill が使われました。
-
-### description を変えた再測定
-
-同じ日に、`description` を変えて測り直しました。「AIっぽい」は元の `description` にも入っていました(「冗長・長すぎる・直訳調・AIっぽい日本語」)。そこで、「「AIっぽい」文章にも使う。」という独立した1文へ移した案(199字)を試しました。
-
-この案は、Release していません。測定のあとに、元の v0.1.4 へ戻しました。条件は前回と同じで、依頼ごとに新しいチャットを作りました。
-
-| 依頼 | 元の版(v0.1.4) | 変えた版 |
-|---|---|---|
-| 「この文章、なんかAIっぽいんだよね。自然な日本語に直して。」 | 0/3 | 0/3 |
-| 「一文が長すぎて読みにくいと言われた。直して。」 | 0/3 | 0/3 |
-| 「次の文章を読みやすくして。」 | 0/1(前の測定) | 0/1 |
-| 「READMEのこの段落を校正して。」 | 0/1(前の測定) | 0/1 |
-
-分かったことは、次の3点です。
-
-- `description` を変えても、暗黙起動は増えなかった。
-- 前の測定で「使われた」依頼は、元の版で3回測り直すと、3回とも使われなかった。前の1回を含めた通算は1/4である。
-- 同じ文を `@japanese-readability-editor` で指定した対照は、使われた。測定の環境は、動いていた。
-
-1回の結果では、起動の有無を判断できません。暗黙起動は、この条件では不安定でした。確実に使うには、`@japanese-readability-editor` で指定してください。
-
-この実測の限界は、次のとおりです。
-
-- 件数が少ない。最初の測定は各依頼1回で、測り直しでも最大3回である。
-- 測り直しでは、Issue の依頼、英語の依頼、使ってはいけない入力を、再実行していない。
-- 「Skill が使われた」かは、「Worked for」の表示と、応答の前置きに出る Skill 名で判定した。処理の詳細は画面に出ないため、英語の依頼は判別できなかった。
-- 他のモデル、Chat モード、他のアカウントでは、確認していない。
-- `description` は1案しか試していない。ほかの言い回しは、検証していない。
-
 Skill 機能がプラン、workspace の設定、管理者の許可に依存する点に注意してください。Enterprise と Edu では、管理者が有効化するまで表示されない場合があります。アップロード画面の名称と手順は、変わる可能性があります。
 
 書き換えの結果は、モデルの出力です。返ってきた文章は、元の文と突き合わせて確認してください。
 
-## 7. Codex
+### 暗黙起動の実測
+
+`@` で指定しない場合に、Skill が自動で使われるかを調べました(2026-09-30)。使うべき依頼6件のうち、使われたのは1件でした。その依頼も、3回測り直すと、3回とも使われませんでした。`description` を変えても、増えませんでした。
+
+暗黙起動は、この条件では不安定でした。確実に使うには、`@japanese-readability-editor` で指定してください。
+
+測定の条件、結果、限界は、[docs/chatgpt-implicit-invocation.md](docs/chatgpt-implicit-invocation.md) にあります。
+
+## 9. Codex
 
 Codex は `.agents/skills/` を、カレントディレクトリから repo root まで順にたどって探します。ユーザー全体の配置先は `$HOME/.agents/skills/` です。
 
@@ -449,7 +407,7 @@ python3 tools/install.py --scope user --target codex
 
 このリポジトリは、現行の `$HOME/.agents/skills/` を使います。旧版の Codex を使う場合は、手動で `$CODEX_HOME/skills/` へコピーしてください。
 
-## 8. Claude Cowork
+## 10. Claude Cowork
 
 Claude のアプリ(Cowork を含む)には、ZIP をアップロードします。ChatGPT Work と同じ ZIP を再利用します。
 
@@ -460,7 +418,7 @@ ZIP は、Skill のフォルダが最上位にある構造です。コード実�
 
 この Skill の `description` は、Claude のヘルプ記事にある「200字以内」の記載に合わせて、200字以内に収めています。Agent Skills の仕様と Claude API の文書は、1024字までを許しています。
 
-## 9. Claude Code
+## 11. Claude Code
 
 ```bash
 python3 tools/install.py --scope workspace --target claude-code   # <project>/.claude/skills/
@@ -480,9 +438,9 @@ Claude Code のプラグインとしても、入れられます。
 
 プラグインの Skill は、プラグイン名を前に付けて呼びます。たとえば、`/japanese-readability-editor:japanese-readability-editor` です。
 
-定義ファイル(`.claude-plugin/`)は、`skill/` を指すだけです。Skill は複製していません。`version` を設定していないので、更新はコミットに追従します。更新の手順は、インストール手順の「更新する」にあります。
+定義ファイル(`.claude-plugin/`)は、`skill/` を指すだけです。Skill は複製していません。`version` を設定していないので、更新はコミットに追従します。更新の手順は、5 節の「更新する」にあります。
 
-## 10. GitHub Copilot
+## 12. GitHub Copilot
 
 Copilot は、次の場所から Skill を読みます。
 
@@ -505,7 +463,7 @@ Copilot には、Skill のほかに指示ファイルがあります。今回の
 | パス別の指示 | `.github/instructions/*.instructions.md` | `applyTo` に合うファイルを扱うときに適用される |
 | エージェント向けの指示 | `AGENTS.md`(`CLAUDE.md`、`GEMINI.md` も) | エージェントが参照する。ディレクトリ木で最も近いものが優先される |
 
-## 11. Gemini Apps
+## 13. Gemini Apps
 
 Gemini CLI とは別の製品です。
 
@@ -522,7 +480,7 @@ Skills は、`SKILL.md` またはそれを含むフォルダをアップロー�
 
 指示文は、Part 1(`SKILL.md` の本文)と Part 2(詳細ルール)からなります。文字数の上限で貼れない場合は、Part 2 を省いてください。上限は公式資料で確認できていません。Gemini Apps では `scripts/` を実行できないので、計測と検証は Agent が手作業で近似します。
 
-## 12. Gemini CLI
+## 14. Gemini CLI
 
 ```bash
 python3 tools/install.py --scope workspace --target gemini-cli   # <project>/.agents/skills/
@@ -536,7 +494,7 @@ python3 tools/install.py --scope user --target gemini-cli        # ~/.agents/ski
 
 Skill が有効になるときは、名前と参照するディレクトリを示す確認画面が出ます。
 
-## 13. Antigravity IDE
+## 15. Antigravity IDE
 
 ```bash
 python3 tools/install.py --scope workspace --target antigravity-ide   # <project>/.agents/skills/
@@ -545,7 +503,7 @@ python3 tools/install.py --scope user --target antigravity-ide        # ~/.gemin
 
 ワークスペースは `.agents/skills/` です。旧称の `.agent/skills/` は互換のために読まれますが、新しい `.agents/skills/` を優先します。グローバルは `~/.gemini/config/skills/` で、旧配置の `~/.gemini/antigravity/skills/` も互換のために読まれます。
 
-## 14. Antigravity CLI
+## 16. Antigravity CLI
 
 ```bash
 python3 tools/install.py --scope workspace --target antigravity-cli   # <project>/.agents/skills/
@@ -554,7 +512,7 @@ python3 tools/install.py --scope user --target antigravity-cli        # ~/.gemin
 
 グローバルの配置先が、IDE とは異なります。IDE と CLI の両方に入れる場合は `--target antigravity` を使います。
 
-## 15. ワークスペースへのインストール
+## 17. ワークスペースへのインストール
 
 共通配置の `.agents/skills/` に置くと、Codex、Copilot、Gemini CLI、Antigravity が読みます。Claude Code だけは `.claude/skills/` が必要です。
 
@@ -571,7 +529,7 @@ python3 tools/install.py --scope workspace --target all --workspace /path/to/pro
 python3 tools/install.py --scope workspace --target all --dry-run
 ```
 
-## 16. グローバル(ユーザー)へのインストール
+## 18. グローバル(ユーザー)へのインストール
 
 ```bash
 python3 tools/install.py --scope user --target codex
@@ -601,7 +559,7 @@ python3 tools/install.py --scope user --target all --dry-run
 - 配置は、複製が終わってから所定の場所へ移すので、途中で失敗しても中途半端なものを残しません。
 - 既定はコピーです。`--link` でシンボリックリンクにできます。Windows では権限が必要な場合があります。
 
-## 17. パッケージ生成
+## 19. パッケージ生成
 
 ```bash
 python3 tools/package.py
@@ -621,7 +579,7 @@ ZIP は再現可能で、同じ入力からは同じ SHA-256 になります。`
 
 `v` で始まるタグを GitHub に push すると、Actions が Release を作ります(`.github/workflows/release.yml`)。Release には、ZIP、SHA-256、Gemini Apps 向けの指示文が添付されます。Release は、[Releases のページ](https://github.com/Mr-Kondo/japanese-readability-editor/releases)で公開されます。リポジトリを取得せずに、ZIP を入手できます。
 
-## 18. 検証
+## 20. 検証
 
 ```bash
 python3 tools/validate_skill.py
@@ -640,7 +598,7 @@ python3 tools/validate_skill.py
 
 frontmatter は、どのエージェントの解析器でも読める、保守的な YAML の部分集合に限ります。値は1行で書き、値の中の `: ` と ` #` は避けます。
 
-## 19. テスト
+## 21. テスト
 
 ```bash
 python3 -m unittest discover -s tests -v
@@ -656,7 +614,7 @@ python3 -m unittest discover -s tests -v
 
 CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で、検証、テスト、パッケージ生成を実行します。Ubuntu では、Python 3.10 と最新版で試し、1つのジョブでは SudachiPy を入れて試します。`compare_rewrite.py` の SudachiPy を使うテストは、SudachiPy が入っている環境だけで実行します。
 
-## 20. 制約と非対応
+## 22. 制約と非対応
 
 - 「未確認」と書いた項目は、公式資料で確認できていません。次の項目が該当します。
   - ChatGPT Work のプラン条件と、管理者の設定(Plus プランでの動作は確認済み)
@@ -675,10 +633,10 @@ CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で
 - プラグインのインストールと更新は、マーケットプレースの追加を含めて、`claude plugin` のコマンドで確かめました。確認日は 2026-10-05、Claude Code は 2.1.285 です。手元の設定に影響しないよう、一時的な設定ディレクトリ(`CLAUDE_CONFIG_DIR`)を使いました。対話画面の `/plugin` での操作は、検証していません。
 - Skill は文章の意味を検証しません。意味の保存を保証するのは、Agent の判断と、利用者の確認です。
 - ChatGPT での実機確認では、二重否定の意味の反転、残余の条件の言い換え、文体の変更が起きました。`SKILL.md` に対策を入れましたが、誤りを完全には防げません。
-- ChatGPT の暗黙起動は、実測では不安定でした。確実に使うには、`@` で指定してください(6 節)。
+- ChatGPT の暗黙起動は、実測では不安定でした。確実に使うには、`@` で指定してください(8 節)。
 - 各製品の仕様は、確認日(2026-09-29)以降に変わる可能性があります。
 
-## 参考にしたプロジェクト
+## 23. 参考にしたプロジェクト
 
 [coji/natural-japanese](https://github.com/coji/natural-japanese)(MIT)を参考に、次の点を取り入れました。文章は転載せず、原則として再構成しています。
 
@@ -708,7 +666,7 @@ CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で
 - 翻訳調の比喩を見分ける二段階の判定
 - 説明の中で、読者を「あなた」と呼ばないこと
 
-## 参照した公式資料
+## 24. 参照した公式資料
 
 - [Agent Skills specification](https://agentskills.io/specification)
 - [Codex / ChatGPT: Build skills](https://learn.chatgpt.com/docs/build-skills)
