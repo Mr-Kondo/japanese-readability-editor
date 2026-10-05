@@ -11,10 +11,11 @@ Markdown として扱うのは既定で拡張子が .md .markdown .mdx .mkd の�
 
 文の区切りは、句点・感嘆符・疑問符と括弧の対応から推定する。ASCII のピリオドでは区切らない。
 
---extras を付けると、長さとは別に、読み流すと見落としやすい3種類の箇所を「指摘」として挙げる。
+--extras を付けると、長さとは別に、読み流すと見落としやすい4種類の箇所を「指摘」として挙げる。
   kanji-run        漢字が7字以上続く箇所(造語の圧縮漢語など。固有名詞・法令用語も拾う)
   no-chain         名詞と「の」が3回以上つながる箇所
   double-negative  「ないわけではない」のような二重否定
+  unrendered-bold  太字にならず `**` がそのまま表示される箇所(Markdown のみ)
 これらは判定ではない。読んで引っかからなければ直さない。
 
 ネットワーク通信、ファイルの書き込み、外部コマンドの実行は行わない。
@@ -25,10 +26,12 @@ from __future__ import annotations
 import argparse
 import bisect
 import glob
+import itertools
 import json
 import os
 import re
 import sys
+import unicodedata
 from dataclasses import dataclass, field
 from typing import Dict, Iterable, Iterator, List, Optional, Tuple
 
@@ -97,10 +100,13 @@ EXTRA_PATTERNS = (
     ("no-chain", NO_CHAIN_RE),
     ("double-negative", DOUBLE_NEGATIVE_RE),
 )
+UNRENDERED_BOLD = "unrendered-bold"
+EXTRA_KINDS = tuple(kind for kind, _ in EXTRA_PATTERNS) + (UNRENDERED_BOLD,)
 EXTRA_LABELS = {
     "kanji-run": f"kanji-run (>={KANJI_RUN_THRESHOLD} kanji in a row)",
     "no-chain": f"no-chain (noun + の x{NO_CHAIN_COUNT}+)",
     "double-negative": "double-negative",
+    UNRENDERED_BOLD: "unrendered-bold (** shown as-is)",
 }
 
 
@@ -195,23 +201,22 @@ def _skip_frontmatter(lines: List[str]) -> int:
     return 0
 
 
-def extract_blocks(text: str, markdown: bool = True) -> List[Block]:
-    text = text.replace("\r\n", "\n").replace("\r", "\n")
-    lines = text.split("\n")
-    builder = _BlockBuilder()
+def split_lines(text: str) -> List[str]:
+    return text.replace("\r\n", "\n").replace("\r", "\n").split("\n")
+
+
+def markdown_lines(lines: List[str]) -> Iterator[Tuple[int, Optional[str]]]:
+    """YAML frontmatter より後の行を (行番号, 行) で返す。
+
+    fenced code block と複数行の HTML コメントの中身は返さない。その始まりの位置を、
+    段落の切れ目として (行番号, None) で返す。
+    """
     fence_close: Optional[re.Pattern] = None
     in_comment = False
 
     for index in range(_skip_frontmatter(lines), len(lines)):
         raw = lines[index]
         number = index + 1
-
-        if not markdown:
-            if not raw.strip():
-                builder.flush()
-            else:
-                builder.add(number, URL_RE.sub("", raw).strip())
-            continue
 
         if fence_close is not None:
             if fence_close.match(raw):
@@ -224,27 +229,51 @@ def extract_blocks(text: str, markdown: bool = True) -> List[Block]:
 
         fence = FENCE_RE.match(raw)
         if fence:
-            builder.flush()
             marker = fence.group(1)
             fence_close = re.compile(
                 r"^\s{0,3}" + re.escape(marker[0]) + "{" + str(len(marker)) + r",}\s*$"
             )
+            yield number, None
             continue
         if "<!--" in raw and "-->" not in raw.split("<!--", 1)[1]:
-            builder.flush()
             in_comment = True
+            yield number, None
+            continue
+        yield number, raw
+
+
+def is_boundary_line(line: str) -> bool:
+    """空行・水平線・コメント・リンク定義のように、文章を含まず段落を区切る行か。"""
+    return bool(
+        not line.strip()
+        or RULE_RE.match(line)
+        or SETEXT_RE.match(line)
+        or COMMENT_LINE_RE.match(line)
+        or LINK_DEFINITION_RE.match(line)
+    )
+
+
+def extract_blocks(text: str, markdown: bool = True) -> List[Block]:
+    lines = split_lines(text)
+    builder = _BlockBuilder()
+
+    if not markdown:
+        for index in range(_skip_frontmatter(lines), len(lines)):
+            raw = lines[index]
+            if not raw.strip():
+                builder.flush()
+            else:
+                builder.add(index + 1, URL_RE.sub("", raw).strip())
+        builder.flush()
+        return builder.blocks
+
+    for number, raw in markdown_lines(lines):
+        if raw is None:
+            builder.flush()
             continue
 
         line = QUOTE_RE.sub("", raw)
-        if (
-            not line.strip()
-            or HEADING_RE.match(line)
-            or RULE_RE.match(line)
-            or SETEXT_RE.match(line)
-            or TABLE_ROW_RE.match(line)
-            or COMMENT_LINE_RE.match(line)
-            or LINK_DEFINITION_RE.match(line)
-        ):
+        if is_boundary_line(line) or HEADING_RE.match(line) or TABLE_ROW_RE.match(line):
             builder.flush()
             continue
 
@@ -256,6 +285,101 @@ def extract_blocks(text: str, markdown: bool = True) -> List[Block]:
 
     builder.flush()
     return builder.blocks
+
+
+# --- 表示されない太字 -------------------------------------------------------
+#
+# CommonMark では、`**` のすぐ内側が記号で、すぐ外側が文字だと、`**` は太字の区切りに
+# ならず、そのまま表示される。日本語では「**「用語」**を」「**必須です。**次に」で起きやすい。
+# 何を記号とみなすかは実装で違う。GitHub(cmark-gfm)は Unicode の P(句読点)だけを、
+# CommonMark 0.31 に従う実装(pandoc など)は S(★ などの記号)も記号とみなす。
+# どちらか一方でも表示されないものを拾う。
+
+_ASCII_PUNCTUATION = frozenset("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~")
+_PUNCTUATION_CATEGORIES = ("P", "PS")  # 記号とみなす Unicode の大分類。GitHub、CommonMark 0.31 の順
+CODE_SPAN_RE = re.compile(r"(`+)(.+?)(?<!`)\1(?!`)", re.S)
+STRONG_DELIMITER_RE = re.compile(r"(?<!\*)\*\*(?!\*)")
+
+
+def _is_space(ch: str) -> bool:
+    return ch in "\t\n\f\r" or unicodedata.category(ch) == "Zs"
+
+
+def _is_punctuation(ch: str, categories: str) -> bool:
+    return ch in _ASCII_PUNCTUATION or unicodedata.category(ch)[0] in categories
+
+
+def _can_open(before: str, after: str, categories: str) -> bool:
+    """CommonMark の left-flanking。"""
+    if _is_space(after):
+        return False
+    return (not _is_punctuation(after, categories)
+            or _is_space(before) or _is_punctuation(before, categories))
+
+
+def _can_close(before: str, after: str, categories: str) -> bool:
+    """CommonMark の right-flanking。"""
+    if _is_space(before):
+        return False
+    return (not _is_punctuation(before, categories)
+            or _is_space(after) or _is_punctuation(after, categories))
+
+
+def _strong_renders(text: str, opener: int, closer: int) -> bool:
+    def char(index: int) -> str:
+        return text[index] if 0 <= index < len(text) else " "  # 行の端は空白とみなす
+
+    return all(
+        _can_open(char(opener - 1), char(opener + 2), categories)
+        and _can_close(char(closer - 1), char(closer + 2), categories)
+        for categories in _PUNCTUATION_CATEGORIES
+    )
+
+
+def _inline_units(lines: List[str]) -> Iterator[List[Tuple[int, str]]]:
+    """太字が続きうる範囲(段落、リストの1項目、見出し、表の1行)ごとに、(行番号, 行) の一覧を返す。"""
+    unit: List[Tuple[int, str]] = []
+    for number, raw in markdown_lines(lines):
+        line = None if raw is None else QUOTE_RE.sub("", raw)
+        if line is None or is_boundary_line(line):
+            if unit:
+                yield unit
+            unit = []
+            continue
+        single_line = bool(HEADING_RE.match(line) or TABLE_ROW_RE.match(line))
+        if single_line or LIST_ITEM_RE.match(line):
+            if unit:
+                yield unit
+            unit = []
+        if single_line:
+            yield [(number, line)]
+        else:
+            unit.append((number, line))
+    if unit:
+        yield unit
+
+
+def find_unrendered_bold(text: str) -> List[Tuple[int, int, str]]:
+    """太字にならず `**` がそのまま表示される箇所を、(行番号, 長さ, 切り出し) の一覧で返す。
+
+    `**` を出現順に2つずつ対にして調べる。対にならない最後の `**` と、`*` の個数が2でない
+    区切り(`*` や `***`)は調べない。インラインコードの中は除く。
+    """
+    found: List[Tuple[int, int, str]] = []
+    for unit in _inline_units(split_lines(text)):
+        text_of_unit = "\n".join(line for _, line in unit)
+        line_offsets = list(itertools.accumulate(len(line) + 1 for _, line in unit))
+        # 長さを変えずに、コードの中身とエスケープした `*` を区切りの判定から外す。
+        masked = CODE_SPAN_RE.sub(lambda m: m.group(1) + "0" * len(m.group(2)) + m.group(1), text_of_unit)
+        masked = masked.replace("\\*", "\\\\")
+        delimiters = [m.start() for m in STRONG_DELIMITER_RE.finditer(masked)]
+        for opener, closer in zip(delimiters[0::2], delimiters[1::2]):
+            if _strong_renders(masked, opener, closer):
+                continue
+            line = unit[bisect.bisect_right(line_offsets, opener)][0]
+            snippet = make_snippet(text_of_unit.replace("\n", " "), opener, closer + 2)
+            found.append((line, closer + 2 - opener, snippet))
+    return found
 
 
 # --- 文の分割 ---------------------------------------------------------------
@@ -366,7 +490,7 @@ class FileResult:
     long_paragraphs: List[Candidate] = field(default_factory=list)
     long_sentences: List[Candidate] = field(default_factory=list)
     extras: Dict[str, List[Candidate]] = field(
-        default_factory=lambda: {kind: [] for kind, _ in EXTRA_PATTERNS}
+        default_factory=lambda: {kind: [] for kind in EXTRA_KINDS}
     )
 
 
@@ -415,6 +539,10 @@ def analyze_text(
                             Candidate(path, block.line_at(offset + match.start()), len(match.group()),
                                       make_snippet(sentence, match.start(), match.end()))
                         )
+    if extras and markdown:
+        result.extras[UNRENDERED_BOLD] = [
+            Candidate(path, line, length, snippet) for line, length, snippet in find_unrendered_bold(text)
+        ]
     return result
 
 
@@ -557,7 +685,7 @@ def format_locate(results: List[FileResult], limit: int, thresholds: Tuple[int, 
 
 def format_extras(results: List[FileResult], limit: int) -> str:
     lines = ["pointers (info only, not verdicts):"]
-    for kind, _ in EXTRA_PATTERNS:
+    for kind in EXTRA_KINDS:
         candidates = [c for r in results for c in r.extras[kind]]
         shown, omitted = select_candidates(candidates, limit)
         lines.append(f"{EXTRA_LABELS[kind]}: {len(candidates)}")
@@ -604,7 +732,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--locate", action="store_true",
                         help="長い段落と長い文の位置(ファイル名・行番号・長さ・冒頭)を示す")
     parser.add_argument("--extras", action="store_true",
-                        help=f"連続漢字({KANJI_RUN_THRESHOLD}字以上)、名詞+「の」の{NO_CHAIN_COUNT}連、二重否定を指摘として挙げる。判定ではない")
+                        help=f"連続漢字({KANJI_RUN_THRESHOLD}字以上)、名詞+「の」の{NO_CHAIN_COUNT}連、二重否定、"
+                             "表示されない太字を指摘として挙げる。判定ではない")
     parser.add_argument("--json", action="store_true", help="JSON で出力する(--locate と --extras の候補は全件)")
     parser.add_argument("--max-locate", type=int, default=DEFAULT_MAX_LOCATE, metavar="N",
                         help=f"--locate で表示する件数の上限(段落・文それぞれ)。0 で無制限。既定 {DEFAULT_MAX_LOCATE}")

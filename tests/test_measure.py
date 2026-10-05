@@ -334,11 +334,54 @@ class ExtrasTest(unittest.TestCase):
         self.assertIn("初回課金転換率", snippet)
 
 
+class UnrenderedBoldTest(unittest.TestCase):
+    """太字が表示されるかどうかは、GitHub の Markdown API と pandoc(gfm) で確かめた。"""
+
+    def lines(self, text: str, **kwargs):
+        return [c.line for c in analyze(text, extras=True, **kwargs).extras["unrendered-bold"]]
+
+    def test_symbol_inside_and_letter_outside_is_reported(self):
+        for text in ("次に**「文書の立場」**を決めます。", "これは**必須です。**詳しくは下に書きます。",
+                     "**`config`**を設定する。", "**注意:**この操作は戻せない。"):
+            with self.subTest(text=text):
+                self.assertEqual(self.lines(text), [1])
+
+    def test_bold_that_renders_is_not_reported(self):
+        for text in ("次に「**文書の立場**」を決めます。", "これは**必須です**。詳しくは下に書きます。",
+                     "立場は **「勧め」か「決まり」** で決めます。", "（**重要**）を見る。"):
+            with self.subTest(text=text):
+                self.assertEqual(self.lines(text), [])
+
+    def test_symbols_count_as_punctuation_for_commonmark_0_31(self):
+        # GitHub では表示されるが、CommonMark 0.31 に従う実装では表示されない。
+        self.assertEqual(self.lines("これは**★重要**です。"), [1])
+
+    def test_bold_across_lines_reports_the_line_of_the_opening_delimiter(self):
+        self.assertEqual(self.lines("一行目である。\nこれは**必須\nです。**詳しくは下に。\n"), [2])
+
+    def test_delimiters_do_not_pair_across_list_items(self):
+        self.assertEqual(self.lines("- 項目の**「一つ目\n- 二つ目」**を見る。\n"), [])
+
+    def test_headings_and_table_rows_are_checked(self):
+        self.assertEqual(self.lines("## 次に**「立場」**を決める\n\n| **「列」**の値 |\n"), [1, 3])
+
+    def test_code_and_escaped_asterisks_are_not_reported(self):
+        text = "`**「a」**を` の書き方。\n\n\\*\\*「b」\\*\\*を見る。\n\n```\n**「c」**を\n```\n"
+        self.assertEqual(self.lines(text), [])
+
+    def test_plain_text_is_not_checked(self):
+        self.assertEqual(self.lines("次に**「文書の立場」**を決めます。", markdown=False), [])
+
+    def test_bold_is_not_checked_without_extras(self):
+        self.assertEqual(analyze("次に**「文書の立場」**を決めます。").extras["unrendered-bold"], [])
+
+
 class ExtrasCommandLineTest(unittest.TestCase):
     def setUp(self):
         self._tmp = temporary_directory()
         self.path = Path(self._tmp.name) / "a.md"
-        self.path.write_text("初回課金転換率を見る。\n\nできないわけではない。\n", encoding="utf-8")
+        self.path.write_text("初回課金転換率を見る。\n\nできないわけではない。\n\n次に**「立場」**を決める。\n",
+                             encoding="utf-8")
 
     def tearDown(self):
         self._tmp.cleanup()
@@ -351,6 +394,8 @@ class ExtrasCommandLineTest(unittest.TestCase):
         self.assertIn(f"{self.path}:1  kanji-run  7  ", out)
         self.assertIn("double-negative: 1", out)
         self.assertIn(f"{self.path}:3  double-negative  ", out)
+        self.assertIn("unrendered-bold (** shown as-is): 1", out)
+        self.assertIn(f"{self.path}:5  unrendered-bold  ", out)
 
     def test_default_output_has_no_pointers(self):
         code, out, _ = run_script(SCRIPT, "--locate", str(self.path))
@@ -365,6 +410,7 @@ class ExtrasCommandLineTest(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(entry["pointers"]["kanji-run"][0]["line"], 1)
         self.assertEqual(entry["pointers"]["no-chain"], [])
+        self.assertEqual(entry["pointers"]["unrendered-bold"][0]["line"], 5)
 
     def test_extras_can_be_combined_with_locate(self):
         code, out, _ = run_script(SCRIPT, "--locate", "--extras", str(self.path))
