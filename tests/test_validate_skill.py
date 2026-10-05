@@ -354,7 +354,7 @@ class ScriptSafetyTest(ValidationCase):
 
     def test_real_scripts_are_read_only(self):
         report = validate.Report()
-        for name in ("measure.py", "verify_preservation.py"):
+        for name in ("measure.py", "verify_preservation.py", "compare_rewrite.py"):
             validate.check_script_safety(SKILL_DIR / "scripts" / name, name, report)
         self.assertEqual(report.errors, [])
 

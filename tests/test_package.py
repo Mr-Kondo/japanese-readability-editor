@@ -44,7 +44,7 @@ class ZipStructureTest(PackageCase):
         with zipfile.ZipFile(self.build()) as archive:
             names = set(archive.namelist())
         for expected in ("references/readability-rules.md", "scripts/measure.py",
-                         "scripts/verify_preservation.py", "assets/examples.md"):
+                         "scripts/verify_preservation.py", "scripts/compare_rewrite.py", "assets/examples.md"):
             self.assertIn(f"{SKILL_NAME}/{expected}", names)
 
     def test_zip_matches_the_source_files_byte_for_byte(self):

@@ -10,14 +10,15 @@ permissions:
 
 jobs:
   test:
-    name: test (${{ matrix.os }}, python ${{ matrix.python }})
+    name: test (${{ matrix.os }}, python ${{ matrix.python }}${{ matrix.sudachi && ', sudachi' || '' }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - { os: ubuntu-latest, python: "3.9" }
+          - { os: ubuntu-latest, python: "3.10" }
           - { os: ubuntu-latest, python: "3.x" }
+          - { os: ubuntu-latest, python: "3.x", sudachi: true }
           - { os: macos-latest, python: "3.x" }
           - { os: windows-latest, python: "3.x" }
     steps:
@@ -26,6 +27,11 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
+
+      # compare_rewrite.py は、SudachiPy が入っていれば使う。入っていない経路は、ほかのジョブで試す。
+      - name: Install SudachiPy
+        if: matrix.sudachi
+        run: python -m pip install sudachipy sudachidict-core
 
       - name: Validate the skill
         run: python tools/validate_skill.py

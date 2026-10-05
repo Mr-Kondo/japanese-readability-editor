@@ -46,6 +46,7 @@ japanese-readability-editor/
 │   ├── references/readability-rules.md
 │   ├── scripts/measure.py
 │   ├── scripts/verify_preservation.py
+│   ├── scripts/compare_rewrite.py
 │   └── assets/examples.md
 ├── tools/
 │   ├── install.py
@@ -67,6 +68,7 @@ japanese-readability-editor/
 | `assets/examples.md` | 修正前後の例。必要なときだけ読む |
 | `scripts/measure.py` | 段落・文の長さなどの計測、修正候補の位置の表示、`--extras` の指摘(読み取り専用) |
 | `scripts/verify_preservation.py` | 空白以外の文字列が同一かの検査(読み取り専用) |
+| `scripts/compare_rewrite.py` | 書き換えの前後の比較。意味が変わったかもしれない箇所を挙げる(読み取り専用。SudachiPy が入っていれば使う) |
 | `tools/install.py` | 各環境の配置先へコピーまたはリンクする |
 | `tools/package.py` | ZIP、SHA-256、Gemini Apps 向けの出力を生成する |
 | `tools/validate_skill.py` | Skill の構造と互換性を検証する |
@@ -79,10 +81,15 @@ japanese-readability-editor/
 
 ### 必要なもの
 
-- Python 3.9 以上
+- Python 3.10 以上
 - Git(リポジトリを取得する場合)
+- SudachiPy と辞書(任意。`compare_rewrite.py` の判定を正確にする)
 
-インストーラも検証ツールも、Python の標準ライブラリだけで動きます。追加のパッケージは要りません。
+インストーラも検証ツールも、Python の標準ライブラリだけで動きます。SudachiPy は、入っていなくても動きます。入れる場合は、次のとおりです。
+
+```bash
+python3 -m pip install sudachipy sudachidict-core
+```
 
 ### 取得する
 
@@ -268,7 +275,7 @@ japanese-readability-editor を paragraph-only モードで適用。
 
 ### スクリプトを直接使う
 
-Python 3.9 以上が必要です。標準ライブラリだけを使い、ネットワーク通信もファイルの書き込みもしません。
+Python 3.10 以上が必要です。どのスクリプトも標準ライブラリだけで動き、ネットワーク通信とファイルの書き込みをしません。`compare_rewrite.py` は、SudachiPy が入っていれば使います。
 
 次のコマンドは、Skill のディレクトリで実行する場合の例です。ディレクトリは、`skill/japanese-readability-editor/` か、配置先の `japanese-readability-editor/` です。
 
@@ -279,6 +286,8 @@ python3 scripts/measure.py --json README.md
 python3 scripts/measure.py --locate docs/*.md
 python3 scripts/measure.py --locate --extras README.md
 python3 scripts/verify_preservation.py before.md after.md
+python3 scripts/compare_rewrite.py before.md after.md
+python3 scripts/compare_rewrite.py --json before.md after.md
 ```
 
 `measure.py` は、次の指標を出します。
@@ -309,6 +318,24 @@ python3 scripts/verify_preservation.py before.md after.md
 `verify_preservation.py` は、空白を除いた文字列が一致すれば終了コード 0、しなければ 1 を返します(読み込みに失敗すると 2)。
 
 > **注意**: このスクリプトが保証するのは「空白以外の文字列が変更されていないこと」だけです。意味の保存は保証しません。英単語の間の空白など、空白が意味を持つ箇所の変更も検出できません。
+
+`compare_rewrite.py` は、書き換えの前後を比べ、意味が変わったかもしれない箇所を挙げます。
+
+- 数値、URL、コード、用語の候補が、消えたか、増えたか
+- 書き換え後の文に、対応する元の文がないか(原文にない情報の候補)
+- 元の文に、対応する書き換え後の文がないか(削除の候補)
+- 否定、推量、可能、義務、依頼、勧誘、強調、限定、残余の条件の表現が、対応する文のあいだで増減したか
+- 敬体と常体のどちらが多いかが変わったか
+
+これらも判定ではありません。正しい言い換えも拾います。
+
+SudachiPy と辞書が入っていれば、形態素解析を使います。否定を品詞で数え、文の対応を内容語の重なりで推定し、カタカナ語の表記ゆれ(サーバとサーバー)を同じ語とみなします。`--tokenizer regex` を付けると、使いません。
+
+uv があれば、次のコマンドで、SudachiPy を自動で入れて実行できます。スクリプトの先頭に、依存関係を宣言しています(PEP 723)。
+
+```bash
+uv run scripts/compare_rewrite.py before.md after.md
+```
 
 ## 環境別の対応表
 
@@ -616,12 +643,13 @@ python3 -m unittest discover -s tests -v
 
 標準ライブラリの `unittest` だけを使います。対象は、次のとおりです。
 
-- `measure.py`、`verify_preservation.py`
+- `measure.py`、`verify_preservation.py`、`compare_rewrite.py`
 - `validate_skill.py`、`install.py`、`package.py`
 - `SKILL.md` の `description`(要件で挙げたトリガー語と、除外する入力を含むか、200字以内か)
+- `SKILL.md` と references の、意味を保つための指示が消えていないか。`SKILL.md` が150行以内か
 - `.claude-plugin/` の定義(正本を指し、Skill を複製していないか)
 
-CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で、検証、テスト、パッケージ生成を実行します。
+CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で、検証、テスト、パッケージ生成を実行します。Ubuntu では、Python 3.10 と最新版で試し、1つのジョブでは SudachiPy を入れて試します。`compare_rewrite.py` の SudachiPy を使うテストは、SudachiPy が入っている環境だけで実行します。
 
 ## 20. 制約と非対応
 
@@ -634,6 +662,8 @@ CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で
 - Claude Code は `.agents/skills/` を読みません。`.claude/skills/` へ別に配置します。
 - Codex の `$CODEX_HOME/skills` は使いません。
 - 計測は、日本語の文章を対象にしたヒューリスティックです。文の区切りは、句点、感嘆符、疑問符と、括弧や引用の対応から推定します。Markdown の解析は簡易で、入れ子の引用、インデントされたコードブロック、HTML の複雑な構造は正確に扱えません。
+- `compare_rewrite.py` の文の対応は、語の重なりによる推定です。大きく言い換えた文は、意味が同じでも、対応がないと出ることがあります。否定以外の表現の検出は、正規表現による近似です。
+- SudachiPy の辞書は、インストールすると約190MBあります。ZIP には含めません。アップロード型の環境では、標準ライブラリの経路で動きます。
 - `--extras` は正規表現による指摘で、形態素解析を使いません。漢字の連続は、固有名詞や法令用語も拾います。「の」の連鎖は、漢字とカタカナの名詞に限ります。
 - 表示されない太字は、`**` を出現順に2つずつ組にして、CommonMark の区切りの規則で調べます。何を記号とみなすかは実装で違うため、GitHub と、CommonMark 0.31 に従う実装(pandoc など)のどちらか一方で表示されない箇所を拾います。そのため、GitHub では表示される `**★重要**` も指摘します。
 - Claude Code のプラグイン定義は、`claude plugin validate` で検証しました。
@@ -650,16 +680,18 @@ CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で
 - 語順、読点、接続詞の射程、否定の入れ子、列挙の埋没、語形の重さの整理
 - 実文書での閾値の校正結果と、「指摘は起点であり命令ではない」という運用
 - 見出しと各段落の先頭文だけを読んで、論旨を確かめる手順
+- SudachiPy を任意の依存として使い、PEP 723 の宣言で `uv run` から入れる方法
 - 中間ファイルを、利用者のプロジェクトに残さない運用
 - `--extras` の指摘のうち、連続漢字、「の」の連鎖、二重否定
 - Claude Code プラグインとしての配布、CI、Release
 
-同リポジトリは、形態素解析、AI臭さのスコア、文体の型、サブエージェントによる推敲も持ちます。このリポジトリは、標準ライブラリだけで動くことと、環境に依存しない単一の `SKILL.md` を優先して、これらは取り入れていません。
+同リポジトリは、AI臭さのスコア、文体の型、サブエージェントによる推敲も持ちます。このリポジトリは、標準ライブラリだけで動くことと、環境に依存しない単一の `SKILL.md` を優先して、これらは取り入れていません。形態素解析は、`compare_rewrite.py` で、入っていれば使う形にしました。
 
 [nanaism/yomiyasu](https://github.com/nanaism/yomiyasu)(MIT)からは、次の点を取り入れました。
 
 - 書き換えた後に確かめる、言い切りの強さと比重
 - 太字が表示されない書き方の検出(`--extras` の unrendered-bold)と、その直し方
+- 書き換えの前後を機械で比べる考え方(`yomiyasu_diff.py`)。`compare_rewrite.py` は、この考え方を参考に、独自に実装しました
 - 定着した慣用句を残す目安と、比喩を言い換えても含みを残すこと
 - 結論や警告を伝える見出しを、一般的な題名に薄めないこと
 - 内容のない定型の結び
