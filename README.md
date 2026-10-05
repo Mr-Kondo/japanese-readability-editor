@@ -35,6 +35,7 @@
   1. [Qiita: masakai](https://qiita.com/masakai/items/7bc5250d04c4dc8669e4)
   2. [Zenn: ncdc](https://zenn.dev/ncdc/articles/6ea029ba5ecf65)
   3. [Zenn: lotation](https://zenn.dev/lotation/articles/8520b50540b274)
+- 末尾の「[参考にしたプロジェクト](#参考にしたプロジェクト)」に挙げた3つのリポジトリからも、原則と手順を取り入れました。
 
 ## 3. ディレクトリ構成
 
@@ -206,8 +207,10 @@ python3 tools/install.py --scope user --target all --on-conflict backup
 
 `--link` でインストールした場合は、複製ではなく正本へのリンクなので、`git pull` だけで反映されます。ただし、リポジトリを移動すると、リンクが切れます。
 
+複製で入れたものをリンクに切り替える場合は、`--on-conflict backup` を付けます。付けないと、既にある複製を残したまま、何もせずに終わります。
+
 ```bash
-python3 tools/install.py --scope user --target all --link
+python3 tools/install.py --scope user --target all --link --on-conflict backup
 ```
 
 アップロード型の環境では、新しい ZIP を、もう一度アップロードします。ZIP は、Release からダウンロードするか、`python3 tools/package.py` で作ります。
@@ -232,7 +235,7 @@ claude plugin update japanese-readability-editor@japanese-readability-editor
 
 ### 削除する
 
-インストーラは、ファイルを削除する機能を持ちません。不要になったら、配置先の `japanese-readability-editor/` ディレクトリを、自分で削除してください。`--link` で入れた場合は、リンクだけを削除します。リンクの先にある正本は消えません。
+インストーラには、アンインストールの機能がありません。不要になったら、配置先の `japanese-readability-editor/` ディレクトリを、自分で削除してください。`--link` で入れた場合は、リンクだけを削除します。リンクの先にある正本は消えません。
 
 配置先は、`--dry-run` の出力で確認できます。
 
@@ -296,7 +299,9 @@ python3 scripts/compare_rewrite.py --json before.md after.md
 - 段落数、平均段落長、200字以上の段落数
 - 文数、平均文長、80字以上の文数、1文あたりの平均読点数
 
-`--locate` を付けると、候補のファイル名、行番号、長さ、冒頭を示します。次のものは、可能な範囲で解析から除きます。
+`--locate` を付けると、候補のファイル名、行番号、長さ、冒頭を示します。
+
+計測では、`--locate` の有無にかかわらず、次のものを可能な範囲で解析から除きます。
 
 - fenced code block と YAML frontmatter
 - URL そのもの(Markdown のリンクは表示テキストだけを残す)
