@@ -3,7 +3,8 @@
 ChatGPT での実機確認で、二重否定の意味の反転、残余条件の言い換え、文体の変更が起きた。
 その対策として加えた指示と、他の推敲スキル(yomiyasu、japanese-tech-writing)から取り入れた
 言い切りの強さと比重の確認、比喩と見出しを直しすぎないための指示が、書き換えの途中で
-失われないようにする。
+失われないようにする。記事と同じ条件の比較で、結びを原文にない行動の指示に置き換える誤りが
+起きたため、その対策も含める。
 文言の一致を見るだけで、Agent が守るかどうかの評価ではない。
 """
 
@@ -47,6 +48,10 @@ class SkillGuardsTest(unittest.TestCase):
         for phrase in ("中身を推測で補わず、利用者に確かめる", "定着した慣用句は残す", "含みは残す",
                        "結論や警告を伝える見出しは、一般的な題名に薄めない"):
             self.assertIn(phrase, self.skill)
+
+    def test_closings_are_not_replaced_with_new_actions(self):
+        self.assertIn("原文にない行動や手順(「まずは〜を一つ書き出してみてください」)を作らない", self.skill)
+        self.assertIn("確かめられないとき(本文だけを求められたときなど)は、その箇所だけ元の表現を残す", self.skill)
 
     def test_skill_md_stays_lean(self):
         self.assertLessEqual(len(self.skill.splitlines()), MAX_SKILL_LINES)
