@@ -209,6 +209,20 @@ ChatGPT では、同じ名前の Skill があると、置き換えの確認(Skil
 
 置き換えの後は、ファイル一覧から、ChatGPT が追加した `assets/icon.svg` が消えました。画面上部のアイコンは、表示されたままでした。
 
+Claude Code のプラグインとして入れた場合は、マーケットプレースを更新してから、プラグインを更新します。
+
+```bash
+claude plugin marketplace update japanese-readability-editor
+```
+
+```bash
+claude plugin update japanese-readability-editor@japanese-readability-editor
+```
+
+`claude plugin update` だけでは、更新されません。手元に取得したマーケットプレースが古いままなので、「already at the latest version」と表示されます。更新した後は、Claude Code を再起動します。
+
+プラグインの版は、コミットの短いハッシュで表示されます。`claude plugin list` の `Version` で確かめられます。
+
 ### 削除する
 
 インストーラは、ファイルを削除する機能を持ちません。不要になったら、配置先の `japanese-readability-editor/` ディレクトリを、自分で削除してください。`--link` で入れた場合は、リンクだけを削除します。リンクの先にある正本は消えません。
@@ -434,7 +448,7 @@ Claude Code のプラグインとしても、入れられます。
 
 プラグインの Skill は、プラグイン名を前に付けて呼びます。たとえば、`/japanese-readability-editor:japanese-readability-editor` です。
 
-定義ファイル(`.claude-plugin/`)は、`skill/` を指すだけです。Skill は複製していません。`version` を設定していないので、更新はコミットに追従します。
+定義ファイル(`.claude-plugin/`)は、`skill/` を指すだけです。Skill は複製していません。`version` を設定していないので、更新はコミットに追従します。更新の手順は、インストール手順の「更新する」にあります。
 
 ## 10. GitHub Copilot
 
@@ -622,7 +636,8 @@ CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で
 - 計測は、日本語の文章を対象にしたヒューリスティックです。文の区切りは、句点、感嘆符、疑問符と、括弧や引用の対応から推定します。Markdown の解析は簡易で、入れ子の引用、インデントされたコードブロック、HTML の複雑な構造は正確に扱えません。
 - `--extras` は正規表現による指摘で、形態素解析を使いません。漢字の連続は、固有名詞や法令用語も拾います。「の」の連鎖は、漢字とカタカナの名詞に限ります。
 - 表示されない太字は、`**` を出現順に2つずつ組にして、CommonMark の区切りの規則で調べます。何を記号とみなすかは実装で違うため、GitHub と、CommonMark 0.31 に従う実装(pandoc など)のどちらか一方で表示されない箇所を拾います。そのため、GitHub では表示される `**★重要**` も指摘します。
-- Claude Code のプラグイン定義は、`claude plugin validate` で検証しました。`/plugin install` の実際の操作は、検証していません。
+- Claude Code のプラグイン定義は、`claude plugin validate` で検証しました。
+- プラグインのインストールと更新は、マーケットプレースの追加を含めて、`claude plugin` のコマンドで確かめました。確認日は 2026-10-05、Claude Code は 2.1.285 です。手元の設定に影響しないよう、一時的な設定ディレクトリ(`CLAUDE_CONFIG_DIR`)を使いました。対話画面の `/plugin` での操作は、検証していません。
 - Skill は文章の意味を検証しません。意味の保存を保証するのは、Agent の判断と、利用者の確認です。
 - ChatGPT での実機確認では、二重否定の意味の反転、残余の条件の言い換え、文体の変更が起きました。`SKILL.md` に対策を入れましたが、誤りを完全には防げません。
 - ChatGPT の暗黙起動は、実測では不安定でした。確実に使うには、`@` で指定してください(6 節)。
