@@ -15,7 +15,8 @@ SKILL.md の「書き換えた後の照合」を、機械で補助する。挙�
   numbers    数値(単位を含む)が消えた、または増えた
   urls       URL が消えた、または増えた
   code       インラインコードと fenced code block が消えた、または増えた
-  terms      英数字の語とカタカナ語(固有名詞・技術用語の候補)が消えた、または増えた
+  terms      英数字の語とカタカナ語(固有名詞・技術用語の候補)が、文書から消えた、または新しく出た。
+             出る回数は比べない(重複を減らす書き換えで、回数は自然に減る)
   unmatched  書き換え後の文に、対応する元の文がない(原文にない情報の候補)。
              元の文に、対応する書き換え後の文がない(削除の候補)
   markers    否定、推量、可能、義務、依頼、勧誘、強調、限定、残余の条件の表現が、
@@ -339,6 +340,25 @@ def compare_items(before: List[Item], after: List[Item]) -> Dict[str, List[Item]
             "added": take_surplus(after, after_counts - before_counts)}
 
 
+def first_occurrences(items: List[Item], keys: set) -> List[Item]:
+    """keys に含まれるものを、それぞれ最初に出た1回だけ選ぶ。"""
+    seen: set = set()
+    chosen: List[Item] = []
+    for item in items:
+        if item.key in keys and item.key not in seen:
+            seen.add(item.key)
+            chosen.append(item)
+    return chosen
+
+
+def compare_presence(before: List[Item], after: List[Item]) -> Dict[str, List[Item]]:
+    """文書に一度も出なくなったものと、新しく出たものを返す。出る回数の増減は挙げない。"""
+    before_keys = {item.key for item in before}
+    after_keys = {item.key for item in after}
+    return {"missing": first_occurrences(before, before_keys - after_keys),
+            "added": first_occurrences(after, after_keys - before_keys)}
+
+
 def compare_sentences(before: Document, after: Document) -> Tuple[Dict[str, List[Item]], Dict[str, dict]]:
     unmatched: Dict[str, List[Item]] = {"after": [], "before": []}
     markers = {kind: {"before": sum(s.markers[kind] for s in before.sentences),
@@ -383,7 +403,7 @@ def compare_documents(before: Document, after: Document, tokenizer: str = RegexA
         "numbers": compare_items(before.numbers, after.numbers),
         "urls": compare_items(before.urls, after.urls),
         "code": compare_items(before.code, after.code),
-        "terms": compare_items(before.terms, after.terms),
+        "terms": compare_presence(before.terms, after.terms),
         "unmatched": unmatched,
         "markers": markers,
         "style": {"before": style_before, "after": style_after,

@@ -99,9 +99,17 @@ class ItemsTest(unittest.TestCase):
         self.assertEqual(texts(result["terms"]["missing"]), ["GitHub", "Actions"])
         self.assertEqual(texts(result["terms"]["added"]), ["ギットハブ", "アクション"])
 
-    def test_repeated_items_are_counted_and_the_later_one_is_reported(self):
+    def test_repeated_numbers_are_counted_and_the_later_one_is_reported(self):
+        result = run("上限は3回である。\n再試行も3回である。\n", "上限と再試行は3回である。\n")
+        self.assertEqual([(i.line, i.text) for i in result["numbers"]["missing"]], [(2, "3回")])
+
+    def test_a_term_used_fewer_times_is_not_reported(self):
         result = run("APIを呼ぶ。\nAPIを閉じる。\n", "APIを呼んで閉じる。\n")
-        self.assertEqual([(i.line, i.text) for i in result["terms"]["missing"]], [(2, "API")])
+        self.assertEqual(result["terms"], {"missing": [], "added": []})
+
+    def test_a_term_gone_from_the_document_is_reported_once_at_its_first_line(self):
+        result = run("APIを呼ぶ。\nAPIを閉じる。\n", "関数を呼んで閉じる。\n")
+        self.assertEqual([(i.line, i.text) for i in result["terms"]["missing"]], [(1, "API")])
 
 
 class UnmatchedTest(unittest.TestCase):
