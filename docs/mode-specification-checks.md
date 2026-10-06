@@ -128,7 +128,7 @@ jetski: no output produced — a tool required the "command" permission that hea
 ## 7. この記録の限界
 
 - 環境ごとに、モデルは1つ(Codex は、効果の設定が Medium と xhigh)で、文章は1つです。回数は、3回から15回です。
-- ChatGPT Work、Claude Cowork、Gemini CLI、Gemini Apps は、測っていません。Gemini CLI は、この環境に入っていません。
+- ChatGPT Work、Claude Cowork、Gemini CLI、Gemini Apps は、測っていません。Gemini CLI は、この環境に入っていません。ChatGPT Work と Claude のアプリは、2026-10-07 に別に試しました([使い方の詳細](usage.md#動作の確認))。
 - Claude Code は、組み込みのツールを無効にしました。ツールを使える状態は、測っていません。
 - Claude Code は、最終の版の測定(15回)より前の実行で、連携先(Google Drive など)を有効にしたままにしていました。そのうち1回で、モデルが対象の文章を Google Drive で探そうとしましたが、権限がなく、実行されませんでした。最終の版の測定は、`--strict-mcp-config` で、連携先を無効にしました。
 - テスト用のコピーは、名前だけが本物と違います。本物の名前で、利用者がインストール済みの Skill がある環境では、結果が変わる可能性があります。
