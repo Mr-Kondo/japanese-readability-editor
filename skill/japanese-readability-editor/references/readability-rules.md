@@ -574,9 +574,15 @@ python3 scripts/compare_rewrite.py before.md after.md
 
 文の対応は、語の重なりで推定する。語順の入れ替えと、2文までの分割・統合には対応する。大きく言い換えた文は、意味が同じでも、対応がないと出ることがある。
 
-SudachiPy と辞書(`pip install sudachipy sudachidict-core`)が入っていれば、形態素解析を使う。否定を品詞で数え、「なくなる」「情けない」を否定に数えず、「迷わず」「ざるを得ない」を数える。カタカナ語の表記ゆれ(サーバとサーバー)は、同じ語とみなす。英数字の語は、カタカナの読みに置き換えずに比べる。
+SudachiPy と辞書(sudachidict-core か sudachidict-small など)が入っていれば、形態素解析を使う。否定を品詞で数え、「なくなる」「情けない」を否定に数えず、「迷わず」「ざるを得ない」を数える。カタカナ語の表記ゆれ(サーバとサーバー)は、同じ語とみなす。英数字の語は、カタカナの読みに置き換えずに比べる。
 
-SudachiPy が入っていなければ、標準ライブラリだけで動く。`uv run scripts/compare_rewrite.py` で実行すると、SudachiPy が自動で入る。
+SudachiPy が入っていなければ、標準ライブラリだけで動き、出力の `tokenizer` が `regex` になる。入れるかどうかは、実行環境で決める。
+
+- 利用者の手元ではない、クラウドの実行環境(ChatGPT や Claude のアプリなど)では、SudachiPy を入れて、照合をやり直す。`python3 -m pip install sudachipy sudachidict-small` を一度だけ試す。ネットワークがなく入らなければ、`regex` の結果を使う。
+- ChatGPT Work では、コマンドのネットワークが既定で制限されている。そのまま `pip` を実行すると、パッケージが見つからないという誤りになる。ネットワークを使える権限で実行すると、入れられる。入れたものは、次の会話でも残る。
+- small の辞書は、core の約半分の大きさである。`assets/examples.md` の修正例では、core と同じ指摘になった。
+- 利用者の手元の環境(Codex、Claude Code、Gemini CLI など)には、断りなく入れない。`uv run scripts/compare_rewrite.py` も、SudachiPy を取得して入れるので、同じ扱いにする。
+- 手元で使うには、利用者が先に入れておく。Codex のサンドボックスのようにネットワークのない環境では、実行中には入れられない。
 
 ## 15. 直した後の自己点検
 

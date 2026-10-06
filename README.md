@@ -87,11 +87,7 @@ japanese-readability-editor/
 - Git(リポジトリを取得する場合)
 - SudachiPy と辞書(任意。`compare_rewrite.py` の判定を正確にする)
 
-インストーラも検証ツールも、Python の標準ライブラリだけで動きます。SudachiPy は、入っていなくても動きます。入れる場合は、次のとおりです。
-
-```bash
-python3 -m pip install sudachipy sudachidict-core
-```
+インストーラも検証ツールも、Python の標準ライブラリだけで動きます。SudachiPy は、入っていなくても動きます。入れ方は、環境によって違います(この節の「SudachiPy を入れる」)。
 
 ### 取得する
 
@@ -196,6 +192,56 @@ Release に添付されるのは、ZIP、SHA-256、Gemini Apps 向けの指示�
 | ChatGPT Work | `dist/japanese-readability-editor.zip` | 8 節 |
 | Claude Cowork | `dist/japanese-readability-editor.zip` | 10 節 |
 | Gemini Apps | `dist/gemini-apps/japanese-readability-editor/`、または `dist/gemini-apps-instructions.md` の貼り付け | 13 節 |
+
+### SudachiPy を入れる(任意)
+
+`compare_rewrite.py` は、SudachiPy と辞書が入っていれば、否定と文の対応をより正確に判定します。入っていなければ、標準ライブラリだけで動きます。どちらで動いたかは、出力の `tokenizer` で分かります。
+
+Skill は、利用者の手元の環境には、SudachiPy を断りなく入れません。実行中に入れるのは、利用者の手元ではない、クラウドの実行環境だけです。
+
+| 環境 | 入れ方 |
+|---|---|
+| Codex、Claude Code、GitHub Copilot(CLI とエディタ)、Gemini CLI、Antigravity | 先に、手元の `python3` に入れておく(下のコマンド) |
+| ChatGPT Work | Skill の指示で、エージェントが実行中に入れる。ネットワークを使える権限が必要(下の「ChatGPT Work での確認」) |
+| Claude のアプリ(Cowork を含む) | Skill の指示で、エージェントが実行中に入れる。入らなければ、標準ライブラリで動く(未確認。下の注) |
+| Copilot のクラウドエージェント | `.github/workflows/copilot-setup-steps.yml` で、先に入れておく |
+| Codex のクラウド環境 | 環境の setup script で、先に入れておく |
+| Claude API | 入れられない。標準ライブラリで動く |
+| Gemini Apps | スクリプトを実行しないので、関係しない |
+
+手元の環境では、エージェントが呼ぶ `python3` に入れます。
+
+```bash
+python3 -m pip install sudachipy sudachidict-core
+```
+
+Homebrew や Debian・Ubuntu の Python では、`externally-managed-environment` のエラーで断られます。その場合は、`--user --break-system-packages` を付けて、ユーザーの領域に入れます。Python 本体の領域には書き込みません。
+
+```bash
+python3 -m pip install --user --break-system-packages sudachipy sudachidict-core
+```
+
+ユーザーの領域は、Python の版ごとに分かれています。Python を 3.14 から 3.15 に上げたときなどは、もう一度入れてください。
+
+Codex のサンドボックスでは、ネットワークを使えないので、エージェントが実行中に入れることはできません。先に入れておけば、サンドボックスの中でも使えます。macOS の Codex CLI 0.155.1 で、読み取り専用と workspace-write の両方を確認しました(2026-10-06)。
+
+辞書は、core と small のどちらでも動きます。インストール後の大きさは、core が約190MB、small が約110MBです。`skill/japanese-readability-editor/assets/examples.md` の18組の修正例では、どちらも同じ指摘になりました。クラウドの実行環境では、入れる時間を短くするために、Skill は small を使います。
+
+#### ChatGPT Work での確認
+
+2026-10-06 に、Plus プランのアカウントで確かめました。Work モードで、既定のモデル(GPT-6 Luna、Medium)を使いました。
+
+- コマンドは、既定ではネットワークを使えません。そのまま `pip install` を実行すると、`No matching distribution found for sudachipy` で失敗しました。設定の「Work network access」がオンでも、同じでした。
+- ネットワークを使える権限でコマンドを実行すると、入りました。その後の照合では、`tokenizer: sudachi (sudachidict_small)` と出ました。承認の画面は出ませんでした。
+- 最初の版の指示(「入れてよい」)では、ChatGPT は入れようとせず、`regex` の結果を返しました。そこで、「入れて、照合をやり直す」に改め、ネットワークを使える権限で実行することを書き足しました。
+- 入れた SudachiPy は、実行環境の領域(`/opt/codex/runtimes/` の下)に入り、次の会話でも残りました。同じ権限で削除しようとすると、承認の審査で拒否されました。
+- 改めた指示だけで、SudachiPy のない状態から入れるかは、確かめられていません。確認に使った環境には、すでに入っていたためです。
+
+注: Claude のアプリでは、まだ確かめていません。
+
+- Claude のアプリでは、組織のネットワークの設定によります([Claude Help Center](https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude))。Team の既定は、パッケージ管理ツール(PyPI など)だけを許可します。Enterprise の新しい組織では、既定で無効です。Cowork での扱いは、確認できていません。
+- Copilot のクラウドエージェントでは、既定の許可リストに、Python のパッケージ置き場が含まれます([GitHub Docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-firewall))。
+- Codex のクラウド環境では、setup script がネットワークを使えます。エージェントの実行中は、既定では使えません([Codex: Cloud environments](https://learn.chatgpt.com/docs/environments/cloud-environment))。
 
 ### 更新する
 
@@ -373,6 +419,8 @@ ChatGPT のワークスペースに Skill をアップロードする方式で�
 2. ChatGPT の Plugins → Skills を開き、Add → Upload from your computer で、ZIP を選びます。
 
 アップロードできるのは、`.zip`、`.skill`、`SKILL.md` で、最大サイズは1ファイルあたり25MBです。
+
+SudachiPy は、Skill の指示で、エージェントが実行中に入れます(5 節の「SudachiPy を入れる」)。
 
 Plus プランのアカウントで、次を確認しました(2026-09-29)。
 
@@ -612,7 +660,9 @@ python3 -m unittest discover -s tests -v
 - `SKILL.md` と references の、意味を保つための指示が消えていないか。`SKILL.md` が150行以内か
 - `.claude-plugin/` の定義(正本を指し、Skill を複製していないか)
 
-CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で、検証、テスト、パッケージ生成を実行します。Ubuntu では、Python 3.10 と最新版で試し、1つのジョブでは SudachiPy を入れて試します。`compare_rewrite.py` の SudachiPy を使うテストは、SudachiPy が入っている環境だけで実行します。
+CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で、検証、テスト、パッケージ生成を実行します。
+
+Ubuntu では、Python 3.10 と最新版で試し、2つのジョブでは SudachiPy を入れて試します。辞書は、一方が core、もう一方が small です。`compare_rewrite.py` の SudachiPy を使うテストは、SudachiPy が入っている環境だけで実行します。
 
 ## 22. 制約と非対応
 
@@ -626,7 +676,7 @@ CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で
 - Codex の `$CODEX_HOME/skills` は使いません。
 - 計測は、日本語の文章を対象にしたヒューリスティックです。文の区切りは、句点、感嘆符、疑問符と、括弧や引用の対応から推定します。Markdown の解析は簡易で、入れ子の引用、インデントされたコードブロック、HTML の複雑な構造は正確に扱えません。
 - `compare_rewrite.py` の文の対応は、語の重なりによる推定です。大きく言い換えた文は、意味が同じでも、対応がないと出ることがあります。否定以外の表現の検出は、正規表現による近似です。
-- SudachiPy の辞書は、インストールすると約190MBあります。ZIP には含めません。アップロード型の環境では、標準ライブラリの経路で動きます。
+- SudachiPy と辞書は、ZIP には含めません。小さい small の辞書でも、配布用のファイルが約42MBあり、ChatGPT のアップロードの上限(1ファイルあたり25MB)を超えるためです。アップロード型の環境では、エージェントが実行中に small を入れます。入らなければ、標準ライブラリの経路で動きます。
 - `--extras` は正規表現による指摘で、形態素解析を使いません。漢字の連続は、固有名詞や法令用語も拾います。「の」の連鎖は、漢字とカタカナの名詞に限ります。
 - 表示されない太字は、`**` を出現順に2つずつ組にして、CommonMark の区切りの規則で調べます。何を記号とみなすかは実装で違うため、GitHub と、CommonMark 0.31 に従う実装(pandoc など)のどちらか一方で表示されない箇所を拾います。そのため、GitHub では表示される `**★重要**` も指摘します。
 - Claude Code のプラグイン定義は、`claude plugin validate` で検証しました。
