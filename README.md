@@ -197,12 +197,13 @@ Release に添付されるのは、ZIP、SHA-256、Gemini Apps 向けの指示�
 
 `compare_rewrite.py` は、SudachiPy と辞書が入っていれば、否定と文の対応をより正確に判定します。入っていなければ、標準ライブラリだけで動きます。どちらで動いたかは、出力の `tokenizer` で分かります。
 
-Skill は、利用者の手元の環境には、SudachiPy を断りなく入れません。実行中に入れるのは、会話ごとに作られる使い捨ての実行環境だけです。
+Skill は、利用者の手元の環境には、SudachiPy を断りなく入れません。実行中に入れるのは、利用者の手元ではない、クラウドの実行環境だけです。
 
 | 環境 | 入れ方 |
 |---|---|
 | Codex、Claude Code、GitHub Copilot(CLI とエディタ)、Gemini CLI、Antigravity | 先に、手元の `python3` に入れておく(下のコマンド) |
-| ChatGPT Work、Claude のアプリ(Cowork を含む) | Skill の指示で、エージェントが実行中に入れる。入らなければ、標準ライブラリで動く(未確認。下の注) |
+| ChatGPT Work | Skill の指示で、エージェントが実行中に入れる。ネットワークを使える権限が必要(下の「ChatGPT Work での確認」) |
+| Claude のアプリ(Cowork を含む) | Skill の指示で、エージェントが実行中に入れる。入らなければ、標準ライブラリで動く(未確認。下の注) |
 | Copilot のクラウドエージェント | `.github/workflows/copilot-setup-steps.yml` で、先に入れておく |
 | Codex のクラウド環境 | 環境の setup script で、先に入れておく |
 | Claude API | 入れられない。標準ライブラリで動く |
@@ -224,11 +225,20 @@ python3 -m pip install --user --break-system-packages sudachipy sudachidict-core
 
 Codex のサンドボックスでは、ネットワークを使えないので、エージェントが実行中に入れることはできません。先に入れておけば、サンドボックスの中でも使えます。macOS の Codex CLI 0.155.1 で、読み取り専用と workspace-write の両方を確認しました(2026-10-06)。
 
-辞書は、core と small のどちらでも動きます。インストール後の大きさは、core が約190MB、small が約110MBです。`skill/japanese-readability-editor/assets/examples.md` の18組の修正例では、どちらも同じ指摘になりました。使い捨ての実行環境では、入れる時間を短くするために、Skill は small を使います。
+辞書は、core と small のどちらでも動きます。インストール後の大きさは、core が約190MB、small が約110MBです。`skill/japanese-readability-editor/assets/examples.md` の18組の修正例では、どちらも同じ指摘になりました。クラウドの実行環境では、入れる時間を短くするために、Skill は small を使います。
 
-注: ChatGPT Work と Claude のアプリで、実行中に入れられるかは、まだ確かめていません。
+#### ChatGPT Work での確認
 
-- ChatGPT のコード実行環境は、外へ通信できません。ただし、`pip install` は内部のプロキシを通して動く、という報告があります([Simon Willison、2026-01-26](https://simonwillison.net/2026/Jan/26/chatgpt-containers/))。公式の文書は見つけられませんでした。
+2026-10-06 に、Plus プランのアカウントで確かめました。Work モードで、既定のモデル(GPT-6 Luna、Medium)を使いました。
+
+- コマンドは、既定ではネットワークを使えません。そのまま `pip install` を実行すると、`No matching distribution found for sudachipy` で失敗しました。設定の「Work network access」がオンでも、同じでした。
+- ネットワークを使える権限でコマンドを実行すると、入りました。その後の照合では、`tokenizer: sudachi (sudachidict_small)` と出ました。承認の画面は出ませんでした。
+- 最初の版の指示(「入れてよい」)では、ChatGPT は入れようとせず、`regex` の結果を返しました。そこで、「入れて、照合をやり直す」に改め、ネットワークを使える権限で実行することを書き足しました。
+- 入れた SudachiPy は、実行環境の領域(`/opt/codex/runtimes/` の下)に入り、次の会話でも残りました。同じ権限で削除しようとすると、承認の審査で拒否されました。
+- 改めた指示だけで、SudachiPy のない状態から入れるかは、確かめられていません。確認に使った環境には、すでに入っていたためです。
+
+注: Claude のアプリでは、まだ確かめていません。
+
 - Claude のアプリでは、組織のネットワークの設定によります([Claude Help Center](https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude))。Team の既定は、パッケージ管理ツール(PyPI など)だけを許可します。Enterprise の新しい組織では、既定で無効です。Cowork での扱いは、確認できていません。
 - Copilot のクラウドエージェントでは、既定の許可リストに、Python のパッケージ置き場が含まれます([GitHub Docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-firewall))。
 - Codex のクラウド環境では、setup script がネットワークを使えます。エージェントの実行中は、既定では使えません([Codex: Cloud environments](https://learn.chatgpt.com/docs/environments/cloud-environment))。
@@ -409,6 +419,8 @@ ChatGPT のワークスペースに Skill をアップロードする方式で�
 2. ChatGPT の Plugins → Skills を開き、Add → Upload from your computer で、ZIP を選びます。
 
 アップロードできるのは、`.zip`、`.skill`、`SKILL.md` で、最大サイズは1ファイルあたり25MBです。
+
+SudachiPy は、Skill の指示で、エージェントが実行中に入れます(5 節の「SudachiPy を入れる」)。
 
 Plus プランのアカウントで、次を確認しました(2026-09-29)。
 

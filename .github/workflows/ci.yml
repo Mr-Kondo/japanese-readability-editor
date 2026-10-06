@@ -30,7 +30,7 @@ jobs:
           python-version: ${{ matrix.python }}
 
       # compare_rewrite.py は、SudachiPy が入っていれば使う。入っていない経路は、ほかのジョブで試す。
-      # small は、Skill が使い捨ての実行環境で入れる辞書。
+      # small は、Skill がクラウドの実行環境で入れる辞書。
       - name: Install SudachiPy
         if: matrix.sudachi
         run: python -m pip install sudachipy sudachidict-${{ matrix.sudachi }}

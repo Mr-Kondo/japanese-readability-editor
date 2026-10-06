@@ -578,7 +578,8 @@ SudachiPy と辞書(sudachidict-core か sudachidict-small など)が入って�
 
 SudachiPy が入っていなければ、標準ライブラリだけで動き、出力の `tokenizer` が `regex` になる。入れるかどうかは、実行環境で決める。
 
-- 会話ごとに作られる使い捨ての実行環境(ChatGPT や Claude のアプリなど)では、入れてよい。`python3 -m pip install sudachipy sudachidict-small` を一度だけ試す。ネットワークがなく入らなければ、`regex` の結果を使う。
+- 利用者の手元ではない、クラウドの実行環境(ChatGPT や Claude のアプリなど)では、SudachiPy を入れて、照合をやり直す。`python3 -m pip install sudachipy sudachidict-small` を一度だけ試す。ネットワークがなく入らなければ、`regex` の結果を使う。
+- ChatGPT Work では、コマンドのネットワークが既定で制限されている。そのまま `pip` を実行すると、パッケージが見つからないという誤りになる。ネットワークを使える権限で実行すると、入れられる。入れたものは、次の会話でも残る。
 - small の辞書は、core の約半分の大きさである。`assets/examples.md` の修正例では、core と同じ指摘になった。
 - 利用者の手元の環境(Codex、Claude Code、Gemini CLI など)には、断りなく入れない。`uv run scripts/compare_rewrite.py` も、SudachiPy を取得して入れるので、同じ扱いにする。
 - 手元で使うには、利用者が先に入れておく。Codex のサンドボックスのようにネットワークのない環境では、実行中には入れられない。

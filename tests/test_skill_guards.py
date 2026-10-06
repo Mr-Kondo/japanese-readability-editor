@@ -5,7 +5,7 @@ ChatGPT での実機確認で、二重否定の意味の反転、残余条件の
 言い切りの強さと比重の確認、比喩と見出しを直しすぎないための指示が、書き換えの途中で
 失われないようにする。記事と同じ条件の比較で、結びを原文にない行動の指示に置き換える誤りが
 起きたため、その対策も含める。
-SudachiPy は、使い捨ての実行環境でだけ実行中に入れ、利用者の手元には断りなく入れない。
+SudachiPy は、クラウドの実行環境でだけ実行中に入れ、利用者の手元には断りなく入れない。
 文言の一致を見るだけで、Agent が守るかどうかの評価ではない。
 """
 
@@ -58,7 +58,8 @@ class SkillGuardsTest(unittest.TestCase):
         rules = read("references/readability-rules.md")
         for text in (self.skill, rules):
             self.assertIn("python3 -m pip install sudachipy sudachidict-small", text)
-            self.assertIn("会話ごとに作られる使い捨ての実行環境", text)
+            self.assertIn("利用者の手元ではない、クラウドの実行環境", text)
+        self.assertIn("ネットワークを使える権限で実行する", self.skill)
         self.assertIn("利用者の手元の環境(Codex、Claude Code など)には、断りなく入れない", self.skill)
         self.assertIn("断りなく入れない。`uv run scripts/compare_rewrite.py` も", rules)
 

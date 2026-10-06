@@ -88,9 +88,9 @@ python3 scripts/compare_rewrite.py before.md after.md
 
 数値・URL・コード・用語の増減、対応する元の文がない文、否定・推量・可能・依頼などの表現の増減、文体の変化を示す。判定ではないので、挙がった箇所を上の観点で元の文と見比べる。SudachiPy が入っていれば、否定と文の対応をより正確に判定する。
 
-出力の `tokenizer` が `regex` なら、SudachiPy が入っていない。会話ごとに作られる使い捨ての実行環境(ChatGPT や Claude のアプリなど)では、入れてよい。`python3 -m pip install sudachipy sudachidict-small` を一度だけ試し、入ったら実行し直す。入らなければ、`regex` の結果を使う。
+出力の `tokenizer` が `regex` なら、SudachiPy が入っていない。利用者の手元ではない、クラウドの実行環境(ChatGPT や Claude のアプリなど)では、SudachiPy を入れて、照合をやり直す。入れるコマンドは `python3 -m pip install sudachipy sudachidict-small` である。
 
-利用者の手元の環境(Codex、Claude Code など)には、断りなく入れない。
+コマンドのネットワークが制限されていれば、ネットワークを使える権限で実行する(承認が要るなら求める)。一度試して入らなければ、`regex` の結果を使う。利用者の手元の環境(Codex、Claude Code など)には、断りなく入れない。
 
 ## 計測（スクリプトを実行できる環境のみ）
 
