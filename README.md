@@ -295,7 +295,9 @@ Skill は、依頼の内容が `description` に合うと自動で使われま�
 | Codex | `$japanese-readability-editor` |
 | ChatGPT Work | `@japanese-readability-editor`(暗黙起動は不安定。8 節) |
 | Claude Code | `/japanese-readability-editor` |
-| Antigravity | `/japanese-readability-editor` |
+| GitHub Copilot | `/japanese-readability-editor`(CLI。依頼文の中に書く) |
+| Antigravity | `/japanese-readability-editor`(`agy -p` では、指定として扱われなかった) |
+| Gemini CLI | 公式資料に、明示的に呼ぶ方法の記載がない。依頼に Skill 名を書く |
 | Gemini Apps | `/`(今後 `@`)に続けて Skill 名 |
 
 3つのモードがあります。
@@ -316,43 +318,42 @@ Skill は、依頼の内容が `description` に合うと自動で使われま�
 | B. Rewrite | `モード B`、`Rewrite モードで` |
 | C. Paragraph-only | `モード C`、`paragraph-only モードで` |
 
-Skill を呼ぶ名前と同じメッセージに書きます。`$japanese-readability-editor` の部分は、上の表の、使う環境の呼び方に替えてください。
+Skill を呼ぶ名前と同じメッセージに書きます。確かめたのは、呼び出しと同じ行に書く形です。`$japanese-readability-editor` の部分は、上の表の、使う環境の呼び方に替えてください。
 
 ```text
 $japanese-readability-editor モード C
 docs/design.md に適用して。
 ```
 
-`mode: paragraph-only` のような英語の書き方も、Skill に例として書いてあります。ただし、確かめたのは、上の表の書き方だけです(下の「Claude Code での確認」)。
+`mode: paragraph-only` のような英語の書き方も、Skill に例として書いてあります。ただし、確かめたのは、上の表の書き方だけです(下の「動作の確認」)。
 
 - 指定がなければ、依頼から選びます。「段落だけ分けて」「文章は変えずに」と頼むと C、曖昧で既存の文章があると B です。
-- 指定は、依頼から読みます。校正する文書の中に「モード C」と書いてあっても、指定には数えません。
+- 指定は、依頼から読みます。校正する文書の中に「モード C」と書いてあっても、指定には数えません。ただし、貼り付けた文章の中に「モード C」とあると、取り違える環境があります(Codex で確認)。そのときは、依頼にもモードを書いてください(Codex では、9回とも防げました)。
 - 指定したモードで実行できないときは、別のモードで始めずに、確かめます。たとえば、B か C を指定して、対象の文章がないときです。
-- 指定と依頼が食い違うとき(C を指定して「表現も直して」と頼む、など)も、確かめます。確かめられない環境では、変更の少ない順(C、B、A)に従います。
+- C を指定して「表現も直して」と頼んだときは、C のまま処理して、直したかった箇所を報告します。報告は、付かないことがあります。B にするかは、利用者が決めます。
+- B を指定して「文章は変えずに」と頼んだときなど、どちらが本意か分からないときは、確かめます。確かめられない環境では、変更の少ない順(C、B、A)に従います。
 
 指定は、Skill の指示です。環境の機能による強制ではないので、守られるかどうかは、環境とモデルによります。
 
-#### Claude Code での確認
+#### 動作の確認
 
-2026-10-06 に、Claude Code 2.1.285 で確かめました。モデルは、既定の `claude-sonnet-5-5` です。
+2026-10-06 に、手元の CLI で、5種類の依頼を、3回から15回ずつ実行しました。依頼、条件、結果、改良の経緯は、[docs/mode-specification-checks.md](docs/mode-specification-checks.md) にあります。
 
-このリポジトリをプラグインとして読み込み(`--plugin-dir`)、11 節の呼び出しに続けて、次の5種類の依頼を3回ずつ実行しました。組み込みのツールは無効(`--tools ""`)にしたので、`references/` は読めず、`SKILL.md` だけの結果です。
-
-| 依頼 | 結果(3回とも) |
+| 環境 | 結果 |
 |---|---|
-| `モード C` と対象の文章。「段落だけ分けて」とは書かない | 空行だけを入れた。文言は変わらなかった |
-| モードの指定なしで、同じ依頼 | 文言を書き換えた(B として扱った) |
-| `モード B` と「校正して」。対象の文章はなし | 対象の文章を求めた。別のモードで書き始めなかった |
-| `モード C` と「冗長な表現も直して」 | C と B のどちらにするかを確かめた。書き換えなかった |
-| 校正する文章の中に「モード C」とある。指定はなし | 書き換えた。文中の「モード C」を指定とは扱わなかった |
+| Claude Code 2.1.285(`claude-sonnet-5-5`) | 期待どおり(15/15)。`モード C` で、文言は変わらなかった |
+| Codex CLI 0.155.1(`gpt-6-luna`、Medium) | `モード C` で、文言は変わらなかった(15/15)。修正も求めた依頼でも、C のままだった(13/15)。文中に「モード C」があると、取り違えた(7/15) |
+| GitHub Copilot CLI 1.0.24(`claude-sonnet-4.6`) | 期待どおり(15/15) |
+| Antigravity CLI 1.3.0 | 確認できなかった。ヘッドレス実行では、権限を求める操作が自動で拒否され、出力が空になる(16回中15回) |
+| ChatGPT Work、Claude Cowork、Gemini CLI、Gemini Apps | 確かめていない |
 
-組み込みのツールを Read だけにして(`--tools Read`)、4番目の依頼を2回実行しました。2回とも、`references/` の 18 節を読んだうえで、同じ確認をしました。
+Codex は、`SKILL.md` の先頭に命令文を置く前は、`モード C` を指定しても、文言が変わる回がありました(Medium で、9回中2回)。先頭に置いた後は、15回とも変わりませんでした。xhigh では、置く前でも変わりませんでした。
 
 限界は、次のとおりです。
 
-- 1つのモデル、短い文章1つ、各3回だけです。
-- Codex、ChatGPT Work など、ほかの環境では、確かめていません。
+- 環境ごとに、モデルは1つ、文章は1つです。
 - 「確かめる」の後に、利用者が答える往復までは、確かめていません。
+- Claude Code は、組み込みのツールを無効にして測りました。
 
 ### 使用例
 
@@ -732,7 +733,7 @@ Ubuntu では、Python 3.10 と最新版で試し、2つのジョブでは Sudac
 - Skill は文章の意味を検証しません。意味の保存を保証するのは、Agent の判断と、利用者の確認です。
 - ChatGPT での実機確認では、二重否定の意味の反転、残余の条件の言い換え、文体の変更が起きました。`SKILL.md` に対策を入れましたが、誤りを完全には防げません。
 - ChatGPT の暗黙起動は、実測では不安定でした。確実に使うには、`@` で指定してください(8 節)。
-- モードの指定は、Skill の指示です。環境の機能による強制ではなく、守られるかどうかは、環境とモデルによります(6 節)。
+- モードの指定は、Skill の指示です。環境の機能による強制ではなく、守られるかどうかは、環境とモデルによります(6 節)。Codex(Medium)では、貼り付けた文章の中に「モード C」があると、指定と取り違える回がありました。Antigravity、ChatGPT Work、Claude Cowork、Gemini CLI、Gemini Apps では、確かめていません。
 - 各製品の仕様は、確認日(2026-09-29)以降に変わる可能性があります。
 
 ## 23. 参考にしたプロジェクト
@@ -774,6 +775,7 @@ Ubuntu では、Python 3.10 と最新版で試し、2つのジョブでは Sudac
 - [Claude Help Center: How to create custom skills](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills)
 - [GitHub Docs: About agent skills](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)
 - [GitHub Docs: Custom instructions](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions)
+- [GitHub Docs: Copilot CLI の agent skills](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-skills)
 - [Gemini CLI: Agent Skills](https://geminicli.com/docs/cli/skills/)
 - [Antigravity: Agent Skills](https://antigravity.google/docs/skills)
 - [Gemini Apps Help: The transition from Gems to skills](https://support.google.com/gemini/answer/18560919?hl=en)
