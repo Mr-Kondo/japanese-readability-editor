@@ -304,16 +304,25 @@ class ExtrasTest(unittest.TestCase):
     def test_no_chain_accepts_katakana_nouns(self):
         self.assertEqual(len(self.pointers("サーバーのログのエラーの原因を調べる。")["no-chain"]), 1)
 
+    def test_no_chain_accepts_alphanumeric_nouns(self):
+        for text in ("APIの仕様の変更の影響を調べる。", "v2の設定の値の上限を変える。", "ＡＰＩの仕様の変更の影響を調べる。"):
+            with self.subTest(text=text):
+                self.assertEqual(len(self.pointers(text)["no-chain"]), 1)
+
     def test_double_negative_forms(self):
         for text in ("できないわけではない。", "負荷が増えないとは言えません。", "使えなくはない。",
                      "失敗しないとも限らない。", "失敗率が下がらないとは限らない。", "下がらないとは限りません。",
-                     "知らないでもない。", "行かないことはありません。"):
+                     "知らないでもない。", "行かないことはありません。", "使えないわけではなかった。",
+                     "使えなくはなかった。", "起きないとは言い切れない。", "気持ちは分からないではない。",
+                     "障害の可能性は否定できない。", "影響があることは否めない。", "移行は不可能ではない。",
+                     "追加の設定は不要ではない。", "改善の余地はなきにしもあらずだ。"):
             with self.subTest(text=text):
                 self.assertEqual(len(self.pointers(text)["double-negative"]), 1)
 
     def test_conditional_and_obligation_forms_are_not_double_negatives(self):
         for text in ("設定しないと動かない。", "確認しなければならない。", "断らないわけにはいかない。",
-                     "行かざるを得ない。", "彼は来ないし、私も行かない。", "成功するとは限らない。"):
+                     "行かざるを得ない。", "彼は来ないし、私も行かない。", "成功するとは限らない。",
+                     "確認しないではいられない。", "無料ではない。"):
             with self.subTest(text=text):
                 self.assertEqual(self.pointers(text)["double-negative"], [])
 
