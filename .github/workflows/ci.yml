@@ -15,11 +15,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # ubuntu-latest は、2026-10-19 から 11-19 にかけて 26.04 へ移る。移行中に版が混ざらないよう、版を固定する。
         include:
-          - { os: ubuntu-latest, python: "3.10" }
-          - { os: ubuntu-latest, python: "3.x" }
-          - { os: ubuntu-latest, python: "3.x", sudachi: core }
-          - { os: ubuntu-latest, python: "3.x", sudachi: small }
+          - { os: ubuntu-26.04, python: "3.10" }
+          - { os: ubuntu-26.04, python: "3.x" }
+          - { os: ubuntu-26.04, python: "3.x", sudachi: core }
+          - { os: ubuntu-26.04, python: "3.x", sudachi: small }
           - { os: macos-latest, python: "3.x" }
           - { os: windows-latest, python: "3.x" }
     steps:
