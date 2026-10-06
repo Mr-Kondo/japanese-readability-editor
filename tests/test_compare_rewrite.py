@@ -157,6 +157,33 @@ class MarkersTest(unittest.TestCase):
         result = run("設定を見直す作業を、今日から始めましょう。\n", "設定を見直す作業を、今日から始めてください。\n")
         self.assertEqual(changed_markers(result), {"request": (0, 1), "invitation": (1, 0)})
 
+    def test_each_kind_counts_common_forms_and_skips_lookalikes(self):
+        cases = (
+            ("conjecture", "障害の可能性もある。", 1), ("conjecture", "設定は反映されたはずである。", 1),
+            ("conjecture", "情報が漏れる恐れもある。", 1), ("conjecture", "メモリ不足と推測される。", 1),
+            ("conjecture", "処理が遅れたと見られる。", 1), ("conjecture", "おそらく、設定の誤りだ。", 1),
+            ("conjecture", "原因は設定のようである。", 1), ("conjecture", "素晴らしい結果だ。", 0),
+            ("conjecture", "予測可能性を高める。", 0), ("conjecture", "このように設定する。", 0),
+            ("obligation", "設定しなければならず、手間がかかる。", 1), ("obligation", "再起動しなくてはならない。", 1),
+            ("obligation", "保存しないといけない。", 1), ("obligation", "管理者の承認が必要である。", 1),
+            ("obligation", "再起動が必要となる。", 1), ("obligation", "設定は変更しないこと。", 1),
+            ("obligation", "つまり、設定を変えるということ。", 0), ("obligation", "必要に応じて設定する。", 0),
+            ("request", "設定をご確認ください。", 1), ("request", "結果を共有してほしい。", 1),
+            ("request", "ご協力をお願いします。", 1),
+            ("emphasis", "外部へは一切送信しない。", 1), ("emphasis", "かならず保存する。", 1),
+            ("limit", "対象は日本語に限る。", 1), ("limit", "用途を社内に限定する。", 1),
+            ("limit", "管理者しか変更できない。", 1), ("limit", "しかし、設定は残る。", 0),
+            ("limit", "しかも、高速だ。", 0), ("limit", "たしかに速い。", 0), ("limit", "設定が難しかった。", 0),
+            ("limit", "速い。だけど、重い。", 0),
+            ("residual", "管理者以外は変更できない。", 1), ("residual", "そうでない場合は、0を返す。", 1),
+            ("residual", "前記以外の値は無視する。", 1), ("residual", "上記以外のときは、0を返す。", 1),
+            ("residual", "その他の設定は変えない。", 0),
+            ("negation", "変更せざるを得ない。", 2), ("negation", "1ないし3を選ぶ。", 0),
+        )
+        for kind, text, expected in cases:
+            with self.subTest(kind=kind, text=text):
+                self.assertEqual(compare.count_markers(text, REGEX)[kind], expected)
+
     def test_regex_negation_skips_words_that_only_look_negative(self):
         for text in ("少ない手順で済む。", "危ない操作は避ける。", "まず、設定を確認する。", "必ず、保存してから閉じる。"):
             with self.subTest(text=text):
