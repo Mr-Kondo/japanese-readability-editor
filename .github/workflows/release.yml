@@ -11,7 +11,8 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    # CI と同じ版に固定する(ci.yml の注)。
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v5
 
