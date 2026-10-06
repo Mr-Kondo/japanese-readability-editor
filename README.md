@@ -129,6 +129,7 @@ japanese-readability-editor を paragraph-only モードで適用。
 - ChatGPT での実機確認では、二重否定の意味の反転、残余の条件の言い換え、文体の変更が起きました。`SKILL.md` に対策を入れましたが、誤りを完全には防げません。
 - ChatGPT の暗黙起動は、実測では不安定でした。確実に使うには、`@` で指定してください([実測](docs/chatgpt-implicit-invocation.md))。
 - モードの指定は、Skill の指示です。環境の機能による強制ではなく、守られるかどうかは、環境とモデルによります。Codex(Medium)では、貼り付けた文章の中に「モード C」があると、指定と取り違える回がありました。Antigravity、ChatGPT Work、Claude Cowork、Gemini CLI、Gemini Apps では、確かめていません([動作の確認](docs/usage.md#動作の確認))。
+- Claude のアプリでは、Sonnet 以上のモデルを選んでください。Haiku 4.5 では、Skill を読み込んでも、文体を敬体に変えるなど、規則が守られない回がありました([モデルを選ぶ](docs/environments.md#モデルを選ぶ))。
 - 各製品の仕様は、確認日(2026-09-29)以降に変わる可能性があります。確認できなかった項目は、[環境別の対応](docs/environments.md)で「未確認」としています。
 
 ## ドキュメント
