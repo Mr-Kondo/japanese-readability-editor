@@ -206,6 +206,14 @@ python3 tools/install.py --scope user --target all --link --on-conflict backup
 
 ChatGPT では、同じ名前の Skill があると、置き換えの確認(Skill already exists)が出ます。「Replace existing」を選ぶと、同じ Skill が更新されます。重複はしません。置き換えた後の表示は、[実機確認](chatgpt-work-checks.md#同じ名前の-skill-の置き換え)にあります。
 
+Claude のアプリでは、Skill の詳細画面から置き換えます。2026-10-07 に、Pro プランのアカウントで確かめました。
+
+1. Customize → Skills で、`japanese-readability-editor` を開きます。
+2. 右上の「⋮」から「Replace」を選びます。
+3. 新しい ZIP を選び、「Upload」を押します。アップロードのときに、セキュリティスキャンが走ります。
+
+置き換えると、同じ Skill の版が1つ上がります(v1 から v2 など)。有効のままです。一覧の行の「⋮」には、「Replace」がありません。置き換えた直後は、前の版の内容が表示されることがあります。ページを再読み込みすると、新しい版が表示されます。
+
 Claude Code のプラグインとして入れた場合は、マーケットプレースを更新してから、プラグインを更新します。
 
 ```bash
