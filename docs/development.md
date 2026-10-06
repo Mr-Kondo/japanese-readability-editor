@@ -1,5 +1,7 @@
 # 開発
 
+このリポジトリを変更する人向けの説明です。
+
 ## ディレクトリ構成
 
 ```text
@@ -17,7 +19,7 @@ japanese-readability-editor/
 │   ├── package.py
 │   └── validate_skill.py
 ├── tests/
-├── docs/                                  # 実測の記録など、README から分けた資料
+├── docs/                                  # 詳しい説明と実測の記録
 ├── .claude-plugin/                        # Claude Code プラグインの定義(正本を指すだけ)
 ├── .github/workflows/                     # CI と Release
 ├── LICENSE                                # MIT

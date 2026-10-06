@@ -1,6 +1,6 @@
 # ChatGPT Work の暗黙起動の実測
 
-ChatGPT Work で、`@` で指定しない場合に、Skill が自動で使われるかを調べた記録です。結論と導入の手順は、[README](../README.md) の「8. ChatGPT Work」にあります。
+ChatGPT Work で、`@` で指定しない場合に、Skill が自動で使われるかを調べた記録です。結論と導入の手順は、[環境別の対応](environments.md#chatgpt-work)の「ChatGPT Work」にあります。
 
 ## 最初の測定
 

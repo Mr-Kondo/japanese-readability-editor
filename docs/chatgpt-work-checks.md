@@ -1,12 +1,14 @@
 # ChatGPT Work の実機確認
 
+ChatGPT Work で、Skill の取り込み、SudachiPy の導入、置き換えを確かめた記録です。導入の手順は、[インストール](installation.md)と、[環境別の対応](environments.md#chatgpt-work)にあります。暗黙起動の実測は、[別の記録](chatgpt-implicit-invocation.md)にあります。
+
 ## Skill の取り込みと呼び出し
 
 Plus プランのアカウントで、次を確認しました(2026-09-29)。
 
 - ZIP を取り込めた。`name` と `description` は、全文が保たれた。
 - `@japanese-readability-editor` で呼び出せた。
-- ChatGPT が `agents/openai.yaml` を自動生成した。`allow_implicit_invocation` は `true` だが、実際に自動で使われる頻度は低かった(次の「暗黙起動の実測」)。
+- ChatGPT が `agents/openai.yaml` を自動生成した。`allow_implicit_invocation` は `true` だが、実際に自動で使われる頻度は低かった([暗黙起動の実測](chatgpt-implicit-invocation.md))。
 - 取り込み直後の `openai.yaml` は、`assets/icon.svg` を参照していたが、ZIP には含まれず、アイコンが壊れた画像として表示された。
 - その後、ChatGPT が `assets/icon.svg` を追加し、`openai.yaml` の短い説明文を書き換え、アイコンが表示されるようになった。`SKILL.md` の `name` と `description` は変わらなかった。
 
@@ -22,4 +24,4 @@ Plus プランのアカウントで、次を確認しました(2026-09-29)。
 
 ## 同じ名前の Skill の置き換え
 
-置き換えの後は、ファイル一覧から、ChatGPT が追加した `assets/icon.svg` が消えました。画面上部のアイコンは、表示されたままでした。
+「Replace existing」で置き換えた後は、ファイル一覧から、ChatGPT が追加した `assets/icon.svg` が消えました。画面上部のアイコンは、表示されたままでした。

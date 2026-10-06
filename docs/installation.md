@@ -1,6 +1,6 @@
 # インストール
 
-取得から、動作確認、更新、削除までを、順に説明します。配置先の詳細は、17 節と 18 節にあります。
+取得から、動作確認、更新、削除までを、順に説明します。手早く入れるだけなら、README の「[クイックスタート](../README.md#クイックスタート)」で足ります。
 
 ## 必要なもの
 
@@ -8,7 +8,7 @@
 - Git(リポジトリを取得する場合)
 - SudachiPy と辞書(任意。`compare_rewrite.py` の判定を正確にする)
 
-インストーラも検証ツールも、Python の標準ライブラリだけで動きます。SudachiPy は、入っていなくても動きます。入れ方は、環境によって違います(この節の「SudachiPy を入れる」)。
+インストーラも検証ツールも、Python の標準ライブラリだけで動きます。SudachiPy は、入っていなくても動きます。入れ方は、環境によって違います(「[SudachiPy を入れる](#sudachipy-を入れる任意)」)。
 
 ## 取得する
 
@@ -55,13 +55,42 @@ python3 tools/install.py --scope user --target codex
 python3 tools/install.py --scope user --target claude-code
 ```
 
-特定のプロジェクトに入れる場合は、`--workspace` にそのプロジェクトのパスを指定します。省くと、カレントディレクトリが対象です。
+`--target` は、繰り返しても、カンマ区切りでも指定できます。同じ場所になる target は、1回だけ配置します。
+
+配置先に同名の Skill が既にある場合は、何も変更しません。上書きするときの選び方は、「[安全な挙動](#安全な挙動)」にあります。
+
+### 特定のプロジェクトに入れる
+
+`--workspace` に、そのプロジェクトのパスを指定します。省くと、カレントディレクトリが対象です。
 
 ```bash
 python3 tools/install.py --scope workspace --target all --workspace /path/to/project
 ```
 
-配置先に同名の Skill が既にある場合は、何も変更しません。上書きするときの選び方は、18 節の「安全な挙動」にあります。
+共通配置の `.agents/skills/` に置くと、Codex、Copilot、Gemini CLI、Antigravity が読みます。Claude Code だけは `.claude/skills/` が必要です。
+
+`--target all` は、`.agents/skills/` と `.claude/skills/` の2か所に配置します。Copilot は両方を読むので、同じ Skill が2つ見える可能性があります。Copilot を使うプロジェクトでは、必要な環境だけを指定してください。
+
+### 配置先
+
+| target | workspace scope の配置先 | user scope の配置先 |
+|---|---|---|
+| `common`、`codex`、`copilot`、`gemini-cli` | `.agents/skills/` | `~/.agents/skills/` |
+| `claude-code` | `.claude/skills/` | `~/.claude/skills/` |
+| `antigravity-ide` | `.agents/skills/` | `~/.gemini/config/skills/` |
+| `antigravity-cli` | `.agents/skills/` | `~/.gemini/antigravity-cli/skills/` |
+| `antigravity` | `.agents/skills/` | 上の2つ(IDE と CLI) |
+| `all` | `.agents/skills/` と `.claude/skills/` | `common`、`claude-code`、`antigravity-ide`、`antigravity-cli` の配置先 |
+
+各製品が Skill を探す場所は、ほかにもあります。一覧は、[環境別の対応](environments.md#対応表)にあります。
+
+### 安全な挙動
+
+- 既にある場合は、何もしません(`--on-conflict skip`、既定)。
+- `--on-conflict backup` は、既存のものを `skills.bak/` へ退避してから配置します。退避先は Skill の探索先の外です。
+- `--on-conflict overwrite` は、既存のものを削除して配置します。`SKILL.md` を持たないディレクトリは、削除を拒否します。
+- 配置は、複製が終わってから所定の場所へ移すので、途中で失敗しても中途半端なものを残しません。
+- 既定はコピーです。`--link` でシンボリックリンクにできます。Windows では権限が必要な場合があります。
 
 ## 動作を確認する
 
@@ -108,11 +137,11 @@ python3 tools/package.py
 
 Release に添付されるのは、ZIP、SHA-256、Gemini Apps 向けの指示文(`gemini-apps-instructions.md`)です。Gemini Apps 向けのフォルダは添付されないので、必要なら手元で作ります。
 
-| 環境 | アップロードするもの | 詳細 |
+| 環境 | アップロードするもの | 手順 |
 |---|---|---|
-| ChatGPT Work | `dist/japanese-readability-editor.zip` | 8 節 |
-| Claude Cowork | `dist/japanese-readability-editor.zip` | 10 節 |
-| Gemini Apps | `dist/gemini-apps/japanese-readability-editor/`、または `dist/gemini-apps-instructions.md` の貼り付け | 13 節 |
+| ChatGPT Work | `dist/japanese-readability-editor.zip` | [ChatGPT Work](environments.md#chatgpt-work) |
+| Claude Cowork | `dist/japanese-readability-editor.zip` | [Claude Cowork](environments.md#claude-cowork) |
+| Gemini Apps | `dist/gemini-apps/japanese-readability-editor/`、または `dist/gemini-apps-instructions.md` の貼り付け | [Gemini Apps](environments.md#gemini-apps) |
 
 ## SudachiPy を入れる(任意)
 
@@ -123,7 +152,7 @@ Skill は、利用者の手元の環境には、SudachiPy を断りなく入れ�
 | 環境 | 入れ方 |
 |---|---|
 | Codex、Claude Code、GitHub Copilot(CLI とエディタ)、Gemini CLI、Antigravity | 先に、手元の `python3` に入れておく(下のコマンド) |
-| ChatGPT Work | Skill の指示で、エージェントが実行中に入れる。ネットワークを使える権限が必要(下の「ChatGPT Work での確認」) |
+| ChatGPT Work | Skill の指示で、エージェントが実行中に入れる。ネットワークを使える権限が必要([実機確認](chatgpt-work-checks.md#sudachipy-の導入)) |
 | Claude のアプリ(Cowork を含む) | Skill の指示で、エージェントが実行中に入れる。入らなければ、標準ライブラリで動く(未確認。下の注) |
 | Copilot のクラウドエージェント | `.github/workflows/copilot-setup-steps.yml` で、先に入れておく |
 | Codex のクラウド環境 | 環境の setup script で、先に入れておく |
@@ -175,7 +204,7 @@ python3 tools/install.py --scope user --target all --link --on-conflict backup
 
 アップロード型の環境では、新しい ZIP を、もう一度アップロードします。ZIP は、Release からダウンロードするか、`python3 tools/package.py` で作ります。
 
-ChatGPT では、同じ名前の Skill があると、置き換えの確認(Skill already exists)が出ます。「Replace existing」を選ぶと、同じ Skill が更新されます。重複はしません。
+ChatGPT では、同じ名前の Skill があると、置き換えの確認(Skill already exists)が出ます。「Replace existing」を選ぶと、同じ Skill が更新されます。重複はしません。置き換えた後の表示は、[実機確認](chatgpt-work-checks.md#同じ名前の-skill-の置き換え)にあります。
 
 Claude Code のプラグインとして入れた場合は、マーケットプレースを更新してから、プラグインを更新します。
 
@@ -196,50 +225,3 @@ claude plugin update japanese-readability-editor@japanese-readability-editor
 インストーラには、アンインストールの機能がありません。不要になったら、配置先の `japanese-readability-editor/` ディレクトリを、自分で削除してください。`--link` で入れた場合は、リンクだけを削除します。リンクの先にある正本は消えません。
 
 配置先は、`--dry-run` の出力で確認できます。
-
-## ワークスペースへのインストール
-
-共通配置の `.agents/skills/` に置くと、Codex、Copilot、Gemini CLI、Antigravity が読みます。Claude Code だけは `.claude/skills/` が必要です。
-
-```bash
-python3 tools/install.py --scope workspace --target common --workspace /path/to/project
-python3 tools/install.py --scope workspace --target all --workspace /path/to/project
-```
-
-`--workspace` を省くと、カレントディレクトリが対象です。`--target all` は、`.agents/skills/` と `.claude/skills/` の2か所に配置します。Copilot は両方を読むので、同じ Skill が2つ見える可能性があります。Copilot を使うプロジェクトでは、必要な環境だけを指定してください。
-
-必ず先に `--dry-run` で、配置先を確認できます。
-
-```bash
-python3 tools/install.py --scope workspace --target all --dry-run
-```
-
-## グローバル(ユーザー)へのインストール
-
-```bash
-python3 tools/install.py --scope user --target codex
-python3 tools/install.py --scope user --target claude-code
-python3 tools/install.py --scope user --target copilot
-python3 tools/install.py --scope user --target gemini-cli
-python3 tools/install.py --scope user --target antigravity
-python3 tools/install.py --scope user --target all --dry-run
-```
-
-| target | user scope の配置先 |
-|---|---|
-| `common`、`codex`、`copilot`、`gemini-cli` | `~/.agents/skills/` |
-| `claude-code` | `~/.claude/skills/` |
-| `antigravity-ide` | `~/.gemini/config/skills/` |
-| `antigravity-cli` | `~/.gemini/antigravity-cli/skills/` |
-| `antigravity` | 上の2つ(IDE と CLI) |
-| `all` | `common`、`claude-code`、`antigravity-ide`、`antigravity-cli` |
-
-同じ場所になる target は、1回だけ配置します。`--target` は、繰り返しても、カンマ区切りでも指定できます。
-
-### 安全な挙動
-
-- 既にある場合は、何もしません(`--on-conflict skip`、既定)。
-- `--on-conflict backup` は、既存のものを `skills.bak/` へ退避してから配置します。退避先は Skill の探索先の外です。
-- `--on-conflict overwrite` は、既存のものを削除して配置します。`SKILL.md` を持たないディレクトリは、削除を拒否します。
-- 配置は、複製が終わってから所定の場所へ移すので、途中で失敗しても中途半端なものを残しません。
-- 既定はコピーです。`--link` でシンボリックリンクにできます。Windows では権限が必要な場合があります。

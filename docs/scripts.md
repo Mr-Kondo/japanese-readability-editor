@@ -1,5 +1,9 @@
 # スクリプト
 
+Skill に同梱した3つのスクリプトを、直接使う方法です。Agent は、Skill の指示でこれらを実行します。
+
+## 実行する
+
 Python 3.10 以上が必要です。どのスクリプトも標準ライブラリだけで動き、ネットワーク通信とファイルの書き込みをしません。`compare_rewrite.py` は、SudachiPy が入っていれば使います。
 
 次のコマンドは、Skill のディレクトリで実行する場合の例です。ディレクトリは、`skill/japanese-readability-editor/` か、配置先の `japanese-readability-editor/` です。
@@ -14,6 +18,8 @@ python3 scripts/verify_preservation.py before.md after.md
 python3 scripts/compare_rewrite.py before.md after.md
 python3 scripts/compare_rewrite.py --json before.md after.md
 ```
+
+## measure.py
 
 `measure.py` は、次の指標を出します。
 
@@ -42,9 +48,13 @@ python3 scripts/compare_rewrite.py --json before.md after.md
 
 太字は、`**` のすぐ内側が記号で、すぐ外側が文字だと表示されません。`次に**「用語」**を` や `**必須です。**次に` が、その例です。
 
+## verify_preservation.py
+
 `verify_preservation.py` は、空白を除いた文字列が一致すれば終了コード 0、しなければ 1 を返します(読み込みに失敗すると 2)。
 
 > **注意**: このスクリプトが保証するのは「空白以外の文字列が変更されていないこと」だけです。意味の保存は保証しません。英単語の間の空白など、空白が意味を持つ箇所の変更も検出できません。
+
+## compare_rewrite.py
 
 `compare_rewrite.py` は、書き換えの前後を比べ、意味が変わったかもしれない箇所を挙げます。
 
