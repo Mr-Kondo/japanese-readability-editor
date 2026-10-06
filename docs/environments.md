@@ -73,6 +73,8 @@ Claude のアプリ(Cowork を含む)には、ZIP をアップロードします
 1. ZIP を用意します。最新の Release からダウンロードするか、`python3 tools/package.py` で作ります。
 2. Customize → Skills から、`dist/japanese-readability-editor.zip` を追加します。
 
+新しい版に置き換える手順は、「[更新する](installation.md#更新する)」にあります。
+
 ZIP は、Skill のフォルダが最上位にある構造です。コード実行の有効化が必要です。Claude Code の `~/.claude/skills/` は、Cowork のセッションでは読み込まれません。
 
 この Skill の `description` は、Claude のヘルプ記事にある「200字以内」の記載に合わせて、200字以内に収めています。Agent Skills の仕様と Claude API の文書は、1024字までを許しています。
