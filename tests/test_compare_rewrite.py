@@ -142,8 +142,9 @@ class MarkersTest(unittest.TestCase):
                      "運用担当者は、ログからエラーの内容を確認する。\n")
         self.assertEqual(changed_markers(result), {"ability": (1, 0)})
 
-    def test_ability_counts_each_form_of_kanou_but_not_kanousei(self):
-        for text, expected in (("確認が可能でした。", 1), ("確認が可能であり、記録も残る。", 1), ("失敗する可能性がある。", 0)):
+    def test_ability_counts_each_form_but_not_kanousei(self):
+        for text, expected in (("確認が可能でした。", 1), ("確認が可能であり、記録も残る。", 1), ("確認が可能。", 1),
+                               ("確認できれば十分だ。", 1), ("確認できず、終了した。", 1), ("失敗する可能性がある。", 0)):
             with self.subTest(text=text):
                 self.assertEqual(compare.count_markers(text, REGEX)["ability"], expected)
 
