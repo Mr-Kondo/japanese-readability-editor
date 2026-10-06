@@ -137,6 +137,16 @@ class MarkersTest(unittest.TestCase):
         self.assertEqual(changed_markers(result), {"ability": (0, 1)})
         self.assertEqual([i.line for i in result["markers"]["ability"]["added"]], [1])
 
+    def test_dropped_formal_ability_is_reported(self):
+        result = run("運用担当者は、ログからエラーの内容を確認することが可能である。\n",
+                     "運用担当者は、ログからエラーの内容を確認する。\n")
+        self.assertEqual(changed_markers(result), {"ability": (1, 0)})
+
+    def test_ability_counts_each_form_of_kanou_but_not_kanousei(self):
+        for text, expected in (("確認が可能でした。", 1), ("確認が可能であり、記録も残る。", 1), ("失敗する可能性がある。", 0)):
+            with self.subTest(text=text):
+                self.assertEqual(compare.count_markers(text, REGEX)["ability"], expected)
+
     def test_a_rewritten_residual_condition_is_reported(self):
         result = run("削除に失敗したファイルがある場合は、終了コード2を返す。それ以外の場合は、0を返す。\n",
                      "削除に失敗したファイルがある場合は、終了コード2を返す。すべて削除できた場合は、0を返す。\n")
