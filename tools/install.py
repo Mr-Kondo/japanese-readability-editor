@@ -89,7 +89,7 @@ class Destination:
 @dataclass
 class Outcome:
     destination: Path
-    status: str  # installed, skipped, dry-run, error
+    status: str  # installed, removed, skipped, dry-run, error, note
     message: str
 
 
@@ -120,6 +120,11 @@ def resolve_destinations(scope: str, targets: List[str], workspace: Path, home: 
         if target not in entry.targets:
             entry.targets.append(target)
     return list(destinations.values())
+
+
+def backup_root(skills_dir: Path) -> Path:
+    """--on-conflict backup の退避先。Skill の探索先(skills/)の外に置く。"""
+    return skills_dir.parent / f"{skills_dir.name}.bak"
 
 
 def is_safe_to_remove(path: Path) -> bool:
@@ -163,7 +168,7 @@ def install_one(source: Path, destination: Destination, *, link: bool, on_confli
                            f"refuse   {target} exists but is not a skill directory; remove it yourself")
         if on_conflict == "backup":
             stamp = now().strftime("%Y%m%d-%H%M%S")
-            backup = destination.skills_dir.parent / f"{destination.skills_dir.name}.bak" / f"{EXPECTED_NAME}-{stamp}"
+            backup = backup_root(destination.skills_dir) / f"{EXPECTED_NAME}-{stamp}"
 
     if dry_run:
         detail = f"{mode} -> {target}"
@@ -197,24 +202,29 @@ def install_one(source: Path, destination: Destination, *, link: bool, on_confli
     return Outcome(target, "installed", f"install  {detail}  [{', '.join(destination.targets)}]")
 
 
+def add_location_arguments(parser: argparse.ArgumentParser) -> None:
+    """配置先を決める引数。uninstall.py と共有する。"""
+    parser.add_argument("--scope", required=True, choices=("workspace", "user"),
+                        help="対象にする配置先。workspace はプロジェクト内、user はホームディレクトリ内")
+    parser.add_argument("--target", action="append", metavar="TARGET",
+                        help=f"配置先の環境。繰り返し指定、またはカンマ区切りで複数指定できる。既定 common。選択肢: {', '.join(TARGET_CHOICES)}")
+    parser.add_argument("--workspace", type=Path, default=None, help="--scope workspace の基準ディレクトリ。既定はカレントディレクトリ")
+    parser.add_argument("--home", type=Path, default=None, help="--scope user の基準ディレクトリ。既定はホームディレクトリ")
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="共通 Skill を、各エージェントが読む場所へ配置する。",
         epilog=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--scope", required=True, choices=("workspace", "user"),
-                        help="workspace はプロジェクト内、user はホームディレクトリ内に配置する")
-    parser.add_argument("--target", action="append", metavar="TARGET",
-                        help=f"配置先の環境。繰り返し指定、またはカンマ区切りで複数指定できる。既定 common。選択肢: {', '.join(TARGET_CHOICES)}")
+    add_location_arguments(parser)
     parser.add_argument("--dry-run", action="store_true", help="何も書かずに、実行する内容だけを表示する")
     parser.add_argument("--link", action="store_true",
                         help="複製ではなくシンボリックリンクを作る(正本の更新がすぐ反映される。Windows では権限が要る場合がある)")
     parser.add_argument("--on-conflict", choices=("skip", "backup", "overwrite"), default="skip",
                         help="配置先に既にある場合の動作。skip=何もしない(既定), backup=退避してから配置, overwrite=削除して配置")
     parser.add_argument("--source", type=Path, default=None, help="skill のディレクトリ。既定 skill/japanese-readability-editor")
-    parser.add_argument("--workspace", type=Path, default=None, help="--scope workspace の基準ディレクトリ。既定はカレントディレクトリ")
-    parser.add_argument("--home", type=Path, default=None, help="--scope user の基準ディレクトリ。既定はホームディレクトリ")
     return parser
 
 
