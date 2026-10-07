@@ -4,7 +4,7 @@ Skill に同梱した3つのスクリプトを、直接使う方法です。Agen
 
 ## 実行する
 
-Python 3.10 以上が必要です。どのスクリプトも標準ライブラリだけで動き、ネットワーク通信とファイルの書き込みをしません。`compare_rewrite.py` は、SudachiPy が入っていれば使います。
+Python 3.10 以上が必要です。どのスクリプトも標準ライブラリだけで動き、ネットワーク通信とファイルの書き込みをしません。`compare_rewrite.py` は、SudachiPy が入っていれば使います。Windows では、`python3` ではなく `python` で実行する場合があります([Python のコマンド名](installation.md#python-のコマンド名))。
 
 次のコマンドは、Skill のディレクトリで実行する場合の例です。ディレクトリは、`skill/japanese-readability-editor/` か、配置先の `japanese-readability-editor/` です。
 
