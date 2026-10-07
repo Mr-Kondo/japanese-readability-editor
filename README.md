@@ -44,7 +44,7 @@ Windows では、`python3` ではなく `python` で実行する場合があり�
 | Antigravity(IDE と CLI) | `antigravity` |
 | すべて | `all` |
 
-特定のプロジェクトだけに入れる方法、更新、削除は、[インストール](docs/installation.md)にあります。Claude Code では、プラグインとしても入れられます([Claude Code](docs/environments.md#claude-code))。
+特定のプロジェクトだけに入れる方法と更新は、[インストール](docs/installation.md)にあります。削除は、下の「[削除する](#削除する)」にあります。Claude Code では、プラグインとしても入れられます([Claude Code](docs/environments.md#claude-code))。
 
 ### ChatGPT Work、Claude Cowork、Gemini Apps に入れる
 
@@ -64,6 +64,18 @@ Windows では、`python3` ではなく `python` で実行する場合があり�
 次の文章を japanese-readability-editor で校正して。
 「このシステムは、ユーザーから入力されたデータを受け取り、それを検証したうえで、問題がなければデータベースに保存し、問題があればエラーとして呼び出し元に返す。」
 ```
+
+### 削除する
+
+`tools/uninstall.py` が、`tools/install.py` で配置したものを削除します。インストールしたときと同じ `--scope` と `--target` を指定します。まず `--dry-run` で、削除するものを確かめます。何も削除しません。
+
+```bash
+python3 tools/uninstall.py --scope user --target all --dry-run
+```
+
+問題がなければ、`--dry-run` を外して実行します。削除するのは、配置先の `japanese-readability-editor/` だけです。`--on-conflict backup` で退避したものは、既定では残ります(`--include-backups` で削除)。詳しくは、[インストール](docs/installation.md#削除する)にあります。
+
+Claude Code のプラグインは、`claude plugin uninstall japanese-readability-editor@japanese-readability-editor` で削除します。ChatGPT Work、Claude Cowork、Gemini Apps は、各製品の画面から削除します。
 
 ## 使い方
 
