@@ -33,6 +33,8 @@ cd japanese-readability-editor
 python3 tools/install.py --scope user --target all --dry-run
 ```
 
+Windows では、`python3` ではなく `python` で実行する場合があります。その場合は、コマンドの `python3` を `python` に読み替えてください([Python のコマンド名](docs/installation.md#python-のコマンド名))。
+
 問題がなければ、`--dry-run` を外して実行します。`all` の代わりに、使う環境の target だけを指定することもできます。
 
 | 使う環境 | `--target` |

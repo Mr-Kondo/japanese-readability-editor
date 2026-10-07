@@ -10,6 +10,16 @@
 
 インストーラも検証ツールも、Python の標準ライブラリだけで動きます。SudachiPy は、入っていなくても動きます。入れ方は、環境によって違います(「[SudachiPy を入れる](#sudachipy-を入れる任意)」)。
 
+### Python のコマンド名
+
+この文書のコマンドは、`python3` で書いています。Windows では、`python3` ではなく `python` で実行する場合があります。その場合は、`python3` を `python` に読み替えてください。
+
+```bash
+python --version
+```
+
+`Python 3.10` 以上と表示されれば、使えます。このリポジトリの CI も、Windows を含む全 OS で `python` を使っています。
+
 ## 取得する
 
 ```bash
@@ -151,7 +161,7 @@ Skill は、利用者の手元の環境には、SudachiPy を断りなく入れ�
 
 | 環境 | 入れ方 |
 |---|---|
-| Codex、Claude Code、GitHub Copilot(CLI とエディタ)、Gemini CLI、Antigravity | 先に、手元の `python3` に入れておく(下のコマンド) |
+| Codex、Claude Code、GitHub Copilot(CLI とエディタ)、Gemini CLI、Antigravity | 先に、手元の Python に入れておく(下のコマンド) |
 | ChatGPT Work | Skill の指示で、エージェントが実行中に入れる。ネットワークを使える権限が必要([実機確認](chatgpt-work-checks.md#sudachipy-の導入)) |
 | Claude のアプリ(Cowork を含む) | Skill の指示で、エージェントが実行中に入れる。入らなければ、標準ライブラリで動く(未確認。下の注) |
 | Copilot のクラウドエージェント | `.github/workflows/copilot-setup-steps.yml` で、先に入れておく |
@@ -159,7 +169,7 @@ Skill は、利用者の手元の環境には、SudachiPy を断りなく入れ�
 | Claude API | 入れられない。標準ライブラリで動く |
 | Gemini Apps | スクリプトを実行しないので、関係しない |
 
-手元の環境では、エージェントが呼ぶ `python3` に入れます。
+手元の環境では、エージェントが呼ぶ Python に入れます。コマンド名は、`python3` です。Windows では、`python` の場合があります(「[Python のコマンド名](#python-のコマンド名)」)。
 
 ```bash
 python3 -m pip install sudachipy sudachidict-core

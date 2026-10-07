@@ -44,6 +44,8 @@ japanese-readability-editor/
 
 ## パッケージ生成
 
+この文書のコマンドは、`python3` で書いています。Windows では、`python` で実行する場合があります([Python のコマンド名](installation.md#python-のコマンド名))。
+
 ```bash
 python3 tools/package.py
 ```
