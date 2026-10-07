@@ -240,6 +240,29 @@ claude plugin update japanese-readability-editor@japanese-readability-editor
 
 ## 削除する
 
-インストーラには、アンインストールの機能がありません。不要になったら、配置先の `japanese-readability-editor/` ディレクトリを、自分で削除してください。`--link` で入れた場合は、リンクだけを削除します。リンクの先にある正本は消えません。
+`tools/uninstall.py` で、配置先の `japanese-readability-editor/` を削除できます。配置先の指定は、インストーラと同じです(`--scope`、`--target`、`--workspace`、`--home`)。インストールしたときと同じ値を指定してください。
 
-配置先は、`--dry-run` の出力で確認できます。
+まず `--dry-run` で、削除するものを確認します。何も削除しません。
+
+```bash
+python3 tools/uninstall.py --scope user --target all --dry-run
+```
+
+問題がなければ、`--dry-run` を外して実行します。
+
+```bash
+python3 tools/uninstall.py --scope user --target all
+```
+
+- 削除するのは、配置先の `japanese-readability-editor/` だけです。`skills/` ディレクトリと、ほかの Skill は残します。
+- `--link` で入れた場合は、リンクだけを削除します。リンクの先にある正本は消えません。
+- `SKILL.md` を持たないディレクトリと、このリポジトリの正本そのものは、削除を断ります。断った配置先があっても、ほかの配置先は処理します。終了コードは 1 になります。
+- 配置先がなければ、何もしません。
+- `--on-conflict backup` で退避したものは、`skills.bak/` に残ります。既定では削除しません。`--include-backups` を付けると、`japanese-readability-editor-<日時>/` を削除します。`skills.bak/` が空になれば、それも削除します。
+
+次の環境で入れたものは、このスクリプトでは削除できません。
+
+| 入れ方 | 削除の方法 |
+|---|---|
+| Claude Code のプラグイン | `claude plugin uninstall japanese-readability-editor@japanese-readability-editor` |
+| ChatGPT Work、Claude Cowork、Gemini Apps | 各製品の画面から、アップロードしたものを削除する(手順は、この文書では確かめていません) |

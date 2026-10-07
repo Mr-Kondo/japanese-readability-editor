@@ -16,6 +16,7 @@ japanese-readability-editor/
 │   └── assets/examples.md
 ├── tools/
 │   ├── install.py
+│   ├── uninstall.py
 │   ├── package.py
 │   └── validate_skill.py
 ├── tests/
@@ -37,6 +38,7 @@ japanese-readability-editor/
 | `scripts/verify_preservation.py` | 空白以外の文字列が同一かの検査(読み取り専用) |
 | `scripts/compare_rewrite.py` | 書き換えの前後の比較。意味が変わったかもしれない箇所を挙げる(読み取り専用。SudachiPy が入っていれば使う) |
 | `tools/install.py` | 各環境の配置先へコピーまたはリンクする |
+| `tools/uninstall.py` | `install.py` で配置したものを、配置先から削除する。配置先の決め方は `install.py` と共有する |
 | `tools/package.py` | ZIP、SHA-256、Gemini Apps 向けの出力を生成する |
 | `tools/validate_skill.py` | Skill の構造と互換性を検証する |
 | `.claude-plugin/` | Claude Code のプラグインとして入れるための定義。`skill/` を指すだけで、Skill は複製しない |
@@ -92,7 +94,7 @@ python3 -m unittest discover -s tests -v
 標準ライブラリの `unittest` だけを使います。対象は、次のとおりです。
 
 - `measure.py`、`verify_preservation.py`、`compare_rewrite.py`
-- `validate_skill.py`、`install.py`、`package.py`
+- `validate_skill.py`、`install.py`、`uninstall.py`、`package.py`
 - `SKILL.md` の `description`(要件で挙げたトリガー語と、除外する入力を含むか、200字以内か)
 - `SKILL.md` と references の、意味を保つための指示と、モードの指定の指示が消えていないか。`SKILL.md` が150行以内か
 - `.claude-plugin/` の定義(正本を指し、Skill を複製していないか)
