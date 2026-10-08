@@ -52,9 +52,9 @@ class OrdinaryTextTest(unittest.TestCase):
 
 
 class LongSentenceTest(unittest.TestCase):
-    def test_sentence_threshold_is_inclusive_at_80(self):
-        self.assertEqual(analyze("あ" * 79 + "。").metrics.long_sentences, 1)  # 句点を含めて80字
-        self.assertEqual(analyze("あ" * 78 + "。").metrics.long_sentences, 0)
+    def test_sentence_threshold_is_inclusive_at_46(self):
+        self.assertEqual(analyze("あ" * 45 + "。").metrics.long_sentences, 1)  # 句点を含めて46字
+        self.assertEqual(analyze("あ" * 44 + "。").metrics.long_sentences, 0)  # 句点を含めて45字
 
     def test_thresholds_are_configurable(self):
         metrics = analyze("あ" * 20 + "。", sentence_threshold=10).metrics
@@ -79,7 +79,7 @@ class LongParagraphTest(unittest.TestCase):
         self.assertEqual(analyze(exactly_200[:-1]).metrics.long_paragraphs, 0)
 
     def test_short_sentences_can_still_make_a_long_paragraph(self):
-        metrics = analyze(("あ" * 49 + "。") * 4).metrics
+        metrics = analyze(("あ" * 39 + "。") * 5).metrics  # 200字。文は40字ずつ
         self.assertEqual(metrics.long_paragraphs, 1)
         self.assertEqual(metrics.long_sentences, 0)
 
@@ -173,7 +173,7 @@ class CommandLineTest(unittest.TestCase):
     def setUp(self):
         self._tmp = temporary_directory()
         self.tmp = Path(self._tmp.name)
-        long_paragraph = ("い" * 49 + "。") * 4      # 200字。文は50字ずつ
+        long_paragraph = ("い" * 39 + "。") * 5      # 200字。文は40字ずつ
         long_sentence = "あ" * 89 + "。"            # 90字の1文
         longer_sentence = "う" * 94 + "。"          # 95字の1文
         (self.tmp / "a.md").write_text(
@@ -189,7 +189,7 @@ class CommandLineTest(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertIn("chars:", out)
         self.assertIn("paragraphs: 4", out)
-        self.assertIn("sentences: 7", out)
+        self.assertIn("sentences: 8", out)
 
     def test_locate_reports_file_line_length_and_preview(self):
         code, out, _ = run_script(SCRIPT, "--locate", str(self.tmp / "a.md"))
@@ -198,7 +198,7 @@ class CommandLineTest(unittest.TestCase):
         self.assertIn(f"{self.tmp / 'a.md'}:7  sentence  90  ", out)
         self.assertIn(f"{self.tmp / 'a.md'}:9  sentence  95  ", out)
         self.assertIn("long paragraphs (>=200 chars): 1", out)
-        self.assertIn("long sentences (>=80 chars): 2", out)
+        self.assertIn("long sentences (>=46 chars): 2", out)
 
     def test_locate_limits_the_output(self):
         code, out, _ = run_script(SCRIPT, "--locate", "--max-locate", "1", str(self.tmp / "a.md"))
@@ -211,7 +211,7 @@ class CommandLineTest(unittest.TestCase):
         code, out, _ = run_script(SCRIPT, "--json", str(self.tmp / "a.md"))
         data = json.loads(out)
         self.assertEqual(code, 0)
-        self.assertEqual(data["thresholds"], {"paragraph": 200, "sentence": 80})
+        self.assertEqual(data["thresholds"], {"paragraph": 200, "sentence": 46})
         self.assertEqual(data["files"][0]["long_paragraphs"], 1)
         self.assertEqual(data["files"][0]["long_sentences"], 2)
         self.assertNotIn("long_paragraph_candidates", data["files"][0])
