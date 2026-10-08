@@ -2,8 +2,12 @@
 """日本語文章の長さに関する指標を測り、修正候補の位置を示す。読み取り専用。
 
 段落は200字以上、文は46字以上(30〜45字の目安を超える文)を「修正候補」として数える。
+細切れの手がかりとして、20字未満の文が同じ段落の中で3文以上続く箇所も数える。句点・
+感嘆符・疑問符で終わらない断片(句点のない箇条書きなど)は短い文に含めず、連続を切る。
+箇条書きの項目は別の段落として扱うので、項目をまたいで数えない。
 この数値は合否の基準ではなく、候補を見つけるための目安である。技術仕様や引用など、
-長いほうが正確な文章もある。数値を満たすためだけの機械的な分割はしない。
+長いほうが正確な文章もある。短い文も、緩急のために残してよい。数値を満たすためだけの
+機械的な分割や連結はしない。
 
 解析から可能な範囲で除くもの: fenced code block、YAML frontmatter、URL、Markdown の記号。
 Markdown のリンクは表示テキストだけを残す。見出し・表・水平線も文章ではないので除く。
@@ -33,10 +37,12 @@ import re
 import sys
 import unicodedata
 from dataclasses import dataclass, field
-from typing import Dict, Iterable, Iterator, List, Optional, Tuple
+from typing import Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Tuple
 
 PARAGRAPH_THRESHOLD = 200
 SENTENCE_THRESHOLD = 46
+SHORT_SENTENCE_THRESHOLD = 20
+SHORT_RUN_LENGTH = 3
 DEFAULT_MAX_LOCATE = 20
 PREVIEW_LENGTH = 30
 KANJI_RUN_THRESHOLD = 7
@@ -441,6 +447,33 @@ def split_sentences(text: str) -> List[Tuple[int, str]]:
     return sentences
 
 
+def ends_with_terminator(sentence: str) -> bool:
+    """句点・感嘆符・疑問符で終わる文か。末尾の閉じ括弧は無視する。"""
+    body = sentence.rstrip(_CLOSERS)
+    return bool(body) and body[-1] in _TERMINATORS + _ASCII_TERMINATORS
+
+
+def find_short_runs(sentences: List[Tuple[int, str]], threshold: int,
+                    min_length: int) -> List[List[Tuple[int, str]]]:
+    """threshold 字未満の文が min_length 文以上続く部分を返す。
+
+    短い文は、句点・感嘆符・疑問符で終わるものだけである。そうでない断片は連続を切る。
+    """
+    min_length = max(min_length, 1)
+    runs: List[List[Tuple[int, str]]] = []
+    current: List[Tuple[int, str]] = []
+    for item in sentences:
+        if visible_length(item[1]) < threshold and ends_with_terminator(item[1]):
+            current.append(item)
+            continue
+        if len(current) >= min_length:
+            runs.append(current)
+        current = []
+    if len(current) >= min_length:
+        runs.append(current)
+    return runs
+
+
 # --- 集計 -------------------------------------------------------------------
 
 
@@ -450,9 +483,13 @@ class Candidate:
     line: int
     length: int
     preview: str
+    sentences: int = 0  # 短い文の連続のときだけ、連なった文の数
 
     def to_dict(self) -> dict:
-        return {"file": self.path, "line": self.line, "length": self.length, "preview": self.preview}
+        data = {"file": self.path, "line": self.line, "length": self.length, "preview": self.preview}
+        if self.sentences:
+            data["sentences"] = self.sentences
+        return data
 
 
 @dataclass
@@ -465,6 +502,7 @@ class Metrics:
     sentences: int = 0
     sentence_chars: int = 0
     long_sentences: int = 0
+    short_runs: int = 0
     commas: int = 0
 
     def add(self, other: "Metrics") -> None:
@@ -485,6 +523,7 @@ class Metrics:
             "sentences": self.sentences,
             "avg_sentence_length": ratio(self.sentence_chars, self.sentences, 1),
             "long_sentences": self.long_sentences,
+            "short_runs": self.short_runs,
             "commas_per_sentence": ratio(self.commas, self.sentences, 2),
         }
 
@@ -495,6 +534,7 @@ class FileResult:
     metrics: Metrics = field(default_factory=Metrics)
     long_paragraphs: List[Candidate] = field(default_factory=list)
     long_sentences: List[Candidate] = field(default_factory=list)
+    short_runs: List[Candidate] = field(default_factory=list)
     extras: Dict[str, List[Candidate]] = field(
         default_factory=lambda: {kind: [] for kind in EXTRA_KINDS}
     )
@@ -514,6 +554,8 @@ def analyze_text(
     paragraph_threshold: int = PARAGRAPH_THRESHOLD,
     sentence_threshold: int = SENTENCE_THRESHOLD,
     extras: bool = False,
+    short_sentence_threshold: int = SHORT_SENTENCE_THRESHOLD,
+    short_run_length: int = SHORT_RUN_LENGTH,
 ) -> FileResult:
     result = FileResult(path=path)
     metrics = result.metrics
@@ -528,7 +570,8 @@ def analyze_text(
             result.long_paragraphs.append(
                 Candidate(path, block.first_line, length, make_preview(block.text))
             )
-        for offset, sentence in split_sentences(block.text):
+        sentences = split_sentences(block.text)
+        for offset, sentence in sentences:
             sentence_length = visible_length(sentence)
             metrics.sentences += 1
             metrics.sentence_chars += sentence_length
@@ -545,6 +588,14 @@ def analyze_text(
                             Candidate(path, block.line_at(offset + match.start()), len(match.group()),
                                       make_snippet(sentence, match.start(), match.end()))
                         )
+        for run in find_short_runs(sentences, short_sentence_threshold, short_run_length):
+            start = run[0][0]
+            run_text = block.text[start:run[-1][0] + len(run[-1][1])]
+            metrics.short_runs += 1
+            result.short_runs.append(
+                Candidate(path, block.line_at(start), visible_length(run_text), make_preview(run_text),
+                          sentences=len(run))
+            )
     if extras and markdown:
         result.extras[UNRENDERED_BOLD] = [
             Candidate(path, line, length, snippet) for line, length, snippet in find_unrendered_bold(text)
@@ -616,7 +667,14 @@ def format_percent(value: float) -> str:
     return f"{value * 100:.1f}"
 
 
-def format_single(result: FileResult, thresholds: Tuple[int, int]) -> str:
+class Thresholds(NamedTuple):
+    paragraph: int
+    sentence: int
+    short_sentence: int
+    short_run: int
+
+
+def format_single(result: FileResult, thresholds: Thresholds) -> str:
     m = result.metrics.to_dict()
     return "\n".join(
         [
@@ -624,17 +682,19 @@ def format_single(result: FileResult, thresholds: Tuple[int, int]) -> str:
             f"  chars: {m['chars']}  kanji: {format_percent(m['kanji_ratio'])}%  "
             f"hiragana: {format_percent(m['hiragana_ratio'])}%",
             f"  paragraphs: {m['paragraphs']}  avg-length: {m['avg_paragraph_length']}  "
-            f">={thresholds[0]}: {m['long_paragraphs']}",
+            f">={thresholds.paragraph}: {m['long_paragraphs']}",
             f"  sentences: {m['sentences']}  avg-length: {m['avg_sentence_length']}  "
-            f">={thresholds[1]}: {m['long_sentences']}  "
+            f">={thresholds.sentence}: {m['long_sentences']}  "
+            f"runs(<{thresholds.short_sentence}x{thresholds.short_run}): {m['short_runs']}  "
             f"commas/sentence: {m['commas_per_sentence']}",
         ]
     )
 
 
-def format_table(results: List[FileResult], total: FileResult, thresholds: Tuple[int, int]) -> str:
-    header = ["file", "chars", "kanji%", "hira%", "para", "avgP", f"P>={thresholds[0]}",
-              "sent", "avgS", f"S>={thresholds[1]}", "comma/s"]
+def format_table(results: List[FileResult], total: FileResult, thresholds: Thresholds) -> str:
+    header = ["file", "chars", "kanji%", "hira%", "para", "avgP", f"P>={thresholds.paragraph}",
+              "sent", "avgS", f"S>={thresholds.sentence}",
+              f"R<{thresholds.short_sentence}x{thresholds.short_run}", "comma/s"]
     rows = [header]
     for result in results + [total]:
         m = result.metrics.to_dict()
@@ -650,6 +710,7 @@ def format_table(results: List[FileResult], total: FileResult, thresholds: Tuple
                 str(m["sentences"]),
                 str(m["avg_sentence_length"]),
                 str(m["long_sentences"]),
+                str(m["short_runs"]),
                 str(m["commas_per_sentence"]),
             ]
         )
@@ -661,29 +722,40 @@ def format_table(results: List[FileResult], total: FileResult, thresholds: Tuple
     return "\n".join(lines)
 
 
-def select_candidates(candidates: List[Candidate], limit: int) -> Tuple[List[Candidate], int]:
-    """長い順に limit 件を選び、ファイル・行の順に並べ直す。省いた件数も返す。"""
+def longest_first(candidate: Candidate) -> Tuple[int, int]:
+    return (-candidate.length, 0)
+
+
+def most_sentences_first(candidate: Candidate) -> Tuple[int, int]:
+    return (-candidate.sentences, -candidate.length)
+
+
+def select_candidates(candidates: List[Candidate], limit: int,
+                      rank: Callable[[Candidate], Tuple[int, int]] = longest_first
+                      ) -> Tuple[List[Candidate], int]:
+    """rank の小さい順(既定は長い順)に limit 件を選び、ファイル・行の順に並べ直す。省いた件数も返す。"""
     if limit <= 0 or len(candidates) <= limit:
         return sorted(candidates, key=lambda c: (c.path, c.line)), 0
-    longest = sorted(candidates, key=lambda c: -c.length)[:limit]
-    return sorted(longest, key=lambda c: (c.path, c.line)), len(candidates) - limit
+    ranked = sorted(candidates, key=rank)[:limit]
+    return sorted(ranked, key=lambda c: (c.path, c.line)), len(candidates) - limit
 
 
-def format_locate(results: List[FileResult], limit: int, thresholds: Tuple[int, int]) -> str:
+def format_locate(results: List[FileResult], limit: int, thresholds: Thresholds) -> str:
     lines: List[str] = []
-    for label, kind, threshold in (
-        ("long paragraphs", "paragraph", thresholds[0]),
-        ("long sentences", "sentence", thresholds[1]),
+    for label, kind, bound, pick, rank in (
+        ("long paragraphs", "paragraph", f">={thresholds.paragraph} chars",
+         lambda r: r.long_paragraphs, longest_first),
+        ("long sentences", "sentence", f">={thresholds.sentence} chars",
+         lambda r: r.long_sentences, longest_first),
+        ("short runs", "run", f">={thresholds.short_run} sentences, each <{thresholds.short_sentence} chars",
+         lambda r: r.short_runs, most_sentences_first),
     ):
-        candidates = [
-            c
-            for r in results
-            for c in (r.long_paragraphs if kind == "paragraph" else r.long_sentences)
-        ]
-        shown, omitted = select_candidates(candidates, limit)
-        lines.append(f"{label} (>={threshold} chars): {len(candidates)}")
+        candidates = [c for r in results for c in pick(r)]
+        shown, omitted = select_candidates(candidates, limit, rank)
+        lines.append(f"{label} ({bound}): {len(candidates)}")
         for c in shown:
-            lines.append(f"  {c.path}:{c.line}  {kind}  {c.length}  {c.preview}")
+            detail = f"{c.sentences} sentences, {c.length} chars" if c.sentences else str(c.length)
+            lines.append(f"  {c.path}:{c.line}  {kind}  {detail}  {c.preview}")
         if omitted:
             lines.append(f"  ... {omitted} more not shown (use --max-locate 0 for all)")
     return "\n".join(lines)
@@ -703,18 +775,22 @@ def format_extras(results: List[FileResult], limit: int) -> str:
 
 
 def build_json(results: List[FileResult], total: FileResult, locate: bool,
-               paragraph_threshold: int, sentence_threshold: int, extras: bool = False) -> dict:
+               paragraph_threshold: int, sentence_threshold: int, extras: bool = False,
+               short_sentence_threshold: int = SHORT_SENTENCE_THRESHOLD,
+               short_run_length: int = SHORT_RUN_LENGTH) -> dict:
     files = []
     for result in results:
         entry = {"file": result.path, **result.metrics.to_dict()}
         if locate:
             entry["long_paragraph_candidates"] = [c.to_dict() for c in result.long_paragraphs]
             entry["long_sentence_candidates"] = [c.to_dict() for c in result.long_sentences]
+            entry["short_run_candidates"] = [c.to_dict() for c in result.short_runs]
         if extras:
             entry["pointers"] = {kind: [c.to_dict() for c in items] for kind, items in result.extras.items()}
         files.append(entry)
     return {
-        "thresholds": {"paragraph": paragraph_threshold, "sentence": sentence_threshold},
+        "thresholds": {"paragraph": paragraph_threshold, "sentence": sentence_threshold,
+                       "short_sentence": short_sentence_threshold, "short_run": short_run_length},
         "files": files,
         "total": total.metrics.to_dict(),
     }
@@ -728,7 +804,8 @@ def build_parser() -> argparse.ArgumentParser:
         prog="measure.py",
         description=(
             "日本語文章の長さの指標を測り、長い段落と長い文の位置を示す(読み取り専用)。"
-            f"{PARAGRAPH_THRESHOLD}字以上の段落と{SENTENCE_THRESHOLD}字以上の文は、"
+            f"{PARAGRAPH_THRESHOLD}字以上の段落と{SENTENCE_THRESHOLD}字以上の文、"
+            f"{SHORT_SENTENCE_THRESHOLD}字未満の文が{SHORT_RUN_LENGTH}文以上続く箇所は、"
             "合否の基準ではなく修正候補の目安である。"
         ),
         epilog="例: measure.py --locate docs/*.md / measure.py --json README.md / cat a.md | measure.py -",
@@ -736,7 +813,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("paths", nargs="+", metavar="PATH",
                         help="ファイル、ディレクトリ(.md/.markdown/.txt を再帰的に探す)、ワイルドカード、標準入力の -")
     parser.add_argument("--locate", action="store_true",
-                        help="長い段落と長い文の位置(ファイル名・行番号・長さ・冒頭)を示す")
+                        help="長い段落、長い文、短い文の連続の位置(ファイル名・行番号・長さ・冒頭)を示す")
     parser.add_argument("--extras", action="store_true",
                         help=f"連続漢字({KANJI_RUN_THRESHOLD}字以上)、名詞+「の」の{NO_CHAIN_COUNT}連、二重否定、"
                              "表示されない太字を指摘として挙げる。判定ではない")
@@ -747,6 +824,11 @@ def build_parser() -> argparse.ArgumentParser:
                         help=f"長い段落の閾値(字)。既定 {PARAGRAPH_THRESHOLD}")
     parser.add_argument("--sent-threshold", type=int, default=SENTENCE_THRESHOLD, metavar="N",
                         help=f"長い文の閾値(字)。既定 {SENTENCE_THRESHOLD}")
+    parser.add_argument("--short-threshold", type=int, default=SHORT_SENTENCE_THRESHOLD, metavar="N",
+                        help="短い文の閾値(字)。N字未満で、句点・感嘆符・疑問符で終わる文を短い文とする。"
+                             f"既定 {SHORT_SENTENCE_THRESHOLD}")
+    parser.add_argument("--short-run", type=int, default=SHORT_RUN_LENGTH, metavar="N",
+                        help=f"短い文が同じ段落でN文以上続く箇所を、細切れの手がかりとして数える。既定 {SHORT_RUN_LENGTH}")
     parser.add_argument("--format", choices=("auto", "markdown", "plain"), default="auto",
                         help="Markdown として解析するか。auto は拡張子で判断する。既定 auto")
     return parser
@@ -754,7 +836,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: Optional[List[str]] = None) -> int:
     args = build_parser().parse_args(argv)
-    thresholds = (args.para_threshold, args.sent_threshold)
+    thresholds = Thresholds(args.para_threshold, args.sent_threshold, args.short_threshold, args.short_run)
 
     paths, errors = expand_inputs(args.paths)
     results: List[FileResult] = []
@@ -767,7 +849,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         display = "<stdin>" if path == "-" else path
         results.append(
             analyze_text(text, display, is_markdown_path(path, args.format),
-                         args.para_threshold, args.sent_threshold, extras=args.extras)
+                         args.para_threshold, args.sent_threshold, extras=args.extras,
+                         short_sentence_threshold=args.short_threshold, short_run_length=args.short_run)
         )
 
     for message in errors:
@@ -780,7 +863,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     if results:
         if args.json:
             payload = build_json(results, total, args.locate, args.para_threshold, args.sent_threshold,
-                                 extras=args.extras)
+                                 extras=args.extras, short_sentence_threshold=args.short_threshold,
+                                 short_run_length=args.short_run)
             print(json.dumps(payload, ensure_ascii=False, indent=2))
         else:
             if len(results) == 1:

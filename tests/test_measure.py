@@ -72,6 +72,59 @@ class LongSentenceTest(unittest.TestCase):
         self.assertEqual(analyze("句点のない箇条書き").metrics.sentences, 1)
 
 
+class ShortRunTest(unittest.TestCase):
+    def runs(self, text: str, **kwargs) -> int:
+        return analyze(text, **kwargs).metrics.short_runs
+
+    def test_three_short_sentences_in_a_row_are_a_run(self):
+        self.assertEqual(self.runs("あ。い。う。"), 1)
+        self.assertEqual(self.runs("あ。い。"), 0)
+
+    def test_sentence_threshold_is_exclusive_at_20(self):
+        self.assertEqual(self.runs(("あ" * 18 + "。") * 3), 1)  # 句点を含めて19字
+        self.assertEqual(self.runs(("あ" * 19 + "。") * 3), 0)  # 句点を含めて20字
+
+    def test_thresholds_are_configurable(self):
+        self.assertEqual(self.runs("あ。い。", short_run_length=2), 1)
+        self.assertEqual(self.runs(("あ" * 19 + "。") * 3, short_sentence_threshold=21), 1)
+
+    def test_a_longer_sentence_ends_the_run(self):
+        longer = "あ" * 24 + "。"
+        text = f"あ。い。{longer}う。え。"
+        self.assertEqual(self.runs(text), 0)
+        self.assertEqual(self.runs(text, short_run_length=2), 2)
+
+    def test_two_runs_in_one_paragraph_are_counted_separately(self):
+        self.assertEqual(self.runs("あ。い。う。" + "あ" * 24 + "。え。お。か。"), 2)
+
+    def test_fragment_without_a_terminator_ends_the_run(self):
+        self.assertEqual(self.runs("あ。い。う"), 0)  # 「う」は句点がなく、短い文ではない
+        self.assertEqual(self.runs("あ。い。う。え"), 1)
+
+    def test_exclamation_and_question_marks_count_as_terminators(self):
+        self.assertEqual(self.runs("本当？ そう！ ええ。"), 1)
+
+    def test_closing_bracket_after_the_period_is_ignored(self):
+        self.assertEqual(self.runs("あ。（い。）う。"), 1)  # 「（い。）」は括弧の直後で1文になる
+
+    def test_a_run_does_not_cross_paragraphs(self):
+        self.assertEqual(self.runs("あ。い。\n\nう。え。"), 0)
+
+    def test_a_run_does_not_cross_list_items(self):
+        self.assertEqual(self.runs("- あ。\n- い。\n- う。"), 0)
+
+    def test_a_minimum_length_below_one_does_not_count_empty_runs(self):
+        self.assertEqual(self.runs("あ。", short_run_length=0), 1)
+        self.assertEqual(self.runs("あ" * 24 + "。", short_run_length=0), 0)
+
+    def test_candidate_reports_line_sentences_length_and_preview(self):
+        text = "# 題\n\nここは短くない長さを超えている文章で書かれています。はい。そう。です。"
+        (candidate,) = analyze(text).short_runs
+        self.assertEqual(
+            (candidate.line, candidate.sentences, candidate.length, candidate.preview),
+            (3, 3, 9, "はい。そう。です。"))
+
+
 class LongParagraphTest(unittest.TestCase):
     def test_paragraph_threshold_is_inclusive_at_200(self):
         exactly_200 = ("あ" * 49 + "。") * 4
@@ -190,6 +243,7 @@ class CommandLineTest(unittest.TestCase):
         self.assertIn("chars:", out)
         self.assertIn("paragraphs: 4", out)
         self.assertIn("sentences: 8", out)
+        self.assertIn("runs(<20x3): 0", out)
 
     def test_locate_reports_file_line_length_and_preview(self):
         code, out, _ = run_script(SCRIPT, "--locate", str(self.tmp / "a.md"))
@@ -199,6 +253,37 @@ class CommandLineTest(unittest.TestCase):
         self.assertIn(f"{self.tmp / 'a.md'}:9  sentence  95  ", out)
         self.assertIn("long paragraphs (>=200 chars): 1", out)
         self.assertIn("long sentences (>=46 chars): 2", out)
+
+    def write_runs(self, name: str, text: str) -> Path:
+        path = self.tmp / name
+        path.write_text(text, encoding="utf-8")
+        return path
+
+    def test_locate_reports_short_runs(self):
+        path = self.write_runs("c.md", "# 題\n\nここは短くない長さを超えている文章で書かれています。はい。そう。です。\n")
+        code, out, _ = run_script(SCRIPT, "--locate", str(path))
+        self.assertEqual(code, 0)
+        self.assertIn("short runs (>=3 sentences, each <20 chars): 1", out)
+        self.assertIn(f"{path}:3  run  3 sentences, 9 chars  はい。そう。です。", out)
+
+    def test_locate_keeps_the_runs_with_most_sentences_when_limited(self):
+        # 1つ目は3文で45字、2つ目は4文で8字。字数の多い順なら1つ目が残る。
+        path = self.write_runs("c.md", ("あ" * 14 + "。") * 3 + "\n\nえ。お。か。き。\n\nく。け。こ。\n")
+        code, out, _ = run_script(SCRIPT, "--locate", "--max-locate", "1", str(path))
+        self.assertEqual(code, 0)
+        self.assertIn(f"{path}:3  run  4 sentences, 8 chars", out)
+        self.assertNotIn(f"{path}:1  run", out)
+        self.assertNotIn(f"{path}:5  run", out)
+        self.assertIn("2 more not shown", out)
+
+    def test_short_run_options(self):
+        path = self.write_runs("c.md", "あ。い。\n")
+        code, out, _ = run_script(SCRIPT, "--json", "--short-run", "2", "--short-threshold", "5", str(path))
+        data = json.loads(out)
+        self.assertEqual(code, 0)
+        self.assertEqual(data["thresholds"]["short_run"], 2)
+        self.assertEqual(data["thresholds"]["short_sentence"], 5)
+        self.assertEqual(data["files"][0]["short_runs"], 1)
 
     def test_locate_limits_the_output(self):
         code, out, _ = run_script(SCRIPT, "--locate", "--max-locate", "1", str(self.tmp / "a.md"))
@@ -211,9 +296,10 @@ class CommandLineTest(unittest.TestCase):
         code, out, _ = run_script(SCRIPT, "--json", str(self.tmp / "a.md"))
         data = json.loads(out)
         self.assertEqual(code, 0)
-        self.assertEqual(data["thresholds"], {"paragraph": 200, "sentence": 46})
+        self.assertEqual(data["thresholds"], {"paragraph": 200, "sentence": 46, "short_sentence": 20, "short_run": 3})
         self.assertEqual(data["files"][0]["long_paragraphs"], 1)
         self.assertEqual(data["files"][0]["long_sentences"], 2)
+        self.assertEqual(data["files"][0]["short_runs"], 0)
         self.assertNotIn("long_paragraph_candidates", data["files"][0])
 
     def test_json_with_locate_includes_candidates(self):
@@ -222,11 +308,13 @@ class CommandLineTest(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual([c["line"] for c in entry["long_paragraph_candidates"]], [5])
         self.assertEqual([c["length"] for c in entry["long_sentence_candidates"]], [90, 95])
+        self.assertEqual(entry["short_run_candidates"], [])
 
     def test_multiple_files_show_a_table_with_totals(self):
         code, out, _ = run_script(SCRIPT, str(self.tmp / "a.md"), str(self.tmp / "b.md"))
         self.assertEqual(code, 0)
         self.assertIn("TOTAL", out)
+        self.assertIn("R<20x3", out)
         self.assertEqual(out.count(".md"), 2)
 
     def test_multiple_files_json_totals_are_sums(self):
