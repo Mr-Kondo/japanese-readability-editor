@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """日本語文章の長さに関する指標を測り、修正候補の位置を示す。読み取り専用。
 
-段落は200字以上、文は80字以上を「修正候補」として数える。この数値は合否の基準では
-なく、候補を見つけるための目安である。技術仕様や引用など、長いほうが正確な文章も
-ある。数値を満たすためだけの機械的な分割はしない。
+段落は200字以上、文は46字以上(30〜45字の目安を超える文)を「修正候補」として数える。
+この数値は合否の基準ではなく、候補を見つけるための目安である。技術仕様や引用など、
+長いほうが正確な文章もある。数値を満たすためだけの機械的な分割はしない。
 
 解析から可能な範囲で除くもの: fenced code block、YAML frontmatter、URL、Markdown の記号。
 Markdown のリンクは表示テキストだけを残す。見出し・表・水平線も文章ではないので除く。
@@ -36,7 +36,7 @@ from dataclasses import dataclass, field
 from typing import Dict, Iterable, Iterator, List, Optional, Tuple
 
 PARAGRAPH_THRESHOLD = 200
-SENTENCE_THRESHOLD = 80
+SENTENCE_THRESHOLD = 46
 DEFAULT_MAX_LOCATE = 20
 PREVIEW_LENGTH = 30
 KANJI_RUN_THRESHOLD = 7
