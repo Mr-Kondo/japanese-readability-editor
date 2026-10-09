@@ -15,7 +15,9 @@ import unittest
 
 from helpers import SKILL_DIR
 
-MAX_SKILL_LINES = 150  # SKILL.md を肥大させない(詳細は references へ)
+# SKILL.md を肥大させない(詳細は references へ)。国語の表記・用法の適用手順(適用設定、区分、実行手順)を
+# 加えたため、150行から190行へ広げた。規則の全文は SKILL.md に入れず、references/kokugo-*.md と data/ に置く。
+MAX_SKILL_LINES = 190
 
 
 def read(relative: str) -> str:

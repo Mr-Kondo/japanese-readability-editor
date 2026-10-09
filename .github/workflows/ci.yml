@@ -39,6 +39,10 @@ jobs:
       - name: Validate the skill
         run: python tools/validate_skill.py
 
+      # 国語表記の規則データ(出典、必須項目、例の再検査)。ネットワークは使わない。公式資料の更新確認(tools/update_kokugo_sources.py verify)は含めない。
+      - name: Validate the kokugo rules
+        run: python skill/japanese-readability-editor/scripts/validate_kokugo_rules.py
+
       - name: Run the tests
         run: python -m unittest discover -s tests -v
 
