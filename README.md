@@ -36,35 +36,17 @@ python3 tools/install.py --scope user --target all --dry-run
 
 Windows では、`python3` ではなく `python` で実行する場合があります。その場合は、コマンドの `python3` を `python` に読み替えてください([Python のコマンド名](docs/installation.md#python-のコマンド名))。
 
-問題がなければ、`--dry-run` を外して実行します。`all` の代わりに、使う環境の target だけを指定することもできます。
-
-| 使う環境 | `--target` |
-|---|---|
-| Codex、Copilot、Gemini CLI | `common` |
-| Claude Code | `claude-code` |
-| Antigravity(IDE と CLI) | `antigravity` |
-| すべて | `all` |
+問題がなければ、`--dry-run` を外して実行します。`all` の代わりに、使う環境の target だけを指定することもできます。環境ごとの `--target` は、[インストール](docs/installation.md#インストールする)の表にあります。
 
 特定のプロジェクトだけに入れる方法と更新は、[インストール](docs/installation.md)にあります。削除は、下の「[削除する](#削除する)」にあります。Claude Code では、プラグインとしても入れられます([Claude Code](docs/environments.md#claude-code))。
 
 ### ChatGPT Work、Claude Cowork、Gemini Apps に入れる
 
-これらの環境は、配置先のディレクトリを持ちません。[最新の Release](https://github.com/Mr-Kondo/japanese-readability-editor/releases/latest) から生成物をダウンロードし、各製品の画面からアップロードします。
-
-| 環境 | アップロードするもの | 手順 |
-|---|---|---|
-| ChatGPT Work | `japanese-readability-editor.zip` | [ChatGPT Work](docs/environments.md#chatgpt-work) |
-| Claude Cowork | `japanese-readability-editor.zip` | [Claude Cowork](docs/environments.md#claude-cowork) |
-| Gemini Apps | `gemini-apps-instructions.md` の貼り付け、または手元で作るフォルダ | [Gemini Apps](docs/environments.md#gemini-apps) |
+これらの環境は、配置先のディレクトリを持ちません。[最新の Release](https://github.com/Mr-Kondo/japanese-readability-editor/releases/latest) から生成物をダウンロードし、各製品の画面からアップロードします。環境ごとにアップロードするものと手順は、[インストール](docs/installation.md#アップロード型の環境に入れる)にあります。
 
 ### 動作を確かめる
 
-どの環境でも、実際に依頼して確かめられます。環境ごとの確認方法は、[インストール](docs/installation.md#動作を確認する)にあります。
-
-```text
-次の文章を japanese-readability-editor で校正して。
-「このシステムは、ユーザーから入力されたデータを受け取り、それを検証したうえで、問題がなければデータベースに保存し、問題があればエラーとして呼び出し元に返す。」
-```
+どの環境でも、実際に依頼して確かめられます。環境ごとの確認方法と、依頼の例は、[インストール](docs/installation.md#動作を確認する)にあります。
 
 ### 削除する
 
@@ -74,9 +56,7 @@ Windows では、`python3` ではなく `python` で実行する場合があり�
 python3 tools/uninstall.py --scope user --target all --dry-run
 ```
 
-問題がなければ、`--dry-run` を外して実行します。削除するのは、配置先の `japanese-readability-editor/` だけです。`--on-conflict backup` で退避したものは、既定では残ります(`--include-backups` で削除)。詳しくは、[インストール](docs/installation.md#削除する)にあります。
-
-Claude Code のプラグインは、`claude plugin uninstall japanese-readability-editor@japanese-readability-editor` で削除します。ChatGPT Work、Claude Cowork、Gemini Apps は、各製品の画面から削除します。
+実際の削除と、残るもの、Claude Code のプラグインやアップロード型の環境の削除は、[インストール](docs/installation.md#削除する)にあります。
 
 ## 使い方
 
@@ -140,30 +120,24 @@ japanese-readability-editor を paragraph-only モードで適用。
 
 ### 国語の表記・用法の検査
 
-文化庁の公式資料に基づく表記・用法の規則を、適用設定(モードとは独立)に応じて文章へ当てられます。指定がなければ `general-tech` です。
-
-| 適用設定 | 用途 |
-|---|---|
-| `general-tech`(既定) | 技術・業務文書。明確な誤りを確認し、専門用語・組織の表記・許容形を尊重する |
-| `public-explanation` | 一般向けの解説・案内・広報。読み手に応じた表記を検討する |
-| `official` | 公用文基準が明示された文書。公用文固有の表記・用語の運用も確認する |
+文化庁の公式資料に基づく表記・用法の規則を、適用設定(モードとは独立)に応じて文章へ当てられます。適用設定は、`general-tech`(既定)、`public-explanation`、`official` の3つです。規則には出典があり、公式資料の規定と、この skill の運用判断を区別しています。
 
 ```bash
 python3 skill/japanese-readability-editor/scripts/check_kokugo.py document.md --profile general-tech
 python3 skill/japanese-readability-editor/scripts/check_kokugo.py document.md --profile official --json
 ```
 
-指摘は `error`(明確な誤り)、`recommendation`(推奨)、`accepted_variant`(許容)、`needs_context`(要確認)、`excluded`(保護対象)に分けます。許容形や適用範囲外の表記を、誤りとして報告しません。規則には出典(資料、節、PDF のページ)があり、公式資料の規定と、この skill の運用判断を区別しています。詳しくは、[国語の表記・用法の検査](docs/kokugo.md)にあります。
+適用設定の使い分け、指摘の区分、終了コード、限界は、[国語の表記・用法の検査](docs/kokugo.md)にあります。
 
 ## 注意
 
-- 国語の表記の検査は、規則に登録した語・表記を機械的に探すだけです。形態素解析を使わず、固有名詞・専門用語を自動では識別しません。検査していない項目(敬語、ローマ字、字体など)があり、『指摘なし』は『規則に違反していない』ことを意味しません([限界](docs/kokugo.md#検査していないもの限界))。
+- 国語の表記の検査は、規則に登録した語・表記を探すだけです。『指摘なし』は『規則に違反していない』ことを意味しません([限界](docs/kokugo.md#検査していないもの限界))。
 - Skill は文章の意味を検証しません。意味の保存を保証するのは、Agent の判断と、利用者の確認です。返ってきた文章は、元の文と突き合わせて確認してください。
 - ChatGPT での実機確認では、二重否定の意味の反転、残余の条件の言い換え、文体の変更が起きました。`SKILL.md` に対策を入れましたが、誤りを完全には防げません。
 - ChatGPT の暗黙起動は、実測では不安定でした。確実に使うには、`@` で指定してください([実測](docs/chatgpt-implicit-invocation.md))。
 - モードの指定は、Skill の指示です。環境の機能による強制ではなく、守られるかどうかは、環境とモデルによります。Codex(Medium)では、貼り付けた文章の中に「モード C」があると、指定と取り違える回がありました。Antigravity、Claude Cowork、Gemini CLI、Gemini Apps では、確かめていません([動作の確認](docs/usage.md#動作の確認))。
 - Claude のアプリでは、Sonnet 以上のモデルを選んでください。Haiku 4.5 では、Skill を読み込んでも、文体を敬体に変えるなど、規則が守られない回がありました([モデルを選ぶ](docs/environments.md#モデルを選ぶ))。
-- 各製品の仕様は、確認日(2026-09-29)以降に変わる可能性があります。確認できなかった項目は、[環境別の対応](docs/environments.md)で「未確認」としています。
+- 各製品の仕様は、[環境別の対応](docs/environments.md)に書いた確認日以降に変わる可能性があります。確認できなかった項目は、同じ文書で「未確認」としています。
 
 ## ドキュメント
 

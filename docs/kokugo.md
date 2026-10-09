@@ -188,7 +188,7 @@ python3 -m venv .venv-sources
 python3 tools/check_all.py
 ```
 
-Skill の検証、規則データの検証、生成した文書の最新確認、全テストを順に実行します。ネットワークは使いません。1つでも失敗すれば終了コード 1 です。テストだけを実行するときは、`python3 -m unittest discover -s tests -v` です。
+実行する内容は、[開発](development.md#検証)にあります。
 
 テストの期待値は、公式資料の例示・許容・適用範囲と、保存要件から決めています(`tests/kokugo_sources_data.py`)。変更してはいけない反例(許容形、慣用の重ね言葉、保護対象、動詞の連用形など)を、修正例と同数以上含みます。意味保存のテストは、用意したケースでの確認であり、すべての自然言語入力に対する保証ではありません。
 
@@ -200,7 +200,7 @@ Skill の検証、規則データの検証、生成した文書の最新確認�
 python3 scripts/verify_preservation.py --strict before.md after.md
 ```
 
-既定の `verify_preservation.py` は、空白全般を無視します。文と文のあいだの空白を消しても、タブを空白に置き換えても、既存の改行を消しても、合格してしまいます。`--strict` は、改行以外のすべての文字(半角・全角スペース、タブ、不可分スペースを含む)が同一で、改行が減っていないときだけ 0 を返します。
+既定の `verify_preservation.py` は空白全般を無視するので、モード C の確認には `--strict` を使います。違いは、[スクリプト](scripts.md#verify_preservationpy)にあります。
 
 ## モード B の照合の限界
 
