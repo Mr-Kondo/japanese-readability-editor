@@ -32,7 +32,7 @@ Codex は、`SKILL.md` の先頭に命令文を置く前は、`モード C` を�
 | 環境 | 結果 |
 |---|---|
 | ChatGPT Work(Plus、Work モード、GPT-6 Luna Medium) | `モード C` で、文言は変わらなかった(1/1)。`モード B` で、常体と用語を保って書き換えた(1回)。ただし、「検証を行うことができる」を、断りなく「検証する」と言い切った |
-| Claude のアプリ(Pro、claude.ai のチャット) | Sonnet 5.5 では、期待どおりだった(C は1/1、B は2/2)。Haiku 4.5 では、B で2回とも文体を敬体に変えた。詳細は「[モデルを選ぶ](environments.md#モデルを選ぶ)」にある |
+| Claude のアプリ(Pro、claude.ai のチャット) | Sonnet 5.5 では、期待どおりだった。Haiku 4.5 では、B で文体を敬体に変えた。回数と詳細は「[モデルを選ぶ](environments.md#モデルを選ぶ)」にある |
 
 Claude Cowork、Gemini CLI、Gemini Apps では、確かめていません。
 

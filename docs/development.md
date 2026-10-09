@@ -64,7 +64,7 @@ japanese-readability-editor/
 | `tools/validate_skill.py` | Skill の構造と互換性を検証する |
 | `tools/update_kokugo_sources.py` | 公式資料を取得して SHA-256 を照合する(`verify`)。PDF から常用漢字表と異字同訓のデータを作る(`extract-*`)。Skill の外にあり、配布物には入らない |
 | `tools/render_kokugo_docs.py` | `references/kokugo-notation.md`(規則の一覧)と `references/kokugo-sources.md`(出典)を、規則データから生成する。`--check` で最新かを確かめる。この2つの文書は手で書き換えない |
-| `tools/check_all.py` | Skill の検証、規則データの検証、生成した文書の最新確認、全テストをまとめて実行する |
+| `tools/check_all.py` | 検証とテストをまとめて実行する。内容は「[検証](#検証)」 |
 | `.claude-plugin/` | Claude Code のプラグインとして入れるための定義。`skill/` を指すだけで、Skill は複製しない |
 | `.github/workflows/` | CI(検証、テスト、パッケージ生成)と、タグを push したときの Release |
 
@@ -88,7 +88,7 @@ ZIP の最上位は `japanese-readability-editor/` の1フォルダです。そ�
 
 ZIP は再現可能で、同じ入力からは同じ SHA-256 になります。`--no-gemini-apps` で、Gemini Apps 向けの出力を省けます。
 
-`v` で始まるタグを GitHub に push すると、Actions が Release を作ります(`.github/workflows/release.yml`)。Release には、ZIP、SHA-256、Gemini Apps 向けの指示文が添付されます。Release は、[Releases のページ](https://github.com/Mr-Kondo/japanese-readability-editor/releases)で公開されます。リポジトリを取得せずに、ZIP を入手できます。
+`v` で始まるタグを GitHub に push すると、Actions が Release を作ります(`.github/workflows/release.yml`)。Release は、[Releases のページ](https://github.com/Mr-Kondo/japanese-readability-editor/releases)で公開されます。添付されるものと、ダウンロードの方法は、[インストール](installation.md#アップロード型の環境に入れる)にあります。
 
 ## 検証
 
@@ -98,7 +98,7 @@ python3 skill/japanese-readability-editor/scripts/validate_kokugo_rules.py
 python3 tools/check_all.py
 ```
 
-`tools/check_all.py` は、Skill の検証、国語の規則データの検証、生成した文書の最新確認、全テストを順に実行します。ネットワークは使いません。規則データ(`data/kokugo-rules.json`、`data/kokugo-sources.json`)を変えたら、`python3 tools/render_kokugo_docs.py` で `references/kokugo-notation.md` と `references/kokugo-sources.md` を作り直します。
+`tools/check_all.py` は、Skill の検証、国語の規則データの検証、生成した文書の最新確認、全テストを順に実行します。1つでも失敗すれば終了コード 1 です。ネットワークは使いません。規則データ(`data/kokugo-rules.json`、`data/kokugo-sources.json`)を変えたら、`python3 tools/render_kokugo_docs.py` で `references/kokugo-notation.md` と `references/kokugo-sources.md` を作り直します。
 
 次を確認し、エラーがあれば終了コード 1 を返します。
 
@@ -129,7 +129,7 @@ python3 -m unittest discover -s tests -v
 - `assets/kokugo-cases.md` の例と、実際の検査結果の一致(`test_kokugo_cases.py`)
 - `validate_skill.py`、`install.py`、`uninstall.py`、`package.py`
 - `SKILL.md` の `description`(要件で挙げたトリガー語と、除外する入力を含むか、200字以内か)
-- `SKILL.md` と references の、意味を保つための指示と、モードの指定の指示が消えていないか。`SKILL.md` が150行以内か
+- `SKILL.md` と references の、意味を保つための指示と、モードの指定の指示が消えていないか。`SKILL.md` の行数が、`tests/test_skill_guards.py` の `MAX_SKILL_LINES` 以内か
 - `.claude-plugin/` の定義(正本を指し、Skill を複製していないか)
 
 CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で、Skill の検証、国語の規則データの検証、テスト、パッケージ生成を実行します。
