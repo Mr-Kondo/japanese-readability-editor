@@ -1,0 +1,455 @@
+{
+  "schema_version": 1,
+  "verified_on": "2026-10-10",
+  "usage_terms": {
+    "url": "https://www.mext.go.jp/b_menu/1351168.htm",
+    "name": "文部科学省ウェブサイト利用規約",
+    "verification": "summary-only",
+    "note": "コンテンツは出典を記載すれば自由に利用でき、編集・加工して利用する場合は加工したことを記載する。国が作成したように見せて公表してはならない。この規約のページは証明書の検証に失敗して直接取得できず、WebFetch による要約で確認した。"
+  },
+  "sources": [
+    {
+      "id": "NAIKAKU-JOYO-2010",
+      "title": "常用漢字表",
+      "designation": "平成22年内閣告示第2号",
+      "issuer": "内閣総理大臣",
+      "kind": "内閣告示",
+      "issued_on": "2010-11-30",
+      "nature": "一般の社会生活における漢字使用の目安を示す内閣告示。科学・技術・芸術等の専門分野や個々人の表記には及ばない。",
+      "scope": "前書き1〜5: 法令・公用文書・新聞・雑誌・放送など一般の社会生活が対象。専門分野・個々人の表記に及ぼさない(2)。都道府県名の漢字とそれに準じる漢字を除き固有名詞を対象としない(3)。過去の著作や文書の漢字使用を否定しない(4)。運用では個々の事情に応じた適切な考慮の余地がある(5)。",
+      "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/kanji/index.html",
+      "role": "implemented",
+      "verified_on": "2026-10-10",
+      "verification": "bytes-fetched-and-read",
+      "currentness": "2026-10-10 に内閣告示・内閣訓令の一覧(naikaku/index.html、最終更新 2025-12-22)に掲載されていることを確認した。",
+      "retrieved_files": [
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/pdf/joyokanjihyo_20101130.pdf",
+          "format": "pdf",
+          "size": 3551021,
+          "sha256": "d9f28aeb4ce8250dbde07de20ac66cca71805ba09d94e4942c752dffa84d8d42",
+          "pages": 164,
+          "last_modified": "2019-11-15"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/kanji/index.html",
+          "format": "html",
+          "size": 12468,
+          "sha256": "1e19637461b44577623d8c918daf73115ab65dfac6888306354cf7e3e9951e1c",
+          "last_modified": "2024-03-18"
+        }
+      ]
+    },
+    {
+      "id": "NAIKAKU-KUNREI-2010",
+      "title": "公用文における漢字使用等について",
+      "designation": "平成22年内閣訓令第1号(別紙)",
+      "issuer": "内閣総理大臣",
+      "kind": "内閣訓令",
+      "issued_on": "2010-11-30",
+      "nature": "各行政機関が作成する公用文における漢字使用等を定める内閣訓令。常用漢字表の告示と同日に出された。",
+      "scope": "別紙3: 1(漢字使用)と2(送り仮名)は固有名詞を対象としない(1)。専門用語・特殊用語を書き表す場合など特別な漢字使用等を必要とする場合は1と2によらなくてよい(2)。専門用語等で読みにくい場合は振り仮名を用いる等の配慮をする(3)。法令は別途、内閣法制局の通知による(4)。",
+      "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/sanko/koyobun/index.html",
+      "role": "implemented",
+      "verified_on": "2026-10-10",
+      "verification": "bytes-fetched-and-read",
+      "currentness": "2026-10-10 に「公用文に関する諸通知」(最終更新 2024-03-18)に掲載されていることと、「公用文作成の考え方」(建議)の本文と解説(Ⅰ-1、Ⅰ-2)がこの訓令の運用を基準として挙げていることを確認した。",
+      "retrieved_files": [
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/sanko/koyobun/pdf/kunrei.pdf",
+          "format": "pdf",
+          "size": 154676,
+          "sha256": "688317a978e9a91ca0a2a213e6d6e4f137a92a3a741cca814114e062573572a1",
+          "pages": 5,
+          "last_modified": "2019-11-15"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/pdf/joyokanjihyobesi_20101130.pdf",
+          "format": "pdf",
+          "size": 109301,
+          "sha256": "c2c7dcaa6e1f91ef90bf0100b96c2e9eb52c26d500777e1c1bc411ee09450225",
+          "pages": 4,
+          "last_modified": "2019-11-15"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/sanko/koyobun/index.html",
+          "format": "html",
+          "size": 11879,
+          "sha256": "5f4763c6638ab22d64d8224c681909a0cf643927d256a119e6f847c32861e84b",
+          "last_modified": "2024-03-18"
+        }
+      ]
+    },
+    {
+      "id": "NAIKAKU-GENDAIKANA-1986",
+      "title": "現代仮名遣い",
+      "designation": "昭和61年内閣告示第1号",
+      "issuer": "内閣総理大臣",
+      "kind": "内閣告示",
+      "issued_on": "1986-07-01",
+      "nature": "一般の社会生活において現代の国語を書き表すための仮名遣いのよりどころを示す内閣告示。",
+      "scope": "前書き: 主として現代文のうち口語体のものに適用。原文の仮名遣いによる必要のあるもの、固有名詞などでこれによりがたいものは除く。科学・技術・芸術等の専門分野や個々人の表記には及ばない。擬声・擬態、特殊な方言音、外来語・外来音は対象としない。",
+      "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gendaikana/index.html",
+      "role": "implemented",
+      "verified_on": "2026-10-10",
+      "verification": "bytes-fetched-and-read",
+      "currentness": "2026-10-10 に内閣告示・内閣訓令の一覧に掲載されていることを確認した。",
+      "retrieved_files": [
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gendaikana/maegaki.html",
+          "format": "html",
+          "size": 12351,
+          "sha256": "26b22540f112b5b07709289ae46c75f4c6223038bca283a10adbebaa334db07c",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gendaikana/honbun_dai1.html",
+          "format": "html",
+          "size": 13027,
+          "sha256": "1871be806ed13f115faef584a1d539454341c1da2d6ef752a05aa657b4e21292",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gendaikana/honbun_dai2.html",
+          "format": "html",
+          "size": 15047,
+          "sha256": "47ff123f735dfd0e2c6f1b9097a08de18fd94e928e59b56ee62464b39db096b1",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gendaikana/kunrei.html",
+          "format": "html",
+          "size": 11671,
+          "sha256": "16699ad4ef122d5ac19ef452b7969d4d60316e0d035f535b3b1e7d58694034b5",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gendaikana/index.html",
+          "format": "html",
+          "size": 11736,
+          "sha256": "e01c83d16b27b040f3e78bd827ea539b5f252263bfe0760994df1cb76ab88441",
+          "last_modified": "2026-05-14"
+        }
+      ]
+    },
+    {
+      "id": "NAIKAKU-OKURIGANA-1973",
+      "title": "送り仮名の付け方",
+      "designation": "昭和48年内閣告示第2号",
+      "issuer": "内閣総理大臣",
+      "kind": "内閣告示",
+      "issued_on": "1973-06-18",
+      "nature": "一般の社会生活において「常用漢字表」の音訓によって現代の国語を書き表す場合の送り仮名の付け方のよりどころを示す内閣告示。本則・例外・許容を区別する。",
+      "scope": "前書き一〜三: 法令・公用文書・新聞・雑誌・放送など一般の社会生活が対象。専門分野や個々人の表記には及ばない。漢字を記号的に用いたり表に記入したりする場合や、固有名詞を書き表す場合は対象としない。許容は、本則と並んで慣用として行われ、これによってよいもの(見方及び使い方 三、五)。",
+      "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/okurikana/index.html",
+      "role": "implemented",
+      "verified_on": "2026-10-10",
+      "verification": "bytes-fetched-and-read",
+      "currentness": "2026-10-10 に内閣告示・内閣訓令の一覧に掲載されていることを確認した。",
+      "retrieved_files": [
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/okurikana/maegaki.html",
+          "format": "html",
+          "size": 11288,
+          "sha256": "9fce274abb44ffa13cc049a31b2fd75b5ac7207d5337d7a04871211340e294c1",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/okurikana/mikata.html",
+          "format": "html",
+          "size": 13505,
+          "sha256": "019463635ad7784eb831561531695060559137bf88c73d5095c6d6b8f4411ec3",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/okurikana/honbun01.html",
+          "format": "html",
+          "size": 12786,
+          "sha256": "ed8c2e317a386c95f79a70f0b0c2d1d250c466902be30b3808caac4aa6634484",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/okurikana/honbun02.html",
+          "format": "html",
+          "size": 13338,
+          "sha256": "d72246784687c47c22e08dfdacb6f24b8e4735343b7291514af12b25388cba85",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/okurikana/honbun03.html",
+          "format": "html",
+          "size": 11535,
+          "sha256": "7b66cdf9cda567a244bdc0166c8e3f26918cdc4dbf1af60a66af33cf562f6517",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/okurikana/honbun04.html",
+          "format": "html",
+          "size": 12653,
+          "sha256": "3d3c85b1b16da7eca14c64dfc1e9cc46953830165a6847b67c508f1f0ee9a202",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/okurikana/honbun05.html",
+          "format": "html",
+          "size": 11912,
+          "sha256": "5acd07e62258504b31ceaba45536501f1a4f68464185be5ddb125d2589fa8f9d",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/okurikana/honbun06.html",
+          "format": "html",
+          "size": 13982,
+          "sha256": "7aacb986c10ccb8141849952d142c8cf5e6abd3a1432c96f9cf36361c133385a",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/okurikana/honbun07.html",
+          "format": "html",
+          "size": 12391,
+          "sha256": "f919ea6ec580387cc602a3053cf7db3436daa5e0162a339882fa6b84b91d4af5",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/okurikana/huhyo.html",
+          "format": "html",
+          "size": 11416,
+          "sha256": "c76e5612ba2c43cd6c0ff20e33b3b0590b4485ab7c1b0fd034f2ab9e186962b7",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/okurikana/kunrei.html",
+          "format": "html",
+          "size": 11793,
+          "sha256": "76d9c9a098b0c1baf3b1877b37c2139ae62da80160f24e29e5c23105568479e5",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/okurikana/index.html",
+          "format": "html",
+          "size": 11838,
+          "sha256": "ce3333a98d1d8170dcd766f8ebbb3b76577a7a08ebdc2655a17d33a76665a1f4",
+          "last_modified": "2026-05-14"
+        }
+      ]
+    },
+    {
+      "id": "NAIKAKU-GAIRAI-1991",
+      "title": "外来語の表記",
+      "designation": "平成3年内閣告示第2号",
+      "issuer": "内閣総理大臣",
+      "kind": "内閣告示",
+      "issued_on": "1991-06-28",
+      "nature": "一般の社会生活において現代の国語を書き表すための「外来語の表記」のよりどころを示す内閣告示。語形にゆれのあるものについて、語形をどちらかに決めようとはしていない。",
+      "scope": "前書き: 法令・公用文書・新聞・雑誌・放送など一般の社会生活が対象。専門分野や個々人の表記には及ばない。固有名詞など(人名、会社名、商品名等)でこれによりがたいものには及ぼさない。過去に行われた様々な表記を否定しない。",
+      "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gairai/index.html",
+      "role": "implemented",
+      "verified_on": "2026-10-10",
+      "verification": "bytes-fetched-and-read",
+      "currentness": "2026-10-10 に内閣告示・内閣訓令の一覧に掲載されていることを確認した。",
+      "retrieved_files": [
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gairai/maegaki.html",
+          "format": "html",
+          "size": 11673,
+          "sha256": "d5212c726958633f7664a2d0754c8004044fc4180015a82dc764a0571f4030ef",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gairai/honbun01.html",
+          "format": "html",
+          "size": 11430,
+          "sha256": "e98da6c7756a6c7439659ce24b4d2462a40e4af8f126d36bfe0c9f4d17acfaf0",
+          "last_modified": "2026-05-15"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gairai/honbun02.html",
+          "format": "html",
+          "size": 11871,
+          "sha256": "c60b1c17785d30a76a61be03f318ee65602e82748866a58ee172c16ae7bdc787",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gairai/honbun03.html",
+          "format": "html",
+          "size": 11056,
+          "sha256": "65434f79acb7bf263e17c20fe38eb6a34f7d9dd8a980b66d3a751e7634485eb8",
+          "last_modified": "2025-08-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gairai/honbun04.html",
+          "format": "html",
+          "size": 13257,
+          "sha256": "f176e06dc066eb38bdee6298e1875be57eb98eb56c34f9f6bb66707bb8e9edc5",
+          "last_modified": "2025-08-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gairai/honbun05.html",
+          "format": "html",
+          "size": 15297,
+          "sha256": "40751c1f4185f9ce6f3ddca2c0da8a5ac203933c94b9039a04c16350dd7bcbbe",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gairai/honbun06.html",
+          "format": "html",
+          "size": 14321,
+          "sha256": "26fbcc6ded1c4af8b358793be18649fbc9955dad7127c910dad4fb03f9276d7e",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gairai/kunrei.html",
+          "format": "html",
+          "size": 11585,
+          "sha256": "efa800799294dab57e968903606616c49618a39f7d081da61dd79aacf29c8280",
+          "last_modified": "2024-03-18"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/gairai/index.html",
+          "format": "html",
+          "size": 12155,
+          "sha256": "7f6ef43bf1755eca254f930f8e462edefd78cb99a07bbe595e2338ccdd6d38a9",
+          "last_modified": "2026-05-14"
+        }
+      ]
+    },
+    {
+      "id": "NAIKAKU-ROMAJI-2025",
+      "title": "ローマ字のつづり方",
+      "designation": "令和7年内閣告示第4号",
+      "issuer": "内閣総理大臣",
+      "kind": "内閣告示",
+      "issued_on": "2025-12-22",
+      "nature": "一般の社会生活において現代の国語をローマ字で書き表す場合のよりどころを示す内閣告示。昭和29年内閣告示第1号を廃止して定められた。",
+      "scope": "前書き1〜6: 法令・公用文書・新聞・雑誌・放送など一般の社会生活が対象。専門分野や個々人の表記には及ばない。過去のつづり方を否定しない。本表以外のつづり方にも意義や用途がある。",
+      "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/roma/index2.html",
+      "role": "reference-only",
+      "verified_on": "2026-10-10",
+      "verification": "bytes-fetched-and-read",
+      "currentness": "2026-10-10 に内閣告示・内閣訓令の一覧(最終更新 2025-12-22)に掲載されていることを確認した。この版が昭和29年の告示に代わる現行の告示である。",
+      "retrieved_files": [
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/pdf/94303201_01.pdf",
+          "format": "pdf",
+          "size": 615641,
+          "sha256": "8eade8ea202ed69bac25b779028360b25702513d6ada6e433059dc73ce0e0077",
+          "pages": 7,
+          "last_modified": "2025-12-22"
+        },
+        {
+          "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/roma/index2.html",
+          "format": "html",
+          "size": 12168,
+          "sha256": "42e9edad70b9ed618c6c6de42a27ce5fc277135420d929613c7054f789c33194",
+          "last_modified": "2025-12-22"
+        }
+      ]
+    },
+    {
+      "id": "BUNKA-GUIDE-2022",
+      "title": "公用文作成の考え方(建議)",
+      "designation": "令和4年1月7日 文化審議会建議(付: 解説)",
+      "issuer": "文化審議会",
+      "kind": "建議",
+      "issued_on": "2022-01-07",
+      "nature": "政府内における公用文作成の手引として活用されることを目指した建議。内閣告示・内閣訓令そのものではなく、それらの運用の考え方と、表記・用語・文章の推奨をまとめたもの。",
+      "scope": "本文 基本的な考え方 1(2): 公用文の表記は原則として法令と一致させる。法令に準ずる告示・通知等は公用文表記の原則に従う。議事録・報道発表資料・白書などは原則に基づきつつ読み手に合わせて工夫する。広く一般に向けた解説・広報等は、特別な知識を持たない人にとっての読みやすさを優先して書き表し方を工夫する。",
+      "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/93650001_01.html",
+      "role": "implemented",
+      "verified_on": "2026-10-10",
+      "verification": "bytes-fetched-and-read",
+      "currentness": "2026-10-10 に文化審議会国語分科会の報告・答申等のページ(最終更新 2024-07-10)に掲載されていることと、内閣官房長官通知(NAIKAKU-NOTICE-2022)で政府内に周知されていることを確認した。",
+      "retrieved_files": [
+        {
+          "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/pdf/93651301_01.pdf",
+          "format": "pdf",
+          "size": 2257110,
+          "sha256": "47ad41d2b9ed689215b36aef6656f1d250cb872a74c3cb44b6174cfc4746a8cf",
+          "pages": 63,
+          "last_modified": "2022-08-22"
+        },
+        {
+          "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/93650001_01.html",
+          "format": "html",
+          "size": 18619,
+          "sha256": "158a14110fe8b30287fcf4fd884fef5c8bfbff31aa85fccd0117c16e0cf3e727",
+          "last_modified": "2024-07-10"
+        }
+      ]
+    },
+    {
+      "id": "NAIKAKU-NOTICE-2022",
+      "title": "「公用文作成の考え方」の周知について",
+      "designation": "令和4年1月11日内閣文第1号",
+      "issuer": "内閣官房長官",
+      "kind": "通知",
+      "issued_on": "2022-01-11",
+      "nature": "「公用文作成の考え方」(建議)を貴管下職員へ周知するよう各国務大臣に求めた内閣官房長官通知。昭和27年の依命通知「公用文改善の趣旨徹底について」を同日付けで廃止した。",
+      "scope": "周知を求める通知であり、表記の規則を新たに定めるものではない。",
+      "url": "https://www.bunka.go.jp/koho_hodo_oshirase/hodohappyo/93651302.html",
+      "role": "reference-only",
+      "verified_on": "2026-10-10",
+      "verification": "bytes-fetched-and-read",
+      "currentness": "2026-10-10 に公用文に関する諸通知のページからのリンク先として確認した。",
+      "retrieved_files": [
+        {
+          "url": "https://www.bunka.go.jp/koho_hodo_oshirase/hodohappyo/93651302.html",
+          "format": "html",
+          "size": 18284,
+          "sha256": "99fe0e66eefbe3937b2ac7f8c35f5fa0ccf782e4e41214a08d1024455faa15dc",
+          "last_modified": "2024-07-10"
+        }
+      ]
+    },
+    {
+      "id": "BUNKA-IJIDOKUN-2014",
+      "title": "「異字同訓」の漢字の使い分け例(報告)",
+      "designation": "平成26年2月21日 文化審議会国語分科会報告",
+      "issuer": "文化審議会国語分科会",
+      "kind": "報告",
+      "issued_on": "2014-02-21",
+      "nature": "常用漢字表の同訓の漢字について、使い分けの大体を簡単な説明と用例で示した報告。一つの参考であり、異なる使い分けを否定する趣旨ではなく、仮名で表記することも妨げない(前書き3)。",
+      "scope": "前書き3, 4: 年代差・個人差・分野ごとの表記習慣の違いがある。常用漢字1字の訓同士でない場合(偏る/片寄る、独り/一人など)は取り上げていない。",
+      "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/pdf/ijidokun_140221.pdf",
+      "role": "implemented",
+      "verified_on": "2026-10-10",
+      "verification": "bytes-fetched-and-read",
+      "currentness": "2026-10-10 に「公用文作成の考え方」の関係資料として参照されていることを確認した(解説 Ⅱ-5)。",
+      "retrieved_files": [
+        {
+          "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/pdf/ijidokun_140221.pdf",
+          "format": "pdf",
+          "size": 924697,
+          "sha256": "57ad033db96d0d035992c5cc0ffd2703db16ef2e84ccdbdff92d6851c7c0d3fb",
+          "pages": 53,
+          "last_modified": "2019-11-15"
+        }
+      ]
+    },
+    {
+      "id": "BUNKA-KEIGO-2007",
+      "title": "敬語の指針(答申)",
+      "designation": "平成19年2月2日 文化審議会答申",
+      "issuer": "文化審議会",
+      "kind": "答申",
+      "issued_on": "2007-02-02",
+      "nature": "敬語の仕組みと使い方についての答申。個々の表記の正誤を定める資料ではない。",
+      "scope": "参照先として記録するのみ。この skill は敬語の自動判定を行わない。",
+      "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/pdf/keigo_tosin.pdf",
+      "role": "reference-only",
+      "verified_on": "2026-10-10",
+      "verification": "bytes-fetched-and-read",
+      "currentness": "2026-10-10 に文化審議会国語分科会の報告・答申等のページに掲載されていることを確認した。",
+      "retrieved_files": [
+        {
+          "url": "https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/pdf/keigo_tosin.pdf",
+          "format": "pdf",
+          "size": 613704,
+          "sha256": "3a567c6d85e990e0f90f0698c1403ba5826c7c6f9e7e50c93ea5d4da9336882d",
+          "pages": 82,
+          "last_modified": "2019-11-15"
+        }
+      ]
+    }
+  ]
+}

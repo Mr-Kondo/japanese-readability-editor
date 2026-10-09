@@ -32,6 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from validate_skill import EXPECTED_NAME, SKILL_FILE, default_skill_dir, iter_skill_files, parse_frontmatter, validate_skill  # noqa: E402
 
 ZIP_TIMESTAMP = (2026, 1, 1, 0, 0, 0)  # 再現可能な ZIP にするため固定する
+GEMINI_EXCLUDED_DIRS = ("scripts", "data")  # Gemini Apps では実行できない scripts/ と、その入力にしか使わない data/ は含めない
 FENCE_RE = re.compile(r"^\s{0,3}(`{3,}|~{3,})")
 RELATIVE_LINK_RE = re.compile(r"\[([^\]]+)\]\((?![A-Za-z][A-Za-z0-9+.-]*:|#)[^)\s]+\)")
 
@@ -150,14 +151,14 @@ def render_gemini_apps_instructions(skill_dir: Path) -> str:
 
 
 def export_gemini_apps_folder(skill_dir: Path, target_root: Path) -> List[str]:
-    """scripts/ を除いた skill のコピーを target_root/<name>/ に作る。"""
+    """scripts/ と data/ を除いた skill のコピーを target_root/<name>/ に作る。"""
     skill_dir = Path(skill_dir)
     destination = target_root / skill_dir.resolve().name
     if target_root.exists():
         shutil.rmtree(target_root)
     copied: List[str] = []
     for relative in iter_skill_files(skill_dir):
-        if relative.parts[0] == "scripts":
+        if relative.parts[0] in GEMINI_EXCLUDED_DIRS:
             continue
         target = destination / relative
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -204,7 +205,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         instructions.write_text(text, encoding="utf-8")
         print(f"gemini  {instructions} ({len(text)} chars)")
         copied = export_gemini_apps_folder(skill_dir, out_dir / "gemini-apps")
-        print(f"gemini  {out_dir / 'gemini-apps' / name} ({len(copied)} files, scripts/ excluded)")
+        print(f"gemini  {out_dir / 'gemini-apps' / name} ({len(copied)} files, scripts/ and data/ excluded)")
     return 0
 
 

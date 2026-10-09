@@ -1,0 +1,5767 @@
+{
+ "schema_version": 1,
+ "rules_version": "2026-10-10",
+ "profiles": {
+  "general-tech": {
+   "label": "技術・業務文書(既定)",
+   "description": "明確な誤りを確認し、専門用語・組織の表記・許容形を尊重する。公用文の細則は要求しない。"
+  },
+  "public-explanation": {
+   "label": "一般向け解説・案内・広報",
+   "description": "読み手に応じた表記を検討する。説明不足は、原文に根拠がなければ指摘にとどめる。漢字を仮名に、送り仮名を省かない形にすることは認められる。"
+  },
+  "official": {
+   "label": "公用文基準が明示された文書",
+   "description": "公用文固有の表記・用語の運用も確認する。文体が堅いという理由だけでは選ばない。"
+  }
+ },
+ "categories": {
+  "error": "適用条件と修正根拠が明確な誤り。",
+  "recommendation": "選択した基準では推奨されるが、一般的な誤りとは限らない。",
+  "accepted_variant": "許容される表記。",
+  "needs_context": "意味・品詞・文脈の確認が必要。",
+  "excluded": "保護対象など、適用しない箇所。"
+ },
+ "rules": [
+  {
+   "id": "KOKUGO-KANJI-001",
+   "family": "kanji",
+   "provenance": "primary-source",
+   "title": "常用漢字表にない字種(表外漢字)の使用",
+   "summary": "常用漢字表(2136字)にない漢字を見つける。確認するのは字種だけで、音訓は確認しない。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "常用漢字表は一般の社会生活における漢字使用の目安で、科学・技術・芸術等の専門分野や個々人の表記には及ばない(前書き2)。この設定では指摘しない。"
+    },
+    "public-explanation": {
+     "category": "needs_context",
+     "basis": "source",
+     "note": "表外漢字は原則として用いない。固有名詞か、専門用語か、言い換え・仮名書き・振り仮名で足りるかは、機械では決まらない。読み手に配慮した対応を確かめる。"
+    },
+    "official": {
+     "category": "needs_context",
+     "basis": "source",
+     "note": "公用文の漢字使用は常用漢字表による(別紙1(1))が、固有名詞(別紙3(1))と専門用語・特殊用語(別紙3(2))は対象外である。どれに当たるかは文脈で決まる。"
+    }
+   },
+   "conditions": [
+    "CJK 統合漢字(基本・拡張A・拡張B以降)と互換漢字を対象にする",
+    "連続する表外漢字は1か所にまとめて報告する",
+    "同じ表記は文書内の最初の1か所だけ報告し、回数を添える"
+   ],
+   "exceptions": [
+    "固有名詞(人名・地名)。都道府県名の漢字とそれに準じる漢字を除き、常用漢字表の対象ではない(前書き3)",
+    "専門用語・特殊用語(訓令 別紙3(2))",
+    "過去の著作や文書における漢字使用(前書き4)",
+    "「々」「〆」「〇」「ヶ」は漢字の字種として数えない"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun",
+    "technical_term"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-JOYO-2010",
+     "locator": "前書き 2, 3, 4, 5",
+     "pages": "PDF p.1"
+    },
+    {
+     "source_id": "NAIKAKU-KUNREI-2010",
+     "locator": "別紙 1(1), 3(1)(2)(3)",
+     "pages": "PDF p.2, 5"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(1)ア・ウ",
+     "pages": "PDF p.20"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(2)",
+     "pages": "PDF pp.21-22"
+    }
+   ],
+   "skill_decisions": [
+    "表外漢字を見つけても error にしない。固有名詞・専門用語かどうかを機械では判別できないため。",
+    "general-tech では指摘しない(accepted_variant)。常用漢字表の前書き2に基づく。",
+    "音訓の確認は、KOKUGO-KANJI-002 に登録した語だけで行う。字種が表内でも、音訓が表外の場合は検出しない。"
+   ],
+   "detection": {
+    "kind": "joyo_outside",
+    "dedupe": "first_per_text",
+    "ignore_chars": "々〆〇ヶ"
+   },
+   "machine_detectable": "常用漢字表の本表にない字種(2136字との照合)。",
+   "needs_context_scope": "固有名詞・専門用語・引用かどうか。言い換え、仮名書き、振り仮名のどれが適切か。音訓の適否。",
+   "examples": {
+    "fix": [
+     {
+      "before": "地域の絆を深める。",
+      "after": "地域のきずなを深める。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "地域の結びつきを深める。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "常用漢字だけで書かれている。"
+     },
+     {
+      "text": "地域の絆を深める。",
+      "profiles": [
+       "general-tech"
+      ],
+      "reason": "general-tech では常用漢字表の目安を要求しない。"
+     }
+    ]
+   },
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-KANJI-002",
+   "family": "kanji",
+   "title": "常用漢字表にない音訓の語(表外音訓)",
+   "summary": "字種は常用漢字表にあるが、その音訓が表にない語を、仮名書きまたは同訓の常用漢字に改める。出典に例示された語だけを検出する。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "常用漢字表の目安は専門分野や個々人の表記には及ばない(前書き2)。この設定では指摘しない。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "常用漢字表にない音訓は、原則として用いない。仮名で書くか、同訓の常用漢字で書く。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "公用文の漢字使用は常用漢字表の本表による(別紙1(1))。表にない音訓は、原則として用いず、仮名書きなどにする。"
+    }
+   },
+   "conditions": [
+    "出典に例示された語と、その活用形に限る",
+    "字と訓が表にないことは validate_kokugo_rules.py が常用漢字表のデータと照合する"
+   ],
+   "exceptions": [
+    "固有名詞(別紙3(1))と専門用語(別紙3(2))",
+    "振り仮名を付けて用いる場合(別紙3(3)、考え方 解説 Ⅰ-1(2)オ)"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun",
+    "technical_term"
+   ],
+   "sources": [
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(2)ア(ア) 訓による語は平仮名で書く",
+     "pages": "PDF p.21"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(2)イ(ア) 同じ訓を持つ漢字を用いて書く",
+     "pages": "PDF p.21"
+    },
+    {
+     "source_id": "NAIKAKU-KUNREI-2010",
+     "locator": "別紙 1(1), 3",
+     "pages": "PDF p.2, 5"
+    },
+    {
+     "source_id": "NAIKAKU-JOYO-2010",
+     "locator": "本表(音訓欄)",
+     "pages": "PDF pp.11-161"
+    }
+   ],
+   "skill_decisions": [
+    "error にしない。『原則として』の規定で、固有名詞・専門用語の例外を機械では除けないため。",
+    "検出する語は考え方の解説に例示された語に限る。例示にない語は検査しない(未検査として扱う)。",
+    "活用形ごとの候補は、この skill が付けた。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "敢えて",
+      "candidates": [
+       "あえて"
+      ],
+      "joyo_check": [
+       {
+        "char": "敢",
+        "kun_prefix": "あえ"
+       }
+      ]
+     },
+     {
+      "pattern": "予め",
+      "candidates": [
+       "あらかじめ"
+      ],
+      "joyo_check": [
+       {
+        "char": "予",
+        "kun_prefix": "あらかじ"
+       }
+      ]
+     },
+     {
+      "pattern": "未だ",
+      "candidates": [
+       "いまだ"
+      ],
+      "joyo_check": [
+       {
+        "char": "未",
+        "kun_prefix": "いま"
+       }
+      ]
+     },
+     {
+      "pattern": "概ね",
+      "candidates": [
+       "おおむね"
+      ],
+      "joyo_check": [
+       {
+        "char": "概",
+        "kun_prefix": "おおむ"
+       }
+      ]
+     },
+     {
+      "pattern": "自ずから",
+      "candidates": [
+       "おのずから"
+      ],
+      "joyo_check": [
+       {
+        "char": "自",
+        "kun_prefix": "おの"
+       }
+      ]
+     },
+     {
+      "pattern": "自ずと",
+      "candidates": [
+       "おのずと"
+      ],
+      "joyo_check": [
+       {
+        "char": "自",
+        "kun_prefix": "おの"
+       }
+      ]
+     },
+     {
+      "pattern": "宜しく",
+      "candidates": [
+       "よろしく"
+      ],
+      "joyo_check": [
+       {
+        "char": "宜",
+        "kun_prefix": "よろ"
+       }
+      ]
+     },
+     {
+      "pattern": "以て",
+      "candidates": [
+       "もって"
+      ],
+      "joyo_check": [
+       {
+        "char": "以",
+        "kun_prefix": "もっ"
+       }
+      ]
+     },
+     {
+      "pattern": "為す",
+      "candidates": [
+       "なす"
+      ],
+      "joyo_check": [
+       {
+        "char": "為",
+        "kun_prefix": "な"
+       }
+      ]
+     },
+     {
+      "pattern": "経(?P<s>つ|っ[たて]|ち(?![ょゅ]))",
+      "candidates": [
+       "た\\g<s>"
+      ],
+      "joyo_check": [
+       {
+        "char": "経",
+        "kun_prefix": "た"
+       }
+      ]
+     },
+     {
+      "pattern": "則(?P<s>る|り|っ[たて])",
+      "candidates": [
+       "のっと\\g<s>"
+      ],
+      "joyo_check": [
+       {
+        "char": "則",
+        "kun_prefix": "のっと"
+       }
+      ]
+     },
+     {
+      "pattern": "[依拠](?P<s>る|り|っ[たて])",
+      "candidates": [
+       "よ\\g<s>"
+      ],
+      "joyo_check": [
+       {
+        "char": "依",
+        "kun_prefix": "よ"
+       },
+       {
+        "char": "拠",
+        "kun_prefix": "よ"
+       }
+      ]
+     },
+     {
+      "pattern": "活か(?=[すさしせ])",
+      "candidates": [
+       "生か"
+      ],
+      "joyo_check": [
+       {
+        "char": "活",
+        "kun_prefix": "い"
+       }
+      ]
+     },
+     {
+      "pattern": "手許",
+      "candidates": [
+       "手元"
+      ],
+      "joyo_check": [
+       {
+        "char": "許",
+        "kun_prefix": "もと"
+       }
+      ]
+     },
+     {
+      "pattern": "想い",
+      "candidates": [
+       "思い"
+      ],
+      "joyo_check": [
+       {
+        "char": "想",
+        "kun_prefix": "おも"
+       }
+      ]
+     },
+     {
+      "pattern": "哀し(?P<s>い|み|む|く|さ)",
+      "candidates": [
+       "悲し\\g<s>"
+      ],
+      "joyo_check": [
+       {
+        "char": "哀",
+        "kun_prefix": "かな"
+       }
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "例示された語の表記(敢えて、予め、未だ、概ね、自ずから、宜しく、以て、為す、経つ、則る、依る・拠る、活かす、手許、想い、哀しい)。",
+   "needs_context_scope": "例示にない語。固有名詞・専門用語。振り仮名で対応する場合。",
+   "examples": {
+    "fix": [
+     {
+      "before": "予め確認する。",
+      "after": "あらかじめ確認する。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "あらかじめ確認する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "仮名書きの形。"
+     },
+     {
+      "text": "予定を確認する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "『予』は音で用いており、表内の音訓である。"
+     },
+     {
+      "text": "予め確認する。",
+      "profiles": [
+       "general-tech"
+      ],
+      "reason": "general-tech では指摘しない。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-KANJI-003",
+   "family": "kanji",
+   "title": "仮名で書く接続詞を漢字で書いている",
+   "summary": "接続詞のうち、仮名で書くとされる語(かつ、ただし、したがって、また、ゆえに、おって)の漢字書きを見つける。『及び』『並びに』『又は』『若しくは』は漢字で書く4語であり、この規則の対象ではない。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "skill-policy",
+     "note": "内閣訓令は各行政機関が作成する公用文を対象にする(訓令本文)。この設定では指摘しない。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "接続詞は、原則として仮名で書く(訓令 別紙1(2)オ)。考え方も『且つ』『但し』を法令に倣い仮名で書くとする。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "接続詞は、原則として仮名で書く(訓令 別紙1(2)オ)。ただし『及び』『並びに』『又は』『若しくは』の4語は漢字で書く。"
+    }
+   },
+   "conditions": [
+    "文頭にあるときだけ接続詞とみなす語(従って、故に、又、追って)は、文頭(行頭、句点の直後)に限る",
+    "『但し書き』は『ただし書』にする(考え方 解説 Ⅰ-1(3)エ)"
+   ],
+   "exceptions": [
+    "動詞の『従う』は漢字で書く",
+    "副詞の『又』は漢字で書く(考え方 解説 Ⅰ-1(3)イ)",
+    "『及び』『並びに』『又は』『若しくは』"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun",
+    "technical_term"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-KUNREI-2010",
+     "locator": "別紙 1(2)オ",
+     "pages": "PDF pp.2-3"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(3)イ 接続詞",
+     "pages": "PDF pp.23-24"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(3)エ 法令に倣い仮名で書く",
+     "pages": "PDF p.24"
+    }
+   ],
+   "skill_decisions": [
+    "error にしない。訓令は『原則として』と定める。",
+    "文頭に限る語の判定は、行頭または句点・感嘆符・疑問符の直後という文字列上の条件で行う。",
+    "general-tech では指摘しない。公用文を対象とする規定だから。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "且つ",
+      "candidates": [
+       "かつ"
+      ]
+     },
+     {
+      "pattern": "但し書き",
+      "candidates": [
+       "ただし書き"
+      ]
+     },
+     {
+      "pattern": "但し書(?!き)",
+      "candidates": [
+       "ただし書"
+      ]
+     },
+     {
+      "pattern": "但書",
+      "candidates": [
+       "ただし書"
+      ]
+     },
+     {
+      "pattern": "但し(?!書)",
+      "candidates": [
+       "ただし"
+      ]
+     },
+     {
+      "pattern": "(?:^|(?<=[。！？\\n]))従って(?=[、，])",
+      "candidates": [
+       "したがって"
+      ]
+     },
+     {
+      "pattern": "(?:^|(?<=[。！？\\n]))故に",
+      "candidates": [
+       "ゆえに"
+      ]
+     },
+     {
+      "pattern": "(?:^|(?<=[。！？\\n]))又(?=[、，])",
+      "candidates": [
+       "また"
+      ]
+     },
+     {
+      "pattern": "(?:^|(?<=[。！？\\n]))追って",
+      "candidates": [
+       "おって"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "且つ、但し、但書、文頭の従って・故に・又、・追って。",
+   "needs_context_scope": "文頭以外の『従って』『故に』など、接続詞か動詞・副詞かが文法で決まる箇所は検査しない。",
+   "examples": {
+    "fix": [
+     {
+      "before": "速度が上がる。且つ、安定する。",
+      "after": "速度が上がる。かつ、安定する。",
+      "profile": "official"
+     },
+     {
+      "before": "但し、例外がある。",
+      "after": "ただし、例外がある。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "命令に従って実行する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "動詞の『従う』は漢字で書く。"
+     },
+     {
+      "text": "A又はBを指定する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "『又は』は漢字で書く4語の一つ。"
+     },
+     {
+      "text": "且つ、安定する。",
+      "profiles": [
+       "general-tech"
+      ],
+      "reason": "general-tech では指摘しない。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-KANJI-004",
+   "family": "kanji",
+   "title": "漢字で書く4つの接続詞を仮名で書いている",
+   "summary": "『及び』『並びに』『又は』『若しくは』を、『および』『ならびに』『または』『もしくは』と仮名で書いている箇所を見つける。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "skill-policy",
+     "note": "公用文向けの規定であり、この設定では指摘しない。仮名書きは一般の社会生活で広く行われている。"
+    },
+    "public-explanation": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "広く一般に向けた解説・広報等では、分かりやすさや親しみやすさを優先し、仮名で書いてよい(考え方 解説 Ⅰ-1(3)オ、Ⅰ-1(1)エ)。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "次の4語は、原則として漢字で書く(訓令 別紙1(2)オのただし書)。"
+    }
+   },
+   "conditions": [
+    "official でのみ推奨として報告する"
+   ],
+   "exceptions": [
+    "広く一般に向けた解説・広報等では仮名で書いてよい(考え方 解説 Ⅰ-1(3)オ)"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun",
+    "technical_term"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-KUNREI-2010",
+     "locator": "別紙 1(2)オ ただし書 次の4語",
+     "pages": "PDF p.3"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(3)イ 〔漢字を使って書く接続詞〕",
+     "pages": "PDF pp.23-24"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(3)オ",
+     "pages": "PDF p.24"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "本文 Ⅰ-1 ただし書",
+     "pages": "PDF p.5"
+    }
+   ],
+   "skill_decisions": [
+    "error にしない。『原則として』の規定。",
+    "public-explanation は accepted_variant。考え方が解説・広報等で仮名書きを認めている。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "および",
+      "candidates": [
+       "及び"
+      ]
+     },
+     {
+      "pattern": "ならびに",
+      "candidates": [
+       "並びに"
+      ]
+     },
+     {
+      "pattern": "または",
+      "candidates": [
+       "又は"
+      ]
+     },
+     {
+      "pattern": "もしくは",
+      "candidates": [
+       "若しくは"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "および、ならびに、または、もしくは。",
+   "needs_context_scope": "なし(語として一意)。ただし official で意図的に仮名を使う場合は文脈による。",
+   "examples": {
+    "fix": [
+     {
+      "before": "AおよびBを指定する。",
+      "after": "A及びBを指定する。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "AおよびBを指定する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation"
+      ],
+      "reason": "解説・広報等と一般の文書では仮名書きでよい。"
+     },
+     {
+      "text": "A及びBを指定する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "漢字で書く4語の漢字書き。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-KANJI-005",
+   "family": "kanji",
+   "title": "漢字で書く副詞・連体詞を仮名で書いている",
+   "summary": "公用文で『原則として漢字で書く』とされる副詞・連体詞(必ず、全て、特に、既に など)を、仮名で書いている箇所を見つける。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "skill-policy",
+     "note": "公用文向けの規定であり、この設定では指摘しない。仮名書きは一般の社会生活で広く行われている。"
+    },
+    "public-explanation": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "広く一般に向けた解説・広報等では、読み手に配慮し、漢字を用いることになっている語も仮名で書いてよい(考え方 本文 Ⅰ-1 ただし書、解説 Ⅰ-1(3)オ)。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "次のような副詞・連体詞は、原則として漢字で書く(訓令 別紙1(2)イ)。"
+    }
+   },
+   "conditions": [
+    "訓令に例示された語に限る",
+    "品詞が決まらない語(動詞の連用形+『て』になりうる語など)は needs_context に下げる"
+   ],
+   "exceptions": [
+    "『かなり』『ふと』『やはり』『よほど』は仮名で書く(訓令 別紙1(2)イのただし書)",
+    "広く一般に向けた解説・広報等での仮名書き(考え方)"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun",
+    "technical_term"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-KUNREI-2010",
+     "locator": "別紙 1(2)イ 副詞及び連体詞",
+     "pages": "PDF p.2"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "本文 Ⅰ-1 ただし書",
+     "pages": "PDF p.5"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(3)オ",
+     "pages": "PDF p.24"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(3)イ(接続詞『さらに』)",
+     "pages": "PDF pp.23-24"
+    }
+   ],
+   "skill_decisions": [
+    "error にしない。『原則として』の規定。",
+    "形態素解析を使わないため、品詞が決まらない語は ambiguous として needs_context に下げる(精度の限界)。",
+    "連体詞は『大きな』『小さな』『明くる』『我が国』の仮名書きだけを検出する。『来る』『去る』は動詞との区別が要るため検出しない。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "かならずしも",
+      "candidates": [
+       "必ずしも"
+      ]
+     },
+     {
+      "pattern": "かならず",
+      "candidates": [
+       "必ず"
+      ]
+     },
+     {
+      "pattern": "おおいに",
+      "candidates": [
+       "大いに"
+      ]
+     },
+     {
+      "pattern": "おそらく",
+      "candidates": [
+       "恐らく"
+      ]
+     },
+     {
+      "pattern": "がいして",
+      "candidates": [
+       "概して"
+      ]
+     },
+     {
+      "pattern": "かろうじて",
+      "candidates": [
+       "辛うじて"
+      ]
+     },
+     {
+      "pattern": "じつに",
+      "candidates": [
+       "実に"
+      ]
+     },
+     {
+      "pattern": "すくなくとも",
+      "candidates": [
+       "少なくとも"
+      ]
+     },
+     {
+      "pattern": "すこし",
+      "candidates": [
+       "少し"
+      ]
+     },
+     {
+      "pattern": "すでに",
+      "candidates": [
+       "既に"
+      ]
+     },
+     {
+      "pattern": "すべて",
+      "candidates": [
+       "全て"
+      ]
+     },
+     {
+      "pattern": "せつに",
+      "candidates": [
+       "切に"
+      ]
+     },
+     {
+      "pattern": "たがいに",
+      "candidates": [
+       "互いに"
+      ]
+     },
+     {
+      "pattern": "ただちに",
+      "candidates": [
+       "直ちに"
+      ]
+     },
+     {
+      "pattern": "たとえば",
+      "candidates": [
+       "例えば"
+      ]
+     },
+     {
+      "pattern": "つねに",
+      "candidates": [
+       "常に"
+      ]
+     },
+     {
+      "pattern": "とくに",
+      "candidates": [
+       "特に"
+      ]
+     },
+     {
+      "pattern": "とつぜん",
+      "candidates": [
+       "突然"
+      ]
+     },
+     {
+      "pattern": "はなはだ",
+      "candidates": [
+       "甚だ"
+      ]
+     },
+     {
+      "pattern": "ふたたび",
+      "candidates": [
+       "再び"
+      ]
+     },
+     {
+      "pattern": "まったく",
+      "candidates": [
+       "全く"
+      ]
+     },
+     {
+      "pattern": "むろん",
+      "candidates": [
+       "無論"
+      ]
+     },
+     {
+      "pattern": "もっぱら",
+      "candidates": [
+       "専ら"
+      ]
+     },
+     {
+      "pattern": "わずか",
+      "candidates": [
+       "僅か"
+      ]
+     },
+     {
+      "pattern": "あまり",
+      "candidates": [
+       "余り"
+      ],
+      "ambiguous": true,
+      "ambiguity": "名詞の『余り』(残り)との区別が要る。"
+     },
+     {
+      "pattern": "いたって",
+      "candidates": [
+       "至って"
+      ],
+      "ambiguous": true,
+      "ambiguity": "動詞『至る』の連用形+『て』の可能性がある。"
+     },
+     {
+      "pattern": "きわめて",
+      "candidates": [
+       "極めて"
+      ],
+      "ambiguous": true,
+      "ambiguity": "動詞『極める』の連用形+『て』の可能性がある。"
+     },
+     {
+      "pattern": "ことに",
+      "candidates": [
+       "殊に"
+      ],
+      "ambiguous": true,
+      "ambiguity": "『事に』など別の語の可能性がある。"
+     },
+     {
+      "pattern": "さらに",
+      "candidates": [
+       "更に"
+      ],
+      "ambiguous": true,
+      "ambiguity": "接続詞の『さらに』は仮名で書く(考え方 解説 Ⅰ-1(3)イ)。副詞か接続詞かの判断が要る。"
+     },
+     {
+      "pattern": "たいして",
+      "candidates": [
+       "大して"
+      ],
+      "ambiguous": true,
+      "ambiguity": "動詞『対する』の連用形+『て』の可能性がある。"
+     },
+     {
+      "pattern": "ついで",
+      "candidates": [
+       "次いで"
+      ],
+      "ambiguous": true,
+      "ambiguity": "『序で』『次いで』など別の語の可能性がある。"
+     },
+     {
+      "pattern": "つとめて",
+      "candidates": [
+       "努めて"
+      ],
+      "ambiguous": true,
+      "ambiguity": "動詞『努める』『務める』の連用形+『て』の可能性がある。"
+     },
+     {
+      "pattern": "はじめて",
+      "candidates": [
+       "初めて"
+      ],
+      "ambiguous": true,
+      "ambiguity": "動詞『始める』の連用形+『て』の可能性がある。"
+     },
+     {
+      "pattern": "はたして",
+      "candidates": [
+       "果たして"
+      ],
+      "ambiguous": true,
+      "ambiguity": "動詞『果たす』の連用形+『て』の可能性がある。"
+     },
+     {
+      "pattern": "もっとも",
+      "candidates": [
+       "最も"
+      ],
+      "ambiguous": true,
+      "ambiguity": "接続詞の『もっとも』(ただし)は仮名で書く。副詞か接続詞かの判断が要る。"
+     },
+     {
+      "pattern": "たえず",
+      "candidates": [
+       "絶えず"
+      ],
+      "ambiguous": true,
+      "ambiguity": "動詞『耐える』『堪える』+『ず』の可能性がある。"
+     },
+     {
+      "pattern": "あくる",
+      "candidates": [
+       "明くる"
+      ]
+     },
+     {
+      "pattern": "おおきな",
+      "candidates": [
+       "大きな"
+      ]
+     },
+     {
+      "pattern": "ちいさな",
+      "candidates": [
+       "小さな"
+      ]
+     },
+     {
+      "pattern": "わが国",
+      "candidates": [
+       "我が国"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "訓令に例示された副詞・連体詞の仮名書き(上記の語)。",
+   "needs_context_scope": "動詞の連用形+『て』や接続詞との区別が要る語(きわめて、はじめて、さらに、もっとも など)。",
+   "examples": {
+    "fix": [
+     {
+      "before": "すべての設定を確認する。",
+      "after": "全ての設定を確認する。",
+      "profile": "official"
+     },
+     {
+      "before": "ここでは、きわめて重要な点を述べる。",
+      "after": "ここでは、極めて重要な点を述べる。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "全ての設定を確認する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "訓令の形(漢字)。"
+     },
+     {
+      "text": "かなり重要な点を述べる。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "『かなり』は仮名で書く語。"
+     },
+     {
+      "text": "すべての設定を確認する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation"
+      ],
+      "reason": "一般の文書と解説・広報等では仮名書きでよい。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-KANJI-006",
+   "family": "kanji",
+   "title": "仮名で書くことが基本の副詞を漢字で書いている",
+   "summary": "公用文で仮名で書くとされる副詞(いろいろ、たくさん、ちょうど、よほど、やはり など)を、漢字や当て字で書いている箇所を見つける。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "skill-policy",
+     "note": "公用文向けの規定であり、この設定では指摘しない。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "動詞・副詞・形容詞は漢字で書くことを基本とするが、一部のものは仮名で書く(考え方 解説 Ⅰ-1(3)ウ)。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "次の副詞は、原則として仮名で書く(訓令 別紙1(2)イのただし書、考え方 解説 Ⅰ-1(3)ウ)。"
+    }
+   },
+   "conditions": [
+    "考え方に例示された語に限る"
+   ],
+   "exceptions": [
+    "常用漢字表の付表にある熟字訓は対象外(別の規則)"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun",
+    "technical_term"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-KUNREI-2010",
+     "locator": "別紙 1(2)イ ただし書",
+     "pages": "PDF p.2"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(3)ウ 副詞のうち仮名で書くもの",
+     "pages": "PDF p.24"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(3)ア いわゆる当て字や熟字訓",
+     "pages": "PDF p.23"
+    }
+   ],
+   "skill_decisions": [
+    "error にしない。",
+    "『矢張り』『如何に』などは考え方の例示にある仮名書きの語の別表記であり、この skill が検出対象に加えた。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "色々",
+      "candidates": [
+       "いろいろ"
+      ]
+     },
+     {
+      "pattern": "沢山",
+      "candidates": [
+       "たくさん"
+      ]
+     },
+     {
+      "pattern": "丁度",
+      "candidates": [
+       "ちょうど"
+      ]
+     },
+     {
+      "pattern": "余程",
+      "candidates": [
+       "よほど"
+      ]
+     },
+     {
+      "pattern": "矢張り",
+      "candidates": [
+       "やはり"
+      ]
+     },
+     {
+      "pattern": "如何に",
+      "candidates": [
+       "いかに"
+      ]
+     },
+     {
+      "pattern": "何れ",
+      "candidates": [
+       "いずれ"
+      ]
+     },
+     {
+      "pattern": "態々",
+      "candidates": [
+       "わざわざ"
+      ]
+     },
+     {
+      "pattern": "態と",
+      "candidates": [
+       "わざと"
+      ]
+     },
+     {
+      "pattern": "軈て",
+      "candidates": [
+       "やがて"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "色々、沢山、丁度、余程、矢張り、如何に、何れ、態々、態と、軈て。",
+   "needs_context_scope": "なし(語として一意)。",
+   "examples": {
+    "fix": [
+     {
+      "before": "色々な方法がある。",
+      "after": "いろいろな方法がある。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "いろいろな方法がある。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "仮名書きの形。"
+     },
+     {
+      "text": "色々な方法がある。",
+      "profiles": [
+       "general-tech"
+      ],
+      "reason": "general-tech では指摘しない。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-KANJI-007",
+   "family": "kanji",
+   "title": "補助的な用法・形式的な用法で仮名にする語を漢字で書いている",
+   "summary": "助動詞・補助的な用法・形式的な用法で仮名書きとされる語(ていただく、てください、てほしい、のような、ことができる、がない、がある)の漢字書きを見つける。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "skill-policy",
+     "note": "公用文向けの規定であり、この設定では指摘しない。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "補助的な用法や形式名詞などは、原則として仮名で書く(考え方 解説 Ⅰ-1(3)ア・ウ)。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "次のような語句を例のように用いるときは、原則として仮名で書く(訓令 別紙1(2)カ・キ)。"
+    }
+   },
+   "conditions": [
+    "補助的な用法に限る(直前が『て』『で』、助詞『が』など)",
+    "実際の動作や状態を表す場合は漢字で書く(声が良い、賞状を頂く、資格が欲しい)"
+   ],
+   "exceptions": [
+    "『出来が良い』のような名詞の『出来』",
+    "『有り難い』『有無』のような漢字で書く語",
+    "『所在・存在』を強調する『在る』"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun",
+    "technical_term"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-KUNREI-2010",
+     "locator": "別紙 1(2)カ・キ",
+     "pages": "PDF p.3"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(3)ア 助動詞・補助的な用法・形式名詞",
+     "pages": "PDF p.23"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(3)ウ 動詞のうち仮名で書くもの・ある・ない",
+     "pages": "PDF p.24"
+    }
+   ],
+   "skill_decisions": [
+    "error にしない。『原則として』の規定で、実際の動作を表す場合は漢字で書くため、機械で全てを判別できない。",
+    "直前の文字による条件(て・で・が)で、補助的な用法に絞った。『事』『時』『所』『物』は検出しない(漢字で書く場合が多く、誤検出が多いため)。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "(?<=[てで])頂(?P<s>く|き|け|か|いた)",
+      "candidates": [
+       "いただ\\g<s>"
+      ]
+     },
+     {
+      "pattern": "(?<=[てで])下さ(?P<s>い|る|った|れ)",
+      "candidates": [
+       "くださ\\g<s>"
+      ]
+     },
+     {
+      "pattern": "(?<=[てで])欲しい",
+      "candidates": [
+       "ほしい"
+      ]
+     },
+     {
+      "pattern": "の様(?P<s>だ|な|に|です)",
+      "candidates": [
+       "のよう\\g<s>"
+      ]
+     },
+     {
+      "pattern": "こと(?P<p>[がはも])出来(?P<s>る|ま|な|た|て|れ|ず)",
+      "candidates": [
+       "こと\\g<p>でき\\g<s>"
+      ]
+     },
+     {
+      "pattern": "(?<=が)無(?P<s>い|く|かっ)",
+      "candidates": [
+       "な\\g<s>"
+      ]
+     },
+     {
+      "pattern": "(?<=が)有(?!り難)(?P<s>る|り|っ[たて])",
+      "candidates": [
+       "あ\\g<s>"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "直前の文字で補助的な用法と分かる、頂く・下さい・欲しい・の様な・ことが出来る・が無い・が有る。",
+   "needs_context_scope": "『行く』『来る』『見る』『良い』の補助的な用法(実際の動作との区別が要る)は検査しない。",
+   "examples": {
+    "fix": [
+     {
+      "before": "確認して頂く。",
+      "after": "確認していただく。",
+      "profile": "official"
+     },
+     {
+      "before": "利用することが出来る。",
+      "after": "利用することができる。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "賞状を頂く。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "実際の動作を表す『頂く』は漢字で書く。"
+     },
+     {
+      "text": "出来が良い。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "名詞の『出来』は漢字で書く。"
+     },
+     {
+      "text": "確認して頂く。",
+      "profiles": [
+       "general-tech"
+      ],
+      "reason": "general-tech では指摘しない。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-KANA-001",
+   "family": "kana",
+   "provenance": "primary-source",
+   "title": "助詞『は』を『わ』と書いている",
+   "summary": "助詞の『は』は『は』と書く(第2 2)。こんにちは、こんばんは、あるいは、もしくは、とはいえ を、『わ』と書いている箇所を見つける。",
+   "profiles": {
+    "general-tech": {
+     "category": "error",
+     "basis": "source",
+     "note": "助詞の『は』は『は』と書く。例に『こんにちは』『こんばんは』『あるいは』『もしくは』『とはいえ』が挙がっている。"
+    },
+    "public-explanation": {
+     "category": "error",
+     "basis": "source",
+     "note": "助詞の『は』は『は』と書く。例に『こんにちは』『こんばんは』『あるいは』『もしくは』『とはいえ』が挙がっている。"
+    },
+    "official": {
+     "category": "error",
+     "basis": "source",
+     "note": "助詞の『は』は『は』と書く。例に『こんにちは』『こんばんは』『あるいは』『もしくは』『とはいえ』が挙がっている。"
+    }
+   },
+   "conditions": [
+    "現代の国語の口語体の文章であること(前書き)",
+    "検出する語は例示された語に限る(語の一部に『わ』が続く場合は除く)"
+   ],
+   "exceptions": [
+    "原文の仮名遣いによる必要のあるもの、固有名詞などでこれによりがたいもの(前書き)",
+    "擬声・擬態的描写や嘆声(前書き)"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-GENDAIKANA-1986",
+     "locator": "本文 第2 2 助詞の『は』"
+    },
+    {
+     "source_id": "NAIKAKU-GENDAIKANA-1986",
+     "locator": "前書き"
+    }
+   ],
+   "skill_decisions": [
+    "『ついてわ』『いずれわ』は後ろの語の頭の『わ』(例: いずれわかる)と区別できないため検出しない。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "こんにちわ(?!か)",
+      "candidates": [
+       "こんにちは"
+      ]
+     },
+     {
+      "pattern": "こんばんわ(?!か)",
+      "candidates": [
+       "こんばんは"
+      ]
+     },
+     {
+      "pattern": "あるいわ(?![れゆ])",
+      "candidates": [
+       "あるいは"
+      ]
+     },
+     {
+      "pattern": "もしくわ",
+      "candidates": [
+       "もしくは"
+      ]
+     },
+     {
+      "pattern": "とわいえ",
+      "candidates": [
+       "とはいえ"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "こんにちわ、こんばんわ、あるいわ、もしくわ、とわいえ。",
+   "needs_context_scope": "例示にない助詞『は』の書き誤りは検査しない。",
+   "examples": {
+    "fix": [
+     {
+      "before": "こんにちわ、田中です。",
+      "after": "こんにちは、田中です。",
+      "profile": "general-tech"
+     },
+     {
+      "before": "あるいわ別の方法もある。",
+      "after": "あるいは別の方法もある。",
+      "profile": "general-tech"
+     }
+    ],
+    "keep": [
+     {
+      "text": "こんにちは、田中です。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "正しい表記。"
+     },
+     {
+      "text": "> こんにちわ、と書いてあった。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "引用(ブロッククォート)は保護対象。"
+     }
+    ]
+   },
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-KANA-002",
+   "family": "kana",
+   "provenance": "primary-source",
+   "title": "動詞『いう(言)』を『ゆう』と書いている",
+   "summary": "動詞の『いう(言)』は『いう』と書く(第2 4)。どういう、こういう、そういう、ああいう、という を『ゆう』と書いている箇所を見つける。",
+   "profiles": {
+    "general-tech": {
+     "category": "error",
+     "basis": "source",
+     "note": "動詞の『いう(言)』は『いう』と書く。例に『という』『どういうふうに』『こういうわけ』が挙がっている。"
+    },
+    "public-explanation": {
+     "category": "error",
+     "basis": "source",
+     "note": "動詞の『いう(言)』は『いう』と書く。例に『という』『どういうふうに』『こういうわけ』が挙がっている。"
+    },
+    "official": {
+     "category": "error",
+     "basis": "source",
+     "note": "動詞の『いう(言)』は『いう』と書く。例に『という』『どういうふうに』『こういうわけ』が挙がっている。"
+    }
+   },
+   "conditions": [
+    "現代の国語の口語体の文章であること(前書き)"
+   ],
+   "exceptions": [
+    "原文の仮名遣いによる必要のあるもの、固有名詞(前書き)",
+    "『交友』『校友』など、別の語として『こうゆう』と書く場合"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-GENDAIKANA-1986",
+     "locator": "本文 第2 4 動詞の『いう(言)』"
+    },
+    {
+     "source_id": "NAIKAKU-GENDAIKANA-1986",
+     "locator": "前書き"
+    }
+   ],
+   "skill_decisions": [
+    "他の語の一部になる偶然の一致を避けるため、検出は『どうゆう』『こうゆう』『そうゆう』『ああゆう』『とゆう』の5形に限る。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "どうゆう",
+      "candidates": [
+       "どういう"
+      ]
+     },
+     {
+      "pattern": "こうゆう",
+      "candidates": [
+       "こういう"
+      ]
+     },
+     {
+      "pattern": "そうゆう",
+      "candidates": [
+       "そういう"
+      ]
+     },
+     {
+      "pattern": "ああゆう",
+      "candidates": [
+       "ああいう"
+      ]
+     },
+     {
+      "pattern": "とゆう(?![うきこ])",
+      "candidates": [
+       "という"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "どうゆう、こうゆう、そうゆう、ああゆう、とゆう。",
+   "needs_context_scope": "『言う』の活用形(ゆって など)は検査しない。",
+   "examples": {
+    "fix": [
+     {
+      "before": "そうゆう場合は再実行する。",
+      "after": "そういう場合は再実行する。",
+      "profile": "general-tech"
+     }
+    ],
+    "keep": [
+     {
+      "text": "そういう場合は再実行する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "正しい表記。"
+     },
+     {
+      "text": "```text\nそうゆう\n```",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "コードブロックは保護対象。"
+     }
+    ]
+   },
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-KANA-003",
+   "family": "kana",
+   "provenance": "primary-source",
+   "title": "『ぢ』『づ』を用いる語を『じ』『ず』で書いている(またはその逆)",
+   "summary": "同音の連呼や二語の連合で『ぢ』『づ』を用いる語(ちぢむ、つづく、つづみ、みかづき)を『じ』『ず』で書いている箇所と、『いちじく』『いちじるしい』を『ぢ』で書いている箇所を見つける。",
+   "profiles": {
+    "general-tech": {
+     "category": "error",
+     "basis": "source",
+     "note": "『ぢ』『づ』を用いて書く語(第2 5(1)(2))と、これにあたらない語(同注意)が定められている。"
+    },
+    "public-explanation": {
+     "category": "error",
+     "basis": "source",
+     "note": "『ぢ』『づ』を用いて書く語(第2 5(1)(2))と、これにあたらない語(同注意)が定められている。"
+    },
+    "official": {
+     "category": "error",
+     "basis": "source",
+     "note": "『ぢ』『づ』を用いて書く語(第2 5(1)(2))と、これにあたらない語(同注意)が定められている。"
+    }
+   },
+   "conditions": [
+    "現代の国語の口語体の文章であること(前書き)",
+    "例示された語だけを検出する"
+   ],
+   "exceptions": [
+    "『じ』『ず』を本則とし『ぢ』『づ』も認める語(せかいじゅう、いなずま、きずな など)は KOKUGO-KANA-004 で許容形として扱う"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-GENDAIKANA-1986",
+     "locator": "本文 第2 5(1)(2) 及び 注意"
+    }
+   ],
+   "skill_decisions": [
+    "例示された語だけを検出する。例示にない語は未検査。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "いちぢく",
+      "candidates": [
+       "いちじく"
+      ]
+     },
+     {
+      "pattern": "いちぢる(?=し)",
+      "candidates": [
+       "いちじる"
+      ]
+     },
+     {
+      "pattern": "つずく",
+      "candidates": [
+       "つづく"
+      ]
+     },
+     {
+      "pattern": "つずみ",
+      "candidates": [
+       "つづみ"
+      ]
+     },
+     {
+      "pattern": "ちじむ",
+      "candidates": [
+       "ちぢむ"
+      ]
+     },
+     {
+      "pattern": "ちじれる",
+      "candidates": [
+       "ちぢれる"
+      ]
+     },
+     {
+      "pattern": "みかずき",
+      "candidates": [
+       "みかづき"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "いちぢく、いちぢるしい、つずく、つずみ、ちじむ、ちじれる、みかずき。",
+   "needs_context_scope": "例示にない語の『ぢ』『づ』は検査しない。",
+   "examples": {
+    "fix": [
+     {
+      "before": "作業がつずく。",
+      "after": "作業がつづく。",
+      "profile": "general-tech"
+     },
+     {
+      "before": "いちぢるしい変化。",
+      "after": "いちじるしい変化。",
+      "profile": "general-tech"
+     }
+    ],
+    "keep": [
+     {
+      "text": "作業がつづく。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "正しい表記。"
+     },
+     {
+      "text": "いなづまが光る。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "許容形(KOKUGO-KANA-004)であり、誤りではない。"
+     }
+    ]
+   },
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-KANA-004",
+   "family": "kana",
+   "provenance": "primary-source",
+   "title": "『ぢ』『づ』で書くことも認められている語(許容形)",
+   "summary": "『じ』『ず』を本則とし、『ぢ』『づ』を用いて書くこともできるとされる語を、許容形として扱う。誤りとして報告しない。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "本則は『じ』『ず』だが、『せかいぢゅう』『いなづま』のように『ぢ』『づ』で書くこともできる(第2 5(2))。"
+    },
+    "public-explanation": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "本則は『じ』『ず』だが、『せかいぢゅう』『いなづま』のように『ぢ』『づ』で書くこともできる(第2 5(2))。"
+    },
+    "official": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "本則は『じ』『ず』だが、『せかいぢゅう』『いなづま』のように『ぢ』『づ』で書くこともできる(第2 5(2))。"
+    }
+   },
+   "conditions": [
+    "例示された語に限る"
+   ],
+   "exceptions": [
+    "『かたづ』(固唾)は『かたづく』(片付く)と区別できないため検出しない"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-GENDAIKANA-1986",
+     "locator": "本文 第2 5(2) なお書き"
+    }
+   ],
+   "skill_decisions": [
+    "どの設定でも accepted_variant とする。公用文の基準(訓令・考え方)にこの許容を禁じる規定は確認できなかったため。",
+    "本則の形は候補として示す。混在は KOKUGO-CONSIST-001 で扱う。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "せかいぢゅう",
+      "candidates": [
+       "せかいじゅう"
+      ]
+     },
+     {
+      "pattern": "いなづま",
+      "candidates": [
+       "いなずま"
+      ]
+     },
+     {
+      "pattern": "きづな",
+      "candidates": [
+       "きずな"
+      ]
+     },
+     {
+      "pattern": "さかづき",
+      "candidates": [
+       "さかずき"
+      ]
+     },
+     {
+      "pattern": "ほおづき",
+      "candidates": [
+       "ほおずき"
+      ]
+     },
+     {
+      "pattern": "みみづく",
+      "candidates": [
+       "みみずく"
+      ]
+     },
+     {
+      "pattern": "うなづく",
+      "candidates": [
+       "うなずく"
+      ]
+     },
+     {
+      "pattern": "おとづれる",
+      "candidates": [
+       "おとずれる"
+      ]
+     },
+     {
+      "pattern": "かしづく",
+      "candidates": [
+       "かしずく"
+      ]
+     },
+     {
+      "pattern": "つまづく",
+      "candidates": [
+       "つまずく"
+      ]
+     },
+     {
+      "pattern": "ぬかづく",
+      "candidates": [
+       "ぬかずく"
+      ]
+     },
+     {
+      "pattern": "ひざまづく",
+      "candidates": [
+       "ひざまずく"
+      ]
+     },
+     {
+      "pattern": "ひとりづつ",
+      "candidates": [
+       "ひとりずつ"
+      ]
+     },
+     {
+      "pattern": "ゆうづう",
+      "candidates": [
+       "ゆうずう"
+      ]
+     },
+     {
+      "pattern": "くろづくめ",
+      "candidates": [
+       "くろずくめ"
+      ]
+     },
+     {
+      "pattern": "さしづめ",
+      "candidates": [
+       "さしずめ"
+      ]
+     },
+     {
+      "pattern": "なかんづく",
+      "candidates": [
+       "なかんずく"
+      ]
+     },
+     {
+      "pattern": "うでづく",
+      "candidates": [
+       "うでずく"
+      ]
+     },
+     {
+      "pattern": "あせみづく",
+      "candidates": [
+       "あせみずく"
+      ]
+     },
+     {
+      "pattern": "ときわづ",
+      "candidates": [
+       "ときわず"
+      ]
+     },
+     {
+      "pattern": "でづっぱり",
+      "candidates": [
+       "でずっぱり"
+      ]
+     },
+     {
+      "pattern": "くんづほぐれつ",
+      "candidates": [
+       "くんずほぐれつ"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "許容形として例示された語(いなづま、きづな、ひとりづつ など22語)。",
+   "needs_context_scope": "『少しづつ』のように例示にない語への許容の適用(KOKUGO-KANA-005)。",
+   "examples": {
+    "fix": [
+     {
+      "before": "いなづまが光る。",
+      "after": "いなずまが光る。",
+      "profile": "general-tech"
+     }
+    ],
+    "keep": [
+     {
+      "text": "いなづまが光る。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "許容形であり、誤りではない。"
+     },
+     {
+      "text": "うなづく。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "許容形であり、誤りではない。"
+     }
+    ]
+   },
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-KANA-005",
+   "family": "kana",
+   "provenance": "primary-source-derived",
+   "title": "『づつ』(『ひとりづつ』以外)の適用範囲",
+   "summary": "『ひとりずつ』を例とする許容は例示である。『少しづつ』など他の語への適用範囲は、告示の例示だけでは断定できないため、文脈で確かめる。",
+   "profiles": {
+    "general-tech": {
+     "category": "needs_context",
+     "basis": "source",
+     "note": "告示が許容を明示するのは『ひとりずつ』を含む例示までである。『ずつ』が本則である。"
+    },
+    "public-explanation": {
+     "category": "needs_context",
+     "basis": "source",
+     "note": "告示が許容を明示するのは『ひとりずつ』を含む例示までである。『ずつ』が本則である。"
+    },
+    "official": {
+     "category": "needs_context",
+     "basis": "source",
+     "note": "告示が許容を明示するのは『ひとりずつ』を含む例示までである。『ずつ』が本則である。"
+    }
+   },
+   "conditions": [
+    "『ひとりづつ』は KOKUGO-KANA-004 で扱う"
+   ],
+   "exceptions": [
+    "固有名詞、原文の仮名遣いによる必要のあるもの"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-GENDAIKANA-1986",
+     "locator": "本文 第2 5(2) なお書き(例に『ひとりずつ』)"
+    }
+   ],
+   "skill_decisions": [
+    "error にも accepted_variant にもせず、needs_context とする。例示から他の語への適用を断定すると、規定を超えて判定することになるため。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "(?<!ひとり)づつ",
+      "candidates": [
+       "ずつ"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "『づつ』の出現(『ひとりづつ』を除く)。",
+   "needs_context_scope": "『ずつ』『づつ』のどちらが認められるかは、告示の例示から断定しない。",
+   "examples": {
+    "fix": [
+     {
+      "before": "少しづつ進める。",
+      "after": "少しずつ進める。",
+      "profile": "general-tech"
+     }
+    ],
+    "keep": [
+     {
+      "text": "少しずつ進める。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "本則の形。"
+     },
+     {
+      "text": "ひとりづつ並ぶ。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "許容形(KOKUGO-KANA-004)であり、この規則の対象ではない。"
+     }
+    ]
+   },
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-KANA-006",
+   "family": "kana",
+   "provenance": "primary-source",
+   "title": "歴史的仮名遣いの文字(ゐ・ゑ・ヰ・ヱ)",
+   "summary": "現代仮名遣いで用いない『ゐ』『ゑ』『ヰ』『ヱ』を見つける。固有名詞や原文の仮名遣いによる箇所かどうかは、機械では決まらない。",
+   "profiles": {
+    "general-tech": {
+     "category": "needs_context",
+     "basis": "source",
+     "note": "原文の仮名遣いによる必要のあるもの、固有名詞などは、現代仮名遣いの対象から除かれる(前書き)。"
+    },
+    "public-explanation": {
+     "category": "needs_context",
+     "basis": "source",
+     "note": "原文の仮名遣いによる必要のあるもの、固有名詞などは、現代仮名遣いの対象から除かれる(前書き)。"
+    },
+    "official": {
+     "category": "needs_context",
+     "basis": "source",
+     "note": "原文の仮名遣いによる必要のあるもの、固有名詞などは、現代仮名遣いの対象から除かれる(前書き)。"
+    }
+   },
+   "conditions": [
+    "現代の国語の口語体の文章であること(前書き)"
+   ],
+   "exceptions": [
+    "固有名詞(例: ヱビス)",
+    "原文の仮名遣いによる引用や古典の例示"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-GENDAIKANA-1986",
+     "locator": "前書き(原文の仮名遣い、固有名詞)"
+    },
+    {
+     "source_id": "NAIKAKU-GENDAIKANA-1986",
+     "locator": "本文 第1(用いる仮名の一覧)"
+    }
+   ],
+   "skill_decisions": [
+    "error にしない。固有名詞・引用かどうかの判別ができないため。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "[ゐゑヰヱ]",
+      "candidates": []
+     }
+    ]
+   },
+   "machine_detectable": "ゐ・ゑ・ヰ・ヱの出現。",
+   "needs_context_scope": "固有名詞か、原文の仮名遣いによる引用か、誤りか。",
+   "examples": {
+    "fix": [
+     {
+      "before": "ゐる場所を確認する。",
+      "after": "いる場所を確認する。",
+      "profile": "general-tech"
+     }
+    ],
+    "keep": [
+     {
+      "text": "いる場所を確認する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "現代仮名遣いの形。"
+     }
+    ]
+   },
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-OKURI-001",
+   "family": "okurigana",
+   "provenance": "primary-source",
+   "title": "通則1の許容形(表わす、行なう など)",
+   "summary": "活用語尾の前の音節から送る許容形(表わす、著わす、現われる、行なう、断わる、賜わる)を見つける。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "通則1の許容として、活用語尾の前の音節から送ることができる。本則と許容のどちらに従ってもよい(見方及び使い方 五)。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "公用文では本則・例外に従って送るのが原則である(考え方 本文 Ⅰ-2)。許容形は誤りではない。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "訓令は通則1の本則・例外を原則とし(別紙2(1))、許容を適用してよいのは通則2・4・6に限る(別紙2(2))。通則1の許容形は誤りではないが、本則にする。"
+    }
+   },
+   "conditions": [
+    "例示された6語と、その活用形に限る"
+   ],
+   "exceptions": [
+    "固有名詞(前書き三)",
+    "漢字を記号的に用いる場合(前書き三)"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-OKURIGANA-1973",
+     "locator": "通則1 許容"
+    },
+    {
+     "source_id": "NAIKAKU-OKURIGANA-1973",
+     "locator": "『本文』の見方及び使い方 三・五"
+    },
+    {
+     "source_id": "NAIKAKU-KUNREI-2010",
+     "locator": "別紙 2(1), 2(2)",
+     "pages": "PDF pp.4-5"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-2ア",
+     "pages": "PDF p.25"
+    }
+   ],
+   "skill_decisions": [
+    "official と public-explanation でも error にしない。許容形は告示が認める形であり、誤りではない。recommendation は『本則を選ぶ』という推奨である。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "表わ(?P<s>す|さ|し|せ)",
+      "candidates": [
+       "表\\g<s>"
+      ]
+     },
+     {
+      "pattern": "著わ(?P<s>す|さ|し|せ)",
+      "candidates": [
+       "著\\g<s>"
+      ]
+     },
+     {
+      "pattern": "現わ(?=れ)",
+      "candidates": [
+       "現"
+      ]
+     },
+     {
+      "pattern": "行な(?P<s>[いうわえっ])",
+      "candidates": [
+       "行\\g<s>"
+      ]
+     },
+     {
+      "pattern": "断わ(?P<s>[るらりれっ])",
+      "candidates": [
+       "断\\g<s>"
+      ]
+     },
+     {
+      "pattern": "賜わ(?P<s>[るらりれっ])",
+      "candidates": [
+       "賜\\g<s>"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "表わす、著わす、現われる、行なう、断わる、賜わる(活用形を含む)。",
+   "needs_context_scope": "例示にない語の送り仮名は検査しない。",
+   "examples": {
+    "fix": [
+     {
+      "before": "処理を行なう。",
+      "after": "処理を行う。",
+      "profile": "official"
+     },
+     {
+      "before": "結果を表わす。",
+      "after": "結果を表す。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "処理を行なう。",
+      "profiles": [
+       "general-tech"
+      ],
+      "reason": "通則1の許容形。general-tech では誤りとして扱わない。"
+     },
+     {
+      "text": "処理を行う。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "本則の形。"
+     }
+    ]
+   },
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-OKURI-002",
+   "family": "okurigana",
+   "provenance": "primary-source-derived",
+   "title": "通則2の許容形(終る、変る、起る など)",
+   "summary": "読み間違えるおそれのない場合に送り仮名を省く許容形(浮ぶ、生れる、押える、捕える、晴やか、積る、聞える、起る、落す、暮す、当る、終る、変る)を見つける。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "通則2の許容として、読み間違えるおそれのない場合は活用語尾以外の部分の送り仮名を省くことができる。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "公用文では本則・例外に従って送るのが原則である(考え方 本文 Ⅰ-2)。許容形は誤りではない。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "訓令は、必要と認める場合に限り通則2の許容を適用して差し支えないとする(別紙2(2))。既定は本則である。"
+    }
+   },
+   "conditions": [
+    "例示された13語と、その主な活用形に限る"
+   ],
+   "exceptions": [
+    "固有名詞(前書き三)",
+    "『見積る』のように他の語と複合した語は対象にしない(『積る』は『見』が前に付くと除く)"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-OKURIGANA-1973",
+     "locator": "通則2 許容"
+    },
+    {
+     "source_id": "NAIKAKU-OKURIGANA-1973",
+     "locator": "『本文』の見方及び使い方 五"
+    },
+    {
+     "source_id": "NAIKAKU-KUNREI-2010",
+     "locator": "別紙 2(2)",
+     "pages": "PDF p.5"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-2ア",
+     "pages": "PDF p.25"
+    }
+   ],
+   "skill_decisions": [
+    "活用形の展開(ない・ます・た・て の形)はこの skill が付けた。",
+    "official でも error にしない。訓令が許容の適用を認めているため。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "浮ぶ",
+      "candidates": [
+       "浮かぶ"
+      ]
+     },
+     {
+      "pattern": "(?<!見)積る",
+      "candidates": [
+       "積もる"
+      ]
+     },
+     {
+      "pattern": "生れ",
+      "candidates": [
+       "生まれ"
+      ]
+     },
+     {
+      "pattern": "押え",
+      "candidates": [
+       "押さえ"
+      ]
+     },
+     {
+      "pattern": "捕え",
+      "candidates": [
+       "捕らえ"
+      ]
+     },
+     {
+      "pattern": "晴やか",
+      "candidates": [
+       "晴れやか"
+      ]
+     },
+     {
+      "pattern": "聞え",
+      "candidates": [
+       "聞こえ"
+      ]
+     },
+     {
+      "pattern": "起(?P<s>る|ら(?=[なずれ])|り|っ(?=[たて]))",
+      "candidates": [
+       "起こ\\g<s>"
+      ]
+     },
+     {
+      "pattern": "落(?P<s>す|さ(?=[なずれ])|し|そ(?=う))",
+      "candidates": [
+       "落と\\g<s>"
+      ]
+     },
+     {
+      "pattern": "暮(?P<s>す|さ(?=[なずれ])|し|そ(?=う))",
+      "candidates": [
+       "暮ら\\g<s>"
+      ]
+     },
+     {
+      "pattern": "当(?P<s>る|ら(?=[なずれ])|り|っ(?=[たて]))",
+      "candidates": [
+       "当た\\g<s>"
+      ]
+     },
+     {
+      "pattern": "終(?P<s>る|ら(?=[なずれ])|り|っ(?=[たて]))",
+      "candidates": [
+       "終わ\\g<s>"
+      ]
+     },
+     {
+      "pattern": "変(?P<s>る|ら(?=[なずれ])|り|っ(?=[たて]))",
+      "candidates": [
+       "変わ\\g<s>"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "浮ぶ、積る、生れ、押え、捕え、晴やか、聞え、起る、落す、暮す、当る、終る、変る(主な活用形を含む)。",
+   "needs_context_scope": "例示にない語の送り仮名。他の語と複合した語。",
+   "examples": {
+    "fix": [
+     {
+      "before": "処理が終る。",
+      "after": "処理が終わる。",
+      "profile": "official"
+     },
+     {
+      "before": "設定を変る。",
+      "after": "設定を変わる。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "処理が終る。",
+      "profiles": [
+       "general-tech"
+      ],
+      "reason": "通則2の許容形。general-tech では誤りとして扱わない。"
+     },
+     {
+      "text": "処理が終わる。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "本則の形。"
+     },
+     {
+      "text": "変更を加える。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "『変』の後が『る』『り』などではなく、検出の対象外。"
+     }
+    ]
+   },
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-OKURI-003",
+   "family": "okurigana",
+   "title": "公用文で送り仮名を省くと定められた186語を、省かずに書いている",
+   "summary": "内閣訓令が通則6の許容を適用して送り仮名を省くものとする名詞186語(申込み、取扱い、打合せ、問合せ など)を、送り仮名を省かない形(申し込み、取り扱い など)で書いている箇所を見つける。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "本則(単独の語の送り仮名の付け方による形)も、通則6の許容(省く形)も、告示が認める形である。"
+    },
+    "public-explanation": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "広く一般に向けた解説・広報等では、読み手に配慮し、送り仮名を省かずに書くことができる(考え方 本文 Ⅰ-2 ただし書、解説 Ⅰ-2ウ)。"
+    },
+    "official": {
+     "category": "error",
+     "basis": "source",
+     "note": "公用文の活用のない複合の語のうち、読み間違えるおそれのない186語は、通則6の許容を適用して送り仮名を省くものとする(訓令 別紙2(1)ただし書)。許容形を用いてよい場合(同2(2))にも、このただし書の語は含まれない。"
+    }
+   },
+   "conditions": [
+    "活用のない語(名詞)としての用法に限る。直後が『が』『を』『の』のときだけ名詞と確定し、それ以外は動詞の連用形の可能性があるため needs_context に下げる",
+    "通則7を適用する語(取扱所、見積書、申込書 など)は含まれない。直後が漢字のときも needs_context に下げる",
+    "動詞は本則に従って書く(入れ替える、売り上げる、問い合わせる など)"
+   ],
+   "exceptions": [
+    "固有名詞(別紙3(1))",
+    "専門用語・特殊用語(別紙3(2))",
+    "広く一般に向けた解説・広報等(考え方 解説 Ⅰ-2ウ)",
+    "通則7を適用する語"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun",
+    "technical_term"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-KUNREI-2010",
+     "locator": "別紙 2(1) ただし書・2(2)",
+     "pages": "PDF pp.4-5"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-2イ(186語)",
+     "pages": "PDF p.25"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-2ウ",
+     "pages": "PDF p.25"
+    },
+    {
+     "source_id": "NAIKAKU-OKURIGANA-1973",
+     "locator": "通則6 許容"
+    },
+    {
+     "source_id": "NAIKAKU-OKURIGANA-1973",
+     "locator": "通則7"
+    }
+   ],
+   "skill_decisions": [
+    "error にするのは official かつ名詞と確定できる場合だけ。形態素解析を使わないため、直後が『が』『を』『の』のときに限る(精度の限界)。",
+    "送り仮名を省かない形(全形)は、訓令の原文の形に平仮名を補ってこの skill が作った。validate_kokugo_rules.py が、原文の形が全形の部分列であることを検査する。",
+    "public-explanation を accepted_variant にするのは、考え方の解説・広報等の扱いに基づく。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "明け渡し",
+      "candidates": [
+       "明渡し"
+      ]
+     },
+     {
+      "pattern": "預かり金",
+      "candidates": [
+       "預り金"
+      ]
+     },
+     {
+      "pattern": "言い渡し",
+      "candidates": [
+       "言渡し"
+      ]
+     },
+     {
+      "pattern": "入れ替え",
+      "candidates": [
+       "入替え"
+      ]
+     },
+     {
+      "pattern": "植え付け",
+      "candidates": [
+       "植付け"
+      ]
+     },
+     {
+      "pattern": "魚釣り用具",
+      "candidates": [
+       "魚釣用具"
+      ]
+     },
+     {
+      "pattern": "受け入れ",
+      "candidates": [
+       "受入れ"
+      ]
+     },
+     {
+      "pattern": "受け皿",
+      "candidates": [
+       "受皿"
+      ]
+     },
+     {
+      "pattern": "受け持ち",
+      "candidates": [
+       "受持ち"
+      ]
+     },
+     {
+      "pattern": "受け渡し",
+      "candidates": [
+       "受渡し"
+      ]
+     },
+     {
+      "pattern": "渦巻き",
+      "candidates": [
+       "渦巻"
+      ]
+     },
+     {
+      "pattern": "打ち合わせ",
+      "candidates": [
+       "打合せ"
+      ]
+     },
+     {
+      "pattern": "打ち合わせ会",
+      "candidates": [
+       "打合せ会"
+      ]
+     },
+     {
+      "pattern": "打ち切り",
+      "candidates": [
+       "打切り"
+      ]
+     },
+     {
+      "pattern": "内払い",
+      "candidates": [
+       "内払"
+      ]
+     },
+     {
+      "pattern": "移し替え",
+      "candidates": [
+       "移替え"
+      ]
+     },
+     {
+      "pattern": "埋め立て",
+      "candidates": [
+       "埋立て"
+      ]
+     },
+     {
+      "pattern": "売り上げ",
+      "candidates": [
+       "売上げ"
+      ]
+     },
+     {
+      "pattern": "売り惜しみ",
+      "candidates": [
+       "売惜しみ"
+      ]
+     },
+     {
+      "pattern": "売り出し",
+      "candidates": [
+       "売出し"
+      ]
+     },
+     {
+      "pattern": "売り場",
+      "candidates": [
+       "売場"
+      ]
+     },
+     {
+      "pattern": "売り払い",
+      "candidates": [
+       "売払い"
+      ]
+     },
+     {
+      "pattern": "売り渡し",
+      "candidates": [
+       "売渡し"
+      ]
+     },
+     {
+      "pattern": "売れ行き",
+      "candidates": [
+       "売行き"
+      ]
+     },
+     {
+      "pattern": "縁組み",
+      "candidates": [
+       "縁組"
+      ]
+     },
+     {
+      "pattern": "追い越し",
+      "candidates": [
+       "追越し"
+      ]
+     },
+     {
+      "pattern": "置き場",
+      "candidates": [
+       "置場"
+      ]
+     },
+     {
+      "pattern": "贈り物",
+      "candidates": [
+       "贈物"
+      ]
+     },
+     {
+      "pattern": "帯留め",
+      "candidates": [
+       "帯留"
+      ]
+     },
+     {
+      "pattern": "折り詰め",
+      "candidates": [
+       "折詰"
+      ]
+     },
+     {
+      "pattern": "買い上げ",
+      "candidates": [
+       "買上げ"
+      ]
+     },
+     {
+      "pattern": "買い入れ",
+      "candidates": [
+       "買入れ"
+      ]
+     },
+     {
+      "pattern": "買い受け",
+      "candidates": [
+       "買受け"
+      ]
+     },
+     {
+      "pattern": "買い換え",
+      "candidates": [
+       "買換え"
+      ]
+     },
+     {
+      "pattern": "買い占め",
+      "candidates": [
+       "買占め"
+      ]
+     },
+     {
+      "pattern": "買い取り",
+      "candidates": [
+       "買取り"
+      ]
+     },
+     {
+      "pattern": "買い戻し",
+      "candidates": [
+       "買戻し"
+      ]
+     },
+     {
+      "pattern": "買い物",
+      "candidates": [
+       "買物"
+      ]
+     },
+     {
+      "pattern": "書き換え",
+      "candidates": [
+       "書換え"
+      ]
+     },
+     {
+      "pattern": "格付け",
+      "candidates": [
+       "格付"
+      ]
+     },
+     {
+      "pattern": "掛け金",
+      "candidates": [
+       "掛金"
+      ]
+     },
+     {
+      "pattern": "貸し切り",
+      "candidates": [
+       "貸切り"
+      ]
+     },
+     {
+      "pattern": "貸し金",
+      "candidates": [
+       "貸金"
+      ]
+     },
+     {
+      "pattern": "貸し越し",
+      "candidates": [
+       "貸越し"
+      ]
+     },
+     {
+      "pattern": "貸し倒れ",
+      "candidates": [
+       "貸倒れ"
+      ]
+     },
+     {
+      "pattern": "貸し出し",
+      "candidates": [
+       "貸出し"
+      ]
+     },
+     {
+      "pattern": "貸し付け",
+      "candidates": [
+       "貸付け"
+      ]
+     },
+     {
+      "pattern": "借り入れ",
+      "candidates": [
+       "借入れ"
+      ]
+     },
+     {
+      "pattern": "借り受け",
+      "candidates": [
+       "借受け"
+      ]
+     },
+     {
+      "pattern": "借り換え",
+      "candidates": [
+       "借換え"
+      ]
+     },
+     {
+      "pattern": "刈り取り",
+      "candidates": [
+       "刈取り"
+      ]
+     },
+     {
+      "pattern": "缶切り",
+      "candidates": [
+       "缶切"
+      ]
+     },
+     {
+      "pattern": "期限付き",
+      "candidates": [
+       "期限付"
+      ]
+     },
+     {
+      "pattern": "切り上げ",
+      "candidates": [
+       "切上げ"
+      ]
+     },
+     {
+      "pattern": "切り替え",
+      "candidates": [
+       "切替え"
+      ]
+     },
+     {
+      "pattern": "切り下げ",
+      "candidates": [
+       "切下げ"
+      ]
+     },
+     {
+      "pattern": "切り捨て",
+      "candidates": [
+       "切捨て"
+      ]
+     },
+     {
+      "pattern": "切り土",
+      "candidates": [
+       "切土"
+      ]
+     },
+     {
+      "pattern": "切り取り",
+      "candidates": [
+       "切取り"
+      ]
+     },
+     {
+      "pattern": "切り離し",
+      "candidates": [
+       "切離し"
+      ]
+     },
+     {
+      "pattern": "靴下留め",
+      "candidates": [
+       "靴下留"
+      ]
+     },
+     {
+      "pattern": "組み合わせ",
+      "candidates": [
+       "組合せ"
+      ]
+     },
+     {
+      "pattern": "組み入れ",
+      "candidates": [
+       "組入れ"
+      ]
+     },
+     {
+      "pattern": "組み替え",
+      "candidates": [
+       "組替え"
+      ]
+     },
+     {
+      "pattern": "組み立て",
+      "candidates": [
+       "組立て"
+      ]
+     },
+     {
+      "pattern": "くみ取り便所",
+      "candidates": [
+       "くみ取便所"
+      ]
+     },
+     {
+      "pattern": "繰り上げ",
+      "candidates": [
+       "繰上げ"
+      ]
+     },
+     {
+      "pattern": "繰り入れ",
+      "candidates": [
+       "繰入れ"
+      ]
+     },
+     {
+      "pattern": "繰り替え",
+      "candidates": [
+       "繰替え"
+      ]
+     },
+     {
+      "pattern": "繰り越し",
+      "candidates": [
+       "繰越し"
+      ]
+     },
+     {
+      "pattern": "繰り下げ",
+      "candidates": [
+       "繰下げ"
+      ]
+     },
+     {
+      "pattern": "繰り延べ",
+      "candidates": [
+       "繰延べ"
+      ]
+     },
+     {
+      "pattern": "繰り戻し",
+      "candidates": [
+       "繰戻し"
+      ]
+     },
+     {
+      "pattern": "差し押さえ",
+      "candidates": [
+       "差押え"
+      ]
+     },
+     {
+      "pattern": "差し止め",
+      "candidates": [
+       "差止め"
+      ]
+     },
+     {
+      "pattern": "差し引き",
+      "candidates": [
+       "差引き"
+      ]
+     },
+     {
+      "pattern": "差し戻し",
+      "candidates": [
+       "差戻し"
+      ]
+     },
+     {
+      "pattern": "砂糖漬け",
+      "candidates": [
+       "砂糖漬"
+      ]
+     },
+     {
+      "pattern": "下請け",
+      "candidates": [
+       "下請"
+      ]
+     },
+     {
+      "pattern": "締め切り",
+      "candidates": [
+       "締切り"
+      ]
+     },
+     {
+      "pattern": "条件付き",
+      "candidates": [
+       "条件付"
+      ]
+     },
+     {
+      "pattern": "仕分け",
+      "candidates": [
+       "仕分"
+      ]
+     },
+     {
+      "pattern": "据え置き",
+      "candidates": [
+       "据置き"
+      ]
+     },
+     {
+      "pattern": "据え付け",
+      "candidates": [
+       "据付け"
+      ]
+     },
+     {
+      "pattern": "捨て場",
+      "candidates": [
+       "捨場"
+      ]
+     },
+     {
+      "pattern": "座り込み",
+      "candidates": [
+       "座込み"
+      ]
+     },
+     {
+      "pattern": "栓抜き",
+      "candidates": [
+       "栓抜"
+      ]
+     },
+     {
+      "pattern": "備え置き",
+      "candidates": [
+       "備置き"
+      ]
+     },
+     {
+      "pattern": "備え付け",
+      "candidates": [
+       "備付け"
+      ]
+     },
+     {
+      "pattern": "染め物",
+      "candidates": [
+       "染物"
+      ]
+     },
+     {
+      "pattern": "田植え",
+      "candidates": [
+       "田植"
+      ]
+     },
+     {
+      "pattern": "立ち会い",
+      "candidates": [
+       "立会い"
+      ]
+     },
+     {
+      "pattern": "立ち入り",
+      "candidates": [
+       "立入り"
+      ]
+     },
+     {
+      "pattern": "立て替え",
+      "candidates": [
+       "立替え"
+      ]
+     },
+     {
+      "pattern": "立て札",
+      "candidates": [
+       "立札"
+      ]
+     },
+     {
+      "pattern": "月掛け",
+      "candidates": [
+       "月掛"
+      ]
+     },
+     {
+      "pattern": "付き添い",
+      "candidates": [
+       "付添い"
+      ]
+     },
+     {
+      "pattern": "月払い",
+      "candidates": [
+       "月払"
+      ]
+     },
+     {
+      "pattern": "積み卸し",
+      "candidates": [
+       "積卸し"
+      ]
+     },
+     {
+      "pattern": "積み替え",
+      "candidates": [
+       "積替え"
+      ]
+     },
+     {
+      "pattern": "積み込み",
+      "candidates": [
+       "積込み"
+      ]
+     },
+     {
+      "pattern": "積み出し",
+      "candidates": [
+       "積出し"
+      ]
+     },
+     {
+      "pattern": "積み立て",
+      "candidates": [
+       "積立て"
+      ]
+     },
+     {
+      "pattern": "積み付け",
+      "candidates": [
+       "積付け"
+      ]
+     },
+     {
+      "pattern": "釣り合い",
+      "candidates": [
+       "釣合い"
+      ]
+     },
+     {
+      "pattern": "釣り鐘",
+      "candidates": [
+       "釣鐘"
+      ]
+     },
+     {
+      "pattern": "釣り銭",
+      "candidates": [
+       "釣銭"
+      ]
+     },
+     {
+      "pattern": "釣り針",
+      "candidates": [
+       "釣針"
+      ]
+     },
+     {
+      "pattern": "手続き",
+      "candidates": [
+       "手続"
+      ]
+     },
+     {
+      "pattern": "問い合わせ",
+      "candidates": [
+       "問合せ"
+      ]
+     },
+     {
+      "pattern": "届け出",
+      "candidates": [
+       "届出"
+      ]
+     },
+     {
+      "pattern": "取り上げ",
+      "candidates": [
+       "取上げ"
+      ]
+     },
+     {
+      "pattern": "取り扱い",
+      "candidates": [
+       "取扱い"
+      ]
+     },
+     {
+      "pattern": "取り卸し",
+      "candidates": [
+       "取卸し"
+      ]
+     },
+     {
+      "pattern": "取り替え",
+      "candidates": [
+       "取替え"
+      ]
+     },
+     {
+      "pattern": "取り決め",
+      "candidates": [
+       "取決め"
+      ]
+     },
+     {
+      "pattern": "取り崩し",
+      "candidates": [
+       "取崩し"
+      ]
+     },
+     {
+      "pattern": "取り消し",
+      "candidates": [
+       "取消し"
+      ]
+     },
+     {
+      "pattern": "取り壊し",
+      "candidates": [
+       "取壊し"
+      ]
+     },
+     {
+      "pattern": "取り下げ",
+      "candidates": [
+       "取下げ"
+      ]
+     },
+     {
+      "pattern": "取り締まり",
+      "candidates": [
+       "取締り"
+      ]
+     },
+     {
+      "pattern": "取り調べ",
+      "candidates": [
+       "取調べ"
+      ]
+     },
+     {
+      "pattern": "取り立て",
+      "candidates": [
+       "取立て"
+      ]
+     },
+     {
+      "pattern": "取り次ぎ",
+      "candidates": [
+       "取次ぎ"
+      ]
+     },
+     {
+      "pattern": "取り付け",
+      "candidates": [
+       "取付け"
+      ]
+     },
+     {
+      "pattern": "取り戻し",
+      "candidates": [
+       "取戻し"
+      ]
+     },
+     {
+      "pattern": "投げ売り",
+      "candidates": [
+       "投売り"
+      ]
+     },
+     {
+      "pattern": "抜き取り",
+      "candidates": [
+       "抜取り"
+      ]
+     },
+     {
+      "pattern": "飲み物",
+      "candidates": [
+       "飲物"
+      ]
+     },
+     {
+      "pattern": "乗り換え",
+      "candidates": [
+       "乗換え"
+      ]
+     },
+     {
+      "pattern": "乗り組み",
+      "candidates": [
+       "乗組み"
+      ]
+     },
+     {
+      "pattern": "話し合い",
+      "candidates": [
+       "話合い"
+      ]
+     },
+     {
+      "pattern": "払い込み",
+      "candidates": [
+       "払込み"
+      ]
+     },
+     {
+      "pattern": "払い下げ",
+      "candidates": [
+       "払下げ"
+      ]
+     },
+     {
+      "pattern": "払い出し",
+      "candidates": [
+       "払出し"
+      ]
+     },
+     {
+      "pattern": "払い戻し",
+      "candidates": [
+       "払戻し"
+      ]
+     },
+     {
+      "pattern": "払い渡し",
+      "candidates": [
+       "払渡し"
+      ]
+     },
+     {
+      "pattern": "払い渡し済み",
+      "candidates": [
+       "払渡済み"
+      ]
+     },
+     {
+      "pattern": "貼り付け",
+      "candidates": [
+       "貼付け"
+      ]
+     },
+     {
+      "pattern": "引き上げ",
+      "candidates": [
+       "引上げ"
+      ]
+     },
+     {
+      "pattern": "引き揚げ",
+      "candidates": [
+       "引揚げ"
+      ]
+     },
+     {
+      "pattern": "引き受け",
+      "candidates": [
+       "引受け"
+      ]
+     },
+     {
+      "pattern": "引き起こし",
+      "candidates": [
+       "引起し"
+      ]
+     },
+     {
+      "pattern": "引き換え",
+      "candidates": [
+       "引換え"
+      ]
+     },
+     {
+      "pattern": "引き込み",
+      "candidates": [
+       "引込み"
+      ]
+     },
+     {
+      "pattern": "引き下げ",
+      "candidates": [
+       "引下げ"
+      ]
+     },
+     {
+      "pattern": "引き締め",
+      "candidates": [
+       "引締め"
+      ]
+     },
+     {
+      "pattern": "引き継ぎ",
+      "candidates": [
+       "引継ぎ"
+      ]
+     },
+     {
+      "pattern": "引き取り",
+      "candidates": [
+       "引取り"
+      ]
+     },
+     {
+      "pattern": "引き渡し",
+      "candidates": [
+       "引渡し"
+      ]
+     },
+     {
+      "pattern": "日雇い",
+      "candidates": [
+       "日雇"
+      ]
+     },
+     {
+      "pattern": "歩留まり",
+      "candidates": [
+       "歩留り"
+      ]
+     },
+     {
+      "pattern": "船着き場",
+      "candidates": [
+       "船着場"
+      ]
+     },
+     {
+      "pattern": "不払い",
+      "candidates": [
+       "不払"
+      ]
+     },
+     {
+      "pattern": "賦払い",
+      "candidates": [
+       "賦払"
+      ]
+     },
+     {
+      "pattern": "振り出し",
+      "candidates": [
+       "振出し"
+      ]
+     },
+     {
+      "pattern": "前払い",
+      "candidates": [
+       "前払"
+      ]
+     },
+     {
+      "pattern": "巻き付け",
+      "candidates": [
+       "巻付け"
+      ]
+     },
+     {
+      "pattern": "巻き取り",
+      "candidates": [
+       "巻取り"
+      ]
+     },
+     {
+      "pattern": "見合わせ",
+      "candidates": [
+       "見合せ"
+      ]
+     },
+     {
+      "pattern": "見積もり",
+      "candidates": [
+       "見積り"
+      ]
+     },
+     {
+      "pattern": "見習い",
+      "candidates": [
+       "見習"
+      ]
+     },
+     {
+      "pattern": "未払い",
+      "candidates": [
+       "未払"
+      ]
+     },
+     {
+      "pattern": "申し合わせ",
+      "candidates": [
+       "申合せ"
+      ]
+     },
+     {
+      "pattern": "申し合わせ事項",
+      "candidates": [
+       "申合せ事項"
+      ]
+     },
+     {
+      "pattern": "申し入れ",
+      "candidates": [
+       "申入れ"
+      ]
+     },
+     {
+      "pattern": "申し込み",
+      "candidates": [
+       "申込み"
+      ]
+     },
+     {
+      "pattern": "申し立て",
+      "candidates": [
+       "申立て"
+      ]
+     },
+     {
+      "pattern": "申し出",
+      "candidates": [
+       "申出"
+      ]
+     },
+     {
+      "pattern": "持ち家",
+      "candidates": [
+       "持家"
+      ]
+     },
+     {
+      "pattern": "持ち込み",
+      "candidates": [
+       "持込み"
+      ]
+     },
+     {
+      "pattern": "持ち分",
+      "candidates": [
+       "持分"
+      ]
+     },
+     {
+      "pattern": "元請け",
+      "candidates": [
+       "元請"
+      ]
+     },
+     {
+      "pattern": "戻し入れ",
+      "candidates": [
+       "戻入れ"
+      ]
+     },
+     {
+      "pattern": "催し物",
+      "candidates": [
+       "催物"
+      ]
+     },
+     {
+      "pattern": "盛り土",
+      "candidates": [
+       "盛土"
+      ]
+     },
+     {
+      "pattern": "焼き付け",
+      "candidates": [
+       "焼付け"
+      ]
+     },
+     {
+      "pattern": "雇い入れ",
+      "candidates": [
+       "雇入れ"
+      ]
+     },
+     {
+      "pattern": "雇い主",
+      "candidates": [
+       "雇主"
+      ]
+     },
+     {
+      "pattern": "譲り受け",
+      "candidates": [
+       "譲受け"
+      ]
+     },
+     {
+      "pattern": "譲り渡し",
+      "candidates": [
+       "譲渡し"
+      ]
+     },
+     {
+      "pattern": "呼び出し",
+      "candidates": [
+       "呼出し"
+      ]
+     },
+     {
+      "pattern": "読み替え",
+      "candidates": [
+       "読替え"
+      ]
+     },
+     {
+      "pattern": "割り当て",
+      "candidates": [
+       "割当て"
+      ]
+     },
+     {
+      "pattern": "割り増し",
+      "candidates": [
+       "割増し"
+      ]
+     },
+     {
+      "pattern": "割り戻し",
+      "candidates": [
+       "割戻し"
+      ]
+     }
+    ],
+    "noun_context": {
+     "followers": "がをの",
+     "otherwise_reason": "直後が『が』『を』『の』ではないため、動詞の連用形(中止法など)の可能性がある。名詞としての用法かを確かめる。",
+     "compound_reason": "直後が漢字・カタカナの複合語の場合、通則7を適用する語(取扱所、申込書 など)の可能性がある。"
+    },
+    "omission_check": true
+   },
+   "machine_detectable": "訓令別紙2(1)の186語の、送り仮名を省かない形。名詞と確定できるのは直後が『が』『を』『の』の場合だけ。",
+   "needs_context_scope": "動詞の連用形との区別。通則7を適用する語かどうか。固有名詞・専門用語。",
+   "examples": {
+    "fix": [
+     {
+      "before": "申し込みを受け付ける。",
+      "after": "申込みを受け付ける。",
+      "profile": "official"
+     },
+     {
+      "before": "取り扱いの方法を示す。",
+      "after": "取扱いの方法を示す。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "申し込みを受け付ける。",
+      "profiles": [
+       "general-tech",
+       "public-explanation"
+      ],
+      "reason": "一般の文書と解説・広報等では送り仮名を省かない形でよい。"
+     },
+     {
+      "text": "申込みを受け付ける。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "訓令の形(省く形)。"
+     },
+     {
+      "text": "入り口で申し込む。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "動詞は本則に従って書く。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-GAIRAI-001",
+   "family": "gairai",
+   "title": "外来語の語末の長音符号を省いた形(サーバ、ユーザ、カテゴリ など)",
+   "summary": "英語の語末の -er・-or・-ar などに当たる語の長音符号『ー』を省いた形を見つける。告示は慣用に応じて省くことを認め、公用文の手引は長音符号を用いて書くのが原則とする。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "原則は長音符号を用いるが、慣用に応じて『ー』を省くことができる(留意事項その2 Ⅲ 3 注3)。分野によって異なる慣用が定まっている場合は、それぞれの慣用によって差し支えない(留意事項その1)。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "英語の語末の -er・-or・-ar などに当たるものは、ア列の長音とし、長音符号を用いて書くのが原則である。-ty・-ry など y で終わる語も長音符号を用いて書く(考え方 解説 Ⅰ-3エ)。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "英語の語末の -er・-or・-ar などに当たるものは、ア列の長音とし、長音符号を用いて書くのが原則である。-ty・-ry など y で終わる語も長音符号を用いて書く(考え方 解説 Ⅰ-3エ)。"
+    }
+   },
+   "conditions": [
+    "語が片仮名の語として終わる位置(直後が片仮名・長音符号でない)に限る。『サーバサイド』のように後ろに片仮名が続く複合語は検出しない"
+   ],
+   "exceptions": [
+    "慣用に従って長音符号を用いない語(バレエ、ミイラ、エイト など)",
+    "固有名詞(人名、会社名、商品名)は告示の対象外(前書き)",
+    "組織の用語集や表記指定"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun",
+    "technical_term"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-GAIRAI-1991",
+     "locator": "留意事項その2 Ⅲ(撥音,促音,長音その他に関するもの) 3 注3"
+    },
+    {
+     "source_id": "NAIKAKU-GAIRAI-1991",
+     "locator": "留意事項その1(原則的な事項)"
+    },
+    {
+     "source_id": "NAIKAKU-GAIRAI-1991",
+     "locator": "前書き"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-3エ",
+     "pages": "PDF p.26"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "本文 Ⅰ-3",
+     "pages": "PDF p.5"
+    }
+   ],
+   "skill_decisions": [
+    "告示と考え方で記述が異なる。告示は省略を認め、考え方は『原則』を述べる。そのため general-tech は accepted_variant、official と public-explanation は recommendation とした。",
+    "検出する語は、IT 文書で多い語に絞った。登録外の語は未検査。",
+    "『ー』を省いた形が組織の用語集で指定されている場合は、--glossary の use: で衝突を示す(黙って片方を適用しない)。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "コンピュータ(?![ァ-ヶー])",
+      "candidates": [
+       "コンピューター"
+      ]
+     },
+     {
+      "pattern": "サーバ(?![ァ-ヶー])",
+      "candidates": [
+       "サーバー"
+      ]
+     },
+     {
+      "pattern": "ユーザ(?![ァ-ヶー])",
+      "candidates": [
+       "ユーザー"
+      ]
+     },
+     {
+      "pattern": "プリンタ(?![ァ-ヶー])",
+      "candidates": [
+       "プリンター"
+      ]
+     },
+     {
+      "pattern": "ブラウザ(?![ァ-ヶー])",
+      "candidates": [
+       "ブラウザー"
+      ]
+     },
+     {
+      "pattern": "スキャナ(?![ァ-ヶー])",
+      "candidates": [
+       "スキャナー"
+      ]
+     },
+     {
+      "pattern": "ルータ(?![ァ-ヶー])",
+      "candidates": [
+       "ルーター"
+      ]
+     },
+     {
+      "pattern": "ドライバ(?![ァ-ヶー])",
+      "candidates": [
+       "ドライバー"
+      ]
+     },
+     {
+      "pattern": "エレベータ(?![ァ-ヶー])",
+      "candidates": [
+       "エレベーター"
+      ]
+     },
+     {
+      "pattern": "インタプリタ(?![ァ-ヶー])",
+      "candidates": [
+       "インタプリター"
+      ]
+     },
+     {
+      "pattern": "ハンドラ(?![ァ-ヶー])",
+      "candidates": [
+       "ハンドラー"
+      ]
+     },
+     {
+      "pattern": "ポインタ(?![ァ-ヶー])",
+      "candidates": [
+       "ポインター"
+      ]
+     },
+     {
+      "pattern": "パーサ(?![ァ-ヶー])",
+      "candidates": [
+       "パーサー"
+      ]
+     },
+     {
+      "pattern": "ジェネレータ(?![ァ-ヶー])",
+      "candidates": [
+       "ジェネレーター"
+      ]
+     },
+     {
+      "pattern": "イテレータ(?![ァ-ヶー])",
+      "candidates": [
+       "イテレーター"
+      ]
+     },
+     {
+      "pattern": "エディタ(?![ァ-ヶー])",
+      "candidates": [
+       "エディター"
+      ]
+     },
+     {
+      "pattern": "モニタ(?![ァ-ヶー])",
+      "candidates": [
+       "モニター"
+      ]
+     },
+     {
+      "pattern": "フォルダ(?![ァ-ヶー])",
+      "candidates": [
+       "フォルダー"
+      ]
+     },
+     {
+      "pattern": "カレンダ(?![ァ-ヶー])",
+      "candidates": [
+       "カレンダー"
+      ]
+     },
+     {
+      "pattern": "ヘッダ(?![ァ-ヶー])",
+      "candidates": [
+       "ヘッダー"
+      ]
+     },
+     {
+      "pattern": "フッタ(?![ァ-ヶー])",
+      "candidates": [
+       "フッター"
+      ]
+     },
+     {
+      "pattern": "レイヤ(?![ァ-ヶー])",
+      "candidates": [
+       "レイヤー"
+      ]
+     },
+     {
+      "pattern": "アダプタ(?![ァ-ヶー])",
+      "candidates": [
+       "アダプター"
+      ]
+     },
+     {
+      "pattern": "プロセッサ(?![ァ-ヶー])",
+      "candidates": [
+       "プロセッサー"
+      ]
+     },
+     {
+      "pattern": "コンパイラ(?![ァ-ヶー])",
+      "candidates": [
+       "コンパイラー"
+      ]
+     },
+     {
+      "pattern": "ローダ(?![ァ-ヶー])",
+      "candidates": [
+       "ローダー"
+      ]
+     },
+     {
+      "pattern": "メモリ(?![ァ-ヶー])",
+      "candidates": [
+       "メモリー"
+      ],
+      "note": "語末が -y の語。外来語の表記の告示は -er・-or・-ar を例に挙げており、-y の語の扱いは考え方の解説による。"
+     },
+     {
+      "pattern": "カテゴリ(?![ァ-ヶー])",
+      "candidates": [
+       "カテゴリー"
+      ],
+      "note": "語末が -y の語。外来語の表記の告示は -er・-or・-ar を例に挙げており、-y の語の扱いは考え方の解説による。"
+     },
+     {
+      "pattern": "ディレクトリ(?![ァ-ヶー])",
+      "candidates": [
+       "ディレクトリー"
+      ],
+      "note": "語末が -y の語。外来語の表記の告示は -er・-or・-ar を例に挙げており、-y の語の扱いは考え方の解説による。"
+     },
+     {
+      "pattern": "ライブラリ(?![ァ-ヶー])",
+      "candidates": [
+       "ライブラリー"
+      ],
+      "note": "語末が -y の語。外来語の表記の告示は -er・-or・-ar を例に挙げており、-y の語の扱いは考え方の解説による。"
+     },
+     {
+      "pattern": "リポジトリ(?![ァ-ヶー])",
+      "candidates": [
+       "リポジトリー"
+      ],
+      "note": "語末が -y の語。外来語の表記の告示は -er・-or・-ar を例に挙げており、-y の語の扱いは考え方の解説による。"
+     },
+     {
+      "pattern": "セキュリティ(?![ァ-ヶー])",
+      "candidates": [
+       "セキュリティー"
+      ],
+      "note": "語末が -y の語。外来語の表記の告示は -er・-or・-ar を例に挙げており、-y の語の扱いは考え方の解説による。"
+     },
+     {
+      "pattern": "コミュニティ(?![ァ-ヶー])",
+      "candidates": [
+       "コミュニティー"
+      ],
+      "note": "語末が -y の語。外来語の表記の告示は -er・-or・-ar を例に挙げており、-y の語の扱いは考え方の解説による。"
+     },
+     {
+      "pattern": "クオリティ(?![ァ-ヶー])",
+      "candidates": [
+       "クオリティー"
+      ],
+      "note": "語末が -y の語。外来語の表記の告示は -er・-or・-ar を例に挙げており、-y の語の扱いは考え方の解説による。"
+     }
+    ]
+   },
+   "machine_detectable": "登録した語(コンピュータ、サーバ、ユーザ、プリンタ、ブラウザ、メモリ、カテゴリ など34語)の長音符号の省略形。",
+   "needs_context_scope": "登録外の語。複合語の途中の省略。分野の慣用。",
+   "examples": {
+    "fix": [
+     {
+      "before": "サーバを再起動する。",
+      "after": "サーバーを再起動する。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "サーバを再起動する。",
+      "profiles": [
+       "general-tech"
+      ],
+      "reason": "告示が認める許容形。general-tech では誤りとして扱わない。"
+     },
+     {
+      "text": "サーバーを再起動する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "長音符号を用いる形。"
+     },
+     {
+      "text": "サーバサイドの処理。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "後ろに片仮名が続く複合語は検出しない。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-GAIRAI-002",
+   "family": "gairai",
+   "title": "『ヴ』を用いた表記",
+   "summary": "第2表の『ヴァ』『ヴィ』『ヴ』『ヴェ』『ヴォ』を見つける。一般的には『バ』『ビ』『ブ』『ベ』『ボ』と書くことができる。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "『ヴ』は第2表に示された仮名で、原音や原つづりになるべく近く書き表そうとする場合に用いる(留意事項その2 Ⅱ 7)。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "『ヴ』はむやみに使用することを慎み、原則として『バビブベボ』を用いる(考え方 解説 Ⅰ-3ウ)。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "『ヴ』はむやみに使用することを慎み、原則として『バビブベボ』を用いる(考え方 解説 Ⅰ-3ウ)。"
+    }
+   },
+   "conditions": [
+    "片仮名の『ヴ』が現れる箇所"
+   ],
+   "exceptions": [
+    "固有名詞(人名、地名、会社名、商品名)は告示の対象外(前書き)。地名・人名は第2表に基づく表記が広く用いられている(考え方 解説 Ⅰ-3ウ)"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun",
+    "technical_term"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-GAIRAI-1991",
+     "locator": "留意事項その2 Ⅱ(第2表に示す仮名に関するもの) 7"
+    },
+    {
+     "source_id": "NAIKAKU-GAIRAI-1991",
+     "locator": "前書き"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-3ウ",
+     "pages": "PDF p.26"
+    }
+   ],
+   "skill_decisions": [
+    "『ヴュ』を『ビュ』にする候補は、留意事項その2 Ⅱ 10 に基づく。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "ヴァ",
+      "candidates": [
+       "バ"
+      ]
+     },
+     {
+      "pattern": "ヴィ",
+      "candidates": [
+       "ビ"
+      ]
+     },
+     {
+      "pattern": "ヴェ",
+      "candidates": [
+       "ベ"
+      ]
+     },
+     {
+      "pattern": "ヴォ",
+      "candidates": [
+       "ボ"
+      ]
+     },
+     {
+      "pattern": "ヴュ",
+      "candidates": [
+       "ビュ"
+      ]
+     },
+     {
+      "pattern": "ヴ(?![ァィェォュ])",
+      "candidates": [
+       "ブ"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "『ヴ』の出現。",
+   "needs_context_scope": "固有名詞かどうか。分野や読み手の慣用。",
+   "examples": {
+    "fix": [
+     {
+      "before": "バイオリンではなくヴァイオリンと書く。",
+      "after": "バイオリンではなくバイオリンと書く。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "ヴァイオリンを弾く。",
+      "profiles": [
+       "general-tech"
+      ],
+      "reason": "第2表の表記。general-tech では誤りとして扱わない。"
+     },
+     {
+      "text": "バイオリンを弾く。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "第1表の範囲の表記。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-GAIRAI-003",
+   "family": "gairai",
+   "title": "第1表・第2表にない仮名の組合せ",
+   "summary": "告示が『特別な音の書き表し方』として例示する、第1表・第2表にない仮名の組合せ(スィ、ズィ、グィ、グェ、グォ、キェ、ニェ、ヒェ、フョ、ヴョ)を見つける。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "第1表・第2表に示す仮名では書き表せない特別な音の書き表し方については、取決めを行わず、自由とする(外来語の表記 本文)。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "第1表及び第2表にない表記は、原則として使用しない(考え方 本文 Ⅰ-3)。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "第1表及び第2表にない表記は、原則として使用しない(考え方 本文 Ⅰ-3)。"
+    }
+   },
+   "conditions": [
+    "告示が例示した10通りの組合せに限る"
+   ],
+   "exceptions": [
+    "固有名詞(前書き)"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun",
+    "technical_term"
+   ],
+   "sources": [
+    {
+     "source_id": "NAIKAKU-GAIRAI-1991",
+     "locator": "本文(『外来語の表記』に用いる仮名と符号の表)"
+    },
+    {
+     "source_id": "NAIKAKU-GAIRAI-1991",
+     "locator": "留意事項その1(特別な音の書き表し方)"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "本文 Ⅰ-3",
+     "pages": "PDF p.5"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-3ア",
+     "pages": "PDF p.26"
+    }
+   ],
+   "skill_decisions": [
+    "告示は『自由』、考え方は『原則として使用しない』と記述が異なるため、設定で区分を分けた。",
+    "言い換えの候補は示さない(原語や分野の慣用による)。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "スィ|ズィ|グィ|グェ|グォ|キェ|ニェ|ヒェ|フョ|ヴョ",
+      "candidates": []
+     }
+    ]
+   },
+   "machine_detectable": "スィ、ズィ、グィ、グェ、グォ、キェ、ニェ、ヒェ、フョ、ヴョ。",
+   "needs_context_scope": "例示にない組合せは検査しない。",
+   "examples": {
+    "fix": [
+     {
+      "before": "スィートを使う。",
+      "after": "スイートを使う。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "スイートを使う。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "第1表の範囲の表記。"
+     },
+     {
+      "text": "スィートを使う。",
+      "profiles": [
+       "general-tech"
+      ],
+      "reason": "告示は特別な音の書き表し方を自由とする。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-NUM-001",
+   "family": "numeral",
+   "title": "算用数字に付く『ヶ所』『カ月』などの表記",
+   "summary": "算用数字を使う横書きでは『○か所』『○か月』と書く。『3ヶ所』『7カ月』『3箇所』などを見つける。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "skill-policy",
+     "note": "公用文向けの表記の原則であり、この設定では指摘しない。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "算用数字を使う横書きでは『○か所』『○か月』と書く。『３ヶ所』『７カ月』といった表記はしない(考え方 解説 Ⅰ-4ケ)。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "算用数字を使う横書きでは『○か所』『○か月』と書く。『３ヶ所』『７カ月』といった表記はしない(考え方 解説 Ⅰ-4ケ)。"
+    }
+   },
+   "conditions": [
+    "直前が算用数字(半角・全角)",
+    "横書きの文書"
+   ],
+   "exceptions": [
+    "漢数字を用いる場合は『三箇所』『七箇月』と書く",
+    "概数の『数箇所』『何箇月』は『箇』を用いる",
+    "縦書きの引用"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter"
+   ],
+   "sources": [
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-4ケ",
+     "pages": "PDF p.28"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "本文 Ⅰ-4ケ",
+     "pages": "PDF p.5"
+    }
+   ],
+   "skill_decisions": [
+    "error にしない。建議の推奨であり、告示・訓令の規定ではないため。",
+    "general-tech は accepted_variant。『3ヶ月』は技術文書で広く使われ、この skill の既定は公用文の表記を求めない。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "(?P<n>[0-9０-９]+)(?P<k>[ヶケカヵ箇])(?P<u>[所月])",
+      "candidates": [
+       "\\g<n>か\\g<u>"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "算用数字+ヶ/ケ/カ/ヵ/箇+所/月。",
+   "needs_context_scope": "縦書きの引用。漢数字の箇所・箇月。",
+   "examples": {
+    "fix": [
+     {
+      "before": "3ヶ所を直す。",
+      "after": "3か所を直す。",
+      "profile": "official"
+     },
+     {
+      "before": "7カ月かかる。",
+      "after": "7か月かかる。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "3か所を直す。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "考え方の形。"
+     },
+     {
+      "text": "3ヶ所を直す。",
+      "profiles": [
+       "general-tech"
+      ],
+      "reason": "general-tech では指摘しない。"
+     },
+     {
+      "text": "数箇所を直す。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "概数の『数箇所』は『箇』を用いる。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-PUNCT-001",
+   "family": "punctuation",
+   "title": "句点にピリオド『.』『．』を使っている",
+   "summary": "日本語の文の句点に『．』や『.』を使っている箇所を見つける。学術的・専門的に必要な場合等を除いて、句点にはピリオドを用いない。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "skill-policy",
+     "note": "公用文向けの表記の原則であり、この設定では指摘しない。学術的・専門的な文書では必要な場合がある。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "学術的・専門的に必要な場合等を除いて、句点に『．』(ピリオド)は用いない(考え方 解説 Ⅰ-5(1)ア)。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "学術的・専門的に必要な場合等を除いて、句点に『．』(ピリオド)は用いない(考え方 解説 Ⅰ-5(1)ア)。"
+    }
+   },
+   "conditions": [
+    "直前が日本語の文字(仮名・漢字)で、直後が空白・改行・文末の『.』『．』",
+    "欧文では『，』と『．』を用いる(対象外)"
+   ],
+   "exceptions": [
+    "学術的・専門的に必要な場合",
+    "欧文の文"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter"
+   ],
+   "sources": [
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-5(1)ア",
+     "pages": "PDF p.29"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "本文 Ⅰ-5(1)ア",
+     "pages": "PDF p.6"
+    }
+   ],
+   "skill_decisions": [
+    "半角の『.』は、直前が日本語の文字で直後が空白か行末のときに限って対象とした(『README.md』『v1.2』を除くため)。",
+    "error にしない。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "(?<=[ぁ-んァ-ヶ一-龥])[．.](?=[ \\t]|$)",
+      "candidates": [
+       "。"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "日本語の文字の直後にある、文末の『.』『．』。",
+   "needs_context_scope": "欧文の文、略語、学術的な文書。",
+   "examples": {
+    "fix": [
+     {
+      "before": "設定を確認する．",
+      "after": "設定を確認する。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "設定を確認する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "句点『。』を用いている。"
+     },
+     {
+      "text": "README.md を読む。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "ファイル名の『.』は対象外。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-EXPR-001",
+   "family": "expression",
+   "title": "『～するべき』と『～すべき』で文を終える形",
+   "summary": "『べき』がサ行変格活用の動詞に続くときは『～すべき』とする。また『～すべき』で文末を終えず、『～すべきである』『～すべきもの』などとする。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "skill-policy",
+     "note": "公用文向けの用語・文体の推奨であり、この設定では指摘しない。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "『べき』は『～するべき』ではなく『～すべき』の形で使うのが原則である。文末を『～すべき』で終えない(考え方 解説 Ⅲ-1オ)。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "『べき』は『～するべき』ではなく『～すべき』の形で使うのが原則である。文末を『～すべき』で終えない(考え方 解説 Ⅲ-1オ)。"
+    }
+   },
+   "conditions": [
+    "『するべき』は語として一致した箇所",
+    "『べき』で終える形は、直後が句点・感嘆符、または行末の場合"
+   ],
+   "exceptions": [
+    "見出しや箇条書きの文末は、考え方が『見られることがある』と述べるにとどまる。意図的な体言止めは文脈で判断する"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter"
+   ],
+   "sources": [
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅲ-1オ",
+     "pages": "PDF p.42"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "本文 Ⅲ-1オ",
+     "pages": "PDF p.9"
+    }
+   ],
+   "skill_decisions": [
+    "『べく』『べし』の形は検出しない(誤検出が多く、現代の文書ではまれなため)。",
+    "error にしない。『原則』の推奨。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "するべき",
+      "candidates": [
+       "すべき"
+      ]
+     },
+     {
+      "pattern": "べき(?=[。！]|[ \\t]*$)",
+      "candidates": [
+       "べきである"
+      ],
+      "note": "文末を『べき』で終えている。見出しや箇条書きの体言止めは意図的な場合がある。"
+     }
+    ]
+   },
+   "machine_detectable": "『するべき』、および文末の『べき』。",
+   "needs_context_scope": "見出し・箇条書きの体言止めが意図的かどうか。",
+   "examples": {
+    "fix": [
+     {
+      "before": "見直すべきことを検討するべきだ。",
+      "after": "見直すべきことを検討すべきだ。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "見直すべきである。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "『べきである』の形。"
+     },
+     {
+      "text": "検討するべきだ。",
+      "profiles": [
+       "general-tech"
+      ],
+      "reason": "general-tech では指摘しない。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-EXPR-002",
+   "family": "expression",
+   "title": "意味が重複する表現(諸先生方、約20名くらい など)",
+   "summary": "意味が重複する表現(重言)として考え方が例示する、諸先生方、各都道府県ごとに、第1日目、約20名くらい、違和感を感じる を見つける。慣用や強調として一概に誤りとも言えない表現(まず最初に、従来から 等)は対象にしない。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "skill-policy",
+     "note": "公用文向けの文章の推奨であり、この設定では指摘しない。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "意味が重複する表現は、むやみに用いないようにする(考え方 解説 Ⅱ-5ウ(ア))。ただし一概に誤りとも言えない。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "意味が重複する表現は、むやみに用いないようにする(考え方 解説 Ⅱ-5ウ(ア))。ただし一概に誤りとも言えない。"
+    }
+   },
+   "conditions": [
+    "考え方の解説が『むやみに用いない』例として挙げた形に限る"
+   ],
+   "exceptions": [
+    "慣用になっていたり強調などのために用いたりする場合(従来から、まず最初に、返事を返す、排気ガス、被害を被る)は、一概に誤りとも言えないものとして対象にしない"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter"
+   ],
+   "sources": [
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅱ-5ウ(ア) 表現の重複に留意する",
+     "pages": "PDF p.38"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "本文 Ⅱ-5ウ",
+     "pages": "PDF p.8"
+    }
+   ],
+   "skill_decisions": [
+    "考え方の例示を一般化したパターン(『各○○ごとに』『第○日目』『約○○くらい』)は、この skill が付けた。",
+    "recommendation にとどめ、error にしない。考え方自身が『一概に誤りとも言えない』と述べている。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "諸先生方",
+      "candidates": [
+       "諸先生",
+       "先生方"
+      ]
+     },
+     {
+      "pattern": "各(?P<x>[一-龥]{2,8})ごとに",
+      "candidates": [
+       "各\\g<x>で",
+       "\\g<x>ごとに"
+      ]
+     },
+     {
+      "pattern": "第(?P<n>[0-9０-９]+)日目",
+      "candidates": [
+       "第\\g<n>日",
+       "\\g<n>日目"
+      ]
+     },
+     {
+      "pattern": "約(?P<n>[0-9０-９,]+[^\\s、。，ぁ-ん]{0,3})(?P<k>くらい|ぐらい)",
+      "candidates": [
+       "約\\g<n>",
+       "\\g<n>\\g<k>"
+      ]
+     },
+     {
+      "pattern": "違和感を感じ",
+      "candidates": [
+       "違和感を覚え",
+       "違和感がある"
+      ]
+     }
+    ]
+   },
+   "machine_detectable": "諸先生方、各○○ごとに、第○日目、約○○くらい、違和感を感じる。",
+   "needs_context_scope": "強調や慣用として意図された重ね言葉。",
+   "examples": {
+    "fix": [
+     {
+      "before": "約20名くらいが参加した。",
+      "after": "約20名が参加した。",
+      "profile": "official"
+     },
+     {
+      "before": "各都道府県ごとに集計する。",
+      "after": "各都道府県で集計する。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "まず最初に確認する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "考え方が『一概に誤りとも言えない』とする例。"
+     },
+     {
+      "text": "従来からの方法を続ける。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "同上。"
+     },
+     {
+      "text": "約20名が参加した。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "重複のない形。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-EXPR-003",
+   "family": "expression",
+   "title": "解説・広報等の文末の『ございます』",
+   "summary": "広く一般に向けた解説・広報等では、丁寧さを出したいときも文末は『です・ます』を基調とし、『ございます』は用いない。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "skill-policy",
+     "note": "解説・広報等を対象とした規定であり、この設定では指摘しない。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "source",
+     "note": "広く一般に向けた解説・広報等の文末は『です・ます』を基調とし、『ございます』は用いない(考え方 解説 Ⅱ-6ウ)。"
+    },
+    "official": {
+     "category": "accepted_variant",
+     "basis": "skill-policy",
+     "note": "考え方の規定は解説・広報等に関するもので、告示・通知等には触れていない。この設定では指摘しない。"
+    }
+   },
+   "conditions": [
+    "『ございます』『ございません』『ございました』『ございましょう』",
+    "『ありがとうございます』『おはようございます』などの定型の挨拶は除く"
+   ],
+   "exceptions": [
+    "定型の挨拶",
+    "相手に応じた気遣いの表現として必要な場合"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter"
+   ],
+   "sources": [
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅱ-6ウ",
+     "pages": "PDF p.39"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "本文 Ⅱ-6ウ",
+     "pages": "PDF p.8"
+    }
+   ],
+   "skill_decisions": [
+    "official を accepted_variant にするのは、規定の対象が解説・広報等だと読み取れるため。告示・通知等にも適用する運用にしたい場合は、public-explanation で検査する。"
+   ],
+   "detection": {
+    "kind": "patterns",
+    "entries": [
+     {
+      "pattern": "(?<!とう)(?<!よう)ござい(?P<s>ます|ません|ました|ましょう)",
+      "candidates": [
+       "あり\\g<s>"
+      ],
+      "note": "『です』『ます』に言い換えられるかは文によって異なる。"
+     }
+    ]
+   },
+   "machine_detectable": "『ございます』『ございません』『ございました』(定型の挨拶を除く)。",
+   "needs_context_scope": "言い換えの適否。相手に応じた敬意の程度。",
+   "examples": {
+    "fix": [
+     {
+      "before": "資料がございます。",
+      "after": "資料があります。",
+      "profile": "public-explanation"
+     }
+    ],
+    "keep": [
+     {
+      "text": "ありがとうございます。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "定型の挨拶は対象外。"
+     },
+     {
+      "text": "資料がございます。",
+      "profiles": [
+       "general-tech",
+       "official"
+      ],
+      "reason": "解説・広報等ではない設定では指摘しない。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-IJIDOKUN-001",
+   "family": "ijidokun",
+   "title": "異字同訓の漢字の使い分け(確認用)",
+   "summary": "『異字同訓』の使い分け例のうち選んだ16項目について、使い分けが問われる漢字の形を見つけ、要確認として示す。読みだけでは使い分けを決められない。",
+   "profiles": {
+    "general-tech": {
+     "category": "accepted_variant",
+     "basis": "source",
+     "note": "使い分け例は一つの参考であり、異なる使い分けを否定する趣旨ではない(前書き3)。この設定では指摘しない。"
+    },
+    "public-explanation": {
+     "category": "needs_context",
+     "basis": "source",
+     "note": "紛らわしい言葉を避けるため、異字同訓の漢字を使い分ける(考え方 本文 Ⅱ-5ア(イ))。使い分け例は一つの参考で、仮名で表記することも妨げない(前書き3)。"
+    },
+    "official": {
+     "category": "needs_context",
+     "basis": "source",
+     "note": "紛らわしい言葉を避けるため、異字同訓の漢字を使い分ける(考え方 本文 Ⅱ-5ア(イ))。使い分け例は一つの参考で、仮名で表記することも妨げない(前書き3)。"
+    }
+   },
+   "conditions": [
+    "選んだ16項目の漢字の形",
+    "同じ表記は文書内の最初の1か所だけ報告し、回数を添える"
+   ],
+   "exceptions": [
+    "使い分け例と異なる使い分け(前書き3)",
+    "仮名で表記すること(前書き3)",
+    "分野ごとの表記習慣・年代差・個人差(前書き3)"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun",
+    "technical_term"
+   ],
+   "sources": [
+    {
+     "source_id": "BUNKA-IJIDOKUN-2014",
+     "locator": "前書き3, 4",
+     "pages": "PDF p.6"
+    },
+    {
+     "source_id": "BUNKA-IJIDOKUN-2014",
+     "locator": "本表 項目009, 017, 030, 032, 033, 041, 047, 057, 059, 084, 086, 090, 104, 105, 108, 117",
+     "pages": "PDF pp.8-29"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "本文 Ⅱ-5ア(イ)",
+     "pages": "PDF p.8"
+    }
+   ],
+   "skill_decisions": [
+    "error・recommendation にしない。使い分け例が『一つの参考』だと明記しているため、常に needs_context とする。",
+    "候補(正しい漢字)を示さない。読みや世論調査の多数派では決まらず、語義と文脈で決まるため。",
+    "16項目の選定は、技術文書や案内文で紛らわしさが問題になりやすいことによる、この skill の判断。133項目のうち、残りは未検査。"
+   ],
+   "detection": {
+    "kind": "ijidokun",
+    "entry_ids": [
+     9,
+     17,
+     30,
+     32,
+     33,
+     41,
+     47,
+     57,
+     59,
+     84,
+     86,
+     90,
+     104,
+     105,
+     108,
+     117
+    ],
+    "dedupe": "first_per_text"
+   },
+   "machine_detectable": "選んだ16項目の漢字の形の出現。",
+   "needs_context_scope": "どの漢字が語義に合うか(すべての出現)。133項目のうち、選ばなかった117項目は検査しない。",
+   "examples": {
+    "fix": [
+     {
+      "before": "時間を計る。",
+      "after": "時間をはかる。",
+      "profile": "official"
+     }
+    ],
+    "keep": [
+     {
+      "text": "時間を計る。",
+      "profiles": [
+       "general-tech"
+      ],
+      "reason": "general-tech では使い分け例を参考として扱い、指摘しない。"
+     },
+     {
+      "text": "確認する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "使い分けが問われる語を含まない。"
+     }
+    ]
+   },
+   "provenance": "primary-source-derived",
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-CONSIST-001",
+   "family": "consistency",
+   "provenance": "skill-policy",
+   "title": "許容される複数の表記が、同じ文書の中で混在している",
+   "summary": "本則と許容、または第1表と第2表のように、複数の表記が認められている語が、同じ文書の中で混在している箇所を見つける。多数派という理由では決めず、明示された表記基準・用語集を先に確認し、なければ一方に統一することを検討する。",
+   "profiles": {
+    "general-tech": {
+     "category": "recommendation",
+     "basis": "skill-policy",
+     "note": "どちらも許容される表記が混在している。明示された基準・用語集があればそれに従い、なければ文書内で統一する。"
+    },
+    "public-explanation": {
+     "category": "recommendation",
+     "basis": "skill-policy",
+     "note": "どちらも許容される表記が混在している。明示された基準・用語集があればそれに従い、なければ文書内で統一する。"
+    },
+    "official": {
+     "category": "recommendation",
+     "basis": "skill-policy",
+     "note": "どちらも許容される表記が混在している。明示された基準・用語集があればそれに従い、なければ文書内で統一する。"
+    }
+   },
+   "conditions": [
+    "同じ文書の保護されていない範囲に、同じ語の複数の表記が現れる",
+    "他の規則が、その表記について error・recommendation・needs_context を出している場合は、重複を避けて出さない"
+   ],
+   "exceptions": [
+    "引用・コード・固有名詞(保護対象)",
+    "意図的な使い分け(例: 引用元の表記を残す)",
+    "組織の用語集が複数の表記を指定している場合"
+   ],
+   "protected": [
+    "code",
+    "url",
+    "quote",
+    "frontmatter",
+    "proper_noun",
+    "technical_term"
+   ],
+   "sources": [
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-3ウ(第2表を用いる場合の統一)",
+     "pages": "PDF p.26"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-4エ(全角・半角の統一)",
+     "pages": "PDF p.27"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-5(1)ア(『、』と『，』の混在)",
+     "pages": "PDF p.29"
+    },
+    {
+     "source_id": "NAIKAKU-GAIRAI-1991",
+     "locator": "留意事項その1(語形にゆれのあるものについて、語形をどちらかに決めようとはしていない)"
+    },
+    {
+     "source_id": "NAIKAKU-OKURIGANA-1973",
+     "locator": "『本文』の見方及び使い方 五(本則又は許容のいずれに従ってもよい)"
+    }
+   ],
+   "skill_decisions": [
+    "この規則はスキル独自の運用判断である。資料が定めるのは、一部の表記(第2表、全角・半角、読点)の統一だけで、すべての許容形の混在を禁じてはいない。",
+    "多数派かどうかは、許容される表記のあいだで選ぶときの判断材料にとどめる。明確な誤りを多数派という理由で広げない。候補には回数の多い表記を示すが、決定ではない。",
+    "error にしない。"
+   ],
+   "detection": {
+    "kind": "consistency",
+    "groups": [
+     {
+      "id": "choon-コンピューター",
+      "label": "コンピューター / コンピュータ",
+      "forms": [
+       {
+        "label": "コンピューター",
+        "pattern": "コンピューター"
+       },
+       {
+        "label": "コンピュータ",
+        "pattern": "コンピュータ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-サーバー",
+      "label": "サーバー / サーバ",
+      "forms": [
+       {
+        "label": "サーバー",
+        "pattern": "サーバー"
+       },
+       {
+        "label": "サーバ",
+        "pattern": "サーバ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-ユーザー",
+      "label": "ユーザー / ユーザ",
+      "forms": [
+       {
+        "label": "ユーザー",
+        "pattern": "ユーザー"
+       },
+       {
+        "label": "ユーザ",
+        "pattern": "ユーザ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-プリンター",
+      "label": "プリンター / プリンタ",
+      "forms": [
+       {
+        "label": "プリンター",
+        "pattern": "プリンター"
+       },
+       {
+        "label": "プリンタ",
+        "pattern": "プリンタ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-ブラウザー",
+      "label": "ブラウザー / ブラウザ",
+      "forms": [
+       {
+        "label": "ブラウザー",
+        "pattern": "ブラウザー"
+       },
+       {
+        "label": "ブラウザ",
+        "pattern": "ブラウザ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-スキャナー",
+      "label": "スキャナー / スキャナ",
+      "forms": [
+       {
+        "label": "スキャナー",
+        "pattern": "スキャナー"
+       },
+       {
+        "label": "スキャナ",
+        "pattern": "スキャナ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-ルーター",
+      "label": "ルーター / ルータ",
+      "forms": [
+       {
+        "label": "ルーター",
+        "pattern": "ルーター"
+       },
+       {
+        "label": "ルータ",
+        "pattern": "ルータ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-ドライバー",
+      "label": "ドライバー / ドライバ",
+      "forms": [
+       {
+        "label": "ドライバー",
+        "pattern": "ドライバー"
+       },
+       {
+        "label": "ドライバ",
+        "pattern": "ドライバ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-エレベーター",
+      "label": "エレベーター / エレベータ",
+      "forms": [
+       {
+        "label": "エレベーター",
+        "pattern": "エレベーター"
+       },
+       {
+        "label": "エレベータ",
+        "pattern": "エレベータ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-インタプリター",
+      "label": "インタプリター / インタプリタ",
+      "forms": [
+       {
+        "label": "インタプリター",
+        "pattern": "インタプリター"
+       },
+       {
+        "label": "インタプリタ",
+        "pattern": "インタプリタ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-ハンドラー",
+      "label": "ハンドラー / ハンドラ",
+      "forms": [
+       {
+        "label": "ハンドラー",
+        "pattern": "ハンドラー"
+       },
+       {
+        "label": "ハンドラ",
+        "pattern": "ハンドラ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-ポインター",
+      "label": "ポインター / ポインタ",
+      "forms": [
+       {
+        "label": "ポインター",
+        "pattern": "ポインター"
+       },
+       {
+        "label": "ポインタ",
+        "pattern": "ポインタ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-メモリー",
+      "label": "メモリー / メモリ",
+      "forms": [
+       {
+        "label": "メモリー",
+        "pattern": "メモリー"
+       },
+       {
+        "label": "メモリ",
+        "pattern": "メモリ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-カテゴリー",
+      "label": "カテゴリー / カテゴリ",
+      "forms": [
+       {
+        "label": "カテゴリー",
+        "pattern": "カテゴリー"
+       },
+       {
+        "label": "カテゴリ",
+        "pattern": "カテゴリ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-ディレクトリー",
+      "label": "ディレクトリー / ディレクトリ",
+      "forms": [
+       {
+        "label": "ディレクトリー",
+        "pattern": "ディレクトリー"
+       },
+       {
+        "label": "ディレクトリ",
+        "pattern": "ディレクトリ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "choon-ライブラリー",
+      "label": "ライブラリー / ライブラリ",
+      "forms": [
+       {
+        "label": "ライブラリー",
+        "pattern": "ライブラリー"
+       },
+       {
+        "label": "ライブラリ",
+        "pattern": "ライブラリ(?![ァ-ヶー])"
+       }
+      ]
+     },
+     {
+      "id": "uirusu",
+      "label": "ウイルス / ウィルス",
+      "forms": [
+       {
+        "label": "ウイルス",
+        "pattern": "ウイルス"
+       },
+       {
+        "label": "ウィルス",
+        "pattern": "ウィルス"
+       }
+      ],
+      "note": "第1表の表記と第2表の表記の混在。必要があって第2表による場合は、一つの文書内で異同が生じないようにする(考え方 解説 Ⅰ-3ウ)。"
+     },
+     {
+      "id": "uebu",
+      "label": "ウェブ / ウエブ",
+      "forms": [
+       {
+        "label": "ウェブ",
+        "pattern": "ウェブ"
+       },
+       {
+        "label": "ウエブ",
+        "pattern": "ウエブ"
+       }
+      ],
+      "note": "第2表の表記と第1表の表記の混在。"
+     },
+     {
+      "id": "okonau",
+      "label": "行う / 行なう",
+      "forms": [
+       {
+        "label": "行う",
+        "pattern": "行う"
+       },
+       {
+        "label": "行なう",
+        "pattern": "行なう"
+       }
+      ]
+     },
+     {
+      "id": "arawasu",
+      "label": "表す / 表わす",
+      "forms": [
+       {
+        "label": "表す",
+        "pattern": "表す"
+       },
+       {
+        "label": "表わす",
+        "pattern": "表わす"
+       }
+      ]
+     },
+     {
+      "id": "arawareru",
+      "label": "現れる / 現われる",
+      "forms": [
+       {
+        "label": "現れる",
+        "pattern": "現れる"
+       },
+       {
+        "label": "現われる",
+        "pattern": "現われる"
+       }
+      ]
+     },
+     {
+      "id": "kotowaru",
+      "label": "断る / 断わる",
+      "forms": [
+       {
+        "label": "断る",
+        "pattern": "断る"
+       },
+       {
+        "label": "断わる",
+        "pattern": "断わる"
+       }
+      ]
+     },
+     {
+      "id": "owaru",
+      "label": "終わる / 終る",
+      "forms": [
+       {
+        "label": "終わる",
+        "pattern": "終わる"
+       },
+       {
+        "label": "終る",
+        "pattern": "終る"
+       }
+      ]
+     },
+     {
+      "id": "kawaru",
+      "label": "変わる / 変る",
+      "forms": [
+       {
+        "label": "変わる",
+        "pattern": "変わる"
+       },
+       {
+        "label": "変る",
+        "pattern": "変る"
+       }
+      ]
+     },
+     {
+      "id": "okoru",
+      "label": "起こる / 起る",
+      "forms": [
+       {
+        "label": "起こる",
+        "pattern": "起こる"
+       },
+       {
+        "label": "起る",
+        "pattern": "起る"
+       }
+      ]
+     },
+     {
+      "id": "ataru",
+      "label": "当たる / 当る",
+      "forms": [
+       {
+        "label": "当たる",
+        "pattern": "当たる"
+       },
+       {
+        "label": "当る",
+        "pattern": "当る"
+       }
+      ]
+     },
+     {
+      "id": "otosu",
+      "label": "落とす / 落す",
+      "forms": [
+       {
+        "label": "落とす",
+        "pattern": "落とす"
+       },
+       {
+        "label": "落す",
+        "pattern": "落す"
+       }
+      ]
+     },
+     {
+      "id": "kurasu",
+      "label": "暮らす / 暮す",
+      "forms": [
+       {
+        "label": "暮らす",
+        "pattern": "暮らす"
+       },
+       {
+        "label": "暮す",
+        "pattern": "暮す"
+       }
+      ]
+     },
+     {
+      "id": "zutsu",
+      "label": "ずつ / づつ",
+      "forms": [
+       {
+        "label": "ずつ",
+        "pattern": "ずつ"
+       },
+       {
+        "label": "づつ",
+        "pattern": "づつ"
+       }
+      ],
+      "note": "『ずつ』が本則。『づつ』の適用範囲は KOKUGO-KANA-005 を参照。"
+     },
+     {
+      "id": "inazuma",
+      "label": "いなずま / いなづま",
+      "forms": [
+       {
+        "label": "いなずま",
+        "pattern": "いなずま"
+       },
+       {
+        "label": "いなづま",
+        "pattern": "いなづま"
+       }
+      ]
+     },
+     {
+      "id": "kizuna",
+      "label": "きずな / きづな",
+      "forms": [
+       {
+        "label": "きずな",
+        "pattern": "きずな"
+       },
+       {
+        "label": "きづな",
+        "pattern": "きづな"
+       }
+      ]
+     },
+     {
+      "id": "unazuku",
+      "label": "うなずく / うなづく",
+      "forms": [
+       {
+        "label": "うなずく",
+        "pattern": "うなずく"
+       },
+       {
+        "label": "うなづく",
+        "pattern": "うなづく"
+       }
+      ]
+     },
+     {
+      "id": "tsumazuku",
+      "label": "つまずく / つまづく",
+      "forms": [
+       {
+        "label": "つまずく",
+        "pattern": "つまずく"
+       },
+       {
+        "label": "つまづく",
+        "pattern": "つまづく"
+       }
+      ]
+     },
+     {
+      "id": "digits",
+      "label": "半角数字 / 全角数字",
+      "forms": [
+       {
+        "label": "半角数字",
+        "pattern": "[0-9]+"
+       },
+       {
+        "label": "全角数字",
+        "pattern": "[０-９]+"
+       }
+      ],
+      "note": "算用数字の全角・半角に特に定めはないが、使い分けの考え方を文書内で統一する(考え方 解説 Ⅰ-4エ)。データや金額は半角にする。"
+     },
+     {
+      "id": "touten",
+      "label": "読点『、』 / 『，』",
+      "forms": [
+       {
+        "label": "、",
+        "pattern": "、"
+       },
+       {
+        "label": "，",
+        "pattern": "，"
+       }
+      ],
+      "note": "横書きでは読点に『，』を用いてもよいが、両者が混在しないよう留意する(考え方 解説 Ⅰ-5(1)ア)。"
+     },
+     {
+      "id": "kuten",
+      "label": "句点『。』 / 『．』",
+      "forms": [
+       {
+        "label": "。",
+        "pattern": "。"
+       },
+       {
+        "label": "．",
+        "pattern": "(?<=[ぁ-んァ-ヶ一-龥])．"
+       }
+      ],
+      "note": "句点にピリオドを用いない(考え方 解説 Ⅰ-5(1)ア)。"
+     }
+    ]
+   },
+   "machine_detectable": "登録した語・記号の組での混在(サーバー/サーバ、行う/行なう、全角数字/半角数字、『、』/『，』 など)。",
+   "needs_context_scope": "混在が意図的かどうか。どちらに統一するか(表記基準・用語集・読み手による)。",
+   "examples": {
+    "fix": [
+     {
+      "before": "サーバーを止める。サーバを再起動する。",
+      "after": "サーバーを止める。サーバーを再起動する。",
+      "profile": "general-tech"
+     }
+    ],
+    "keep": [
+     {
+      "text": "サーバーを止める。サーバーを再起動する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "表記がそろっている。"
+     },
+     {
+      "text": "> サーバを止める。\n\nサーバーを再起動する。",
+      "profiles": [
+       "general-tech",
+       "public-explanation",
+       "official"
+      ],
+      "reason": "一方が引用(保護対象)の中にあるため、混在とみなさない。"
+     }
+    ]
+   },
+   "automation": "detect"
+  },
+  {
+   "id": "KOKUGO-REF-001",
+   "family": "reference",
+   "provenance": "primary-source",
+   "automation": "reference-only",
+   "title": "敬語の指針",
+   "summary": "敬語の仕組み(尊敬語、謙譲語Ⅰ・Ⅱ、丁寧語、美化語)と使い方の考え方。表記の正誤を定める資料ではない。",
+   "sources": [
+    {
+     "source_id": "BUNKA-KEIGO-2007",
+     "locator": "第2章 敬語の仕組み、第3章 敬語の具体的な使い方",
+     "pages": "PDF 全82ページ"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅱ-6ウ(敬語の使い方)",
+     "pages": "PDF p.39"
+    }
+   ],
+   "reference_when": "敬語の誤用が疑われるとき、または相手や場面に応じた待遇表現が問題になるとき、答申の該当箇所を直接読む。",
+   "not_checked": "敬語の自動判定は行わない。敬語の適否はすべて未検査。",
+   "skill_decisions": [
+    "初期実装では参照先の整理にとどめる。"
+   ],
+   "machine_detectable": "なし(参照先の整理だけで、自動判定は行わない)。",
+   "needs_context_scope": "敬語の自動判定は行わない。敬語の適否はすべて未検査。",
+   "protected": [],
+   "conditions": [],
+   "exceptions": []
+  },
+  {
+   "id": "KOKUGO-REF-002",
+   "family": "reference",
+   "provenance": "primary-source",
+   "automation": "reference-only",
+   "title": "ローマ字のつづり方",
+   "summary": "令和7年12月22日内閣告示第4号。昭和29年内閣告示第1号を廃止して定められた、ローマ字のつづり方のよりどころ。",
+   "sources": [
+    {
+     "source_id": "NAIKAKU-ROMAJI-2025",
+     "locator": "前書き、本表、添え書き、(付)対照表",
+     "pages": "PDF 全7ページ"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "本文 Ⅰ-5(2)オ(日本人の姓名のローマ字表記)",
+     "pages": "PDF p.7"
+    }
+   ],
+   "reference_when": "ローマ字で国語を書き表す箇所が問題になるとき、告示の本表と添え書きを直接読む。昭和29年の告示(旧版)を前提にしていないか注意する。",
+   "not_checked": "ローマ字表記の自動判定は行わない。ローマ字の適否はすべて未検査。",
+   "skill_decisions": [
+    "初期実装では参照先の整理にとどめる。",
+    "旧版(昭和29年内閣告示第1号)の内容は、この skill の根拠にしていない。"
+   ],
+   "machine_detectable": "なし(参照先の整理だけで、自動判定は行わない)。",
+   "needs_context_scope": "ローマ字表記の自動判定は行わない。ローマ字の適否はすべて未検査。",
+   "protected": [],
+   "conditions": [],
+   "exceptions": []
+  },
+  {
+   "id": "KOKUGO-REF-003",
+   "family": "reference",
+   "provenance": "primary-source",
+   "automation": "reference-only",
+   "title": "字体(通用字体、表外漢字字体表、字体・字形の指針)",
+   "summary": "字体は常用漢字表の通用字体を用いる。表外漢字を用いる場合は表外漢字字体表の印刷標準字体を用いる。",
+   "sources": [
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(1)イ",
+     "pages": "PDF p.20"
+    },
+    {
+     "source_id": "NAIKAKU-JOYO-2010",
+     "locator": "(付)字体についての解説",
+     "pages": "PDF pp.4-10"
+    }
+   ],
+   "reference_when": "旧字体・異体字が混じる文書で、字体の統一が問題になるとき。",
+   "not_checked": "字体(旧字体、許容字体、IVS による異体字)の検査は行わない。字種が表外かどうかは KOKUGO-KANJI-001 で扱う。",
+   "skill_decisions": [
+    "表外漢字字体表と『常用漢字表の字体・字形に関する指針』は取得していない。"
+   ],
+   "machine_detectable": "なし(参照先の整理だけで、自動判定は行わない)。",
+   "needs_context_scope": "字体(旧字体、許容字体、IVS による異体字)の検査は行わない。字種が表外かどうかは KOKUGO-KANJI-001 で扱う。",
+   "protected": [],
+   "conditions": [],
+   "exceptions": []
+  },
+  {
+   "id": "KOKUGO-REF-004",
+   "family": "reference",
+   "provenance": "primary-source",
+   "automation": "reference-only",
+   "title": "数字・符号の使い方(検査しない項目)",
+   "summary": "漢数字と算用数字の使い分け、大きな数の区切り、括弧と句点の関係、中黒などの用法。",
+   "sources": [
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-4(数字の使い方)",
+     "pages": "PDF pp.27-28"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-5(符号の使い方)",
+     "pages": "PDF p.29"
+    }
+   ],
+   "reference_when": "公用文の数字・符号の細則を確認したいとき。",
+   "not_checked": "検査するのは『○か所』『○か月』、全角・半角数字の混在、読点『、』『，』の混在、句点のピリオドだけ。それ以外の数字・符号の用法は未検査。",
+   "skill_decisions": [
+    "検査対象は誤検出の少ない項目に絞った。"
+   ],
+   "machine_detectable": "なし(参照先の整理だけで、自動判定は行わない)。",
+   "needs_context_scope": "検査するのは『○か所』『○か月』、全角・半角数字の混在、読点『、』『，』の混在、句点のピリオドだけ。それ以外の数字・符号の用法は未検査。",
+   "protected": [],
+   "conditions": [],
+   "exceptions": []
+  },
+  {
+   "id": "KOKUGO-REF-005",
+   "family": "reference",
+   "provenance": "primary-source",
+   "automation": "reference-only",
+   "title": "用語と文章(考え方 Ⅱ・Ⅲ)",
+   "summary": "専門用語・外来語の言い換え、文体の選択、文の書き方、構成の工夫。読みやすさの診断と重なる。",
+   "sources": [
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "本文 Ⅱ, Ⅲ",
+     "pages": "PDF pp.7-10"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅱ, Ⅲ",
+     "pages": "PDF pp.33-46"
+    },
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅲ-3ア(一文を短くする)",
+     "pages": "PDF p.44"
+    },
+    {
+     "source_id": "NAIKAKU-NOTICE-2022",
+     "locator": "本文(周知の依頼、昭和27年の依命通知の廃止)"
+    }
+   ],
+   "reference_when": "表記の検査より先に、構成と論理、文の長さ、主語と述語、二重否定を確認するとき。この skill の診断の順序と references/readability-rules.md を使う。",
+   "not_checked": "言い換えの適否、文体、構成の適否は自動判定しない。二重否定は measure.py --extras が拾う(別の仕組み)。",
+   "skill_decisions": [
+    "文の長さの目安(30〜45字、46字以上を候補、段落は200字以上を候補)は、この skill の運用判断であり、文化庁の基準ではない。考え方の解説は『適当な長さは一概に決められないが、50〜60字ほどになってきたら読みにくくなっていないか意識するとよい』と述べるにとどまる(解説 Ⅲ-3ア、PDF p.44)。"
+   ],
+   "machine_detectable": "なし(参照先の整理だけで、自動判定は行わない)。",
+   "needs_context_scope": "言い換えの適否、文体、構成の適否は自動判定しない。二重否定は measure.py --extras が拾う(別の仕組み)。",
+   "protected": [],
+   "conditions": [],
+   "exceptions": []
+  },
+  {
+   "id": "KOKUGO-REF-006",
+   "family": "reference",
+   "provenance": "primary-source",
+   "automation": "reference-only",
+   "title": "法令における漢字使用等について",
+   "summary": "内閣法制局長官決定(平成22年)。法令の漢字使用等を定める。公用文の表記は原則として法令と一致させる(考え方)。",
+   "sources": [
+    {
+     "source_id": "BUNKA-GUIDE-2022",
+     "locator": "解説 Ⅰ-1(3) 関係資料",
+     "pages": "PDF p.24"
+    },
+    {
+     "source_id": "NAIKAKU-KUNREI-2010",
+     "locator": "別紙 4(法令における取扱い)",
+     "pages": "PDF p.5"
+    }
+   ],
+   "reference_when": "法令の文章を書く、または法令の引用の表記を確認するとき。",
+   "not_checked": "原資料は取得していない。内容を確認していないため、この skill は法令の表記を検査しない。",
+   "skill_decisions": [
+    "考え方と訓令から参照されていることだけを記録した。"
+   ],
+   "machine_detectable": "なし(参照先の整理だけで、自動判定は行わない)。",
+   "needs_context_scope": "原資料は取得していない。内容を確認していないため、この skill は法令の表記を検査しない。",
+   "protected": [],
+   "conditions": [],
+   "exceptions": []
+  }
+ ]
+}

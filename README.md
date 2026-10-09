@@ -18,6 +18,7 @@
 - 主語・述語や論理関係の追いにくさ、次の展開の予測しにくさ
 - 見出しだけでは中身が分からない構成
 - 冗長、直訳調、翻訳調の比喩、抽象的な言い回し、AI特有の決めぜりふ、内容のない結び
+- 国語の表記・用法の基準(文化庁の常用漢字表、現代仮名遣い、送り仮名の付け方、外来語の表記、公用文作成の考え方など)に照らした表記の確認
 
 目的は、日本語を短くすることではありません。数値、条件、例外、因果関係、主体、固有名詞、技術用語、API名、コマンド、コード、URL、引用、出典を、読みやすさのために削ったり簡略化したりしません。
 
@@ -137,8 +138,26 @@ japanese-readability-editor を paragraph-only モードで適用。
 
 計測と照合のスクリプトを直接使う方法は、[スクリプト](docs/scripts.md)にあります。
 
+### 国語の表記・用法の検査
+
+文化庁の公式資料に基づく表記・用法の規則を、適用設定(モードとは独立)に応じて文章へ当てられます。指定がなければ `general-tech` です。
+
+| 適用設定 | 用途 |
+|---|---|
+| `general-tech`(既定) | 技術・業務文書。明確な誤りを確認し、専門用語・組織の表記・許容形を尊重する |
+| `public-explanation` | 一般向けの解説・案内・広報。読み手に応じた表記を検討する |
+| `official` | 公用文基準が明示された文書。公用文固有の表記・用語の運用も確認する |
+
+```bash
+python3 skill/japanese-readability-editor/scripts/check_kokugo.py document.md --profile general-tech
+python3 skill/japanese-readability-editor/scripts/check_kokugo.py document.md --profile official --json
+```
+
+指摘は `error`(明確な誤り)、`recommendation`(推奨)、`accepted_variant`(許容)、`needs_context`(要確認)、`excluded`(保護対象)に分けます。許容形や適用範囲外の表記を、誤りとして報告しません。規則には出典(資料、節、PDF のページ)があり、公式資料の規定と、この skill の運用判断を区別しています。詳しくは、[国語の表記・用法の検査](docs/kokugo.md)にあります。
+
 ## 注意
 
+- 国語の表記の検査は、規則に登録した語・表記を機械的に探すだけです。形態素解析を使わず、固有名詞・専門用語を自動では識別しません。検査していない項目(敬語、ローマ字、字体など)があり、『指摘なし』は『規則に違反していない』ことを意味しません([限界](docs/kokugo.md#検査していないもの限界))。
 - Skill は文章の意味を検証しません。意味の保存を保証するのは、Agent の判断と、利用者の確認です。返ってきた文章は、元の文と突き合わせて確認してください。
 - ChatGPT での実機確認では、二重否定の意味の反転、残余の条件の言い換え、文体の変更が起きました。`SKILL.md` に対策を入れましたが、誤りを完全には防げません。
 - ChatGPT の暗黙起動は、実測では不安定でした。確実に使うには、`@` で指定してください([実測](docs/chatgpt-implicit-invocation.md))。
@@ -154,6 +173,7 @@ japanese-readability-editor を paragraph-only モードで適用。
 | [docs/environments.md](docs/environments.md) | 環境ごとの対応表と注意、参照した公式資料 |
 | [docs/usage.md](docs/usage.md) | モードの指定の扱いと、動作の確認 |
 | [docs/scripts.md](docs/scripts.md) | 計測と照合のスクリプトの使い方と限界 |
+| [docs/kokugo.md](docs/kokugo.md) | 国語の表記・用法の検査。適用設定、区分、終了コード、JSON の形式、用語集、規則の更新、限界 |
 | [docs/design.md](docs/design.md) | 設計の考え方と、参考にした記事とプロジェクト |
 | [docs/development.md](docs/development.md) | ディレクトリ構成、パッケージ生成、検証、テスト |
 

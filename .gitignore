@@ -11,3 +11,4 @@ __pycache__/
 # このリポジトリ自体へ install.py で配置したコピー
 /.agents/
 /.claude/skills/
+/.venv-sources/

@@ -1,10 +1,10 @@
 # スクリプト
 
-Skill に同梱した3つのスクリプトを、直接使う方法です。Agent は、Skill の指示でこれらを実行します。
+Skill に同梱したスクリプトを、直接使う方法です。Agent は、Skill の指示でこれらを実行します。計測の `measure.py`、保存の検証の `verify_preservation.py`、書き換えの照合の `compare_rewrite.py`、国語の表記の検査の `check_kokugo.py` と `validate_kokugo_rules.py` があります。`kokugo_engine.py` は後の2つが使う部品で、単独では実行しません。
 
 ## 実行する
 
-Python 3.10 以上が必要です。どのスクリプトも標準ライブラリだけで動き、ネットワーク通信とファイルの書き込みをしません。`compare_rewrite.py` は、SudachiPy が入っていれば使います。Windows では、`python3` ではなく `python` で実行する場合があります([Python のコマンド名](installation.md#python-のコマンド名))。
+Python 3.10 以上が必要です。どのスクリプトも標準ライブラリだけで動き、ネットワーク通信とファイルの書き込みをしません。国語の表記の検査(`check_kokugo.py`)も、ネットワークなしで動きます。公式資料を取り直す処理は、Skill の外の `tools/update_kokugo_sources.py` に分けています([国語の表記・用法の検査](kokugo.md#規則を更新する))。`compare_rewrite.py` は、SudachiPy が入っていれば使います。Windows では、`python3` ではなく `python` で実行する場合があります([Python のコマンド名](installation.md#python-のコマンド名))。
 
 次のコマンドは、Skill のディレクトリで実行する場合の例です。ディレクトリは、`skill/japanese-readability-editor/` か、配置先の `japanese-readability-editor/` です。
 
@@ -15,8 +15,12 @@ python3 scripts/measure.py --json README.md
 python3 scripts/measure.py --locate docs/*.md
 python3 scripts/measure.py --locate --extras README.md
 python3 scripts/verify_preservation.py before.md after.md
+python3 scripts/verify_preservation.py --strict before.md after.md
 python3 scripts/compare_rewrite.py before.md after.md
 python3 scripts/compare_rewrite.py --json before.md after.md
+python3 scripts/check_kokugo.py README.md --profile general-tech
+python3 scripts/check_kokugo.py README.md --profile official --json
+python3 scripts/validate_kokugo_rules.py
 ```
 
 ## measure.py
@@ -54,7 +58,9 @@ python3 scripts/compare_rewrite.py --json before.md after.md
 
 `verify_preservation.py` は、空白を除いた文字列が一致すれば終了コード 0、しなければ 1 を返します(読み込みに失敗すると 2)。
 
-> **注意**: このスクリプトが保証するのは「空白以外の文字列が変更されていないこと」だけです。意味の保存は保証しません。英単語の間の空白など、空白が意味を持つ箇所の変更も検出できません。
+> **注意**: このスクリプトが保証するのは「空白以外の文字列が変更されていないこと」だけです。意味の保存は保証しません。英単語の間の空白など、空白が意味を持つ箇所の変更も検出できません。空白全般を無視するので、文と文のあいだの空白の削除、タブの置換、既存の改行の削除も、合格にしてしまいます。
+
+`--strict` を付けると、改行以外のすべての文字(半角・全角スペース、タブ、不可分スペースを含む)が同一で、改行が減っていないときだけ、終了コード 0 を返します。モード C の「改行と空行の挿入のみ」を確かめるときに使います。CRLF と LF の違いは、改行の種類を変えただけなので区別しません。
 
 ## compare_rewrite.py
 
@@ -78,8 +84,31 @@ uv があれば、次のコマンドで、SudachiPy を自動で入れて実行�
 uv run scripts/compare_rewrite.py before.md after.md
 ```
 
+## check_kokugo.py
+
+`check_kokugo.py` は、国語の表記・用法の規則(文化庁の公式資料に基づく)を文章へ当て、規則 ID、位置、該当表記、区分、理由、候補、出典 ID を出します。読み取り専用で、ネットワークを使いません。適用設定(`--profile`)、判定区分、終了コード、JSON の形式、用語集、保護対象、検査していないものは、[国語の表記・用法の検査](kokugo.md)にあります。
+
+```bash
+python3 scripts/check_kokugo.py document.md --profile official
+```
+
+```text
+document.md  (profile: official, rules: 2026-10-10)
+  1:1  [error]  KOKUGO-OKURI-003  申し込み → 申込み
+      公用文の活用のない複合の語のうち、読み間違えるおそれのない186語は、通則6の許容を適用して送り仮名を省くものとする(訓令 別紙2(1)ただし書)。許容形を用いてよい場合(同2(2))にも、このただし書の語は含まれない。
+      出典: NAIKAKU-KUNREI-2010, BUNKA-GUIDE-2022, NAIKAKU-OKURIGANA-1973  [primary-source-derived]
+```
+
+- 終了コード: 0=`--fail-on`(既定は `error`)以上の指摘なし、1=あり、2=検査を完了できなかった。
+- 許容形や適用範囲外の表記は、誤り(`error`)として報告しません。文脈に依存する候補は、`needs_context` です。
+
+## validate_kokugo_rules.py
+
+規則データ(`data/*.json`)を検証します。ID の重複、参照切れ、必須項目の不足、不正な適用設定、出典のない規則、PDF の出典のページ、正規表現、修正例と保持例の再検査などを検出します。終了コード: 0=問題なし、1=問題あり、2=データを読めない。
+
 ## 限界
 
+- 国語の表記の検査は、規則に登録した語・表記だけを機械的に探します。形態素解析を使わないので、品詞が決まらない語は `needs_context` に下げます。固有名詞・専門用語は自動では識別できません(用語集で指定します)。意味の保存や日本語の正しさ全体は保証しません。
 - 計測は、日本語の文章を対象にしたヒューリスティックです。文の区切りは、句点、感嘆符、疑問符と、括弧や引用の対応から推定します。Markdown の解析は簡易で、入れ子の引用、インデントされたコードブロック、HTML の複雑な構造は正確に扱えません。
 - `compare_rewrite.py` の文の対応は、語の重なりによる推定です。大きく言い換えた文は、意味が同じでも、対応がないと出ることがあります。否定以外の表現の検出は、正規表現による近似です。
 - `--extras` は正規表現による指摘で、形態素解析を使いません。漢字の連続は、固有名詞や法令用語も拾います。「の」の連鎖は、漢字、カタカナ、英数字の名詞に限ります。

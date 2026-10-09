@@ -10,7 +10,7 @@ SKILL_DIR の既定は skill/japanese-readability-editor。エラーがあれば
   - YAML frontmatter が先頭にあり、name と description がある
   - name が japanese-readability-editor で、ディレクトリ名と一致する
   - 製品固有の frontmatter を含まない(既定では name と description だけを許す)
-  - SKILL.md が参照する references/ scripts/ assets/ のファイルが存在する
+  - SKILL.md が参照する references/ scripts/ assets/ data/ のファイルが存在する
   - Markdown のリンクや参照に、skill の外へ出るパス(../ や絶対パス)がない
   - scripts/ の Python が、通信・外部コマンド・ファイル削除や書き込みをしない
   - ZIP にできる
@@ -66,7 +66,7 @@ FORBIDDEN_PATH_METHODS = {"write_text", "write_bytes", "unlink", "rmdir", "touch
                           "symlink_to", "hardlink_to"}
 
 # 日本語の助詞などを巻き込まないよう、パスに使う文字は ASCII に限る。
-PATH_MENTION_RE = re.compile(r"(?<![A-Za-z0-9_./-])((?:references|scripts|assets)/[A-Za-z0-9_./-]*[A-Za-z0-9_-])")
+PATH_MENTION_RE = re.compile(r"(?<![A-Za-z0-9_./-])((?:references|scripts|assets|data)/[A-Za-z0-9_./-]*[A-Za-z0-9_-])")
 DRIVE_RE = re.compile(r"^[A-Za-z]:[\\/]")
 LINK_RE = re.compile(r"\[[^\]]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 SCHEME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9+.-]*:")
