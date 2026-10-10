@@ -59,15 +59,20 @@ DEFAULT_MAX_SHOWN = 20
 # 数値に続ける単位。カタカナの単位は、ミリオン・テラス・メガネのような別の語を取り違えないよう、
 # 列挙した接頭辞と単位だけを認め、後ろにカタカナが続くものは除く。「時間」は「時」(時刻)と区別する。
 # 「30秒間」「5分間」の「間」は単位に含めない(「30秒」と書き換えても同じ量なので)。
+# 「3ヶ所」「3カ月」「3箇所」は、「か」を含む形にそろえて比べる(number_key)。skill が勧める「3か所」への書き換えを、数値の差にしないため。
 _SI_PREFIX = "ナノ|マイクロ|ミリ|センチ|キロ|メガ|ギガ|テラ"
 _KATAKANA_UNIT = "メートル|グラム|リットル|バイト|ビット|ヘルツ"
+_CURRENCY_UNIT = "ドル|ユーロ"
+_COUNTER_VARIANT = "ヶヵケカか箇"  # 「○か所」「○か月」の「か」の書き方
 NUMBER_RE = re.compile(
     r"\d+(?:[.,]\d+)*[万億兆]?"  # 3万円、1億2000万円(「1億」と「2000万円」に分かれる)の万・億・兆
     r"(?:\s?(?:%|[A-Za-z]+"
     r"|(?:ナノ|マイクロ|ミリ)秒"  # 「ミリ」だけで切れないよう、秒を伴う形を先に試す
-    rf"|(?:(?:{_SI_PREFIX})(?:{_KATAKANA_UNIT})?|{_KATAKANA_UNIT}|パーセント)(?![ァ-ヴー])"
+    rf"|(?:(?:{_SI_PREFIX})(?:{_KATAKANA_UNIT})?|{_KATAKANA_UNIT}|{_CURRENCY_UNIT}|パーセント)(?![ァ-ヴー])"
+    rf"|[{_COUNTER_VARIANT}][所月]"
     r"|時間|[秒分時日週月年件回倍個字行円人台本度点枚つ割歳]))?"
 )
+COUNTER_VARIANT_RE = re.compile(rf"[{_COUNTER_VARIANT}]([所月])$")
 ASCII_TERM_RE = re.compile(r"[A-Za-z][A-Za-z0-9_.+#/-]*[A-Za-z0-9+#]|[A-Za-z]{2,}")
 KATAKANA_TERM_RE = re.compile(r"[ァ-ヴ][ァ-ヴー]{2,}")
 FENCED_BLOCK_RE = re.compile(r"^ {0,3}(`{3,}|~{3,})[^\n]*\n(.*?)^ {0,3}\1[`~]*[ \t]*$", re.M | re.S)
@@ -108,6 +113,13 @@ PLAIN_END_RE = re.compile(r"[。！？!?]$")
 
 def normalize(text: str) -> str:
     return unicodedata.normalize("NFKC", text)
+
+
+def number_key(text: str) -> str:
+    """表記が違うだけで同じ量になる数値を、同じ値にそろえる。「100パーセント」は「100%」、「3ヶ所」「7カ月」は「3か所」「7か月」。"""
+    if text.endswith("パーセント"):
+        return text[:-len("パーセント")] + "%"
+    return COUNTER_VARIANT_RE.sub(r"か\1", text)
 
 
 def is_content_char(ch: str) -> bool:
@@ -275,7 +287,9 @@ def collect_line_items(number: int, line: str, doc: Document, markdown: bool, an
         line = HEADING_MARK_RE.sub("", line)
         line = measure.LIST_ITEM_RE.sub("", line)
     line = normalize(line)
-    doc.numbers += [Item(number, m.group(0).replace(" ", "")) for m in NUMBER_RE.finditer(line)]
+    for m in NUMBER_RE.finditer(line):
+        text = m.group(0).replace(" ", "")
+        doc.numbers.append(Item(number, text, number_key(text)))
     for pattern in (ASCII_TERM_RE, KATAKANA_TERM_RE):
         doc.terms += [Item(number, m.group(0), analyzer.term_key(m.group(0))) for m in pattern.finditer(line)]
 

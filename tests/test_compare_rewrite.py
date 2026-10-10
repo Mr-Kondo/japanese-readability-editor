@@ -154,9 +154,47 @@ class NumberUnitTest(unittest.TestCase):
     def test_percent_notations(self):
         self.assertEqual(numbers("達成率は100％である。\n"), ["100%"])
         self.assertEqual(run("達成率は100％である。\n", "達成率は100%である。\n")["numbers"], {"missing": [], "added": []})
-        result = run("達成率は100%である。\n", "達成率は100パーセントである。\n")
-        self.assertEqual(texts(result["numbers"]["missing"]), ["100%"])
-        self.assertEqual(texts(result["numbers"]["added"]), ["100パーセント"])
+        # 「%」と「パーセント」は同じ量なので、書き換えても差にしない。値が違えば挙げる。
+        for analyzer in ANALYZERS:
+            with self.subTest(analyzer=analyzer.name):
+                self.assertEqual(run("達成率は100%である。\n", "達成率は100パーセントである。\n", analyzer)["numbers"],
+                                 {"missing": [], "added": []})
+                result = run("達成率は100%である。\n", "達成率は50パーセントである。\n", analyzer)
+                self.assertEqual(texts(result["numbers"]["missing"]), ["100%"])
+                self.assertEqual(texts(result["numbers"]["added"]), ["50パーセント"])
+
+    def test_currency_units(self):
+        for analyzer in ANALYZERS:
+            with self.subTest(analyzer=analyzer.name):
+                self.assertEqual(numbers("費用は100ドルと5.5ユーロである。\n", analyzer), ["100ドル", "5.5ユーロ"])
+                result = run("費用は100ドルである。\n", "費用は100ユーロである。\n", analyzer)
+                self.assertEqual(texts(result["numbers"]["missing"]), ["100ドル"])
+                self.assertEqual(texts(result["numbers"]["added"]), ["100ユーロ"])
+        for text in ("3ドルフィン", "3ユーロッパ", "3ドルビー"):  # ドル・ユーロで始まるだけの語
+            with self.subTest(text=text):
+                self.assertEqual(numbers(text + "である。\n"), ["3"])
+        self.assertEqual(numbers("ドルの相場とユーロの相場を見る。\n"), [])
+
+    def test_counter_variants_are_one_unit_and_one_value(self):
+        for analyzer in ANALYZERS:
+            with self.subTest(analyzer=analyzer.name):
+                self.assertEqual(numbers("3ヶ所、4ケ所、5カ所、6ヵ所、7箇所、8か所と、3ヶ月、4ケ月、5カ月、6ヵ月、7箇月、8か月。\n", analyzer),
+                                 ["3ヶ所", "4ケ所", "5カ所", "6ヵ所", "7箇所", "8か所", "3ヶ月", "4ケ月", "5カ月", "6ヵ月", "7箇月", "8か月"])
+                # skill が勧める「か所」「か月」への書き換えは、数値の差にしない(KOKUGO-NUM-001)。
+                result = run("3ヶ所を直す。7カ月かかる。\n", "3か所を直す。7か月かかる。\n", analyzer)
+                self.assertEqual(result["numbers"], {"missing": [], "added": []})
+                # 所と月、月と日、個数の違いは別の数値として挙げる。
+                for before, after, missing, added in (("3ヶ月", "3ヶ所", "3ヶ月", "3ヶ所"), ("3か月", "3月", "3か月", "3月"),
+                                                      ("3ヶ月", "4ヶ月", "3ヶ月", "4ヶ月")):
+                    result = run(f"期間は{before}である。\n", f"期間は{after}である。\n", analyzer)
+                    self.assertEqual((texts(result["numbers"]["missing"]), texts(result["numbers"]["added"])),
+                                     ([missing], [added]), (before, after))
+
+    def test_a_bare_ka_after_a_number_is_not_a_counter(self):
+        for text in ("3かもしれない", "3カメラ", "3ケーブル", "3箇条", "3ヶ国"):
+            with self.subTest(text=text):
+                self.assertEqual(numbers(text + "。\n"), ["3"])
+        self.assertEqual(numbers("3か4かを選ぶ。\n"), ["3", "4"])
 
     def test_hours_are_not_clock_times(self):
         self.assertEqual(numbers("3時間かかる。3時に始まる。\n"), ["3時間", "3時"])
