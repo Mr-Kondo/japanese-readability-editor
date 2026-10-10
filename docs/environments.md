@@ -20,7 +20,7 @@
 | Antigravity IDE | あり | `.agents/skills/`(旧 `.agent/skills/` も互換) | `~/.gemini/config/skills/`(旧 `~/.gemini/antigravity/skills/`) | 不要 | `/<skill-name>` で呼べる |
 | Antigravity CLI | あり | `.agents/skills/` | `~/.gemini/antigravity-cli/skills/` | 不要 | `~/.agents/skills` は自動では読まれないとする記述あり(Codelab)。未確認 |
 | OpenCode | あり | `.opencode/skills/`、`.claude/skills/`、`.agents/skills/`(作業ディレクトリから git の根まで探索) | `~/.config/opencode/skills/`(`$OPENCODE_CONFIG_DIR` も探索)、`~/.claude/skills/`、`~/.agents/skills/` | 不要 | `skill` ツールで読み込む。検出は、2.0.20 の実機で確認済み(`.opencode`、XDG の設定、`.agents`、`.claude`)。`skill` ツールでの読み込みは、`.opencode` に置いた場合を確認済み。スクリプトの実行とモード指定は、モデルしだい([OpenCode](#opencode)) |
-| Hermes Agent | あり | `.hermes/skills/`、`.agents/skills/`(`hermes skills trust` が要る) | `$HERMES_HOME/skills/`(既定 `~/.hermes/skills/`。プロファイルごとに別) | 不要 | `/<skill-name>`、`hermes -s`。検出、本文と参照資料の読み込み、同梱スクリプトの実行を、Hermes 本体の CLI と関数で確認済み。モデルを介した動作は未確認([Hermes Agent](#hermes-agent)) |
+| Hermes Agent | あり | `.hermes/skills/`、`.agents/skills/`(`hermes skills trust` が要る) | `$HERMES_HOME/skills/`(既定 `~/.hermes/skills/`。プロファイルごとに別) | 不要 | `/<skill-name>`、`hermes -s`。検出、本文と参照資料の読み込み、同梱スクリプトの実行を、Hermes 本体の CLI と関数で確認済み。手元のローカルモデルでは、`-s` を付けると計測のスクリプトが動く回が多かったが、安定はしなかった([Hermes Agent](#hermes-agent)) |
 
 ※1 2026-09-29 に、Plus プランのアカウントで、実際に確認しました。
 
@@ -36,7 +36,7 @@ OpenAI ヘルプセンターの記事は、自動取得できませんでした�
 - Gemini Apps の `scripts/` の扱いと、ZIP の可否
 - Copilot のプラン条件
 - Antigravity の `~/.agents/skills`
-- Hermes Agent の、モデルを介した動作(Skill が選ばれ、依頼のスクリプトが実行されるか)
+- Hermes Agent の、ホスト型の主要モデルでの動作(確かめたのはローカルモデルだけ)と、対話セッションでの `/japanese-readability-editor`
 - OpenCode の、ホスト型の主要モデルでの動作(確かめたのはローカルモデルだけ)と、`OPENCODE_CONFIG_DIR` に置いた Skill が読まれるか
 - Hermes Agent の Docker、SSH、Modal、Daytona、Singularity での動作
 
@@ -242,7 +242,7 @@ docs/design.md に適用して。
 hermes chat -s japanese-readability-editor -q "モード B で README.md を読みやすく直して"
 ```
 
-モード A の依頼は、`モード A で、この調査結果を技術レポートにまとめて` のように書きます。上の依頼は書き方の例で、動作は確かめていません。
+モード A の依頼は、`モード A で、この調査結果を技術レポートにまとめて` のように書きます。手元のローカルモデルで試した結果は、[確認の記録](opencode-hermes-checks.md#hermes-agent-v0210)にあります。`-s` で読み込んだ回は、`[Skill directory]` の絶対パスで、スクリプトが動きました。依頼に Skill の名前を書くだけの場合は、モデルが `skill_view` で Skill を読んでも、`scripts/` を作業ディレクトリの相対パスで実行して失敗する回がありました。`hermes chat -q` に `/japanese-readability-editor` と書いても、Skill は起動しませんでした(非対話のため。対話セッションでは確かめていません)。非対話で使うときは、`-s` を使います。
 
 Skill を読み込んだときのメッセージに、`[Skill directory: <絶対パス>]` が入ります。`scripts/` などの相対パスは、その場所からの相対です。
 
@@ -267,11 +267,13 @@ Docker と Singularity は、`~/.hermes` の Skill を bind mount します。SS
 | 同名の Skill が隠れている | 上位の Skill が下位を隠す。同じ階層に内容の違う同名が 2 つあると、曖昧としてエラーになる。`verify_install.py` が重複を示す |
 | `hermes skills install` で入れたら検査が動かない | `data/` と `scripts/kokugo_engine.py` が入らない。`tools/install.py` で入れ直す |
 | 参照資料やスクリプトに届かない | 読み込みメッセージの `[Skill directory: ...]` を確かめる。ターミナルが手元でなければ、その環境の中で、パスが存在するか。複製で入れているか |
-| スクリプトが実行できない | `terminal` のツールセットが有効か(`hermes chat --toolsets` で確かめる)。`python3 --version` が 3.10 以上か。`verify_install.py` が、スクリプトを外のディレクトリから実行して、失敗した理由を示す |
+| スクリプトが実行できない | `terminal` のツールセットが有効か(`hermes chat --toolsets` で確かめる)。`python3 --version` が 3.10 以上か。`verify_install.py` が、スクリプトを外のディレクトリから実行して、失敗した理由を示す。モデルが `scripts/` を相対パスで実行して失敗するときは、`-s japanese-readability-editor` を付ける(絶対パスが渡される)。それでも失敗する回がある |
+| 計測やモードの結果が、スクリプトの出力と合わない | モデルが、スクリプトを実行せずに答えた可能性がある。`measure.py` や `verify_preservation.py --strict` を自分で実行して、確かめる |
+| ファイルに `1\|` のような行番号が入った | モデルが、`read_file` の出力の行番号を、内容として書いた。Hermes が拒否する場合もあるが、防げるとは限らない。`verify_preservation.py --strict` で確かめる |
 
 ### 確認した版と未検証
 
-2026-10-10 に、公式文書と `NousResearch/hermes-agent` のソース(`46d7718a52ff`)を確認しました。手元の `Hermes Agent v0.21.0 (2026.8.31)` では、`hermes skills list`、`hermes skills trust`、Skill の読み込み、参照資料の読み込み、`[Skill directory]` のパスからのスクリプトの実行を、隔離した `HERMES_HOME` で確かめました。モデルを介した動作と、手元ではないターミナルの backend は、確かめていません。詳しくは[確認の記録](opencode-hermes-checks.md#hermes-agent-v0210)にあります。
+2026-10-10 に、公式文書と `NousResearch/hermes-agent` のソース(`46d7718a52ff`)を確認しました。手元の `Hermes Agent v0.21.0 (2026.8.31)` では、`hermes skills list`、`hermes skills trust`、Skill の読み込み、参照資料の読み込み、`[Skill directory]` のパスからのスクリプトの実行を、隔離した `HERMES_HOME` で確かめました。手元のローカルモデルでは、モデルを介した動作も試しました。`-s` を付けた計測は、gemma4 で 3 回中 2 回動き、通常の依頼では動かず、qwen3-coder で `モード C` は守られませんでした。ホスト型の主要モデルと、手元ではないターミナルの backend は、確かめていません。詳しくは[確認の記録](opencode-hermes-checks.md#hermes-agent-v0210)にあります。
 
 ## 参照した公式資料
 
