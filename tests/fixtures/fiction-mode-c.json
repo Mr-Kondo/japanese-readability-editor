@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "insert_lf",
+      "before": "　雨。 まだ雨。\n「待つ」\t僕は残る。\n",
+      "after": "　雨。 \n\nまだ雨。\n「待つ」\t\n僕は残る。\n",
+      "allowed": true
+    },
+    {
+      "id": "insert_crlf",
+      "before": "雨。\r\n僕は残る。",
+      "after": "雨。\r\n\r\n僕は残る。",
+      "allowed": true
+    },
+    {
+      "id": "keep_bom",
+      "before": "﻿雨。\n待つ。",
+      "after": "﻿雨。\n\n待つ。",
+      "allowed": true
+    },
+    {
+      "id": "word_changed",
+      "before": "雨。\n待つ。",
+      "after": "雪。\n待つ。",
+      "allowed": false
+    },
+    {
+      "id": "punctuation_changed",
+      "before": "雨。\n待つ。",
+      "after": "雨、\n待つ。",
+      "allowed": false
+    },
+    {
+      "id": "ascii_space_removed",
+      "before": "雨。 待つ。",
+      "after": "雨。\n待つ。",
+      "allowed": false
+    },
+    {
+      "id": "fullwidth_space_removed",
+      "before": "　雨。待つ。",
+      "after": "雨。\n待つ。",
+      "allowed": false
+    },
+    {
+      "id": "space_width_changed",
+      "before": "雨。 待つ。",
+      "after": "雨。　待つ。",
+      "allowed": false
+    },
+    {
+      "id": "existing_newline_deleted",
+      "before": "雨。\n待つ。",
+      "after": "雨。待つ。\n",
+      "allowed": false
+    },
+    {
+      "id": "newline_moved",
+      "before": "雨。\n待つ。",
+      "after": "雨\n。待つ。",
+      "allowed": false
+    },
+    {
+      "id": "crlf_replaced",
+      "before": "雨。\r\n待つ。",
+      "after": "雨。\n待つ。",
+      "allowed": false
+    },
+    {
+      "id": "bom_deleted",
+      "before": "﻿雨。\n待つ。",
+      "after": "雨。\n待つ。",
+      "allowed": false
+    },
+    {
+      "id": "tab_changed",
+      "before": "雨。\t待つ。",
+      "after": "雨。 待つ。",
+      "allowed": false
+    }
+  ]
+}

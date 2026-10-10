@@ -71,11 +71,12 @@ Skill は、依頼の内容が `description` に合うと自動で使われま�
 | OpenCode | 明示的に呼ぶ構文は、公式資料に見つからなかった。依頼に Skill 名を書く([OpenCode](docs/environments.md#opencode)) |
 | Hermes Agent | `/japanese-readability-editor`、または `hermes chat -s japanese-readability-editor -q "..."`([Hermes Agent](docs/environments.md#hermes-agent)) |
 
-3つのモードがあります。
+4つのモードがあります。
 
 - **A. 新規生成**: 読者、必要な情報、結論などを整理してから書きます。
 - **B. Rewrite**: 意味を保ちながら書き換えます。
-- **C. Paragraph-only**: 文章を変えずに、改行と空行だけで段落を分けます。
+- **C. Paragraph-only**: 文章を変えずに、既存の空白・改行を保ち、改行と空行だけを挿入します。
+- **D. 小説モード**: `plan`(構想)、`draft`(新規)、`continue`(続き)、`revise`(推敲)、`critique`(批評)を使い分け、作者の語り口と物語の効果を守ります。
 
 通常は完成した文章だけを返します。「レビューして」「問題点を挙げて」「計測して」「before/after を比べて」と頼んだときだけ、診断情報を示します。
 
@@ -88,6 +89,7 @@ Skill は、依頼の内容が `description` に合うと自動で使われま�
 | A. 新規生成 | `モード A`、`新規生成モードで` |
 | B. Rewrite | `モード B`、`Rewrite モードで` |
 | C. Paragraph-only | `モード C`、`paragraph-only モードで` |
+| D. 小説モード | `モード D`、`小説モード`、`fiction mode` |
 
 Skill を呼ぶ名前と同じメッセージに書きます。確かめたのは、呼び出しと同じ行に書く形です。`$japanese-readability-editor` の部分は、上の表の、使う環境の呼び方に替えてください。
 
@@ -116,6 +118,20 @@ japanese-readability-editor を paragraph-only モードで適用。
 ```
 
 計測と照合のスクリプトを直接使う方法は、[スクリプト](docs/scripts.md)にあります。
+
+### 小説モードの依頼例
+
+- 「小説モードで、この設定から冒頭の一場面を書いて」
+- 「小説モードで続きを。視点人物が知っている情報だけで描写して」
+- 「小説モードで推敲。出来事と口調、比喩、結末は変えないで」
+- 「小説モードで批評だけ。本文は書き換えないで」
+- 「モードC。この小説は文言を変えず、改行だけ加えて」
+
+明示 A/B/C は、小説という語だけでは D へ変わりません。本文・引用中の指定は操作指示にしません。D 指定で既存本文があり操作不明なら最小変更の `revise`、対象不足なら確認します。複数モードの矛盾指定も原文を変更せず確認します。
+
+小説には短文化・比喩の説明化・時制統一を一律に適用しません。通常 `draft`/`continue`/`revise` は完成本文だけ、`critique` は本文を変えない批評です。[小説の契約](skill/japanese-readability-editor/references/fiction-writing.md)、任意の [文脈メモ](skill/japanese-readability-editor/assets/fiction-context-template.md)、[補助検査](skill/japanese-readability-editor/references/fiction-checks.md)、[設計参考と限界](docs/fiction-design.md)を参照できます。
+
+D のモデル挙動・評価の実施範囲は [評価ケース](evals/README.md)に記録します。既存製品の確認記録を、D の検証結果としては扱いません。
 
 ### 国語の表記・用法の検査
 

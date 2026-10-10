@@ -155,6 +155,17 @@ def render_gemini_apps_instructions(skill_dir: Path) -> str:
             "",
             demote_headings(strip_relative_links(rules.strip("\n")), 2),
         ]
+    fiction_path = skill_dir / "references" / "fiction-writing.md"
+    if fiction_path.is_file():
+        parts += [
+            "",
+            "## Part 3. 小説モード D の契約",
+            "",
+            "D を使う場合は、この Part 3 も含める。ファイルを参照できない貼付用指示に契約を埋め込む。"
+            "スクリプトのコマンドは実行済みと扱わず、括弧・文字数・文字列は必要に応じて目視確認する。",
+            "",
+            demote_headings(strip_relative_links(fiction_path.read_text(encoding="utf-8").strip("\n")), 2),
+        ]
     return "\n".join(parts) + "\n"
 
 

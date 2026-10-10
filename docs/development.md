@@ -98,6 +98,14 @@ ZIP は再現可能で、同じ入力からは同じ SHA-256 になります。`
 
 `v` で始まるタグを GitHub に push すると、Actions が Release を作ります(`.github/workflows/release.yml`)。Release は、[Releases のページ](https://github.com/Mr-Kondo/japanese-readability-editor/releases)で公開されます。添付されるものと、ダウンロードの方法は、[インストール](installation.md#アップロード型の環境に入れる)にあります。
 
+## 小説モードの正本と評価
+
+D の正本は共通 `SKILL.md` と `references/fiction-writing.md`、`references/fiction-checks.md`、`assets/fiction-examples.md`、任意の `assets/fiction-context-template.md`、読み取り専用 `scripts/check_fiction.py` です。詳細を参照へ分け、製品固有 API を必須依存にしません。文化庁の規則データと既存 CLI の既定値は変更しません。
+
+`evals/fiction-cases.json` はモデル挙動の評価入力と観点です。構造テスト・キーワード検査だけではモデルの実行証拠になりません。[評価手順と実施範囲](../evals/README.md)、[設計参考・採否・限界](fiction-design.md)を参照してください。
+
+配布 ZIP と OpenCode/Hermes 向けフォルダは追加ファイルも正本から複製します。Gemini Apps のフォルダは従来どおり scripts/data を除き、貼付用指示にも D の契約を埋め込みます。新規 evals は開発資料なので Skill の必須依存にはしません。
+
 ## 検証
 
 ```bash
