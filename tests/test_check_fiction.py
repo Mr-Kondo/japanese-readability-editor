@@ -128,7 +128,7 @@ class CommandLineTest(unittest.TestCase):
         self.addCleanup(self._temporary.cleanup)
         self.tmp = Path(self._temporary.name)
         self.path = self.tmp / "原稿.txt"
-        self.path.write_text("夜が肺に溜まる。\n", encoding="utf-8")
+        self.path.write_bytes("夜が肺に溜まる。\n".encode("utf-8"))
 
     def run_json(self, *args, stdin=None):
         code, out, err = run_script(SCRIPT, *args, "--json", stdin=stdin)
@@ -187,10 +187,10 @@ class CommandLineTest(unittest.TestCase):
         self.assertEqual(result["files"][0]["counts"]["codepoints"], 0)
 
     def test_stdin_is_utf8_and_reports_its_filename(self):
-        code, result = self.run_json("-", stdin="『雨』\n")
+        code, result = self.run_json("-", stdin="『雨』")
         self.assertEqual(code, 0)
         self.assertEqual(result["files"][0]["file"], "<stdin>")
-        self.assertEqual(result["files"][0]["counts"]["codepoints"], 4)
+        self.assertEqual(result["files"][0]["counts"]["codepoints"], 3)
 
     def test_optional_settings_add_only_requested_literal_checks(self):
         path = self.settings({"forbidden": ["肺"], "required": ["夜", "朝"]})
