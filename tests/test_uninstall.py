@@ -4,8 +4,8 @@ import os
 import unittest
 from pathlib import Path
 
-from helpers import (SKILL_NAME, TOOLS_DIR, copy_real_skill, load_module, run_script, symlinks_supported,
-                     temporary_directory)
+from helpers import (SKILL_NAME, TOOLS_DIR, copy_real_skill, hermes_default_home, load_module, run_script,
+                     symlinks_supported, temporary_directory)
 
 install = load_module("install", TOOLS_DIR / "install.py")
 uninstall = load_module("uninstall", TOOLS_DIR / "uninstall.py")
@@ -182,8 +182,10 @@ class LinkTest(UninstallCase):
 
 class BackupTest(UninstallCase):
     def install_with_backup(self) -> Path:
-        """既存のコピーを退避させて、skills.bak/ に1件の退避を作る。"""
+        """内容の違う既存のコピーを退避させて、skills.bak/ に1件の退避を作る(内容が同じなら退避しない)。"""
         self.run_install("--scope", "workspace", "--target", "common")
+        edited = self.workspace_copy() / "references" / "readability-rules.md"
+        edited.write_text("利用者が直したもの\n", encoding="utf-8")
         self.run_install("--scope", "workspace", "--target", "common", "--on-conflict", "backup")
         root = self.workspace / ".agents" / "skills.bak"
         self.assertEqual(len(list(root.iterdir())), 1)
@@ -240,6 +242,58 @@ class BackupTest(UninstallCase):
         self.assertEqual(code, 1)
         self.assertIn("not a skill directory", err)
         self.assertEqual(len(list(root.iterdir())), 1)
+
+
+class OpenCodeAndHermesTest(UninstallCase):
+    def test_removes_what_install_placed_for_each_new_target(self):
+        cases = [("workspace", "opencode", self.workspace / ".opencode" / "skills"),
+                 ("workspace", "hermes", self.workspace / ".hermes" / "skills"),
+                 ("user", "opencode", self.home / ".config" / "opencode" / "skills"),
+                 ("user", "hermes", hermes_default_home(self.home) / "skills")]
+        for scope, target, skills_dir in cases:
+            with self.subTest(scope=scope, target=target):
+                self.run_install("--scope", scope, "--target", target)
+                self.assertTrue((skills_dir / SKILL_NAME).is_dir())
+                code, out, err = self.run_uninstall("--scope", scope, "--target", target)
+                self.assertEqual(code, 0, out + err)
+                self.assertFalse((skills_dir / SKILL_NAME).exists())
+                self.assertTrue(skills_dir.is_dir())  # skills/ とほかの Skill は残す
+
+    def test_other_skills_beside_ours_are_kept(self):
+        self.run_install("--scope", "user", "--target", "hermes")
+        other = hermes_default_home(self.home) / "skills" / "writing" / "another-skill"
+        other.mkdir(parents=True)
+        (other / "SKILL.md").write_text("---\nname: another-skill\ndescription: x\n---\n", encoding="utf-8")
+        self.run_uninstall("--scope", "user", "--target", "hermes")
+        self.assertTrue((other / "SKILL.md").is_file())
+
+    def test_hermes_profile_and_home_options_are_shared_with_install(self):
+        profile = hermes_default_home(self.home) / "profiles" / "coder"
+        profile.mkdir(parents=True)
+        (profile / "config.yaml").write_text("{}\n", encoding="utf-8")
+        self.run_install("--scope", "user", "--target", "hermes", "--profile", "coder")
+        self.assertTrue((profile / "skills" / SKILL_NAME).is_dir())
+        code, out, err = self.run_uninstall("--scope", "user", "--target", "hermes", "--profile", "coder")
+        self.assertEqual(code, 0, out + err)
+        self.assertFalse((profile / "skills" / SKILL_NAME).exists())
+
+    def test_dest_is_removed_the_same_way(self):
+        dest = self.tmp / "私の skills"
+        self.run_install("--dest", str(dest))
+        code, out, err = self.run_uninstall("--dest", str(dest))
+        self.assertEqual(code, 0, out + err)
+        self.assertFalse((dest / SKILL_NAME).exists())
+        self.assertTrue(dest.is_dir())
+
+    def test_a_different_installed_copy_is_removed_only_when_it_is_a_skill_directory(self):
+        self.run_install("--scope", "user", "--target", "opencode")
+        edited = self.home / ".config" / "opencode" / "skills" / SKILL_NAME / "SKILL.md"
+        edited.write_text("手元の版\n", encoding="utf-8")
+        before = tree(self.home)
+        code, out, _ = self.run_uninstall("--scope", "user", "--target", "opencode", "--dry-run")
+        self.assertEqual(code, 0)
+        self.assertEqual(tree(self.home), before)
+        self.assertIn("remove", out)
 
 
 if __name__ == "__main__":
