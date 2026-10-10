@@ -2,7 +2,7 @@
 
 各環境での Skill の扱いと、環境ごとの注意をまとめます。インストールのコマンドは、[インストール](installation.md)にあります。
 
-仕様の確認日は 2026-09-29 です。各製品の仕様は変わりやすく、確認日以降に変わる可能性があります。このため、公式資料で確認できた範囲だけを書き、確認できなかった項目は「未確認」としています。
+仕様の確認日は 2026-09-29 です。OpenCode と Hermes Agent は 2026-10-10 で、確認した版と範囲は[OpenCode と Hermes Agent の対応確認](opencode-hermes-checks.md)にあります。各製品の仕様は変わりやすく、確認日以降に変わる可能性があります。このため、公式資料で確認できた範囲だけを書き、確認できなかった項目は「未確認」としています。
 
 ## 対応表
 
@@ -19,6 +19,8 @@
 | Gemini CLI | あり | `.agents/skills/`、`.gemini/skills/` | `~/.agents/skills/`、`~/.gemini/skills/` | 不要 | 同じ階層では `.agents/skills` が優先。`/skills list` で確認 |
 | Antigravity IDE | あり | `.agents/skills/`(旧 `.agent/skills/` も互換) | `~/.gemini/config/skills/`(旧 `~/.gemini/antigravity/skills/`) | 不要 | `/<skill-name>` で呼べる |
 | Antigravity CLI | あり | `.agents/skills/` | `~/.gemini/antigravity-cli/skills/` | 不要 | `~/.agents/skills` は自動では読まれないとする記述あり(Codelab)。未確認 |
+| OpenCode | あり | `.opencode/skills/`、`.claude/skills/`、`.agents/skills/`(作業ディレクトリから git の根まで探索) | `~/.config/opencode/skills/`(`$OPENCODE_CONFIG_DIR` も探索)、`~/.claude/skills/`、`~/.agents/skills/` | 不要 | `skill` ツールで読み込む。配置先の解決と配置の検証は確認済み。OpenCode 本体での検出・読み込みと、モデルを介した動作は未確認([OpenCode](#opencode)) |
+| Hermes Agent | あり | `.hermes/skills/`、`.agents/skills/`(`hermes skills trust` が要る) | `$HERMES_HOME/skills/`(既定 `~/.hermes/skills/`。プロファイルごとに別) | 不要 | `/<skill-name>`、`hermes -s`。検出、本文と参照資料の読み込み、同梱スクリプトの実行を、Hermes 本体の CLI と関数で確認済み。モデルを介した動作は未確認([Hermes Agent](#hermes-agent)) |
 
 ※1 2026-09-29 に、Plus プランのアカウントで、実際に確認しました。
 
@@ -34,6 +36,9 @@ OpenAI ヘルプセンターの記事は、自動取得できませんでした�
 - Gemini Apps の `scripts/` の扱いと、ZIP の可否
 - Copilot のプラン条件
 - Antigravity の `~/.agents/skills`
+- OpenCode と Hermes Agent の、モデルを介した動作(Skill が選ばれ、依頼のスクリプトが実行されるか)
+- OpenCode 2.0.20 が `.claude/skills` と `.agents/skills` を読むか
+- Hermes Agent の Docker、SSH、Modal、Daytona、Singularity での動作
 
 ## ChatGPT Work
 
@@ -168,6 +173,103 @@ Skill が有効になるときは、名前と参照するディレクトリを�
 
 ワークスペースは、IDE と同じ `.agents/skills/` です。グローバルは `~/.gemini/antigravity-cli/skills/` で、IDE とは異なります。IDE と CLI の両方に入れる場合は `--target antigravity` を使います。
 
+## OpenCode
+
+OpenCode は、`skill` ツールで Skill を読み込みます。ツールの説明に、Skill の名前と `description` が並びます。Agent が必要と判断したときに、本文が読み込まれます。
+
+配置先は、プロジェクトでは `.opencode/skills/`、ユーザー全体では `~/.config/opencode/skills/` です。`XDG_CONFIG_HOME` と `OPENCODE_CONFIG_DIR` で変わります。導入、更新、検証のコマンドと配置先の決め方は、[インストール](installation.md#opencode-と-hermes-agent-に入れる)にあります。
+
+OpenCode は、`.agents/skills/` と `.claude/skills/` も読みます(公式文書)。そこにも同じ Skill があると、重複します。OpenCode は、同名のうち 1 つしか使いません。
+
+### 呼び出す
+
+明示的に Skill を呼ぶ構文は、公式資料に見つけられませんでした。依頼に Skill の名前を書きます。`permission.skill` が `deny` だと、Skill は Agent から見えません。`ask` だと、読み込むときに承認を求められます。
+
+モードの指定は、依頼に書きます。次の依頼は、書き方の例で、動作は確かめていません。
+
+```text
+japanese-readability-editor を使って、モード A で、この調査結果を技術レポートにまとめて。
+```
+
+```text
+japanese-readability-editor を使って、モード B で、README.md を読みやすく直して。
+```
+
+```text
+japanese-readability-editor を使って、モード C で、docs/design.md の段落だけ分けて。
+```
+
+### Python と依存
+
+Python 3.10 以上が必要です。標準ライブラリだけで動きます。SudachiPy は任意で、入っていなければ標準ライブラリの経路で動きます([SudachiPy を入れる](installation.md#sudachipy-を入れる任意))。Skill は、手元の Python に SudachiPy を断りなく入れません。
+
+### うまくいかないとき
+
+| 症状 | 確かめること |
+|---|---|
+| Skill が見つからない | `python3 tools/verify_install.py --scope user --target opencode` で、配置先と中身を確かめる。`opencode debug paths` の `config` が、配置先の親と一致するか。OpenCode を開き直す。プロジェクトに入れたなら、そのプロジェクトの中で起動しているか。`permission.skill` が `deny` でないか。`OPENCODE_DISABLE_EXTERNAL_SKILLS` を設定していると、`.claude/skills/` と `.agents/skills/` の Skill は読まれない |
+| `name` が合わない | `name` は `japanese-readability-editor` で、ディレクトリ名と一致しなければならない。ディレクトリ名を変えない |
+| 重複の警告が出る | `verify_install.py` が、重複する場所を示す。残す 1 か所を決め、ほかは利用者が削除する。ツールは削除しない |
+| 参照資料やスクリプトに届かない | `skill` ツールの出力にある `Base directory for this skill` を確かめる。`scripts/` などの相対パスは、そこからの相対になる。Agent がプロジェクトのディレクトリで相対パスのまま実行して失敗するなら、基準のディレクトリの絶対パスを使うよう頼む |
+| スクリプトが実行できない | `python3 --version` が 3.10 以上か(Windows は `python`)。`verify_install.py` が、スクリプトを外のディレクトリから実行して、失敗した理由を示す。Agent のシェルの権限(`bash` ツール)が許可されているか |
+| skills ディレクトリに別の `.md` が Skill になる | v2 のソースは、skills ディレクトリの直下の `.md` も Skill として読む。配布物の `INSTALL.md` を、skills ディレクトリに置かない |
+
+### 確認した版と未検証
+
+2026-10-10 に、公式文書と `sst/opencode` のソース(`055d95bb7e27`)を確認しました。手元の `opencode 2.0.20` では、設定ディレクトリの解決とインストーラの一致を確かめました。Skill の発見、読み込み、スクリプトの実行は、実機では確かめていません。`opencode run` が起動するローカルサーバを、実行環境が許可せず、モデルの認証情報もなかったためです。詳しくは[確認の記録](opencode-hermes-checks.md#opencode-2020)にあります。
+
+## Hermes Agent
+
+Hermes Agent は、Skill をホーム(`~/.hermes`)の `skills/` に置きます。Agent は `skills_list()` で一覧を、`skill_view(name)` で本文を、`skill_view(name, path)` で参照資料を読みます。
+
+配置先は、ホームの決まり方で変わります。`HERMES_HOME`、プロファイル(`hermes -p`、`hermes profile use`)、既定の `~/.hermes` の順に、実際に使われるホームを解決して、表示します。解決の順番と、プロジェクトに入れるときの `hermes skills trust` は、[インストール](installation.md#hermes-agent-の配置先)にあります。
+
+Hermes は、同名の Skill が複数あると、プロジェクト、プロファイル、`skills.create_dir`、`skills.external_dirs` の順で上位を使い、下位を隠します。
+
+### 呼び出す
+
+セッションの中では、`/japanese-readability-editor` で呼べます。メッセージの先頭に Skill を書くと、残りが依頼になります。端末からは、`-s` で Skill を読み込んで開始できます。
+
+```text
+/japanese-readability-editor モード C
+docs/design.md に適用して。
+```
+
+```bash
+hermes chat -s japanese-readability-editor -q "モード B で README.md を読みやすく直して"
+```
+
+モード A の依頼は、`モード A で、この調査結果を技術レポートにまとめて` のように書きます。上の依頼は書き方の例で、動作は確かめていません。
+
+Skill を読み込んだときのメッセージに、`[Skill directory: <絶対パス>]` が入ります。`scripts/` などの相対パスは、その場所からの相対です。
+
+### Python と依存
+
+Python 3.10 以上が必要です。標準ライブラリだけで動きます。SudachiPy は任意です。ターミナルが Docker、SSH、Modal、Daytona のときは、スクリプトはその環境で動くので、Python もその環境のものが対象です。
+
+### ターミナルが手元ではないとき
+
+Docker と Singularity は、`~/.hermes` の Skill を bind mount します。SSH、Modal、Daytona は、セッションの間に `~/.hermes` の状態を送ります。どれも、ソースの読み取りです。実機では確かめていません。
+
+- Skill は、複製で入れます。シンボリックリンクは送られません。
+- 確かめるには、その環境の中で、`[Skill directory: ...]` のパスに、`SKILL.md`、`scripts/`、`data/` があるかを見ます。`python3 --version` が 3.10 以上かも、その環境で確かめます。
+- SSH、Modal、Daytona では、Hermes は終了時に、送った状態の変更を手元へ戻します(文書による)。Agent がリモートで Skill を書き換えると、手元のファイルが変わることがあります。
+
+### うまくいかないとき
+
+| 症状 | 確かめること |
+|---|---|
+| Skill が見つからない | `hermes skills list` に出るか。プロファイルを使っているなら、同じ `-p` を付ける。`python3 tools/verify_install.py --scope user --target hermes` が、解決したホームを示す。`hermes profile use` で選んだプロファイルは、`active_profile` に従う。セッションを開き直す |
+| プロジェクトの Skill が出ない | `hermes skills trust` を、そのリポジトリの中で実行したか。プロジェクトの根は、`.git` を持つ最も近い祖先。`skills.project_discovery: false` にしていないか |
+| 同名の Skill が隠れている | 上位の Skill が下位を隠す。同じ階層に内容の違う同名が 2 つあると、曖昧としてエラーになる。`verify_install.py` が重複を示す |
+| `hermes skills install` で入れたら検査が動かない | `data/` と `scripts/kokugo_engine.py` が入らない。`tools/install.py` で入れ直す |
+| 参照資料やスクリプトに届かない | 読み込みメッセージの `[Skill directory: ...]` を確かめる。ターミナルが手元でなければ、その環境の中で、パスが存在するか。複製で入れているか |
+| スクリプトが実行できない | `terminal` のツールセットが有効か(`hermes chat --toolsets` で確かめる)。`python3 --version` が 3.10 以上か。`verify_install.py` が、スクリプトを外のディレクトリから実行して、失敗した理由を示す |
+
+### 確認した版と未検証
+
+2026-10-10 に、公式文書と `NousResearch/hermes-agent` のソース(`46d7718a52ff`)を確認しました。手元の `Hermes Agent v0.21.0 (2026.8.31)` では、`hermes skills list`、`hermes skills trust`、Skill の読み込み、参照資料の読み込み、`[Skill directory]` のパスからのスクリプトの実行を、隔離した `HERMES_HOME` で確かめました。モデルを介した動作と、手元ではないターミナルの backend は、確かめていません。詳しくは[確認の記録](opencode-hermes-checks.md#hermes-agent-v0210)にあります。
+
 ## 参照した公式資料
 
 - [Agent Skills specification](https://agentskills.io/specification)
@@ -181,3 +283,9 @@ Skill が有効になるときは、名前と参照するディレクトリを�
 - [Gemini CLI: Agent Skills](https://geminicli.com/docs/cli/skills/)
 - [Antigravity: Agent Skills](https://antigravity.google/docs/skills)
 - [Gemini Apps Help: The transition from Gems to skills](https://support.google.com/gemini/answer/18560919?hl=en)
+- [OpenCode: Agent Skills](https://opencode.ai/docs/skills/)
+- [OpenCode: Config](https://opencode.ai/docs/config/)
+- [Hermes Agent: Skills System](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills)
+- [Hermes Agent: Profiles](https://hermes-agent.nousresearch.com/docs/user-guide/profiles)
+- [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent)
+- [sst/opencode](https://github.com/sst/opencode)

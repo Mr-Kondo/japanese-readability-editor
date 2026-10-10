@@ -5,7 +5,8 @@
     python3 tools/uninstall.py --scope workspace --target common
     python3 tools/uninstall.py --scope user --target claude-code --include-backups
 
-配置先の決め方は install.py と同じ(--scope、--target、--workspace、--home)。
+配置先の決め方は install.py と同じ(--scope、--target、--workspace、--home、--dest、--hermes-home、--profile、
+--opencode-config-dir)。インストールしたときと同じ値を指定する。
 
 削除するのは、各配置先の japanese-readability-editor/ だけ。
   - --link で入れたものは、リンクだけを削除する。リンク先の正本は残る。
@@ -31,8 +32,8 @@ from typing import List, Optional
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from install import (Destination, Outcome, add_location_arguments, backup_root, is_safe_to_remove,  # noqa: E402
-                     parse_targets, resolve_destinations)
+from install import (Destination, Outcome, add_location_arguments, backup_root, destinations_from_args,  # noqa: E402
+                     is_safe_to_remove)
 from validate_skill import EXPECTED_NAME, default_skill_dir  # noqa: E402
 
 BACKUP_NAME = re.compile(rf"^{re.escape(EXPECTED_NAME)}-\d{{8}}-\d{{6}}$")
@@ -114,10 +115,8 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: Optional[List[str]] = None) -> int:
     args = build_parser().parse_args(argv)
-    workspace = (args.workspace or Path.cwd()).resolve()
-    home = (args.home or Path.home()).resolve()
     try:
-        destinations = resolve_destinations(args.scope, parse_targets(args.target), workspace, home)
+        destinations = destinations_from_args(args)
     except ValueError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

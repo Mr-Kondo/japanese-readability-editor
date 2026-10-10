@@ -29,6 +29,8 @@ japanese-readability-editor/
 ├── tools/
 │   ├── install.py
 │   ├── uninstall.py
+│   ├── verify_install.py                  # 配置した Skill の検証(構造、メタデータ、内容、実行、依存、重複)
+│   ├── skill_env.py                       # OpenCode と Hermes の配置先の解決、同名 Skill の探索、内容の比較
 │   ├── package.py
 │   ├── validate_skill.py
 │   ├── update_kokugo_sources.py           # 公式資料の照合・抽出(ネットワークを使う唯一のコード)
@@ -58,9 +60,11 @@ japanese-readability-editor/
 | `scripts/kokugo_engine.py` | 検査エンジン(保護対象の判定、検出、区分の決定)。単独では実行しない |
 | `scripts/validate_kokugo_rules.py` | 規則データの検証(読み取り専用) |
 | `assets/kokugo-cases.md` | 国語の表記の修正例と、変更してはいけない反例 |
-| `tools/install.py` | 各環境の配置先へコピーまたはリンクする |
+| `tools/install.py` | 各環境の配置先へコピーまたはリンクする。内容が同じなら何もせず、違う既存のものは上書きしない。OpenCode と Hermes の配置先は `skill_env.py` で解決し、同名 Skill の重複を警告する |
 | `tools/uninstall.py` | `install.py` で配置したものを、配置先から削除する。配置先の決め方は `install.py` と共有する |
-| `tools/package.py` | ZIP、SHA-256、Gemini Apps 向けの出力を生成する |
+| `tools/verify_install.py` | 配置した Skill を検証する。スクリプトを、Skill でもリポジトリでもない、空白と日本語を含むディレクトリから実行する(何も変更せず、何もインストールしない) |
+| `tools/skill_env.py` | OpenCode と Hermes の配置先の解決(環境変数は引数で受ける)、同名 Skill の探索、正本との内容の比較。`install.py`、`uninstall.py`、`verify_install.py`、`package.py` が使う |
+| `tools/package.py` | ZIP、SHA-256、Gemini Apps 向けの出力、OpenCode と Hermes 向けの配布物を生成する |
 | `tools/validate_skill.py` | Skill の構造と互換性を検証する |
 | `tools/update_kokugo_sources.py` | 公式資料を取得して SHA-256 を照合する(`verify`)。PDF から常用漢字表と異字同訓のデータを作る(`extract-*`)。Skill の外にあり、配布物には入らない |
 | `tools/render_kokugo_docs.py` | `references/kokugo-notation.md`(規則の一覧)と `references/kokugo-sources.md`(出典)を、規則データから生成する。`--check` で最新かを確かめる。この2つの文書は手で書き換えない |
@@ -81,12 +85,16 @@ dist/
 ├── japanese-readability-editor.zip          # ChatGPT Work / Claude Cowork のアップロード用
 ├── japanese-readability-editor.sha256
 ├── gemini-apps-instructions.md              # Gemini Apps の Gem / Custom Instructions 用
-└── gemini-apps/japanese-readability-editor/ # Gemini Apps の Skills 用(scripts/ なし)
+├── gemini-apps/japanese-readability-editor/ # Gemini Apps の Skills 用(scripts/ なし)
+├── opencode/                                # OpenCode 用。japanese-readability-editor/ と INSTALL.md
+└── hermes/                                  # Hermes Agent 用。japanese-readability-editor/ と INSTALL.md
 ```
 
 ZIP の最上位は `japanese-readability-editor/` の1フォルダです。その直下に、`SKILL.md`、`references/`、`scripts/`、`data/`、`assets/` が入ります。Gemini Apps 向けのフォルダは、実行できない `scripts/` と、その入力にしか使わない `data/` を含めません。ZIP のルートへ直接 `SKILL.md` を置く構造ではありません。
 
 ZIP は再現可能で、同じ入力からは同じ SHA-256 になります。`--no-gemini-apps` で、Gemini Apps 向けの出力を省けます。
+
+`dist/opencode/` と `dist/hermes/` の `japanese-readability-editor/` は、正本の完全な複製です。環境ごとに変えるのは、配置先とコマンドを書いた `INSTALL.md` だけで、Skill の本文は複製しません。生成のたびに、`verify_install.py` と同じ検証(正本との一致を含む)を行い、失敗すると終了コード 1 です。`--bundle opencode` のように対象を選べ、`--no-agent-bundles` で省けます。
 
 `v` で始まるタグを GitHub に push すると、Actions が Release を作ります(`.github/workflows/release.yml`)。Release は、[Releases のページ](https://github.com/Mr-Kondo/japanese-readability-editor/releases)で公開されます。添付されるものと、ダウンロードの方法は、[インストール](installation.md#アップロード型の環境に入れる)にあります。
 
@@ -128,6 +136,9 @@ python3 -m unittest discover -s tests -v
 - モード C の厳密な確認と、モード B の意味保存の回帰(`test_kokugo_modes.py`)
 - `assets/kokugo-cases.md` の例と、実際の検査結果の一致(`test_kokugo_cases.py`)
 - `validate_skill.py`、`install.py`、`uninstall.py`、`package.py`
+- `skill_env.py`(OpenCode と Hermes の配置先の解決、プロファイルと `active_profile`、`config.yaml` の読み取り、同名 Skill の探索、内容の比較)と、`install.py` の OpenCode と Hermes の対応(冪等性、内容が違う既存のものの保護、`--dest`、空白と日本語を含むパス、環境変数と `--home`)
+- `verify_install.py`(壊れた配置の検出、対象の環境ごとのメタデータ、リポジトリの外からのスクリプトの実行)と、配置した複製が正本と同じ出力を返すこと
+- `compare_rewrite.py` の SudachiPy がない経路と、`tokenizer` の表示(`test_tokenizer_modes.py`。SudachiPy が入っている環境でも、import を塞いだ別プロセスで試す)
 - `SKILL.md` の `description`(要件で挙げたトリガー語と、除外する入力を含むか、200字以内か)
 - `SKILL.md` と references の、意味を保つための指示と、モードの指定の指示が消えていないか。`SKILL.md` の行数が、`tests/test_skill_guards.py` の `MAX_SKILL_LINES` 以内か
 - `.claude-plugin/` の定義(正本を指し、Skill を複製していないか)
@@ -135,3 +146,5 @@ python3 -m unittest discover -s tests -v
 CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で、Skill の検証、国語の規則データの検証、テスト、パッケージ生成を実行します。
 
 Ubuntu では、Python 3.10 と最新版で試し、2つのジョブでは SudachiPy を入れて試します。辞書は、一方が core、もう一方が small です。`compare_rewrite.py` の SudachiPy を使うテストは、SudachiPy が入っている環境だけで実行します。
+
+テストは、利用者の Python 環境に何も入れません。SudachiPy がない経路は、入っていない仮想環境、または import を塞いだ別プロセスで試します。ある経路は、SudachiPy が入っている環境で実行します。OpenCode と Hermes の配置先のテストは、一時ディレクトリの `--home`、または一時ディレクトリを指す `HOME` だけを使います。利用者の `HERMES_HOME` などの環境変数が混ざらないよう、子プロセスから外しています。

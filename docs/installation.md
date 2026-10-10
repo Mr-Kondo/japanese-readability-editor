@@ -56,7 +56,11 @@ python3 tools/install.py --scope user --target all --dry-run
 | Codex、Copilot、Gemini CLI | `--scope user --target common` | `--scope workspace --target common` |
 | Claude Code | `--scope user --target claude-code` | `--scope workspace --target claude-code` |
 | Antigravity(IDE と CLI) | `--scope user --target antigravity` | `--scope workspace --target common` |
+| OpenCode | `--scope user --target opencode` | `--scope workspace --target opencode` |
+| Hermes Agent | `--scope user --target hermes` | `--scope workspace --target hermes`(使う前に `hermes skills trust` が要る) |
 | すべて | `--scope user --target all` | `--scope workspace --target all` |
+
+`all` に、OpenCode と Hermes Agent は含みません。使っていない製品の設定ディレクトリを、ホームに作らないためです。OpenCode と Hermes の導入は、「[OpenCode と Hermes Agent に入れる](#opencode-と-hermes-agent-に入れる)」にあります。
 
 たとえば、Codex と Claude Code をユーザー全体で使う場合は、次のとおりです。
 
@@ -90,17 +94,133 @@ python3 tools/install.py --scope workspace --target all --workspace /path/to/pro
 | `antigravity-ide` | `.agents/skills/` | `~/.gemini/config/skills/` |
 | `antigravity-cli` | `.agents/skills/` | `~/.gemini/antigravity-cli/skills/` |
 | `antigravity` | `.agents/skills/` | 上の2つ(IDE と CLI) |
-| `all` | `.agents/skills/` と `.claude/skills/` | `common`、`claude-code`、`antigravity-ide`、`antigravity-cli` の配置先 |
+| `opencode` | `.opencode/skills/` | `$OPENCODE_CONFIG_DIR`、`$XDG_CONFIG_HOME/opencode`、`~/.config/opencode` の `skills/`([詳細](#opencode-の配置先)) |
+| `hermes` | `.hermes/skills/` | Hermes のホームの `skills/`(`HERMES_HOME`、プロファイル、`~/.hermes`。[詳細](#hermes-agent-の配置先)) |
+| `all` | `.agents/skills/` と `.claude/skills/` | `common`、`claude-code`、`antigravity-ide`、`antigravity-cli` の配置先。`opencode` と `hermes` は含まない |
 
 各製品が Skill を探す場所は、ほかにもあります。一覧は、[環境別の対応](environments.md#対応表)にあります。
 
 ### 安全な挙動
 
-- 既にある場合は、何もしません(`--on-conflict skip`、既定)。
-- `--on-conflict backup` は、既存のものを `skills.bak/` へ退避してから配置します。退避先は Skill の探索先の外です。
-- `--on-conflict overwrite` は、既存のものを削除して配置します。`SKILL.md` を持たないディレクトリは、削除を拒否します。
+- 配置先の内容が正本と同じなら、何もしません。`--on-conflict` の値によらず、再実行しても退避や書き込みは起きません(`up to date` と表示します)。
+- 内容が違うものが既にある場合も、何もしません(`--on-conflict skip`、既定)。違うファイルの名前(`missing`、`extra`、`changed`)を表示します。
+- `--on-conflict backup` は、内容の違う既存のものを `skills.bak/` へ退避してから配置します。退避先は Skill の探索先の外で、退避したものは、そのまま元の場所へ戻せます。
+- `--on-conflict overwrite` は、内容の違う既存のものを削除して配置します。`SKILL.md` を持たないディレクトリは、削除を拒否します。
 - 配置は、複製が終わってから所定の場所へ移すので、途中で失敗しても中途半端なものを残しません。
-- 既定はコピーです。`--link` でシンボリックリンクにできます。Windows では権限が必要な場合があります。
+- 既定はコピーです。`--link` でシンボリックリンクにできます。Windows では権限が必要な場合があります。Hermes の Docker や SSH などの backend には、リンクは送られません(Hermes のソースの読み取り。実機では未確認)。
+- コピーで配置した直後(`--link` のときを除く)に、構造、メタデータ、参照先、正本との一致を確かめます(`verify   OK`)。スクリプトまで実行して確かめるには、「[配置した Skill を検証する](#配置した-skill-を検証する)」を使います。
+
+## OpenCode と Hermes Agent に入れる
+
+どちらも、先に `--dry-run` で、配置先と決め方を確かめます。何も書き込みません。
+
+```bash
+python3 tools/install.py --scope user --target opencode --dry-run
+python3 tools/install.py --scope user --target hermes --dry-run
+```
+
+出力の `decided by:` に、配置先をどう決めたかが出ます。問題がなければ、`--dry-run` を外します。
+
+```bash
+python3 tools/install.py --scope user --target opencode
+python3 tools/install.py --scope user --target hermes
+```
+
+配置先のパスは、空白や日本語を含んでいてもかまいません。
+
+### OpenCode の配置先
+
+| 範囲 | 配置先 | 読まれる条件 |
+|---|---|---|
+| プロジェクト | `<プロジェクト>/.opencode/skills/japanese-readability-editor/` | OpenCode を、そのプロジェクトの中(git の worktree の中)で起動したとき |
+| ユーザー全体 | 下の順で決まる `skills/japanese-readability-editor/` | 常に |
+
+ユーザー全体の配置先は、次の順に決めます。先に当てはまったものを使います。
+
+1. `--opencode-config-dir PATH` の `PATH/skills/`
+2. 環境変数 `OPENCODE_CONFIG_DIR` の `skills/`
+3. 環境変数 `XDG_CONFIG_HOME` の `opencode/skills/`
+4. `~/.config/opencode/skills/`
+
+OpenCode は、`XDG_CONFIG_HOME` の設定ディレクトリと `OPENCODE_CONFIG_DIR` の両方を探します。どちらに置いても読まれます(`OPENCODE_CONFIG_DIR` は公式文書、`XDG_CONFIG_HOME` と両方を探す点は OpenCode 1.x 系のソースによる。手元の 2.0.20 では確かめていません)。
+
+OpenCode は、`.agents/skills/` と `.claude/skills/` も読みます(公式文書)。`--target common` や `claude-code` で入れた Skill も、OpenCode から見えます。そこに入れてあるなら、OpenCode のために入れ直す必要はありません。両方に置くと、同名の Skill が重複します。
+
+### Hermes Agent の配置先
+
+ユーザー全体の配置先は、実際に使われる Hermes のホームの `skills/` です。ホームは、次の順に決めます。先に当てはまったものを使います。Hermes 本体の決め方に合わせています。
+
+1. `--hermes-home PATH` の `PATH/skills/`
+2. `--profile NAME` のプロファイル(`<根>/profiles/NAME/skills/`。`default` は根)。プロファイルが存在しないときは、何も書かずに終わります
+3. 環境変数 `HERMES_HOME` が `profiles/<名前>` を指しているなら、そのプロファイル
+4. `<根>/active_profile` に `default` 以外の名前があれば(`hermes profile use` で決めたもの)、そのプロファイル
+5. 環境変数 `HERMES_HOME`
+6. `~/.hermes/skills/`(Windows は `%LOCALAPPDATA%\hermes\skills\`)
+
+`--home` を指定したときは、`HERMES_HOME` と `XDG_CONFIG_HOME` などの環境変数を使いません。別のホームを丸ごと指定したものとして扱います。配置先は、実行のたびに表示します。
+
+プロファイルは、別の Skill の置き場を持ちます。使っているプロファイルとは別のプロファイルに入れた Skill は、そのプロファイルで Hermes を起動するまで見えません。
+
+プロジェクトに入れるときは、`--scope workspace --target hermes` で、`<プロジェクト>/.hermes/skills/` に置きます。Hermes は、`.git` を持つ最も近い祖先を、プロジェクトの根とします。リポジトリを信頼するまで、読み込みません。信頼は利用者の判断なので、このツールは実行しません。
+
+```bash
+cd /path/to/project
+hermes skills trust
+```
+
+Hermes のターミナルが Docker、SSH、Modal、Daytona のときも、Skill は複製で入れます。`hermes skills install` では入れられません。取り込む範囲に `data/` が入らず、国語の検査が動かなくなるためです。手元の v0.21.0 で確かめたのは URL 経由の取り込みで、GitHub の識別子を使う経路は、文書の記述によります([確認の記録](opencode-hermes-checks.md#判断))。
+
+### 配置先を直接指定する
+
+`--dest DIR` は、skills ディレクトリを直接指定します。`DIR/japanese-readability-editor/` に置きます。`--scope` の代わりに使います。
+
+```bash
+python3 tools/install.py --dest "/path with spaces/skills" --target opencode
+```
+
+`--target` は、`opencode` か `hermes` を付けたときだけ、検証と重複の確認の基準になります。
+
+### 重複を確かめる
+
+同じ Skill が、その製品の別の探索先でも見つかると、`warn` で知らせます。内容が正本と同じか違うかも示します。何も削除しません。どれを残すかは、利用者が決めます。
+
+- OpenCode: `.claude/skills/`、`.agents/skills/`、`.opencode/skills/`、設定ディレクトリの `skills/`。プロジェクトは、作業ディレクトリから git の根まで見ます。OpenCode は、同名のうち 1 つしか使いません。どれが使われるかは、当てになりません。
+- Hermes: ホームの `skills/`、`config.yaml` の `skills.external_dirs` と `skills.create_dir`、信頼したプロジェクトの `.hermes/skills/` と `.agents/skills/`。Hermes は、プロジェクト、プロファイル、`create_dir`、`external_dirs` の順で上位を使い、下位を隠します。同じ階層に内容の違うものが 2 つあると、曖昧としてエラーになります。
+
+### 配置した Skill を検証する
+
+`tools/verify_install.py` は、配置した Skill を検証します。何も変更せず、何もインストールしません。
+
+```bash
+python3 tools/verify_install.py --scope user --target opencode
+python3 tools/verify_install.py --scope user --target hermes --profile coder
+python3 tools/verify_install.py "/path/to/skills/japanese-readability-editor" --target hermes
+```
+
+| 検証 | 内容 |
+|---|---|
+| 構造とメタデータ | `SKILL.md` の名前と形式、`name` とディレクトリ名の一致、`SKILL.md` が参照するファイルの存在、公式仕様の制約(名前の形式、`description` の長さ) |
+| 内容 | 正本との差。ファイルの欠け、余分なファイル、内容の違い |
+| 実行 | カレントディレクトリが Skill でもリポジトリでもない、空白と日本語を含むディレクトリから、5 つのスクリプト(`measure.py`、`verify_preservation.py`〈通常と `--strict`〉、`compare_rewrite.py`、`check_kokugo.py`、`validate_kokugo_rules.py`)を実行する。`--no-run` で省く |
+| 依存 | Python 3.10 以上か。SudachiPy が入っているか(`tokenizer` で分かる)。入れはしない |
+| 重複 | 同じ Skill が別の探索先にないか |
+
+終了コードは、問題なしなら 0、誤りがあれば 1、引数が不正なら 2 です。警告(古い版、重複)では、1 にしません。正本との比較を省くときは、`--no-source` を付けます。正本との差を誤りとして扱うときは、`--strict-source` を付けます。実行するスクリプトの Python は、`verify_install.py` を動かした Python です。エージェントが使う Python で実行してください。
+
+### リポジトリなしで入れる
+
+`python3 tools/package.py` は、`dist/opencode/` と `dist/hermes/` に、配布物を作ります。どちらも、Skill のフォルダ(正本の完全な複製)と、配置先とコマンドを書いた `INSTALL.md` からなります。作ったあとに、`verify_install.py` で検証します。
+
+```text
+dist/opencode/
+├── INSTALL.md
+└── japanese-readability-editor/
+dist/hermes/
+├── INSTALL.md
+└── japanese-readability-editor/
+```
+
+リポジトリを取得している別の場所で配布物を作り、フォルダごと、対象のマシンの skills ディレクトリへコピーします。`INSTALL.md` は、skills ディレクトリに置きません。
 
 ## 動作を確認する
 
@@ -113,6 +233,8 @@ python3 tools/install.py --scope workspace --target all --workspace /path/to/pro
 | Gemini CLI | `/skills list`、または端末で `gemini skills list`。追加した直後は `/skills reload` |
 | Antigravity | `/japanese-readability-editor` で呼べる |
 | GitHub Copilot | 公式資料に確認方法の記載を見つけられなかったため、次の依頼で試す |
+| OpenCode | 一覧するコマンドは、手元の 2.0.20 では見つけられなかった。`python3 tools/verify_install.py --scope user --target opencode` で配置を確かめ、依頼して試す |
+| Hermes Agent | `hermes skills list` の一覧に出る。セッションで `/japanese-readability-editor` を呼べる。プロファイルを使うなら、同じ `-p` を付ける |
 
 どの環境でも、実際に依頼して確かめられます。
 
@@ -164,6 +286,8 @@ Skill は、利用者の手元の環境には、SudachiPy を断りなく入れ�
 | 環境 | 入れ方 |
 |---|---|
 | Codex、Claude Code、GitHub Copilot(CLI とエディタ)、Gemini CLI、Antigravity | 先に、手元の Python に入れておく(下のコマンド) |
+| OpenCode、Hermes Agent(ターミナルが手元) | 先に、手元の Python に入れておく(下のコマンド)。入っていなければ、標準ライブラリで動く |
+| Hermes Agent(ターミナルが Docker、SSH、Modal、Daytona) | その環境の Python が対象。入っていなければ、標準ライブラリで動く。入れるかどうかは、利用者が決める(未確認) |
 | ChatGPT Work | Skill の指示で、エージェントが実行中に入れる。ネットワークを使える権限が必要([実機確認](chatgpt-work-checks.md#sudachipy-の導入)) |
 | Claude のアプリ(Cowork を含む) | Skill の指示で、エージェントが実行中に入れる。入らなければ、標準ライブラリで動く(未確認。下の注) |
 | Copilot のクラウドエージェント | `.github/workflows/copilot-setup-steps.yml` で、先に入れておく |
@@ -206,6 +330,23 @@ git pull
 python3 tools/install.py --scope user --target all --on-conflict backup
 ```
 
+内容が変わっていなければ、`--on-conflict backup` を付けても、退避は作りません。変わったときだけ、以前のものを `skills.bak/` へ退避して、置き直します。
+
+退避したものは、元の場所へ戻せば復元できます。インストーラの出力に、退避先の名前(`japanese-readability-editor-<日時>`)が出ます。置き直したものを消してから、退避したものを戻します。
+
+```bash
+rm -r ~/.hermes/skills/japanese-readability-editor
+mv ~/.hermes/skills.bak/japanese-readability-editor-20261010-120000 ~/.hermes/skills/japanese-readability-editor
+```
+
+
+OpenCode と Hermes も、同じです。配置先を指定した引数は、インストールしたときと同じにします。
+
+```bash
+python3 tools/install.py --scope user --target opencode --on-conflict backup
+python3 tools/install.py --scope user --target hermes --on-conflict backup
+```
+
 `--link` でインストールした場合は、複製ではなく正本へのリンクなので、`git pull` だけで反映されます。ただし、リポジトリを移動すると、リンクが切れます。
 
 複製で入れたものをリンクに切り替える場合は、`--on-conflict backup` を付けます。付けないと、既にある複製を残したまま、何もせずに終わります。
@@ -242,7 +383,7 @@ claude plugin update japanese-readability-editor@japanese-readability-editor
 
 ## 削除する
 
-`tools/uninstall.py` で、配置先の `japanese-readability-editor/` を削除できます。配置先の指定は、インストーラと同じです(`--scope`、`--target`、`--workspace`、`--home`)。インストールしたときと同じ値を指定してください。
+`tools/uninstall.py` で、配置先の `japanese-readability-editor/` を削除できます。配置先の指定は、インストーラと同じです(`--scope`、`--target`、`--workspace`、`--home`、`--dest`、`--hermes-home`、`--profile`、`--opencode-config-dir`)。インストールしたときと同じ値を指定してください。
 
 まず `--dry-run` で、削除するものを確認します。何も削除しません。
 
