@@ -7,6 +7,7 @@
 - Codex、Claude Code、GitHub Copilot
 - Gemini CLI、Antigravity(IDE と CLI)
 - ChatGPT Work、Claude Cowork、Gemini Apps
+- OpenCode、Hermes Agent(Hermes は、配置、検出、読み込み、同梱スクリプトの実行までを Hermes 本体の操作で確認し、手元のローカルモデルでも試した。OpenCode は、配置と検出(4 種類の配置先)、`.opencode` に置いた Skill の `skill` ツールでの読み込みまでを OpenCode 本体で確認。どちらも、モデルを介したスクリプトの実行とモード指定は、確かめた範囲が限られる。[確認の範囲](docs/opencode-hermes-checks.md))
 
 環境ごとの差は、配置先、ZIP、生成物、ドキュメントで吸収します。Skill 本文の複製はありません。
 
@@ -40,6 +41,17 @@ Windows では、`python3` ではなく `python` で実行する場合があり�
 
 特定のプロジェクトだけに入れる方法と更新は、[インストール](docs/installation.md)にあります。削除は、下の「[削除する](#削除する)」にあります。Claude Code では、プラグインとしても入れられます([Claude Code](docs/environments.md#claude-code))。
 
+### OpenCode、Hermes Agent に入れる
+
+`--target all` には含みません。`--target opencode` か `--target hermes` を指定します。配置先は、環境変数やプロファイルで変わるので、先に `--dry-run` で、実際の配置先と決め方を確かめます。
+
+```bash
+python3 tools/install.py --scope user --target opencode --dry-run
+python3 tools/install.py --scope user --target hermes --dry-run
+```
+
+問題がなければ、`--dry-run` を外します。内容が同じなら何もせず、違う既存のものは上書きしません。配置した Skill は、`python3 tools/verify_install.py --scope user --target hermes` で、スクリプトの実行まで検証できます。配置先の決め方、プロジェクトへの導入、重複の確認は、[インストール](docs/installation.md#opencode-と-hermes-agent-に入れる)にあります。
+
 ### ChatGPT Work、Claude Cowork、Gemini Apps に入れる
 
 これらの環境は、配置先のディレクトリを持ちません。[最新の Release](https://github.com/Mr-Kondo/japanese-readability-editor/releases/latest) から生成物をダウンロードし、各製品の画面からアップロードします。環境ごとにアップロードするものと手順は、[インストール](docs/installation.md#アップロード型の環境に入れる)にあります。
@@ -71,6 +83,8 @@ Skill は、依頼の内容が `description` に合うと自動で使われま�
 | Antigravity | `/japanese-readability-editor`(`agy -p` では、指定として扱われなかった) |
 | Gemini CLI | 公式資料に、明示的に呼ぶ方法の記載がない。依頼に Skill 名を書く |
 | Gemini Apps | `/`(今後 `@`)に続けて Skill 名 |
+| OpenCode | 明示的に呼ぶ構文は、公式資料に見つからなかった。依頼に Skill 名を書く([OpenCode](docs/environments.md#opencode)) |
+| Hermes Agent | `/japanese-readability-editor`、または `hermes chat -s japanese-readability-editor -q "..."`([Hermes Agent](docs/environments.md#hermes-agent)) |
 
 3つのモードがあります。
 
@@ -137,13 +151,14 @@ python3 skill/japanese-readability-editor/scripts/check_kokugo.py document.md --
 - ChatGPT の暗黙起動は、実測では不安定でした。確実に使うには、`@` で指定してください([実測](docs/chatgpt-implicit-invocation.md))。
 - モードの指定は、Skill の指示です。環境の機能による強制ではなく、守られるかどうかは、環境とモデルによります。Codex(Medium)では、貼り付けた文章の中に「モード C」があると、指定と取り違える回がありました。Antigravity、Claude Cowork、Gemini CLI、Gemini Apps では、確かめていません([動作の確認](docs/usage.md#動作の確認))。
 - Claude のアプリで確かめたモデルは、Sonnet 5.5、Haiku 4.5、Haiku 5.5 です(2026-10-07 と 2026-10-10)。Haiku 4.5 では、Skill を読み込んでも、文体を敬体に変えるなど、規則が守られない回がありました。Haiku 5.5 では、文体と用語は保たれましたが、頼んでいない解説が付いた回がありました。回数は少なく、確かめた Skill は古い版です([モデルを選ぶ](docs/environments.md#モデルを選ぶ))。
+- OpenCode と Hermes Agent は、モデルを介した動作を、十分には確かめていません。OpenCode は、手元のローカルモデルで、Skill の発見と読み込みを確かめました。スクリプトの実行は、手順を明示した依頼の 1 回だけ成功し、普通の依頼では、実行しないモデルがありました。モード C は、確かめたモデルで守られませんでした(`verify_preservation.py --strict` が失敗)。ホスト型の主要モデルでは、確かめていません。Hermes は、本体の CLI と関数で、検出、本文と参照資料の読み込み、同梱スクリプトの実行を確かめました。手元のローカルモデルでは、`hermes chat -s japanese-readability-editor` で計測を頼むと、gemma4 で 3 回中 2 回、スクリプトが動きました。通常の依頼(2回)では動かず、qwen3-coder では `モード C` が守られませんでした。ホスト型の主要モデルでは、確かめていません。Hermes のターミナルが Docker や SSH のときも、未確認です([確認の記録](docs/opencode-hermes-checks.md))。
 - 各製品の仕様は、[環境別の対応](docs/environments.md)に書いた確認日以降に変わる可能性があります。確認できなかった項目は、同じ文書で「未確認」としています。
 
 ## ドキュメント
 
 | ファイル | 内容 |
 |---|---|
-| [docs/installation.md](docs/installation.md) | インストール、配置先、SudachiPy の入れ方、更新、削除 |
+| [docs/installation.md](docs/installation.md) | インストール、配置先、OpenCode と Hermes Agent の導入と検証、SudachiPy の入れ方、更新、削除 |
 | [docs/environments.md](docs/environments.md) | 環境ごとの対応表と注意、参照した公式資料 |
 | [docs/usage.md](docs/usage.md) | モードの指定の扱いと、動作の確認 |
 | [docs/scripts.md](docs/scripts.md) | 計測と照合のスクリプトの使い方と限界 |
@@ -151,11 +166,12 @@ python3 skill/japanese-readability-editor/scripts/check_kokugo.py document.md --
 | [docs/design.md](docs/design.md) | 設計の考え方と、参考にした記事とプロジェクト |
 | [docs/development.md](docs/development.md) | ディレクトリ構成、パッケージ生成、検証、テスト |
 
-実測の記録は、次の3つです。
+実測の記録は、次の4つです。
 
 - [ChatGPT Work の実機確認](docs/chatgpt-work-checks.md)
 - [ChatGPT Work の暗黙起動の実測](docs/chatgpt-implicit-invocation.md)
 - [モードの指定の動作確認](docs/mode-specification-checks.md)
+- [OpenCode と Hermes Agent の対応確認](docs/opencode-hermes-checks.md)
 
 ## 参考とライセンス
 

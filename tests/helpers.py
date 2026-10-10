@@ -31,12 +31,23 @@ def load_module(name: str, path: Path) -> ModuleType:
     return module
 
 
-def run_script(path: Path, *args: str, stdin: Optional[str] = None, cwd: Optional[Path] = None):
-    """スクリプトを別プロセスで実行する。(終了コード, stdout, stderr) を返す。"""
-    env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", PYTHONUTF8="1", PYTHONIOENCODING="utf-8")
+# 利用者の環境の設定が、テストの配置先の解決に混ざらないよう、子プロセスから外す変数。
+ISOLATED_ENV_VARS = ("HERMES_HOME", "HERMES_DATA_DIR_SUFFIX", "XDG_CONFIG_HOME", "OPENCODE_CONFIG_DIR",
+                     "OPENCODE_DISABLE_EXTERNAL_SKILLS", "OPENCODE_DISABLE_CLAUDE_CODE", "OPENCODE_DISABLE_CLAUDE_CODE_SKILLS")
+
+
+def run_script(path: Path, *args: str, stdin: Optional[str] = None, cwd: Optional[Path] = None,
+               env: Optional[dict] = None):
+    """スクリプトを別プロセスで実行する。(終了コード, stdout, stderr) を返す。
+
+    env を渡すと、その変数を足す(利用者の HERMES_HOME などは、渡さない限り子プロセスに引き継がない)。
+    """
+    base = {k: v for k, v in os.environ.items() if k not in ISOLATED_ENV_VARS}
+    base.update(PYTHONDONTWRITEBYTECODE="1", PYTHONUTF8="1", PYTHONIOENCODING="utf-8")
+    base.update(env or {})
     completed = subprocess.run(
         [sys.executable, str(path), *args],
-        input=stdin, capture_output=True, text=True, encoding="utf-8", cwd=cwd, env=env, timeout=60,
+        input=stdin, capture_output=True, text=True, encoding="utf-8", cwd=cwd, env=base, timeout=60,
     )
     return completed.returncode, completed.stdout, completed.stderr
 
@@ -64,6 +75,11 @@ def copy_real_skill(destination_root: Path) -> Path:
     return target
 
 
+def hermes_default_home(home: Path) -> Path:
+    """--home を指定したときの、Hermes の既定のホーム。Windows は %LOCALAPPDATA% の下(hermes_constants に合わせる)。"""
+    return home / "AppData" / "Local" / "hermes" if sys.platform == "win32" else home / ".hermes"
+
+
 def symlinks_supported() -> bool:
     """シンボリックリンクを作れる環境か。Windows では権限が要ることがある。"""
     with tempfile.TemporaryDirectory(prefix="jre-symlink-") as tmp:
@@ -83,7 +99,8 @@ def dedent(text: str) -> str:
 
 
 __all__: List[str] = [
-    "REPO_ROOT", "SKILL_NAME", "SKILL_DIR", "SCRIPTS_DIR", "TOOLS_DIR", "FIXTURES", "VALID_DESCRIPTION",
-    "load_module", "run_script", "write_skill", "copy_real_skill", "symlinks_supported", "temporary_directory",
+    "ISOLATED_ENV_VARS", "REPO_ROOT", "SKILL_NAME", "SKILL_DIR", "SCRIPTS_DIR", "TOOLS_DIR", "FIXTURES", "VALID_DESCRIPTION",
+    "load_module", "run_script", "write_skill", "copy_real_skill", "hermes_default_home", "symlinks_supported",
+    "temporary_directory",
     "dedent",
 ]
