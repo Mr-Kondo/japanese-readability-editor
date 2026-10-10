@@ -19,6 +19,7 @@ try:
     SUDACHI = compare.SudachiAnalyzer()
 except ImportError:
     SUDACHI = None
+ANALYZERS = [analyzer for analyzer in (REGEX, SUDACHI) if analyzer]  # SudachiPy がなければ regex だけで確かめる
 
 
 def run(before: str, after: str, analyzer=REGEX) -> dict:
@@ -29,6 +30,10 @@ def run(before: str, after: str, analyzer=REGEX) -> dict:
 
 def texts(items) -> list:
     return [item.text for item in items]
+
+
+def numbers(text: str, analyzer=REGEX) -> list:
+    return texts(compare.parse_document(dedent(text), "doc.md", True, analyzer).numbers)
 
 
 def changed_markers(result: dict) -> dict:
@@ -110,6 +115,106 @@ class ItemsTest(unittest.TestCase):
     def test_a_term_gone_from_the_document_is_reported_once_at_its_first_line(self):
         result = run("APIを呼ぶ。\nAPIを閉じる。\n", "関数を呼んで閉じる。\n")
         self.assertEqual([(i.line, i.text) for i in result["terms"]["missing"]], [(1, "API")])
+
+
+class NumberUnitTest(unittest.TestCase):
+    """数値の単位は、解析器によらず同じに抜き出す。単位が違えば、別の数値として挙げる。"""
+
+    def test_a_change_of_unit_prefix_is_reported(self):
+        for analyzer in ANALYZERS:
+            with self.subTest(analyzer=analyzer.name):
+                result = run("待ち時間は100ミリ秒である。\n", "待ち時間は100マイクロ秒である。\n", analyzer)
+                self.assertEqual(texts(result["numbers"]["missing"]), ["100ミリ秒"])
+                self.assertEqual(texts(result["numbers"]["added"]), ["100マイクロ秒"])
+
+    def test_katakana_units_belong_to_the_number(self):
+        cases = {
+            "100ミリ秒": "100ミリ秒", "100マイクロ秒": "100マイクロ秒", "100ナノ秒": "100ナノ秒", "100 ミリ秒": "100ミリ秒",
+            "50パーセント": "50パーセント", "5キロ": "5キロ", "5キロメートル": "5キロメートル", "3センチ": "3センチ",
+            "10ミリ": "10ミリ", "3ミリリットル": "3ミリリットル", "3キログラム": "3キログラム", "1.5メートル": "1.5メートル",
+            "2メガバイト": "2メガバイト", "1.5ギガバイト": "1.5ギガバイト", "4テラバイト": "4テラバイト", "8ビット": "8ビット",
+            "3ヘルツ": "3ヘルツ", "ﾐﾘ秒の100ﾐﾘ秒": "100ミリ秒",
+        }
+        for analyzer in ANALYZERS:
+            for text, expected in cases.items():
+                with self.subTest(analyzer=analyzer.name, text=text):
+                    self.assertEqual(numbers(text + "である。\n", analyzer), [expected])
+
+    def test_katakana_words_that_only_start_like_a_unit_are_not_units(self):
+        for text in ("3ミリオン", "3テラス", "3メガネ", "3ビットコイン", "3キロメートルズ"):
+            with self.subTest(text=text):
+                self.assertEqual(numbers(text + "である。\n"), ["3"])
+
+    def test_units_without_digits_are_not_numbers(self):
+        for analyzer in ANALYZERS:
+            with self.subTest(analyzer=analyzer.name):
+                self.assertEqual(numbers("ミリ秒単位で測る。キロやメガの単位を使う。パーセントで示す。\n", analyzer), [])
+                self.assertEqual(numbers("1. ミリ秒を測る。\n2. キロ単位に直す。\n", analyzer), [])
+
+    def test_percent_notations(self):
+        self.assertEqual(numbers("達成率は100％である。\n"), ["100%"])
+        self.assertEqual(run("達成率は100％である。\n", "達成率は100%である。\n")["numbers"], {"missing": [], "added": []})
+        # 「%」と「パーセント」は同じ量なので、書き換えても差にしない。値が違えば挙げる。
+        for analyzer in ANALYZERS:
+            with self.subTest(analyzer=analyzer.name):
+                self.assertEqual(run("達成率は100%である。\n", "達成率は100パーセントである。\n", analyzer)["numbers"],
+                                 {"missing": [], "added": []})
+                result = run("達成率は100%である。\n", "達成率は50パーセントである。\n", analyzer)
+                self.assertEqual(texts(result["numbers"]["missing"]), ["100%"])
+                self.assertEqual(texts(result["numbers"]["added"]), ["50パーセント"])
+
+    def test_currency_units(self):
+        for analyzer in ANALYZERS:
+            with self.subTest(analyzer=analyzer.name):
+                self.assertEqual(numbers("費用は100ドルと5.5ユーロである。\n", analyzer), ["100ドル", "5.5ユーロ"])
+                result = run("費用は100ドルである。\n", "費用は100ユーロである。\n", analyzer)
+                self.assertEqual(texts(result["numbers"]["missing"]), ["100ドル"])
+                self.assertEqual(texts(result["numbers"]["added"]), ["100ユーロ"])
+        for text in ("3ドルフィン", "3ユーロッパ", "3ドルビー"):  # ドル・ユーロで始まるだけの語
+            with self.subTest(text=text):
+                self.assertEqual(numbers(text + "である。\n"), ["3"])
+        self.assertEqual(numbers("ドルの相場とユーロの相場を見る。\n"), [])
+
+    def test_counter_variants_are_one_unit_and_one_value(self):
+        for analyzer in ANALYZERS:
+            with self.subTest(analyzer=analyzer.name):
+                self.assertEqual(numbers("3ヶ所、4ケ所、5カ所、6ヵ所、7箇所、8か所と、3ヶ月、4ケ月、5カ月、6ヵ月、7箇月、8か月。\n", analyzer),
+                                 ["3ヶ所", "4ケ所", "5カ所", "6ヵ所", "7箇所", "8か所", "3ヶ月", "4ケ月", "5カ月", "6ヵ月", "7箇月", "8か月"])
+                # skill が勧める「か所」「か月」への書き換えは、数値の差にしない(KOKUGO-NUM-001)。
+                result = run("3ヶ所を直す。7カ月かかる。\n", "3か所を直す。7か月かかる。\n", analyzer)
+                self.assertEqual(result["numbers"], {"missing": [], "added": []})
+                # 所と月、月と日、個数の違いは別の数値として挙げる。
+                for before, after, missing, added in (("3ヶ月", "3ヶ所", "3ヶ月", "3ヶ所"), ("3か月", "3月", "3か月", "3月"),
+                                                      ("3ヶ月", "4ヶ月", "3ヶ月", "4ヶ月")):
+                    result = run(f"期間は{before}である。\n", f"期間は{after}である。\n", analyzer)
+                    self.assertEqual((texts(result["numbers"]["missing"]), texts(result["numbers"]["added"])),
+                                     ([missing], [added]), (before, after))
+
+    def test_a_bare_ka_after_a_number_is_not_a_counter(self):
+        for text in ("3かもしれない", "3カメラ", "3ケーブル", "3箇条", "3ヶ国"):
+            with self.subTest(text=text):
+                self.assertEqual(numbers(text + "。\n"), ["3"])
+        self.assertEqual(numbers("3か4かを選ぶ。\n"), ["3", "4"])
+
+    def test_hours_are_not_clock_times(self):
+        self.assertEqual(numbers("3時間かかる。3時に始まる。\n"), ["3時間", "3時"])
+        result = run("会議は3時間である。\n", "会議は3時である。\n")
+        self.assertEqual(texts(result["numbers"]["missing"]), ["3時間"])
+        self.assertEqual(texts(result["numbers"]["added"]), ["3時"])
+
+    def test_the_kan_of_a_duration_is_not_part_of_the_unit(self):
+        self.assertEqual(numbers("30秒間待つ。5分間待つ。\n"), ["30秒", "5分"])
+        self.assertEqual(run("30秒間待つ。\n", "30秒待つ。\n")["numbers"], {"missing": [], "added": []})
+
+    def test_magnitude_markers_belong_to_the_number(self):
+        for analyzer in ANALYZERS:
+            with self.subTest(analyzer=analyzer.name):
+                self.assertEqual(numbers("費用は3万円、利用者は2.5億人、予算は1兆円である。\n", analyzer), ["3万円", "2.5億人", "1兆円"])
+                self.assertEqual(numbers("費用は1億2000万円、容量は3,000万である。\n", analyzer), ["1億", "2000万円", "3,000万"])
+                for after, expected in (("3億円", "3億円"), ("3万人", "3万人"), ("3円", "3円")):
+                    result = run("費用は3万円である。\n", f"費用は{after}である。\n", analyzer)
+                    self.assertEqual((texts(result["numbers"]["missing"]), texts(result["numbers"]["added"])),
+                                     (["3万円"], [expected]), after)
 
 
 class UnmatchedTest(unittest.TestCase):
@@ -247,6 +352,15 @@ class CommandLineTest(unittest.TestCase):
         self.assertIn("pointers (info only, not verdicts):", out)
         self.assertIn(f"{self.before}:1  missing  30秒", out)
         self.assertIn("negation: 2 -> 0", out)
+
+    def test_a_unit_prefix_change_is_reported(self):
+        self.before.write_text("待ち時間は100ミリ秒である。\n", encoding="utf-8")
+        self.after.write_text("待ち時間は100マイクロ秒である。\n", encoding="utf-8")
+        code, out, _ = run_script(SCRIPT, "--tokenizer", "regex", str(self.before), str(self.after))
+        self.assertEqual(code, 0)
+        self.assertIn("numbers: 1 missing, 1 added", out)
+        self.assertIn(f"{self.before}:1  missing  100ミリ秒", out)
+        self.assertIn(f"{self.after}:1  added    100マイクロ秒", out)
 
     def test_json_output(self):
         code, out, _ = run_script(SCRIPT, "--json", "--tokenizer", "regex", str(self.before), str(self.after))
