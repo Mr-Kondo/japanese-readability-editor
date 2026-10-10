@@ -7,7 +7,7 @@
 - Codex、Claude Code、GitHub Copilot
 - Gemini CLI、Antigravity(IDE と CLI)
 - ChatGPT Work、Claude Cowork、Gemini Apps
-- OpenCode、Hermes Agent(Hermes は、配置、検出、読み込み、同梱スクリプトの実行までを Hermes 本体の操作で確認し、手元のローカルモデルでも試した。OpenCode は、配置と検出(4 種類の配置先)、`.opencode` に置いた Skill の `skill` ツールでの読み込みまでを OpenCode 本体で確認。どちらも、モデルを介したスクリプトの実行とモード指定は、確かめた範囲が限られる。[確認の範囲](docs/opencode-hermes-checks.md))
+- OpenCode、Hermes Agent(モデルを介したスクリプトの実行とモード指定は、確かめた範囲が限られる。[注意](#注意))
 
 環境ごとの差は、配置先、ZIP、生成物、ドキュメントで吸収します。Skill 本文の複製はありません。
 
@@ -39,36 +39,21 @@ Windows では、`python3` ではなく `python` で実行する場合があり�
 
 問題がなければ、`--dry-run` を外して実行します。`all` の代わりに、使う環境の target だけを指定することもできます。環境ごとの `--target` は、[インストール](docs/installation.md#インストールする)の表にあります。
 
-特定のプロジェクトだけに入れる方法と更新は、[インストール](docs/installation.md)にあります。削除は、下の「[削除する](#削除する)」にあります。Claude Code では、プラグインとしても入れられます([Claude Code](docs/environments.md#claude-code))。
-
 ### OpenCode、Hermes Agent に入れる
 
-`--target all` には含みません。`--target opencode` か `--target hermes` を指定します。配置先は、環境変数やプロファイルで変わるので、先に `--dry-run` で、実際の配置先と決め方を確かめます。
-
-```bash
-python3 tools/install.py --scope user --target opencode --dry-run
-python3 tools/install.py --scope user --target hermes --dry-run
-```
-
-問題がなければ、`--dry-run` を外します。内容が同じなら何もせず、違う既存のものは上書きしません。配置した Skill は、`python3 tools/verify_install.py --scope user --target hermes` で、スクリプトの実行まで検証できます。配置先の決め方、プロジェクトへの導入、重複の確認は、[インストール](docs/installation.md#opencode-と-hermes-agent-に入れる)にあります。
+`--target all` には含みません。`--target opencode` か `--target hermes` を指定します。配置先は、環境変数やプロファイルで変わるので、先に `--dry-run` で、実際の配置先と決め方を確かめます。配置先の決め方、プロジェクトへの導入、重複の確認、検証は、[インストール](docs/installation.md#opencode-と-hermes-agent-に入れる)にあります。
 
 ### ChatGPT Work、Claude Cowork、Gemini Apps に入れる
 
 これらの環境は、配置先のディレクトリを持ちません。[最新の Release](https://github.com/Mr-Kondo/japanese-readability-editor/releases/latest) から生成物をダウンロードし、各製品の画面からアップロードします。環境ごとにアップロードするものと手順は、[インストール](docs/installation.md#アップロード型の環境に入れる)にあります。
 
-### 動作を確かめる
+### そのほかの手順
 
-どの環境でも、実際に依頼して確かめられます。環境ごとの確認方法と、依頼の例は、[インストール](docs/installation.md#動作を確認する)にあります。
-
-### 削除する
-
-`tools/uninstall.py` が、`tools/install.py` で配置したものを削除します。インストールしたときと同じ `--scope` と `--target` を指定します。まず `--dry-run` で、削除するものを確かめます。何も削除しません。
-
-```bash
-python3 tools/uninstall.py --scope user --target all --dry-run
-```
-
-実際の削除と、残るもの、Claude Code のプラグインやアップロード型の環境の削除は、[インストール](docs/installation.md#削除する)にあります。
+- [特定のプロジェクトに入れる](docs/installation.md#特定のプロジェクトに入れる)
+- [更新する](docs/installation.md#更新する)
+- [動作を確認する](docs/installation.md#動作を確認する)。どの環境でも、実際に依頼して確かめられます。
+- [削除する](docs/installation.md#削除する)。`tools/uninstall.py` が、`tools/install.py` で配置したものを削除します。インストールしたときと同じ `--scope` と `--target` を指定し、まず `--dry-run` で、削除するものを確かめます(何も削除しません)。
+- [Claude Code のプラグインとして入れる](docs/environments.md#プラグインとして入れる)
 
 ## 使い方
 
@@ -136,12 +121,7 @@ japanese-readability-editor を paragraph-only モードで適用。
 
 文化庁の公式資料に基づく表記・用法の規則を、適用設定(モードとは独立)に応じて文章へ当てられます。適用設定は、`general-tech`(既定)、`public-explanation`、`official` の3つです。規則には出典があり、公式資料の規定と、この skill の運用判断を区別しています。
 
-```bash
-python3 skill/japanese-readability-editor/scripts/check_kokugo.py document.md --profile general-tech
-python3 skill/japanese-readability-editor/scripts/check_kokugo.py document.md --profile official --json
-```
-
-適用設定の使い分け、指摘の区分、終了コード、限界は、[国語の表記・用法の検査](docs/kokugo.md)にあります。
+実行方法、適用設定の使い分け、指摘の区分、終了コード、限界は、[国語の表記・用法の検査](docs/kokugo.md)にあります。
 
 ## 注意
 
@@ -150,8 +130,8 @@ python3 skill/japanese-readability-editor/scripts/check_kokugo.py document.md --
 - ChatGPT での実機確認では、二重否定の意味の反転、残余の条件の言い換え、文体の変更が起きました。`SKILL.md` に対策を入れましたが、誤りを完全には防げません。
 - ChatGPT の暗黙起動は、実測では不安定でした。確実に使うには、`@` で指定してください([実測](docs/chatgpt-implicit-invocation.md))。
 - モードの指定は、Skill の指示です。環境の機能による強制ではなく、守られるかどうかは、環境とモデルによります。Codex(Medium)では、貼り付けた文章の中に「モード C」があると、指定と取り違える回がありました。Antigravity、Claude Cowork、Gemini CLI、Gemini Apps では、確かめていません([動作の確認](docs/usage.md#動作の確認))。
-- Claude のアプリで確かめたモデルは、Sonnet 5.5、Haiku 4.5、Haiku 5.5 です(2026-10-07 と 2026-10-10)。Haiku 4.5 では、Skill を読み込んでも、文体を敬体に変えるなど、規則が守られない回がありました。Haiku 5.5 では、文体と用語は保たれましたが、頼んでいない解説が付いた回がありました。回数は少なく、確かめた Skill は古い版です([モデルを選ぶ](docs/environments.md#モデルを選ぶ))。
-- OpenCode と Hermes Agent は、モデルを介した動作を、十分には確かめていません。OpenCode は、手元のローカルモデルで、Skill の発見と読み込みを確かめました。スクリプトの実行は、手順を明示した依頼の 1 回だけ成功し、普通の依頼では、実行しないモデルがありました。モード C は、確かめたモデルで守られませんでした(`verify_preservation.py --strict` が失敗)。ホスト型の主要モデルでは、確かめていません。Hermes は、本体の CLI と関数で、検出、本文と参照資料の読み込み、同梱スクリプトの実行を確かめました。手元のローカルモデルでは、`hermes chat -s japanese-readability-editor` で計測を頼むと、gemma4 で 3 回中 2 回、スクリプトが動きました。通常の依頼(2回)では動かず、qwen3-coder では `モード C` が守られませんでした。ホスト型の主要モデルでは、確かめていません。Hermes のターミナルが Docker や SSH のときも、未確認です([確認の記録](docs/opencode-hermes-checks.md))。
+- Claude のアプリでは、モデルによって結果が違いました。Haiku 4.5 では、Skill を読み込んでも、文体を敬体に変えるなど、規則が守られない回がありました。回数は少なく、確かめた Skill は古い版です。モデルごとの結果は、[モデルを選ぶ](docs/environments.md#モデルを選ぶ)にあります。
+- OpenCode と Hermes Agent は、モデルを介した動作を、十分には確かめていません。手元のローカルモデルでは、Skill の発見と読み込みを確かめました。ただし、スクリプトが動かない回と、モード C が守られない回がありました。ホスト型の主要モデルと、Hermes のターミナルが Docker や SSH の場合は、確かめていません([確認の記録](docs/opencode-hermes-checks.md))。
 - 各製品の仕様は、[環境別の対応](docs/environments.md)に書いた確認日以降に変わる可能性があります。確認できなかった項目は、同じ文書で「未確認」としています。
 
 ## ドキュメント
@@ -175,9 +155,6 @@ python3 skill/japanese-readability-editor/scripts/check_kokugo.py document.md --
 
 ## 参考とライセンス
 
-日本語可読性の設計原則は、3つの記事と3つのリポジトリを参考にしました。何を取り入れたかは、[設計](docs/design.md)にあります。
-
-- 記事: [Qiita: masakai](https://qiita.com/masakai/items/7bc5250d04c4dc8669e4)、[Zenn: ncdc](https://zenn.dev/ncdc/articles/6ea029ba5ecf65)、[Zenn: lotation](https://zenn.dev/lotation/articles/8520b50540b274)
-- リポジトリ: [coji/natural-japanese](https://github.com/coji/natural-japanese)(MIT)、[nanaism/yomiyasu](https://github.com/nanaism/yomiyasu)(MIT)、[k16shikano/japanese-tech-writing](https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d)(Unlicense)
+日本語可読性の設計原則は、3つの記事と3つのリポジトリを参考にしました。記事とリポジトリの一覧(ライセンスを含む)と、何を取り入れたかは、[設計](docs/design.md)にあります。
 
 ライセンスは [MIT](LICENSE) です。
