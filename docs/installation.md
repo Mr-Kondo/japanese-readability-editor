@@ -142,7 +142,7 @@ python3 tools/install.py --scope user --target hermes
 3. 環境変数 `XDG_CONFIG_HOME` の `opencode/skills/`
 4. `~/.config/opencode/skills/`
 
-OpenCode は、`XDG_CONFIG_HOME` の設定ディレクトリと `OPENCODE_CONFIG_DIR` の両方を探します。どちらに置いても読まれます(`OPENCODE_CONFIG_DIR` は公式文書、`XDG_CONFIG_HOME` と両方を探す点は OpenCode 1.x 系のソースによる。手元の 2.0.20 では確かめていません)。
+OpenCode は、`XDG_CONFIG_HOME` の設定ディレクトリと `OPENCODE_CONFIG_DIR` の両方を探します。どちらに置いても読まれます(`OPENCODE_CONFIG_DIR` は公式文書、`XDG_CONFIG_HOME` と両方を探す点は OpenCode 1.x 系のソースによる。手元の 2.0.20 では、`XDG_CONFIG_HOME` の設定ディレクトリに置いた Skill が読まれることを確かめました。`OPENCODE_CONFIG_DIR` は確かめていません)。
 
 OpenCode は、`.agents/skills/` と `.claude/skills/` も読みます(公式文書)。`--target common` や `claude-code` で入れた Skill も、OpenCode から見えます。そこに入れてあるなら、OpenCode のために入れ直す必要はありません。両方に置くと、同名の Skill が重複します。
 
@@ -233,7 +233,7 @@ dist/hermes/
 | Gemini CLI | `/skills list`、または端末で `gemini skills list`。追加した直後は `/skills reload` |
 | Antigravity | `/japanese-readability-editor` で呼べる |
 | GitHub Copilot | 公式資料に確認方法の記載を見つけられなかったため、次の依頼で試す |
-| OpenCode | 一覧するコマンドは、手元の 2.0.20 では見つけられなかった。`python3 tools/verify_install.py --scope user --target opencode` で配置を確かめ、依頼して試す |
+| OpenCode | 一覧するコマンドは、手元の 2.0.20 には見つけられなかった。`opencode serve` を起動し、`OPENCODE_PASSWORD` に起動時のパスワードを設定して `opencode api --server <URL> GET /api/skill` を 3 回以上呼ぶと、一覧が取れた。`python3 tools/verify_install.py --scope user --target opencode` で配置を確かめ、依頼して試す |
 | Hermes Agent | `hermes skills list` の一覧に出る。セッションで `/japanese-readability-editor` を呼べる。プロファイルを使うなら、同じ `-p` を付ける |
 
 どの環境でも、実際に依頼して確かめられます。

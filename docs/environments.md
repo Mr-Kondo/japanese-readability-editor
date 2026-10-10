@@ -19,7 +19,7 @@
 | Gemini CLI | あり | `.agents/skills/`、`.gemini/skills/` | `~/.agents/skills/`、`~/.gemini/skills/` | 不要 | 同じ階層では `.agents/skills` が優先。`/skills list` で確認 |
 | Antigravity IDE | あり | `.agents/skills/`(旧 `.agent/skills/` も互換) | `~/.gemini/config/skills/`(旧 `~/.gemini/antigravity/skills/`) | 不要 | `/<skill-name>` で呼べる |
 | Antigravity CLI | あり | `.agents/skills/` | `~/.gemini/antigravity-cli/skills/` | 不要 | `~/.agents/skills` は自動では読まれないとする記述あり(Codelab)。未確認 |
-| OpenCode | あり | `.opencode/skills/`、`.claude/skills/`、`.agents/skills/`(作業ディレクトリから git の根まで探索) | `~/.config/opencode/skills/`(`$OPENCODE_CONFIG_DIR` も探索)、`~/.claude/skills/`、`~/.agents/skills/` | 不要 | `skill` ツールで読み込む。配置先の解決と配置の検証は確認済み。OpenCode 本体での検出・読み込みと、モデルを介した動作は未確認([OpenCode](#opencode)) |
+| OpenCode | あり | `.opencode/skills/`、`.claude/skills/`、`.agents/skills/`(作業ディレクトリから git の根まで探索) | `~/.config/opencode/skills/`(`$OPENCODE_CONFIG_DIR` も探索)、`~/.claude/skills/`、`~/.agents/skills/` | 不要 | `skill` ツールで読み込む。検出は、2.0.20 の実機で確認済み(`.opencode`、XDG の設定、`.agents`、`.claude`)。`skill` ツールでの読み込みは、`.opencode` に置いた場合を確認済み。スクリプトの実行とモード指定は、モデルしだい([OpenCode](#opencode)) |
 | Hermes Agent | あり | `.hermes/skills/`、`.agents/skills/`(`hermes skills trust` が要る) | `$HERMES_HOME/skills/`(既定 `~/.hermes/skills/`。プロファイルごとに別) | 不要 | `/<skill-name>`、`hermes -s`。検出、本文と参照資料の読み込み、同梱スクリプトの実行を、Hermes 本体の CLI と関数で確認済み。モデルを介した動作は未確認([Hermes Agent](#hermes-agent)) |
 
 ※1 2026-09-29 に、Plus プランのアカウントで、実際に確認しました。
@@ -36,8 +36,8 @@ OpenAI ヘルプセンターの記事は、自動取得できませんでした�
 - Gemini Apps の `scripts/` の扱いと、ZIP の可否
 - Copilot のプラン条件
 - Antigravity の `~/.agents/skills`
-- OpenCode と Hermes Agent の、モデルを介した動作(Skill が選ばれ、依頼のスクリプトが実行されるか)
-- OpenCode 2.0.20 が `.claude/skills` と `.agents/skills` を読むか
+- Hermes Agent の、モデルを介した動作(Skill が選ばれ、依頼のスクリプトが実行されるか)
+- OpenCode の、ホスト型の主要モデルでの動作(確かめたのはローカルモデルだけ)と、`OPENCODE_CONFIG_DIR` に置いた Skill が読まれるか
 - Hermes Agent の Docker、SSH、Modal、Daytona、Singularity での動作
 
 ## ChatGPT Work
@@ -185,7 +185,9 @@ OpenCode は、`.agents/skills/` と `.claude/skills/` も読みます(公式文
 
 明示的に Skill を呼ぶ構文は、公式資料に見つけられませんでした。依頼に Skill の名前を書きます。`permission.skill` が `deny` だと、Skill は Agent から見えません。`ask` だと、読み込むときに承認を求められます。
 
-モードの指定は、依頼に書きます。次の依頼は、書き方の例で、動作は確かめていません。
+モードの指定は、依頼に書きます。次の依頼は、書き方の例です。
+
+モデルによっては、Skill を読み込んでも、スクリプトを実行しません。実行させるには、依頼に「`scripts/measure.py` を、Skill の Base directory を基準にした絶対パスで実行して」のように書きます。パスに空白があると、引用符で囲まずに失敗するモデルがありました。モード C は、返ってきた文章を、`verify_preservation.py --strict` で確かめてください。
 
 ```text
 japanese-readability-editor を使って、モード A で、この調査結果を技術レポートにまとめて。
@@ -208,6 +210,7 @@ Python 3.10 以上が必要です。標準ライブラリだけで動きます�
 | 症状 | 確かめること |
 |---|---|
 | Skill が見つからない | `python3 tools/verify_install.py --scope user --target opencode` で、配置先と中身を確かめる。`opencode debug paths` の `config` が、配置先の親と一致するか。OpenCode を開き直す。プロジェクトに入れたなら、そのプロジェクトの中で起動しているか。`permission.skill` が `deny` でないか。`OPENCODE_DISABLE_EXTERNAL_SKILLS` を設定していると、`.claude/skills/` と `.agents/skills/` の Skill は読まれない |
+| 一覧が空、または組み込みの 2 件だけ | `opencode serve` の起動直後は、Skill の読み込みが遅れる。`GET /api/skill` を 3 回以上呼ぶと出る。サーバは、起動したディレクトリに固定される |
 | `name` が合わない | `name` は `japanese-readability-editor` で、ディレクトリ名と一致しなければならない。ディレクトリ名を変えない |
 | 重複の警告が出る | `verify_install.py` が、重複する場所を示す。残す 1 か所を決め、ほかは利用者が削除する。ツールは削除しない |
 | 参照資料やスクリプトに届かない | `skill` ツールの出力にある `Base directory for this skill` を確かめる。`scripts/` などの相対パスは、そこからの相対になる。Agent がプロジェクトのディレクトリで相対パスのまま実行して失敗するなら、基準のディレクトリの絶対パスを使うよう頼む |
@@ -216,7 +219,7 @@ Python 3.10 以上が必要です。標準ライブラリだけで動きます�
 
 ### 確認した版と未検証
 
-2026-10-10 に、公式文書と `sst/opencode` のソース(`055d95bb7e27`)を確認しました。手元の `opencode 2.0.20` では、設定ディレクトリの解決とインストーラの一致を確かめました。Skill の発見、読み込み、スクリプトの実行は、実機では確かめていません。`opencode run` が起動するローカルサーバを、実行環境が許可せず、モデルの認証情報もなかったためです。詳しくは[確認の記録](opencode-hermes-checks.md#opencode-2020)にあります。
+2026-10-10 に、公式文書と `sst/opencode` のソース(`055d95bb7e27`)を確認しました。手元の `opencode 2.0.20` では、`.opencode/skills/`、XDG の設定ディレクトリ、`.agents/skills/`、`.claude/skills/`(プロジェクトとユーザー)に置いた Skill が発見されることを確かめました。`.opencode/skills/` に置いた Skill は、`skill` ツールで本文が読み込まれることも確かめました。手元のローカルモデルでは、スクリプトの実行は、手順を明示した依頼の 1 回だけ成功しました。普通の依頼では実行しないモデルがあり、`モード C` は守られませんでした。ホスト型の主要モデルと `OPENCODE_CONFIG_DIR` は、確かめていません。詳しくは[確認の記録](opencode-hermes-checks.md#opencode-2020)にあります。
 
 ## Hermes Agent
 
