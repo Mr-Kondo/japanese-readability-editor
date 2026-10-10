@@ -5,7 +5,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from helpers import (SKILL_DIR, SKILL_NAME, TOOLS_DIR, copy_real_skill, load_module, run_script,
+from helpers import (SKILL_DIR, SKILL_NAME, TOOLS_DIR, copy_real_skill, hermes_default_home, load_module, run_script,
                      temporary_directory, write_skill)
 
 package = load_module("package", TOOLS_DIR / "package.py")
@@ -241,7 +241,7 @@ class CommandLineTest(PackageCase):
         code, out, err = run_script(TOOLS_DIR / "install.py", "--source", str(bundle), "--scope", "user",
                                     "--target", "hermes", "--home", str(home))
         self.assertEqual(code, 0, out + err)
-        installed = home / ".hermes" / "skills" / SKILL_NAME
+        installed = hermes_default_home(home) / "skills" / SKILL_NAME
         code, out, err = run_script(installed / "scripts" / "verify_preservation.py", "--strict",
                                     str(SKILL_DIR.parent.parent / "tests" / "fixtures" / "before.md"),
                                     str(SKILL_DIR.parent.parent / "tests" / "fixtures" / "after_split.md"), cwd=home)

@@ -4,8 +4,8 @@ import os
 import unittest
 from pathlib import Path
 
-from helpers import (SKILL_NAME, TOOLS_DIR, copy_real_skill, load_module, run_script, symlinks_supported,
-                     temporary_directory)
+from helpers import (SKILL_NAME, TOOLS_DIR, copy_real_skill, hermes_default_home, load_module, run_script,
+                     symlinks_supported, temporary_directory)
 
 install = load_module("install", TOOLS_DIR / "install.py")
 uninstall = load_module("uninstall", TOOLS_DIR / "uninstall.py")
@@ -249,7 +249,7 @@ class OpenCodeAndHermesTest(UninstallCase):
         cases = [("workspace", "opencode", self.workspace / ".opencode" / "skills"),
                  ("workspace", "hermes", self.workspace / ".hermes" / "skills"),
                  ("user", "opencode", self.home / ".config" / "opencode" / "skills"),
-                 ("user", "hermes", self.home / ".hermes" / "skills")]
+                 ("user", "hermes", hermes_default_home(self.home) / "skills")]
         for scope, target, skills_dir in cases:
             with self.subTest(scope=scope, target=target):
                 self.run_install("--scope", scope, "--target", target)
@@ -261,14 +261,14 @@ class OpenCodeAndHermesTest(UninstallCase):
 
     def test_other_skills_beside_ours_are_kept(self):
         self.run_install("--scope", "user", "--target", "hermes")
-        other = self.home / ".hermes" / "skills" / "writing" / "another-skill"
+        other = hermes_default_home(self.home) / "skills" / "writing" / "another-skill"
         other.mkdir(parents=True)
         (other / "SKILL.md").write_text("---\nname: another-skill\ndescription: x\n---\n", encoding="utf-8")
         self.run_uninstall("--scope", "user", "--target", "hermes")
         self.assertTrue((other / "SKILL.md").is_file())
 
     def test_hermes_profile_and_home_options_are_shared_with_install(self):
-        profile = self.home / ".hermes" / "profiles" / "coder"
+        profile = hermes_default_home(self.home) / "profiles" / "coder"
         profile.mkdir(parents=True)
         (profile / "config.yaml").write_text("{}\n", encoding="utf-8")
         self.run_install("--scope", "user", "--target", "hermes", "--profile", "coder")

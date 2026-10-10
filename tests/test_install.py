@@ -5,8 +5,8 @@ import unittest
 from datetime import datetime
 from pathlib import Path
 
-from helpers import (SKILL_DIR, SKILL_NAME, TOOLS_DIR, copy_real_skill, load_module, run_script, symlinks_supported,
-                     temporary_directory, write_skill)
+from helpers import (SKILL_DIR, SKILL_NAME, TOOLS_DIR, copy_real_skill, hermes_default_home, load_module, run_script,
+                     symlinks_supported, temporary_directory, write_skill)
 
 install = load_module("install", TOOLS_DIR / "install.py")
 SCRIPT = TOOLS_DIR / "install.py"
@@ -334,7 +334,7 @@ class OpenCodeTargetTest(InstallCase):
 
 class HermesTargetTest(InstallCase):
     def make_profile(self, name: str) -> Path:
-        directory = self.home / ".hermes" / "profiles" / name
+        directory = hermes_default_home(self.home) / "profiles" / name
         directory.mkdir(parents=True)
         (directory / "config.yaml").write_text("{}\n", encoding="utf-8")
         return directory
@@ -345,11 +345,11 @@ class HermesTargetTest(InstallCase):
         self.assertTrue((self.workspace / ".hermes" / "skills" / SKILL_NAME / "SKILL.md").is_file())
         self.assertIn("hermes skills trust", out)
 
-    def test_user_default_installs_under_dot_hermes_and_prints_the_resolved_home(self):
+    def test_user_default_installs_under_the_default_hermes_home_and_prints_it(self):
         code, out, err = self.run_install("--scope", "user", "--target", "hermes")
         self.assertEqual(code, 0, out + err)
-        self.assertTrue((self.home / ".hermes" / "skills" / SKILL_NAME / "SKILL.md").is_file())
-        self.assertIn(str(self.home / ".hermes" / "skills"), out)
+        self.assertTrue((hermes_default_home(self.home) / "skills" / SKILL_NAME / "SKILL.md").is_file())
+        self.assertIn(str(hermes_default_home(self.home) / "skills"), out)
         self.assertIn("decided by: default", out)
 
     def test_hermes_home_environment_variable_is_followed_without_home(self):
@@ -359,14 +359,14 @@ class HermesTargetTest(InstallCase):
         self.assertEqual(code, 0, out + err)
         self.assertTrue((target_home / "skills" / SKILL_NAME / "SKILL.md").is_file())
         self.assertIn("decided by: $HERMES_HOME", out)
-        self.assertFalse((self.home / ".hermes").exists())
+        self.assertFalse((hermes_default_home(self.home)).exists())
 
     def test_home_ignores_hermes_home_in_the_environment(self):
         leak = self.tmp / "must-stay-empty"
         code, out, err = run_script(SCRIPT, "--scope", "user", "--target", "hermes", "--home", str(self.home),
                                     env={"HERMES_HOME": str(leak)})
         self.assertEqual(code, 0, out + err)
-        self.assertTrue((self.home / ".hermes" / "skills" / SKILL_NAME).is_dir())
+        self.assertTrue((hermes_default_home(self.home) / "skills" / SKILL_NAME).is_dir())
         self.assertFalse(leak.exists())
 
     def test_explicit_hermes_home(self):
@@ -381,7 +381,7 @@ class HermesTargetTest(InstallCase):
         code, out, err = self.run_install("--scope", "user", "--target", "hermes", "--profile", "coder")
         self.assertEqual(code, 0, out + err)
         self.assertTrue((profile / "skills" / SKILL_NAME / "SKILL.md").is_file())
-        self.assertFalse((self.home / ".hermes" / "skills").exists())
+        self.assertFalse((hermes_default_home(self.home) / "skills").exists())
 
     def test_unknown_profile_is_refused_and_nothing_is_written(self):
         code, _, err = self.run_install("--scope", "user", "--target", "hermes", "--profile", "ghost")
@@ -391,7 +391,7 @@ class HermesTargetTest(InstallCase):
 
     def test_the_sticky_profile_is_followed_and_reported(self):
         profile = self.make_profile("coder")
-        (self.home / ".hermes" / "active_profile").write_text("coder\n", encoding="utf-8")
+        (hermes_default_home(self.home) / "active_profile").write_text("coder\n", encoding="utf-8")
         code, out, err = self.run_install("--scope", "user", "--target", "hermes")
         self.assertEqual(code, 0, out + err)
         self.assertTrue((profile / "skills" / SKILL_NAME).is_dir())
@@ -418,8 +418,8 @@ class HermesTargetTest(InstallCase):
     def test_duplicates_in_external_dirs_and_agents_skills_are_reported(self):
         (self.workspace / ".git").mkdir()
         copy_real_skill(self.home / ".agents" / "skills")
-        hermes_home = self.home / ".hermes"
-        hermes_home.mkdir()
+        hermes_home = hermes_default_home(self.home)
+        hermes_home.mkdir(parents=True)
         (hermes_home / "config.yaml").write_text("skills:\n  external_dirs:\n    - ~/.agents/skills\n", encoding="utf-8")
         code, out, _ = self.run_install("--scope", "user", "--target", "hermes")
         self.assertEqual(code, 0)
@@ -439,7 +439,7 @@ class IdempotenceAndProtectionTest(InstallCase):
 
     def test_second_run_changes_nothing_and_says_so(self):
         self.run_install("--scope", "user", "--target", "hermes")
-        installed = self.home / ".hermes" / "skills" / SKILL_NAME
+        installed = hermes_default_home(self.home) / "skills" / SKILL_NAME
         marker_times = {p: p.stat().st_mtime_ns for p in installed.rglob("*") if p.is_file()}
         code, out, _ = self.run_install("--scope", "user", "--target", "hermes")
         self.assertEqual(code, 0)
@@ -458,7 +458,7 @@ class IdempotenceAndProtectionTest(InstallCase):
 
     def test_different_content_is_kept_by_default_and_the_difference_is_named(self):
         self.run_install("--scope", "user", "--target", "hermes")
-        edited = self.home / ".hermes" / "skills" / SKILL_NAME / "references" / "readability-rules.md"
+        edited = hermes_default_home(self.home) / "skills" / SKILL_NAME / "references" / "readability-rules.md"
         edited.write_text("利用者が直したもの\n", encoding="utf-8")
         code, out, _ = self.run_install("--scope", "user", "--target", "hermes")
         self.assertEqual(code, 0)
@@ -469,7 +469,7 @@ class IdempotenceAndProtectionTest(InstallCase):
 
     def test_an_extra_file_in_the_installed_copy_counts_as_different(self):
         self.run_install("--scope", "user", "--target", "hermes")
-        extra = self.home / ".hermes" / "skills" / SKILL_NAME / "notes.txt"
+        extra = hermes_default_home(self.home) / "skills" / SKILL_NAME / "notes.txt"
         extra.write_text("メモ\n", encoding="utf-8")
         _, out, _ = self.run_install("--scope", "user", "--target", "hermes")
         self.assertIn("differs from the source", out)
@@ -478,25 +478,25 @@ class IdempotenceAndProtectionTest(InstallCase):
 
     def test_backup_keeps_the_old_copy_so_it_can_be_restored(self):
         self.run_install("--scope", "user", "--target", "hermes")
-        edited = self.home / ".hermes" / "skills" / SKILL_NAME / "references" / "readability-rules.md"
+        edited = hermes_default_home(self.home) / "skills" / SKILL_NAME / "references" / "readability-rules.md"
         edited.write_text("利用者が直したもの\n", encoding="utf-8")
         code, out, _ = self.run_install("--scope", "user", "--target", "hermes", "--on-conflict", "backup")
         self.assertEqual(code, 0, out)
-        backups = list((self.home / ".hermes" / "skills.bak").iterdir())
+        backups = list((hermes_default_home(self.home) / "skills.bak").iterdir())
         self.assertEqual(len(backups), 1)
         self.assertEqual((backups[0] / "references" / "readability-rules.md").read_text(encoding="utf-8"), "利用者が直したもの\n")
-        self.assertTrue(self.digest(self.home / ".hermes" / "skills" / SKILL_NAME) == self.digest(SKILL_DIR))
+        self.assertTrue(self.digest(hermes_default_home(self.home) / "skills" / SKILL_NAME) == self.digest(SKILL_DIR))
 
     def test_moving_the_backup_back_restores_the_previous_copy(self):
         # docs/installation.md の復元手順(置き直したものを消し、退避したものを戻す)が成り立つ。
         self.run_install("--scope", "user", "--target", "hermes")
-        installed = self.home / ".hermes" / "skills" / SKILL_NAME
+        installed = hermes_default_home(self.home) / "skills" / SKILL_NAME
         edited = installed / "references" / "readability-rules.md"
         edited.write_text("利用者が直したもの\n", encoding="utf-8")
         before = self.digest(installed)
         self.run_install("--scope", "user", "--target", "hermes", "--on-conflict", "backup")
         self.assertNotEqual(self.digest(installed), before)
-        [backup] = list((self.home / ".hermes" / "skills.bak").iterdir())
+        [backup] = list((hermes_default_home(self.home) / "skills.bak").iterdir())
         shutil.rmtree(installed)
         shutil.move(str(backup), str(installed))
         self.assertEqual(self.digest(installed), before)
@@ -506,7 +506,7 @@ class IdempotenceAndProtectionTest(InstallCase):
 
     def test_dry_run_with_a_different_existing_copy_changes_nothing(self):
         self.run_install("--scope", "user", "--target", "hermes")
-        edited = self.home / ".hermes" / "skills" / SKILL_NAME / "SKILL.md"
+        edited = hermes_default_home(self.home) / "skills" / SKILL_NAME / "SKILL.md"
         edited.write_text("手元の版\n", encoding="utf-8")
         before = tree(self.home)
         code, out, _ = self.run_install("--scope", "user", "--target", "hermes", "--on-conflict", "overwrite", "--dry-run")

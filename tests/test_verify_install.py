@@ -4,8 +4,8 @@ import json
 import unittest
 from pathlib import Path
 
-from helpers import (SKILL_DIR, SKILL_NAME, TOOLS_DIR, copy_real_skill, load_module, run_script, symlinks_supported,
-                     temporary_directory, write_skill)
+from helpers import (SKILL_DIR, SKILL_NAME, TOOLS_DIR, copy_real_skill, hermes_default_home, load_module, run_script,
+                     symlinks_supported, temporary_directory, write_skill)
 
 verify = load_module("verify_install", TOOLS_DIR / "verify_install.py")
 skill_env = verify.skill_env
@@ -224,7 +224,7 @@ class CommandLineTest(VerifyCase):
         self.assertEqual(code, 0, out + err)
         code, out, err = run_script(SCRIPT, "--scope", "user", "--target", "hermes", "--home", str(home))
         self.assertEqual(code, 0, out + err)
-        self.assertIn(str(home / ".hermes" / "skills" / SKILL_NAME), out)
+        self.assertIn(str(hermes_default_home(home) / "skills" / SKILL_NAME), out)
 
     def test_a_target_with_nothing_installed_fails(self):
         code, out, _ = run_script(SCRIPT, "--scope", "user", "--target", "opencode", "--home", str(self.tmp / "empty"))

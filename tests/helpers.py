@@ -75,6 +75,11 @@ def copy_real_skill(destination_root: Path) -> Path:
     return target
 
 
+def hermes_default_home(home: Path) -> Path:
+    """--home を指定したときの、Hermes の既定のホーム。Windows は %LOCALAPPDATA% の下(hermes_constants に合わせる)。"""
+    return home / "AppData" / "Local" / "hermes" if sys.platform == "win32" else home / ".hermes"
+
+
 def symlinks_supported() -> bool:
     """シンボリックリンクを作れる環境か。Windows では権限が要ることがある。"""
     with tempfile.TemporaryDirectory(prefix="jre-symlink-") as tmp:
@@ -95,6 +100,7 @@ def dedent(text: str) -> str:
 
 __all__: List[str] = [
     "ISOLATED_ENV_VARS", "REPO_ROOT", "SKILL_NAME", "SKILL_DIR", "SCRIPTS_DIR", "TOOLS_DIR", "FIXTURES", "VALID_DESCRIPTION",
-    "load_module", "run_script", "write_skill", "copy_real_skill", "symlinks_supported", "temporary_directory",
+    "load_module", "run_script", "write_skill", "copy_real_skill", "hermes_default_home", "symlinks_supported",
+    "temporary_directory",
     "dedent",
 ]
