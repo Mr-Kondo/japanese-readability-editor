@@ -7,7 +7,7 @@
 - Codex、Claude Code、GitHub Copilot
 - Gemini CLI、Antigravity(IDE と CLI)
 - ChatGPT Work、Claude Cowork、Gemini Apps
-- OpenCode、Hermes Agent(Hermes は、配置、検出、読み込み、同梱スクリプトの実行までを Hermes 本体の操作で確認。OpenCode は、配置先の解決と配置の検証までで、OpenCode 本体での検出は未確認。どちらも、モデルを介した動作は未確認。[確認の範囲](docs/opencode-hermes-checks.md))
+- OpenCode、Hermes Agent(Hermes は、配置、検出、読み込み、同梱スクリプトの実行までを Hermes 本体の操作で確認。OpenCode は、配置と検出(4 種類の配置先)、`.opencode` に置いた Skill の `skill` ツールでの読み込みまでを OpenCode 本体で確認。どちらも、モデルを介したスクリプトの実行とモード指定は、確かめた範囲が限られる。[確認の範囲](docs/opencode-hermes-checks.md))
 
 環境ごとの差は、配置先、ZIP、生成物、ドキュメントで吸収します。Skill 本文の複製はありません。
 
@@ -151,7 +151,7 @@ python3 skill/japanese-readability-editor/scripts/check_kokugo.py document.md --
 - ChatGPT の暗黙起動は、実測では不安定でした。確実に使うには、`@` で指定してください([実測](docs/chatgpt-implicit-invocation.md))。
 - モードの指定は、Skill の指示です。環境の機能による強制ではなく、守られるかどうかは、環境とモデルによります。Codex(Medium)では、貼り付けた文章の中に「モード C」があると、指定と取り違える回がありました。Antigravity、Claude Cowork、Gemini CLI、Gemini Apps では、確かめていません([動作の確認](docs/usage.md#動作の確認))。
 - Claude のアプリで確かめたモデルは、Sonnet 5.5、Haiku 4.5、Haiku 5.5 です(2026-10-07 と 2026-10-10)。Haiku 4.5 では、Skill を読み込んでも、文体を敬体に変えるなど、規則が守られない回がありました。Haiku 5.5 では、文体と用語は保たれましたが、頼んでいない解説が付いた回がありました。回数は少なく、確かめた Skill は古い版です([モデルを選ぶ](docs/environments.md#モデルを選ぶ))。
-- OpenCode と Hermes Agent は、モデルを介した動作(Skill が選ばれ、依頼のスクリプトが実行されるか)と、モード指定が守られるかを、確かめていません。Hermes は、本体の CLI と関数で、検出、本文と参照資料の読み込み、同梱スクリプトの実行を確かめました。OpenCode は、手元の 2.0.20 で Skill の検出と読み込みを確かめられず、配置先の解決と配置の検証までです。Hermes のターミナルが Docker や SSH のときも、未確認です([確認の記録](docs/opencode-hermes-checks.md))。
+- OpenCode と Hermes Agent は、モデルを介した動作を、十分には確かめていません。OpenCode は、手元のローカルモデルで、Skill の発見と読み込みを確かめました。スクリプトの実行は、手順を明示した依頼の 1 回だけ成功し、普通の依頼では、実行しないモデルがありました。モード C は、確かめたモデルで守られませんでした(`verify_preservation.py --strict` が失敗)。ホスト型の主要モデルでは、確かめていません。Hermes は、本体の CLI と関数で、検出、本文と参照資料の読み込み、同梱スクリプトの実行を確かめましたが、モデルを介した動作は未確認です。Hermes のターミナルが Docker や SSH のときも、未確認です([確認の記録](docs/opencode-hermes-checks.md))。
 - 各製品の仕様は、[環境別の対応](docs/environments.md)に書いた確認日以降に変わる可能性があります。確認できなかった項目は、同じ文書で「未確認」としています。
 
 ## ドキュメント

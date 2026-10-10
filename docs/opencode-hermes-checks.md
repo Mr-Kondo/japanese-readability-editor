@@ -85,23 +85,54 @@ OpenCode と Hermes Agent に対応したときの、仕様の確認と実機確
 
 ### OpenCode 2.0.20
 
-| 確認 | 結果 |
+隔離は、`HOME` と `XDG_*` を一時ディレクトリへ向けて行いました。Skill の一覧は、`opencode serve`(`127.0.0.1` だけ)を一時的に起動し、`opencode api` で `GET /api/skill` を呼んで取りました。サンドボックスの外で実行しています。モデルは、手元で動いている Ollama(ローカル推論)です。
+
+**発見**
+
+| 配置先 | 結果 |
 |---|---|
-| `tools/install.py --scope user --target opencode` が、`$XDG_CONFIG_HOME/opencode/skills/` に置く | 実施 |
-| `opencode debug paths` の設定ディレクトリが、インストーラの解決と一致する | 実施。隔離した `XDG_CONFIG_HOME` で、`config` が `$XDG_CONFIG_HOME/opencode` だった |
-| Skill が発見される | **未実施** |
-| 本文と参照資料の読み込み(`skill` ツール) | **未実施** |
-| サンプル依頼でスクリプトが実行される | **未実施** |
+| `<プロジェクト>/.opencode/skills/` | 発見された |
+| `$XDG_CONFIG_HOME/opencode/skills/` | 発見された |
+| `<プロジェクト>/.agents/skills/` と `<プロジェクト>/.claude/skills/` | 発見された |
+| `~/.agents/skills/` と `~/.claude/skills/` | 発見された |
+| 何も置かない(対照) | 発見されない(組み込みの 2 件だけ) |
 
-未実施の理由は 2 つです。`opencode run` はローカルのサーバを起動しますが、この環境ではローカルポートの待ち受けが許可されておらず、`Failed to start server` で終わりました。隔離環境にはモデルの認証情報もありません。2.0.20 には、Skill を一覧する `debug skill` もありません(ソースの 1.x 系にはあります)。
+- `name`、`description`、本文は、`SKILL.md` と一致しました。
+- 一覧は遅延して読み込まれます。サーバの起動後、最初の 1〜2 回の `GET /api/skill` は、空か組み込みの 2 件だけで、3 回目以降に Skill が出ました。起動直後に空でも、故障ではありません。
+- 同名があるとき、プロジェクトの `.opencode/skills/` が、ユーザーの設定ディレクトリに勝ちました。ユーザーの設定ディレクトリは、`.agents/skills/` と `.claude/skills/`(プロジェクトとユーザー)に勝ちました。確かめたのは、この組み合わせだけです。
+- `OPENCODE_CONFIG_DIR` に置いた場合は、確かめていません。
 
-構造検証、`tools/verify_install.py`、ソースの読み取りは、この未実施の代わりにはなりません。OpenCode の実機での動作は、確認できていません。
+**読み込み**
+
+プロジェクトの `.opencode/skills/` に置いた Skill について、`skill` ツールを `{"id": "japanese-readability-editor"}` で呼ぶと、`SKILL.md` の本文がそのまま返りました。ほかの配置先では、読み込みまでは確かめていません。出力には、`Base directory for this skill: <絶対パス>` と、相対パスはそこからの相対だという注記、サンプリングしたファイル一覧(`data/` を含む)が付いていました。API の `skills: [{"id": ...}]` で明示した場合も、同じ文章が注入されました。
+
+**モデルを介した動作(Ollama のローカルモデル)**
+
+OpenCode の無料のホスト型モデルは、「OpenCode の中からだけ使える」という制限で、403 を返しました(`opencode run` でも同じ)。提供側の利用条件なので、迂回していません。
+
+| モデル | 依頼 | 結果 |
+|---|---|---|
+| `qwen2.5:7b` | 「`japanese-readability-editor` スキルを使って、`sample.md` の段落と文の長さを計測して」(3回) | 3回とも `skill` を呼んだ。スクリプトは実行できなかった。1回はコマンドを文章で出力して止まり、1回は空白を含むパスを引用符で囲まず失敗し、1回は `execute`(JavaScript の実行環境)に `python3 ...` を渡して構文エラー |
+| `gpt-oss:20b` | 同じ依頼(2回) | `skill` を呼ばず、`glob` と `read` で自分で答えた |
+| `gpt-oss:20b` | 同じ依頼に、API で Skill を明示(1回) | 本文は注入された。`python3 scripts/measure.py` をカレントからの相対パスで実行して失敗し、「スクリプトは存在しない」と結論した |
+| `qwen3-coder:30b` | 同じ依頼(1回) | `skill` を呼び、`sample.md` を読んだ。スクリプトは実行せず、本文をそのまま返した |
+| `qwen3-coder:30b` | 「`scripts/measure.py` を `--locate` 付きで実行し、Base directory を基準にした絶対パスで」と明示(1回) | **成功**。`skill` を呼び、`execute` で失敗した後、`shell` ツールで `measure.py --locate` を実行し、実際の計測結果(84字、46字以上の文が1つ)が返った |
+| `qwen3-coder:30b` | 「モード C で `sample.md` に適用して。文章は変えず、改行と空行だけで」(1回。別の1回は、モデルが利用できず無効) | **守られなかった**。`skill` を呼び、`sample.md` を読んだ後、原文と無関係な文章を書き込み、「文言は一切変更せず」と報告した。独立に実行した `verify_preservation.py --strict` が失敗した |
+
+つまり、Skill の発見と読み込みは確認できました。スクリプトの実行は、依頼で手順を明示した 1 回だけ成功しました。普通の依頼で、自発的に実行したモデルはありませんでした。モード C は、守られませんでした。これは、確かめたモデル(いずれも小型・中型のローカルモデル)の結果です。Claude や GPT などのホスト型の主要モデルでは、確かめていません。
+
+**ほかに分かったこと**
+
+- v2 で、シェルを実行するツールの名前は `shell` です。`execute` は JavaScript の実行環境で、`python3 ...` の文字列を渡すと構文エラーになります。
+- `opencode run` は、標準入力が端末でないと、入力が閉じるまで待ちます。自動化するときは、`< /dev/null` で閉じます。
+- 権限の規則は、最後に一致したものが勝ちます。`"bash": {"python3 *scripts/*": "allow", "*": "deny"}` のように、`"*": "deny"` を最後に書くと、そのツールが無効になります(今回、実際に起きました)。検証用に書いた `bash` と `shell` の規則が、効いたかどうかは確かめていません。この検証でのモデルのシェルは、実質的に制限されていませんでした。
+- 利用者の認証情報と、ホームの設定は、読み書きしていません。検証後に、サーバを止め、Ollama のモデルを解放しました。
 
 ## 確認できなかったこと
 
-- OpenCode 2.0.20 が、`.claude/skills` と `.agents/skills` を読むか。文書は読むと書くが、v2 のソースでは処理を見つけられなかった
-- OpenCode で、同名の Skill が複数あるときに、どれが使われるか
-- 両環境で、`モード A`、`モード B`、`モード C` の指定が守られるか
+- OpenCode の `OPENCODE_CONFIG_DIR` に置いた Skill が読まれるか(文書にはある。実機では確かめていない)
+- OpenCode で、ホスト型の主要モデル(Claude、GPT など)が、普通の依頼で Skill のスクリプトを実行するか。モード C が守られるか
+- Hermes で、`モード A`、`モード B`、`モード C` の指定が守られるか(モデルを介した動作そのものが未確認)
 - Hermes の `hermes skills install` が、GitHub の識別子で取り込む範囲。URL の経路は手元の版で確かめたが、GitHub の経路は、文書の記述とソースの読み取りだけ
 
 ## 今回の作業で見つけた、既存の限界
