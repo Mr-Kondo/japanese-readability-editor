@@ -67,7 +67,7 @@
   "test_ids_sha256": "3f98861356ca0c12f280c161bc28d4e22bc94f95fa3f12903ed838d7fafbd498",
   "claude": {
     "version": "2.1.287",
-    "model": "claude-opus-5-5",
+    "model": "claude-sonnet-5-5",
     "method": "Fresh sessions; stdin prompt; restricted for example 9, auto permissions for example 12. Read/Edit/Write/Skill allowed; Bash reviewed automatically.",
     "before": {
       "9": [
