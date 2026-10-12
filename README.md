@@ -57,6 +57,8 @@ Windows では、`python3` ではなく `python` で実行する場合があり�
 
 ## 使い方
 
+コピーして使える依頼例と、結果を確認する手順は、[実践ガイド](docs/user-guide.md)にあります。
+
 Skill は、依頼の内容が `description` に合うと自動で使われます。名前を指定して呼ぶこともできます。
 
 | 環境 | 明示的に呼ぶ方法 |
@@ -156,6 +158,8 @@ D のモデル挙動・評価の実施範囲は [評価ケース](evals/README.m
 |---|---|
 | [docs/installation.md](docs/installation.md) | インストール、配置先、OpenCode と Hermes Agent の導入と検証、SudachiPy の入れ方、更新、削除 |
 | [docs/environments.md](docs/environments.md) | 環境ごとの対応表と注意、参照した公式資料 |
+| [docs/user-guide.md](docs/user-guide.md) | コピーして使える依頼例、ファイルの編集・レビュー、小説の5操作、結果の確認、困ったときの対処 |
+| [docs/user-guide-validation.md](docs/user-guide-validation.md) | 実践ガイドの実行結果、Claude Codeの繰り返し試験、環境設定の確認と未完了の範囲 |
 | [docs/usage.md](docs/usage.md) | モードの指定の扱いと、動作の確認 |
 | [docs/scripts.md](docs/scripts.md) | 計測と照合のスクリプトの使い方と限界 |
 | [docs/kokugo.md](docs/kokugo.md) | 国語の表記・用法の検査。適用設定、区分、終了コード、JSON の形式、用語集、規則の更新、限界 |
