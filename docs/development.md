@@ -1,6 +1,6 @@
 # 開発
 
-文章の定量・定性評価と、自動／手動検証の実行方法は[文章評価ツール](human-evaluation.md)を参照してください。開発用の `tools/review_readability.py` と画面テンプレートは配布スキルの外に置いています。
+文章の定量・定性評価、自動／手動検証、モードBの匿名二候補比較は[文章評価ツール](human-evaluation.md)を参照してください。開発用の `tools/review_readability.py`、`tools/compare_readability.py` と画面テンプレートは配布スキルの外に置いています。
 
 このリポジトリを変更する人向けの説明です。
 

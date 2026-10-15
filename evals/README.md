@@ -2,6 +2,8 @@
 
 定量評点と根拠付きの定性評価を、自動／手動の2系統で行う場合は[人手・自動評価ツールの手順](../docs/human-evaluation.md)を参照する。`tools/review_readability.py` は既存の `run.json` と独自の `cases` JSONを取り込み、通信不要の表層検査、任意のLLM採点、ローカルHTMLでの人手評価、回答集計を行う。初回は[人工例題](human-review-example.json)で試せる。
 
+モードBの旧新版・スキル有無を匿名比較する場合は `tools/compare_readability.py` を使う。[比較用の練習3例](blind-comparison-example.json)から評価者別の配布物を作り、候補別の意味保持、引用付きの指摘、両候補合格内の選好、全割付の欠測を記録する。主催者用の版名対応表は配布物から分離する。
+
 万能動詞の具体化例の修正は、[実装案と追加調査](../docs/concretization-example-plan.md)、[比較手順](concretization-comparison.md)、[実装・比較結果](concretization-result.md)を参照する。[自作6入力](concretization-cases.json)は、資料なし／ありの対と自然な原文の保持を含む回帰確認用で、未使用文書への一般化を示すものではない。
 
 一般文書 A/B の構造修正・文の働きの保持は、[比較評価の手順](readability-comparison.md)と[自作12ケース](readability-cases.json)を使う。変更前後の条件を固定し、意味保持と読みやすさを別々に判断する。

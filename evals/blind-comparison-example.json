@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "condition-practice",
+      "document_id": "condition",
+      "mode": "B",
+      "request": "数値・条件・意味を保って読みやすくしてください。",
+      "audience": "利用申請をする社員",
+      "original": "管理者が承認した場合に限り、30分以内に実行できます。",
+      "candidates": {
+        "baseline": "管理者が承認した場合に限り、30分以内に実行できます。",
+        "revision": "3分以内に実行できます。"
+      }
+    },
+    {
+      "id": "connection-practice",
+      "document_id": "connection",
+      "mode": "B",
+      "request": "数値・条件・意味を保って読みやすくしてください。",
+      "audience": "接続設定をする社員",
+      "original": "設定の保存後に接続を確認して、接続できなければ管理者に連絡してください。",
+      "candidates": {
+        "baseline": "設定の保存後に接続を確認して、接続できなければ管理者に連絡してください。",
+        "revision": "設定を保存してから、接続を確認してください。接続できなければ管理者に連絡してください。"
+      }
+    },
+    {
+      "id": "speech-act-practice",
+      "document_id": "speech-act",
+      "mode": "B",
+      "request": "意味と文の働きを保って読みやすくしてください。",
+      "audience": "対応方針を確認する社員",
+      "original": "問題の影響を広げないようにします。",
+      "candidates": {
+        "baseline": "問題の影響を広げないようにします。",
+        "revision": "問題の影響を広げないでください。"
+      }
+    }
+  ]
+}
