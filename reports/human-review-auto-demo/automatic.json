@@ -1,0 +1,282 @@
+{
+  "schema_version": 1,
+  "task_sha256": "7aebfb3cf9589034be585a397a8c2fd29ecb40270accc91b317937b09982c558",
+  "status": "completed",
+  "coverage": {
+    "surface": true,
+    "llm": false,
+    "human": false
+  },
+  "results": [
+    {
+      "id": "condition",
+      "metrics": {
+        "original": {
+          "path": "<text>",
+          "metrics": {
+            "chars": 27,
+            "kanji": 13,
+            "hiragana": 10,
+            "paragraphs": 1,
+            "long_paragraphs": 0,
+            "sentences": 1,
+            "sentence_chars": 27,
+            "long_sentences": 0,
+            "short_runs": 0,
+            "commas": 1,
+            "mean_sentence_chars": 27.0,
+            "kanji_ratio": 0.48148148148148145
+          },
+          "long_paragraphs": [],
+          "long_sentences": [],
+          "short_runs": [],
+          "extras": {
+            "kanji-run": [],
+            "no-chain": [],
+            "double-negative": [],
+            "unrendered-bold": []
+          }
+        },
+        "candidate": {
+          "path": "<text>",
+          "metrics": {
+            "chars": 12,
+            "kanji": 5,
+            "hiragana": 5,
+            "paragraphs": 1,
+            "long_paragraphs": 0,
+            "sentences": 1,
+            "sentence_chars": 12,
+            "long_sentences": 0,
+            "short_runs": 0,
+            "commas": 0,
+            "mean_sentence_chars": 12.0,
+            "kanji_ratio": 0.4166666666666667
+          },
+          "long_paragraphs": [],
+          "long_sentences": [],
+          "short_runs": [],
+          "extras": {
+            "kanji-run": [],
+            "no-chain": [],
+            "double-negative": [],
+            "unrendered-bold": []
+          }
+        }
+      },
+      "findings": [
+        {
+          "category": "numbers",
+          "direction": "missing",
+          "line": 1,
+          "quote": "30分",
+          "reason": "原文と候補の要素・文対応に差。意味の変化か照合が必要。"
+        },
+        {
+          "category": "numbers",
+          "direction": "added",
+          "line": 1,
+          "quote": "3分",
+          "reason": "原文と候補の要素・文対応に差。意味の変化か照合が必要。"
+        },
+        {
+          "category": "unmatched",
+          "direction": "before",
+          "line": 1,
+          "quote": "管理者が承認した場合に限り、30分以内に実行できます。",
+          "reason": "原文と候補の要素・文対応に差。意味の変化か照合が必要。"
+        },
+        {
+          "category": "limit",
+          "before": 1,
+          "after": 0,
+          "reason": "否定・条件・文の働き等の表現数に差。表現数だけで意味改変を確定しない。"
+        }
+      ],
+      "contract": "uncertain",
+      "reason": "表層検査では意味保持・理解・文学的品質は未判定。",
+      "comparison": {
+        "before": "original",
+        "after": "candidate",
+        "tokenizer": "regex",
+        "numbers": {
+          "missing": [
+            {
+              "line": 1,
+              "text": "30分"
+            }
+          ],
+          "added": [
+            {
+              "line": 1,
+              "text": "3分"
+            }
+          ]
+        },
+        "urls": {
+          "missing": [],
+          "added": []
+        },
+        "code": {
+          "missing": [],
+          "added": []
+        },
+        "terms": {
+          "missing": [],
+          "added": []
+        },
+        "unmatched": {
+          "after": [],
+          "before": [
+            {
+              "line": 1,
+              "text": "管理者が承認した場合に限り、30分以内に実行できます。"
+            }
+          ]
+        },
+        "markers": {
+          "negation": {
+            "before": 0,
+            "after": 0,
+            "removed": [],
+            "added": []
+          },
+          "conjecture": {
+            "before": 0,
+            "after": 0,
+            "removed": [],
+            "added": []
+          },
+          "ability": {
+            "before": 1,
+            "after": 1,
+            "removed": [],
+            "added": []
+          },
+          "obligation": {
+            "before": 0,
+            "after": 0,
+            "removed": [],
+            "added": []
+          },
+          "request": {
+            "before": 0,
+            "after": 0,
+            "removed": [],
+            "added": []
+          },
+          "invitation": {
+            "before": 0,
+            "after": 0,
+            "removed": [],
+            "added": []
+          },
+          "emphasis": {
+            "before": 0,
+            "after": 0,
+            "removed": [],
+            "added": []
+          },
+          "limit": {
+            "before": 1,
+            "after": 0,
+            "removed": [],
+            "added": []
+          },
+          "residual": {
+            "before": 0,
+            "after": 0,
+            "removed": [],
+            "added": []
+          }
+        },
+        "style": {
+          "before": {
+            "polite": 1,
+            "plain": 0
+          },
+          "after": {
+            "polite": 1,
+            "plain": 0
+          },
+          "changed": false
+        }
+      }
+    },
+    {
+      "id": "paragraph",
+      "metrics": {
+        "original": {
+          "path": "<text>",
+          "metrics": {
+            "chars": 26,
+            "kanji": 14,
+            "hiragana": 10,
+            "paragraphs": 1,
+            "long_paragraphs": 0,
+            "sentences": 2,
+            "sentence_chars": 26,
+            "long_sentences": 0,
+            "short_runs": 0,
+            "commas": 0,
+            "mean_sentence_chars": 13.0,
+            "kanji_ratio": 0.5384615384615384
+          },
+          "long_paragraphs": [],
+          "long_sentences": [],
+          "short_runs": [],
+          "extras": {
+            "kanji-run": [],
+            "no-chain": [],
+            "double-negative": [],
+            "unrendered-bold": []
+          }
+        },
+        "candidate": {
+          "path": "<text>",
+          "metrics": {
+            "chars": 26,
+            "kanji": 14,
+            "hiragana": 10,
+            "paragraphs": 2,
+            "long_paragraphs": 0,
+            "sentences": 2,
+            "sentence_chars": 26,
+            "long_sentences": 0,
+            "short_runs": 0,
+            "commas": 0,
+            "mean_sentence_chars": 13.0,
+            "kanji_ratio": 0.5384615384615384
+          },
+          "long_paragraphs": [],
+          "long_sentences": [],
+          "short_runs": [],
+          "extras": {
+            "kanji-run": [],
+            "no-chain": [],
+            "double-negative": [],
+            "unrendered-bold": []
+          }
+        }
+      },
+      "findings": [],
+      "contract": "pass",
+      "reason": "JSON内の原文字列を保持し、LF挿入のみか検査。元ファイルのバイト保持と読解品質は対象外。",
+      "comparison": {
+        "only_newlines_inserted": true,
+        "non_newline_identical": true,
+        "newlines_removed": false,
+        "inserted_newlines": 2
+      }
+    }
+  ],
+  "summary": {
+    "tasks": 2,
+    "contract_counts": {
+      "uncertain": 1,
+      "pass": 1
+    },
+    "finding_count": 4,
+    "limits": "表層指摘件数は誤り数でも品質点でもない。Bの意味保持はLLMまたは人手で別途検証する。"
+  }
+}

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; base-uri 'none'; form-action 'none'">
+<title>日本語文章の手動評価</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#f5f6f8;color:#1c2732;max-width:1100px;margin:auto;padding:24px;line-height:1.7}
+h1{font-size:1.7rem}header,.card{background:white;padding:24px;border:1px solid #ccd3dc;border-radius:10px;margin-bottom:24px}
+.texts{display:grid;grid-template-columns:1fr 1fr;gap:20px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;background:#f5f6f8;padding:16px;max-height:450px;overflow:auto}
+label{display:block;margin-top:12px}select,input,textarea,button{font:inherit;padding:8px;border:1px solid #778492;border-radius:4px;max-width:100%;box-sizing:border-box}
+textarea{width:100%;min-height:90px}button{background:#153f6c;color:white;cursor:pointer;margin:12px 8px 0 0}input[type=file]{background:white}
+:focus-visible{outline:3px solid #bd5000;outline-offset:3px}.note{color:#405064}.error{color:#9e1b1b}#status{font-weight:bold}
+@media(max-width:700px){.texts{grid-template-columns:1fr}body{padding:12px}}
+</style>
+<header>
+<h1>日本語文章の手動評価</h1>
+<p>意味・指示への適合と、読みやすさ・自然さ・文体を分けて評価します。原文と候補の比較です。版同士の盲検比較ではありません。</p>
+<p class="note">評点：1 大きな問題／2 問題あり／3 許容／4 良い／5 非常に良い。「未評価」は0点として扱いません。理由には問題箇所の引用、読者への影響を記入してください。Aは資料と依頼、Bは意味保持、Cは改行挿入のみ、Dは操作ごとの設定・視点・語り口を確認します。</p>
+<label>評価者ID（仮名可） <input id="reviewer" autocomplete="off" required></label>
+<button id="export" type="button">回答JSONを保存</button>
+<label>以前の回答JSONから再開 <input id="resume" type="file" accept=".json,application/json"></label>
+<p id="status" role="status" aria-live="polite">未保存です。入力後は回答JSONを保存してください。</p>
+<p class="note">回答は自動保存されません。未入力の文書は飛ばせます。入力を始めた文書は判定と理由を完成させてから保存してください。ページを閉じる前に保存してください。評価所要時間から読解速度は算出しません。</p>
+</header>
+<main id="cards"></main>
+<script type="application/json" id="tasks">{"schema_version": 1, "rubric_version": "readability-review-v1", "cases": [{"id": "condition", "request": "意味・条件・数値を保って読みやすくしてください。", "context": "候補は評価手順を試すための人工的な失敗例です。", "original": "管理者が承認した場合に限り、30分以内に実行できます。", "candidate": "3分以内に実行できます。", "audience": "利用申請をする社員", "operation": "", "mode": "B", "document_id": "condition", "provenance": {}}, {"id": "paragraph", "request": "文章を変えず、改行だけ追加してください。", "context": "", "original": "申請は管理者が確認します。承認後に結果を通知します。", "candidate": "申請は管理者が確認します。\n\n承認後に結果を通知します。", "audience": "", "operation": "", "mode": "C", "document_id": "paragraph", "provenance": {}}], "task_sha256": "7aebfb3cf9589034be585a397a8c2fd29ecb40270accc91b317937b09982c558"}</script>
+<script>
+'use strict';
+const tasks=JSON.parse(document.getElementById('tasks').textContent);
+const rubric=tasks.rubric_version;
+const dimensions={readability:'理解しやすさ',naturalness:'日本語の自然さ',style:'依頼・文体への適合'};
+const forms=[];
+let dirty=false;
+const status=document.getElementById('status');
+function markDirty(){dirty=true;status.textContent='変更があります。回答JSONを保存してください。';status.className='';}
+function element(tag,text,parent){const el=document.createElement(tag);if(text)el.textContent=text;if(parent)parent.append(el);return el;}
+function selectField(parent,label,options){
+  const wrapper=element('label',label+' ',parent),select=element('select','',wrapper);
+  for(const [value,text] of options){const option=element('option',text,select);option.value=value;}
+  return select;
+}
+for(const task of tasks.cases){
+  const card=element('section','',document.getElementById('cards'));card.className='card';
+  element('h2',task.id+' / モード'+task.mode+(task.operation?' / '+task.operation:''),card);
+  element('p','依頼：'+task.request,card);
+  element('p','対象読者：'+(task.audience||'未指定'),card);
+  if(task.context){element('h3','資料・文脈',card);element('pre',task.context,card);}
+  const texts=element('div','',card);texts.className='texts';
+  for(const [key,label] of [['original','原文'],['candidate','評価対象の候補']]){
+    const column=element('div','',texts);element('h3',label,column);element('pre',task[key]||'（なし）',column);
+  }
+  const contract=selectField(card,'意味保持・モードの契約', [['','未評価'],['pass','合格：確認範囲で問題なし'],['fail','不合格：変更・違反あり'],['uncertain','判断不能：資料や確信が不足']]);
+  const scores={};
+  for(const [key,label] of Object.entries(dimensions))scores[key]=selectField(card,label,[['','未評価'],...Array.from({length:5},(_,i)=>[String(i+1),String(i+1)])]);
+  const comparable=['B','C'].includes(task.mode);
+  const preference=selectField(card,'原文と比べた選好',comparable?[['','未評価'],['original','原文がよい'],['candidate','候補がよい'],['tie','同程度'],['uncertain','判断不能']]:[['not_applicable','対象外：A/Dは単独評価']]);
+  const reason=element('textarea','',element('label','根拠・理由（評価時は必須。引用＋問題または保持された関係）',card));
+  const suggestion=element('textarea','',element('label','修正案（任意）',card));
+  const reset=element('button','この文書の回答をクリア',card);reset.type='button';
+  const fields={contract,preference,reason,suggestion,...scores};
+  reset.addEventListener('click',()=>{if(!confirm('この文書の回答を消去しますか？'))return;for(const [key,field] of Object.entries(fields))field.value=key==='preference'&&!comparable?'not_applicable':'';markDirty();});
+  card.addEventListener('input',markDirty);card.addEventListener('change',markDirty);
+  forms.push({task,fields,scores,comparable});
+}
+function validate(review,form){
+  if(!['pass','fail','uncertain'].includes(review.contract)||typeof review.reason!=='string'||!review.reason.trim()||typeof review.suggestion!=='string')throw Error(form.task.id+'：判定と根拠・理由が必要です。');
+  if(!review.scores||Object.keys(review.scores).sort().join()!==Object.keys(dimensions).sort().join())throw Error('評点の形式が違います。');
+  for(const value of Object.values(review.scores))if(value!==null&&(!Number.isInteger(value)||value<1||value>5))throw Error('評点は1〜5または未評価です。');
+  if(form.comparable?!['original','candidate','tie','uncertain'].includes(review.preference):review.preference!=='not_applicable')throw Error(form.task.id+'：選好を選んでください。');
+  if(review.contract!=='pass'&&!['uncertain','not_applicable'].includes(review.preference))throw Error(form.task.id+'：不合格・判断不能の場合は選好も「判断不能」にしてください。');
+}
+function collect(){
+  const reviews=[];
+  for(const form of forms){
+    const f=form.fields;
+    const started=Object.entries(f).some(([key,el])=>el.value&&!(key==='preference'&&el.value==='not_applicable'));
+    if(!started)continue;
+    const review={id:form.task.id,contract:f.contract.value,scores:Object.fromEntries(Object.entries(form.scores).map(([key,el])=>[key,el.value?Number(el.value):null])),preference:f.preference.value,reason:f.reason.value,suggestion:f.suggestion.value};
+    validate(review,form);reviews.push(review);
+  }
+  return reviews;
+}
+document.getElementById('reviewer').addEventListener('input',markDirty);
+document.getElementById('export').addEventListener('click',()=>{
+  try{
+    const reviewer=document.getElementById('reviewer').value.trim();if(!reviewer)throw Error('評価者IDを入力してください。');
+    const reviews=collect();
+    const data={schema_version:1,rubric_version:rubric,task_sha256:tasks.task_sha256,method:'human',reviewer,reviews};
+    const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)+'\n'],{type:'application/json'}));
+    const link=element('a','',document.body);link.href=url;link.download='human-answers.json';link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    dirty=false;status.className='';status.textContent=reviews.length+' / '+tasks.cases.length+'件の回答を出力しました。ダウンロード先に保存されたか確認してください。';
+  }catch(error){status.className='error';status.textContent=error.message;}
+});
+document.getElementById('resume').addEventListener('change',async event=>{
+  try{
+    const file=event.target.files[0];if(!file)return;
+    const data=JSON.parse(await file.text());
+    if(!data||data.schema_version!==1||data.task_sha256!==tasks.task_sha256||data.rubric_version!==rubric||data.method!=='human'||typeof data.reviewer!=='string'||!data.reviewer.trim()||!Array.isArray(data.reviews))throw Error('この評価対象・基準の人手回答JSONではありません。');
+    const seen=new Set();
+    for(const review of data.reviews){
+      const form=forms.find(f=>f.task.id===review.id);
+      if(!form||seen.has(review.id))throw Error('不明または重複した文書IDです。');
+      validate(review,form);seen.add(review.id);
+    }
+    if(dirty&&!confirm('未保存の入力を、読み込んだ回答で置き換えますか？'))return;
+    for(const form of forms){
+      const review=data.reviews.find(r=>r.id===form.task.id);
+      for(const [key,field] of Object.entries(form.fields))field.value=review?(key in dimensions?(review.scores[key]??''):review[key]):(key==='preference'&&!form.comparable?'not_applicable':'');
+    }
+    document.getElementById('reviewer').value=data.reviewer;dirty=false;status.className='';status.textContent=data.reviews.length+'件の回答を読み込みました。';
+  }catch(error){status.className='error';status.textContent='読み込めません：'+error.message;}
+  finally{event.target.value='';}
+});
+window.addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue='';}});
+</script>
+</html>
