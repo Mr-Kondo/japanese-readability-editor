@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; base-uri 'none'; form-action 'none'">
+<title>日本語文章の匿名比較</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#f5f6f8;color:#1c2732;max-width:1200px;margin:auto;padding:24px;line-height:1.7}
+header,section{background:white;padding:24px;border:1px solid #ccd3dc;border-radius:10px;margin-bottom:24px}
+.columns{display:grid;grid-template-columns:1fr 1fr;gap:24px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;background:#f5f6f8;padding:16px;max-height:450px;overflow:auto}
+label{display:block;margin-top:12px}select,input,textarea,button{font:inherit;padding:8px;border:1px solid #778492;border-radius:4px;max-width:100%;box-sizing:border-box}
+textarea{width:100%;min-height:80px}button{background:#153f6c;color:white;cursor:pointer;margin:12px 8px 0 0}fieldset{margin-top:16px}legend{font-weight:bold}
+:focus-visible{outline:3px solid #bd5000;outline-offset:3px}.error{color:#9e1b1b}
+@media(max-width:750px){.columns{grid-template-columns:1fr}body{padding:12px}}
+</style>
+<header>
+<h1>日本語文章の匿名比較</h1>
+<p id="assigned"></p>
+<p>まず原文と各候補を照合し、意味・数値・条件・否定・主体・文の働きの保持を判定してください。両方が合格したときだけ、読みやすさの選好を記録します。原文を残す方がよい場合も理由に記入してください。</p>
+<p>評点：1 大きな問題／2 問題あり／3 許容／4 良い／5 非常に良い。主観的な印象であり、理解度の実測ではありません。問題の引用は候補からそのまま転記します。欠落は周辺の文を引用して説明してください。</p>
+<button id="export" type="button">回答JSONを保存</button>
+<label>保存した回答から再開 <input id="resume" type="file" accept=".json,application/json"></label>
+<p id="status" role="status" aria-live="polite">自動保存されません。未回答の文書は飛ばせます。入力を始めた文書は左右の判定・理由と比較理由を完成させて保存してください。</p>
+</header>
+<main id="cards"></main>
+<script type="application/json" id="tasks">__TASK_DATA__</script>
+<script>
+'use strict';
+const tasks=JSON.parse(document.getElementById('tasks').textContent);
+const dimensions={readability:'理解しやすさ',naturalness:'日本語の自然さ',style:'依頼・文体への適合'};
+const categories={number:'数量',condition:'条件',negation:'否定',actor:'主体',speech_act:'文の働き',omission:'欠落',addition:'追加',style:'文体',readability:'読みやすさ',other:'その他'};
+const forms=[];let dirty=false;
+const status=document.getElementById('status');
+document.getElementById('assigned').textContent='評価者ID：'+tasks.reviewer+'。モードB。左右の割付は保存・再開しても変わりません。';
+function element(tag,text,parent){const el=document.createElement(tag);if(text)el.textContent=text;if(parent)parent.append(el);return el;}
+function selectField(parent,label,options){
+  const field=element('select','',element('label',label+' ',parent));
+  for(const [key,text] of options){const option=element('option',text,field);option.value=key;}return field;
+}
+function textarea(parent,label){return element('textarea','',element('label',label,parent));}
+function markDirty(){dirty=true;status.className='';status.textContent='変更があります。回答JSONを保存してください。';}
+function addIssue(parent,issue){
+  const row=element('fieldset','',parent);element('legend','問題箇所',row);
+  const fields={category:selectField(row,'種類',Object.entries(categories)),
+    severity:selectField(row,'重大度',[['minor','軽微：局所的な問題'],['major','重大：解釈・利用に影響'],['critical','致命的：数量・条件等の誤りで判断を誤る']]),
+    quote:textarea(row,'候補からの引用（必須）'),reason:textarea(row,'問題と読者への影響（必須）')};
+  if(issue)for(const [key,field] of Object.entries(fields))field.value=issue[key];
+  row.issueFields=fields;
+  const remove=element('button','この問題を削除',row);remove.type='button';
+  remove.addEventListener('click',()=>{if(confirm('この問題の記録を削除しますか？')){row.remove();markDirty();}});
+}
+function candidateForm(parent,side,caseText){
+  const column=element('div','',parent);element('h3',side==='left'?'左候補':'右候補',column);element('pre',caseText,column);
+  const fields={contract:selectField(column,'意味保持',[['','未評価'],['pass','合格'],['fail','不合格'],['uncertain','判断不能']])};
+  const scores={};for(const [key,label] of Object.entries(dimensions))scores[key]=selectField(column,label,[['','未評価'],...Array.from({length:5},(_,i)=>[String(i+1),String(i+1)])]);
+  fields.reason=textarea(column,'判定の根拠・理由（必須）');fields.suggestion=textarea(column,'修正案（任意）');
+  const issues=element('div','',column),add=element('button','問題箇所を追加',column);add.type='button';add.addEventListener('click',()=>{addIssue(issues);markDirty();});
+  return {fields,scores,issues};
+}
+for(const task of tasks.cases){
+  const card=element('section','',document.getElementById('cards'));element('h2',task.id,card);
+  element('p','依頼：'+task.request,card);element('p','対象読者：'+(task.audience||'未指定'),card);
+  if(task.context){element('h3','資料・文脈',card);element('pre',task.context,card);}
+  element('h3','原文',card);element('pre',task.original,card);
+  const columns=element('div','',card);columns.className='columns';
+  const sides={};for(const side of ['left','right'])sides[side]=candidateForm(columns,side,task[side]);
+  const preference=selectField(card,'両候補合格後の選好',[['uncertain','判断不能・両候補合格前'],['left','左がよい'],['right','右がよい'],['tie','同等']]);
+  const reason=textarea(card,'比較の理由（必須。原文の方がよい場合もここへ記入）');
+  const gate=()=>{const eligible=Object.values(sides).every(s=>s.fields.contract.value==='pass');preference.disabled=!eligible;if(!eligible)preference.value='uncertain';};
+  for(const side of Object.values(sides))side.fields.contract.addEventListener('change',gate);gate();
+  card.addEventListener('input',markDirty);card.addEventListener('change',markDirty);
+  forms.push({task,sides,preference,reason,gate});
+}
+function candidateAnswer(form){
+  return {contract:form.fields.contract.value,scores:Object.fromEntries(Object.entries(form.scores).map(([key,field])=>[key,field.value?Number(field.value):null])),
+    reason:form.fields.reason.value,suggestion:form.fields.suggestion.value,
+    issues:Array.from(form.issues.children,row=>Object.fromEntries(Object.entries(row.issueFields).map(([key,field])=>[key,field.value])))};
+}
+function validateCandidate(answer,text){
+  if(!answer||!['pass','fail','uncertain'].includes(answer.contract)||typeof answer.reason!=='string'||!answer.reason.trim()||typeof answer.suggestion!=='string')throw Error('各候補の保持判定と理由が必要です。');
+  if(!answer.scores||Object.keys(answer.scores).sort().join()!==Object.keys(dimensions).sort().join())throw Error('評点形式が違います。');
+  for(const score of Object.values(answer.scores))if(score!==null&&(!Number.isInteger(score)||score<1||score>5))throw Error('評点は1〜5または未評価です。');
+  if(!Array.isArray(answer.issues))throw Error('問題記録の形式が違います。');
+  for(const issue of answer.issues){
+    if(!issue||!Object.hasOwn(categories,issue.category)||!['minor','major','critical'].includes(issue.severity)||typeof issue.quote!=='string'||!issue.quote.trim()||!text.includes(issue.quote)||typeof issue.reason!=='string'||!issue.reason.trim())throw Error('問題の種類・重大度・候補内の引用・理由を確認してください。');
+  }
+}
+function validateAnswer(answer,form){
+  if(!answer||!['left','right','tie','uncertain'].includes(answer.preference)||typeof answer.reason!=='string'||!answer.reason.trim())throw Error('比較の選好と理由が必要です。');
+  for(const side of ['left','right'])validateCandidate(answer[side],form.task[side]);
+  if(['left','right'].some(s=>answer[s].contract!=='pass')&&answer.preference!=='uncertain')throw Error('選好には両候補の合格が必要です。');
+}
+function collect(){
+  const reviews=[];
+  for(const form of forms){
+    const candidates=Object.fromEntries(Object.entries(form.sides).map(([side,fields])=>[side,candidateAnswer(fields)]));
+    const started=Object.values(candidates).some(a=>a.contract||a.reason||a.suggestion||a.issues.length||Object.values(a.scores).some(s=>s!==null))||form.reason.value||form.preference.value!=='uncertain';
+    if(!started)continue;
+    const answer={id:form.task.id,...candidates,preference:form.preference.value,reason:form.reason.value};
+    try{validateAnswer(answer,form);}catch(error){throw Error(form.task.id+'：'+error.message);}reviews.push(answer);
+  }return reviews;
+}
+document.getElementById('export').addEventListener('click',()=>{
+  try{
+    const reviews=collect(),answers={schema_version:1,rubric_version:tasks.rubric_version,task_sha256:tasks.task_sha256,reviewer:tasks.reviewer,method:'human',reviews};
+    const url=URL.createObjectURL(new Blob([JSON.stringify(answers,null,2)+'\n'],{type:'application/json'}));
+    const link=element('a','',document.body);link.href=url;link.download='pair-answers.json';link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    dirty=false;status.className='';status.textContent=reviews.length+'件を出力しました。保存先を確認してください。';
+  }catch(error){status.className='error';status.textContent=error.message;}
+});
+function restoreCandidate(form,answer){
+  for(const [key,field] of Object.entries(form.fields))field.value=answer?answer[key]:'';
+  for(const [key,field] of Object.entries(form.scores))field.value=answer?(answer.scores[key]??''):'';
+  form.issues.replaceChildren();if(answer)for(const issue of answer.issues)addIssue(form.issues,issue);
+}
+document.getElementById('resume').addEventListener('change',async event=>{
+  try{
+    const file=event.target.files[0];if(!file)return;const answers=JSON.parse(await file.text());
+    if(!answers||['schema_version','rubric_version','task_sha256','reviewer'].some(k=>answers[k]!==tasks[k])||answers.method!=='human'||!Array.isArray(answers.reviews))throw Error('評価対象・評価者・基準が一致しません。');
+    const seen=new Set();for(const answer of answers.reviews){const form=forms.find(f=>f.task.id===answer?.id);if(!form||seen.has(answer.id))throw Error('不明・重複IDです。');validateAnswer(answer,form);seen.add(answer.id);}
+    if(dirty&&!confirm('未保存の入力を読み込んだ回答で置き換えますか？'))return;
+    for(const form of forms){const answer=answers.reviews.find(a=>a.id===form.task.id);for(const side of ['left','right'])restoreCandidate(form.sides[side],answer?.[side]);form.preference.value=answer?.preference||'uncertain';form.reason.value=answer?.reason||'';form.gate();}
+    dirty=false;status.className='';status.textContent=answers.reviews.length+'件を読み込みました。';
+  }catch(error){status.className='error';status.textContent='読み込めません：'+error.message;}finally{event.target.value='';}
+});
+window.addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue='';}});
+</script>
+</html>
