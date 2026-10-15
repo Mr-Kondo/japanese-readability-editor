@@ -1,0 +1,12 @@
+{
+  "checked_calls": 44,
+  "generated": 36,
+  "preservation_judgments": 50,
+  "comparison_judgments": 34,
+  "source_and_prompt_hashes": "matched",
+  "summary": "matched",
+  "secret_patterns": "none",
+  "model_ids": [
+    "claude-sonnet-5-5"
+  ]
+}

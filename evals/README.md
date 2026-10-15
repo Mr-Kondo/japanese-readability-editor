@@ -1,5 +1,7 @@
 # スキルの評価ケース
 
+万能動詞の具体化例の修正は、[実装案と追加調査](../docs/concretization-example-plan.md)、[比較手順](concretization-comparison.md)、[実装・比較結果](concretization-result.md)を参照する。[自作6入力](concretization-cases.json)は、資料なし／ありの対と自然な原文の保持を含む回帰確認用で、未使用文書への一般化を示すものではない。
+
 一般文書 A/B の構造修正・文の働きの保持は、[比較評価の手順](readability-comparison.md)と[自作12ケース](readability-cases.json)を使う。変更前後の条件を固定し、意味保持と読みやすさを別々に判断する。
 
 初回の意味保持失敗に対する修正は、同じ12ケースでの再比較と[追加6ケース](readability-preservation-cases.json)で確認した。[修正・再評価の結果](readability-preservation-result.md)と[生の実行記録](readability-preservation-run.json)を参照する。
