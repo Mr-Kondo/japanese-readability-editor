@@ -1,4 +1,12 @@
-# 小説モードの評価ケース
+# スキルの評価ケース
+
+一般文書 A/B の構造修正・文の働きの保持は、[比較評価の手順](readability-comparison.md)と[自作12ケース](readability-cases.json)を使う。変更前後の条件を固定し、意味保持と読みやすさを別々に判断する。
+
+初回の意味保持失敗に対する修正は、同じ12ケースでの再比較と[追加6ケース](readability-preservation-cases.json)で確認した。[修正・再評価の結果](readability-preservation-result.md)と[生の実行記録](readability-preservation-run.json)を参照する。
+
+さらに広い文章での確認は、[未使用文書による追加評価](readability-generalization.md)を使う。未使用16文書を1件ずつ3回生成し、採点点検用12項目を混ぜる。[実行ツール](../tools/evaluate_readability.py)は既定では準備だけを行い、`--execute`がある場合だけ外部Claudeを呼ぶ。[準備済みの入力・指示](readability-generalization-plan/run.json)と[実施状況](readability-generalization-result.md)は、モデルによる検証結果と区別する。
+
+## 小説モード
 
 [fiction-cases.json](fiction-cases.json) は24件の自作入力、期待する操作、守る事実、禁止する変更、評価方法を持つ。covers は18の必須観点に対応する。公開小説の本文は使っていない。開発資料であり実行時の依存ではない。
 

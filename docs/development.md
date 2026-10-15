@@ -98,6 +98,12 @@ ZIP は再現可能で、同じ入力からは同じ SHA-256 になります。`
 
 `v` で始まるタグを GitHub に push すると、Actions が Release を作ります(`.github/workflows/release.yml`)。Release は、[Releases のページ](https://github.com/Mr-Kondo/japanese-readability-editor/releases)で公開されます。添付されるものと、ダウンロードの方法は、[インストール](installation.md#アップロード型の環境に入れる)にあります。
 
+## 一般文書 A/B のモデル評価
+
+構造を直す手順と文の働きの保持は、[比較評価の手順](../evals/readability-comparison.md)と[自作ケース](../evals/readability-cases.json)で確認します。変更前後で生成条件を固定し、意味保持の成否と、両方が意味を保った場合の読みやすさを分けて採点します。例集・指示の文言検査や単体テストの成功だけでは、モデル出力の改善を確認したことにはなりません。評価資料は配布スキルの必須依存にしません。
+
+未使用文書での追加確認は [評価手順](../evals/readability-generalization.md)と `tools/evaluate_readability.py` を使います。既定は外部通信のない準備だけで、`--execute`を付けた場合だけ既存認証のClaude CLIを呼びます。単体テストではプロセス実行の境界を差し替え、モデル呼び出しは行いません。出力欠落、採点点検の誤答、実行失敗を成功へ置き換えないことを検査します。
+
 ## 小説モードの正本と評価
 
 D の正本は共通 `SKILL.md` と `references/fiction-writing.md`、`references/fiction-checks.md`、`assets/fiction-examples.md`、任意の `assets/fiction-context-template.md`、読み取り専用 `scripts/check_fiction.py` です。詳細を参照へ分け、製品固有 API を必須依存にしません。文化庁の規則データと既存 CLI の既定値は変更しません。
