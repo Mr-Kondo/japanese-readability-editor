@@ -6,7 +6,9 @@
 
 不一致・重大度の集計、確認済み指摘の回帰ケース化、人手とLLMの照合、単一版だけを読む理解問題、文書単位の近似区間の手順も[評価ツールのガイド](../docs/human-evaluation.md)にある。[理解問題の人工例](comprehension-example.json)は操作練習であり、効果の実証ではない。開発に使う回帰ケースと、最後に検証する未使用文書を分ける。
 
-公開された実文書（デジタル庁・Python・Kubernetes・青空文庫・IPA）を追加する計画と台帳は、[計画](../docs/public-document-evaluation.md)と[台帳](public-documents/manifest.json)を参照する。本文は未収集で、台帳の抜粋は空である。
+公開された実文書（デジタル庁・Python・Kubernetes・青空文庫・IPA）を追加する計画と台帳は、[計画](../docs/public-document-evaluation.md)と[台帳](public-documents/manifest.json)を参照する。原本は取得済みで、抜粋は人の確認待ちの候補である。
+
+Ragas の評価器を調べるための[人工の校正ケース](ragas-calibration/artificial-cases.json)と[期待ラベル](ragas-calibration/artificial-labels.json)は、構成によるラベルで人の確認前である。実運用の成績ではない。手順は[Ragas による自動評価](../docs/ragas-evaluation.md)を参照する。
 
 万能動詞の具体化例の修正は、[実装案と追加調査](../docs/concretization-example-plan.md)、[比較手順](concretization-comparison.md)、[実装・比較結果](concretization-result.md)を参照する。[自作6入力](concretization-cases.json)は、資料なし／ありの対と自然な原文の保持を含む回帰確認用で、未使用文書への一般化を示すものではない。
 
