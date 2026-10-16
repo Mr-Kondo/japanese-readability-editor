@@ -29,7 +29,9 @@ ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
 SPLITS = ("tuning", "final")
 EXCERPT_STATUSES = ("candidate", "adopted", "excluded")
 ROLES = ("change_target", "no_change_control")
-PRESERVE_KINDS = ("claim", "condition", "exception", "actor", "number", "deadline", "deliverable", "strength", "function")
+PRESERVE_KINDS = ("claim", "condition", "exception", "actor", "number", "deadline", "deliverable", "strength", "function",
+                  "code", "version", "warning", "term",
+                  "contrast", "negation", "logic", "figure", "notation")
 STRENGTHS = ("normative", "informative")
 REDISTRIBUTION = ("allowed", "restricted", "unknown")
 COLLECTED_SOURCE_FIELDS = ("title", "provider", "url", "version", "format")
