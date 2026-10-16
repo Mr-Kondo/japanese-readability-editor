@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "condition-practice",
+      "document_id": "condition",
+      "mode": "B",
+      "request": "数値・条件・意味を保って読みやすくしてください。",
+      "audience": "利用申請をする社員",
+      "original": "管理者が承認した場合に限り、30分以内に実行できます。",
+      "candidates": {
+        "baseline": "管理者が承認した場合に限り、30分以内に実行できます。",
+        "revision": "3分以内に実行できます。"
+      },
+      "questions": [
+        {
+          "id": "approval",
+          "prompt": "実行に必要な条件は何ですか。",
+          "options": [
+            "管理者の承認",
+            "条件はない",
+            "設定の保存"
+          ],
+          "answer_index": 0,
+          "evidence": "管理者が承認した場合に限り",
+          "verified_by": "fixture-author",
+          "verification_reason": "原文に承認が必須条件として明示されている。"
+        },
+        {
+          "id": "minutes",
+          "prompt": "実行できる時間は何分以内ですか。",
+          "options": [
+            "3分",
+            "30分",
+            "300分"
+          ],
+          "answer_index": 1,
+          "evidence": "30分以内",
+          "verified_by": "fixture-author",
+          "verification_reason": "原文の数値・単位を照合した。"
+        }
+      ]
+    },
+    {
+      "id": "connection-practice",
+      "document_id": "connection",
+      "mode": "B",
+      "request": "数値・条件・意味を保って読みやすくしてください。",
+      "audience": "接続設定をする社員",
+      "original": "設定の保存後に接続を確認して、接続できなければ管理者に連絡してください。",
+      "candidates": {
+        "baseline": "設定の保存後に接続を確認して、接続できなければ管理者に連絡してください。",
+        "revision": "設定を保存してから、接続を確認してください。接続できなければ管理者に連絡してください。"
+      },
+      "questions": [
+        {
+          "id": "contact",
+          "prompt": "接続できない場合、誰に連絡しますか。",
+          "options": [
+            "管理者",
+            "申請者",
+            "連絡しない"
+          ],
+          "answer_index": 0,
+          "evidence": "接続できなければ管理者に連絡してください。",
+          "verified_by": "fixture-author",
+          "verification_reason": "原文の条件と連絡先を照合した。"
+        }
+      ]
+    }
+  ],
+  "purpose": "人工例による操作練習。文章品質や理解度の改善を示す実験結果ではない。"
+}

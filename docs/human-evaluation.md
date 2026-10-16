@@ -210,6 +210,26 @@ python3 tools/feedback_readability.py calibrate --organizer /tmp/jre-pairs/organ
 
 意味改変の検出率は、全確認済み不合格を分母とする値とLLM回答済みだけを分母とする値を分けます。LLM合格中の人手不合格は、人手側の判定が確定したLLM合格だけを分母にします。各率に `numerator/denominator/rate` を保存し、分母ゼロなら `null`。人手未解決、LLM判断不能、LLM欠測も別記します。人工例での成績は実運用の誤り頻度・適合率には読み替えず、二候補間の選好と原文との選好も直接比較しません。
 
+## 一つの候補だけを読んで理解問題を解く
+
+比較画面には原文と両候補があるため、理解問題は別の配布物にします。`evals/comprehension-example.json` は操作練習用の人工例です。二候補入力に `questions` を追加し、各設問に `id`、`prompt`、異なる二つ以上の `options`、0始まりの `answer_index`、原文に完全一致する `evidence`、`verified_by`、`verification_reason` を指定します。引用の存在と形式は検証しますが、正解の意味的な正しさは作問者が原文と照合してください。
+
+```bash
+python3 tools/comprehension_readability.py prepare --input evals/comprehension-example.json --readers reader-a reader-b --out-dir /tmp/jre-comprehension
+```
+
+`organizer.json` は正解・原文・版対応を含む主催者用です。回答者には対応する `reader-NNN/review.html` と `tasks.json` だけを渡します。配布物は候補文・対象読者・設問・選択肢だけを含み、原文・版名・正解・根拠を含めません。候補の文体などから版を推測できる可能性は残ります。再生成せず、同じ配布物を保管して再開してください。
+
+各回答者には同じ原稿を一度だけ配るため、入力の `document_id` 重複を拒否します。各回答者内と各文書内の旧新版の割付差を最大1件に抑えます。一人だけでは文書ごとの版間比較はできず、多人数でも対象読者の違いや知識の偏りは別途考慮が必要です。
+
+画面は文章を参照しながら回答する形式です。「分からない」と任意の迷った箇所を記録し、回答JSONを明示保存できます。再読込時は回答者・割付・基準を確認し、未保存入力の置換前に確認します。自動保存・時間計測はありません。注記だけの入力は、回答か「分からない」を選んでから保存してください。
+
+```bash
+python3 tools/comprehension_readability.py summarize --organizer /tmp/jre-comprehension/organizer.json --answers /path/to/reader-a-comprehension.json /path/to/reader-b-comprehension.json --out-dir /tmp/jre-comprehension-summary
+```
+
+`summary.json` と `summary.md` に全体・版別・文書別の割付設問数、回答数、正答数、分からない件数、欠測、回答済み内の正答率と全割付中の正答割合を保存します。「分からない」は回答済みの非正答、欠測は未回答として分けます。未提出者も欠測に含み、一人につき最新の回答ファイル一つを渡します。全体の率は設問・回答を等重みにした記述値で、文書を等重みにした効果推定ではありません。両コマンドとも `0=完了、2=エラー`、出力先は新規フォルダだけです。
+
 ## 限界と改善への接続
 
 平均評点を単一の総合品質点にしません。評点が高くても意味改変は独立した不具合です。反復生成や複数人の票を独立文書と数えず、信頼区間・一致係数・有意差は未実装です。Cの検査対象もJSON内の文字列であり、元ファイルの文字コード・バイト保持までは保証しません。
