@@ -118,6 +118,144 @@ class PureLogicTest(unittest.TestCase):
         self.assertTrue(any("verdict_count_mismatch" in w for w in mismatch["warnings"]))
 
 
+def scored(value, unsupported=()):
+    return {"status": "scored", "value": value, "ragas_value": value,
+            "response_claims": {"unsupported_texts": [{"claim": c, "reason": ""} for c in unsupported]},
+            "reference_claims": {"unsupported_texts": [{"claim": c, "reason": ""} for c in unsupported]}}
+
+
+def rubric(**values):
+    return {a: {"status": "scored", "value": v, "reason": "r"} for a, v in values.items()}
+
+
+def run_case(case_id, precision=1.0, recall=1.0, **aspects):
+    return {"id": case_id, "document_id": "d", "errors": [],
+            "factual": {"precision": scored(precision), "recall": scored(recall)}, "rubric": rubric(**aspects)}
+
+
+def label(expected, aspect=None, perturbation="p"):
+    return {"expected_preservation": expected, "perturbation": perturbation, "violated_aspect": aspect, "source_id": "s"}
+
+
+class CalibrationTest(unittest.TestCase):
+    def report(self, cases, labels):
+        return ragas_tool.calibrate({"cases": cases, "status": "complete", "models": ["m"], "call_summary": {}},
+                                    {"labels": labels, "notice": "n"})
+
+    def test_signals_rates_and_targeted_hits_use_expected_labels(self):
+        cases = [run_case("f1", recall=0.67, condition_scope="fail", actor_target="fail", unnecessary_change="fail"),
+                 run_case("f2", condition_scope="pass", actor_target="pass", unnecessary_change="pass"),
+                 run_case("p1", condition_scope="pass", actor_target="pass", unnecessary_change="fail"),
+                 run_case("p2", precision=0.5, condition_scope="fail", actor_target="pass", unnecessary_change="pass")]
+        labels = {"f1": label("fail", "condition_scope"), "f2": label("fail", "condition_scope"),
+                  "p1": label("pass"), "p2": label("pass")}
+        summary = self.report(cases, labels)["summary"]
+        self.assertEqual(summary["fail"]["factual_signal"], {"signalled": 1, "available": 2, "unavailable": 0, "rate": 0.5})
+        self.assertEqual(summary["fail"]["targeted_aspect_hit"]["signalled"], 1)
+        self.assertEqual(summary["fail"]["failed_aspects_per_case"]["values"], [2, 0])  # 観点が弁別していない例
+        self.assertEqual(summary["pass"]["factual_signal"]["signalled"], 1)
+        self.assertEqual(summary["pass"]["rubric_signal"]["signalled"], 1)
+        # unnecessary_change は保持の信号に含めない（p1 は保持の信号なし）
+        self.assertEqual(summary["pass"]["unnecessary_change_fail"], {"signalled": 1, "available": 2})
+
+    def test_unscored_cases_are_unavailable_not_negative(self):
+        broken = run_case("f1", condition_scope="fail")
+        broken["factual"]["precision"] = {"status": "no_claims", "value": None}
+        broken["rubric"]["actor_target"] = {"status": "error", "value": None, "error": "x"}
+        report = self.report([broken], {"f1": label("fail", "condition_scope")})
+        part = report["summary"]["fail"]
+        self.assertEqual((part["factual_signal"]["available"], part["factual_signal"]["unavailable"]), (0, 1))
+        self.assertEqual((part["rubric_signal"]["available"], part["rubric_signal"]["unavailable"]), (0, 1))
+        self.assertIsNone(report["cases"][0]["factual_signal"])
+
+    def test_missing_label_and_unlabelled_file_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, "no label"):
+            self.report([run_case("x")], {})
+        with self.assertRaisesRegex(ValueError, "no labels"):
+            ragas_tool.calibrate({"cases": []}, {})
+
+    def test_report_states_that_labels_are_unconfirmed(self):
+        report = self.report([run_case("f1", condition_scope="fail")], {"f1": label("fail", "condition_scope")})
+        self.assertEqual(report["status"], "constructed_labels_not_human_confirmed")
+        self.assertIn("人の確認前", ragas_tool.render_calibration(report))
+
+    def test_committed_labels_cover_every_artificial_case_and_use_only_tuning_sources(self):
+        base = REPO_ROOT / "evals/ragas-calibration"
+        cases = json.loads((base / "artificial-cases.json").read_text(encoding="utf-8"))["cases"]
+        labels = json.loads((base / "artificial-labels.json").read_text(encoding="utf-8"))["labels"]
+        self.assertEqual({c["id"] for c in cases}, set(labels))
+        manifest = json.loads((REPO_ROOT / "evals/public-documents/manifest.json").read_text(encoding="utf-8"))
+        splits = {e["id"]: e["split"] for e in manifest["excerpts"] if e["status"] == "candidate"}
+        self.assertTrue(all(splits[v["source_excerpt"]] == "tuning" for v in labels.values()))  # 最終評価用は校正に使わない
+        self.assertTrue(all(v["confirmed_by"] == "" for v in labels.values()))  # 人の確認を偽らない
+        for c in cases:
+            self.assertEqual(labels[c["id"]]["original_sha256"], __import__("hashlib").sha256(c["original"].encode()).hexdigest())
+
+    def test_cli_calibrate_writes_report_and_refuses_overwrite(self):
+        with tempfile.TemporaryDirectory() as folder:
+            run, labels = Path(folder, "run.json"), Path(folder, "labels.json")
+            run.write_text(json.dumps({"cases": [run_case("f1", condition_scope="fail")], "status": "complete", "config": {}}), encoding="utf-8")
+            labels.write_text(json.dumps({"labels": {"f1": label("fail", "condition_scope")}}), encoding="utf-8")
+            out = Path(folder, "out")
+            code, _, err = run_script(TOOL, "calibrate", "--run", str(run), "--labels", str(labels), "--out-dir", str(out))
+            self.assertEqual(code, 0, err)
+            self.assertEqual(sorted(p.name for p in out.iterdir()), ["ragas-calibration.json", "ragas-calibration.md"])
+            self.assertEqual(run_script(TOOL, "calibrate", "--run", str(run), "--labels", str(labels), "--out-dir", str(out))[0], 2)
+
+
+class MergeRunsTest(unittest.TestCase):
+    def run_file(self, *cases, **config):
+        base = {"atomicity": "high", "coverage": "high", "rubric_sha256": "r", "aspects": ["a"], "metrics": ["factual"],
+                "claude_flags": ["--print"], "packages": {"ragas": "0.4.3"}}
+        return {"status": "complete", "config": base | config, "models": ["m"], "cases": list(cases),
+                "call_summary": {"calls": 4, "cache_hits": 1, "failures": 0, "seconds": 2.0, "cost_usd_list_price": 0.5, "calls_without_cost": 0}}
+
+    def test_split_runs_merge_with_summed_calls(self):
+        merged = ragas_tool.merge_runs([self.run_file(run_case("a")), self.run_file(run_case("b"))])
+        self.assertEqual([c["id"] for c in merged["cases"]], ["a", "b"])
+        self.assertEqual((merged["call_summary"]["calls"], merged["call_summary"]["cost_usd_list_price"]), (8, 1.0))
+        self.assertEqual(merged["status"], "complete")
+
+    def test_different_settings_or_duplicate_cases_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, "different config: coverage"):
+            ragas_tool.merge_runs([self.run_file(run_case("a")), self.run_file(run_case("b"), coverage="low")])
+        with self.assertRaisesRegex(ValueError, "duplicate case id"):
+            ragas_tool.merge_runs([self.run_file(run_case("a")), self.run_file(run_case("a"))])
+
+    def test_a_partial_run_keeps_the_merged_status_partial(self):
+        partial = self.run_file(run_case("b"))
+        partial["status"] = "complete_with_errors"
+        self.assertEqual(ragas_tool.merge_runs([self.run_file(run_case("a")), partial])["status"], "partial_or_with_errors")
+
+
+class CompareLlmTest(unittest.TestCase):
+    def eval_run(self, candidate, status="pass"):
+        return {"skill_sha256": {"SKILL.md": "x"}, "suite": {"cases": [{"id": "k1", "text": "原文。"}]},
+                "outputs": [{"id": "g001", "case_id": "k1", "repeat": 1, "text": candidate, "model_ids": ["gen"]}],
+                "grading_items": [{"id": "j001", "source_id": "g001", "kind": "generated"}],
+                "grading_calls": [{"model_ids": ["grader"], "judgments": [{"id": "j001", "status": status, "reason": "理由"}]}]}
+
+    def test_pairs_existing_grader_with_ragas_signals_without_judging_correctness(self):
+        ragas = {"cases": [run_case("g001", recall=0.5, condition_scope="fail")]}
+        report = ragas_tool.compare_llm(ragas, self.eval_run("原文。", "pass"))
+        row = report["cases"][0]
+        self.assertEqual((row["existing_grader"], row["factual_signal"], row["rubric_signal"]), ("pass", True, True))
+        self.assertTrue(row["identical_to_original"])
+        self.assertEqual(report["crosstab"], {"grader=pass | factual_signal=True | rubric_signal=True": 1})
+        self.assertEqual(report["status"], "no_human_labels")
+        self.assertEqual((report["generation_models"], report["grading_models"]), (["gen"], ["grader"]))
+
+    def test_missing_grading_is_missing_not_pass(self):
+        run = self.eval_run("別。")
+        run["grading_calls"], run["grading_items"] = [], []
+        report = ragas_tool.compare_llm({"cases": [run_case("g001")]}, run)
+        self.assertEqual(report["cases"][0]["existing_grader"], "missing")
+
+    def test_unknown_output_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "no generated output"):
+            ragas_tool.compare_llm({"cases": [run_case("g999")]}, self.eval_run("原文。"))
+
+
 class CliTest(unittest.TestCase):
     def test_prepare_only_sends_nothing_and_does_not_overwrite(self):
         with tempfile.TemporaryDirectory() as folder:

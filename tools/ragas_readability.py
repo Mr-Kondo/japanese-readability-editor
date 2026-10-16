@@ -348,6 +348,173 @@ def render_markdown(run: dict) -> str:
     return "\n".join(lines)
 
 
+# 校正の判定規則。結果を見る前に固定する（スモーク3件を見た後で固めたため、その3件は事前固定ではない）。
+#  - factual の信号: 採点できた precision/recall のどちらかが 1.0 未満（支持されない主張がある）。閾値は置かない。
+#  - rubric の信号: 保持の観点（unnecessary_change を除く）のどれかが fail。
+#  - 狙い撃ち: 期待ラベルの violated_aspect が fail になった。
+#  - unnecessary_change は保持の信号に含めず、別に集計する（正当な言い換えでも不要な変更と判定され得るため）。
+PRESERVATION_EXCLUDED = ("unnecessary_change",)
+
+
+def case_signals(case: dict) -> dict:
+    factual = case.get("factual") or {}
+    values = {m: factual.get(m, {}) for m in ("precision", "recall")}
+    scored = [v for v in values.values() if v.get("status") == "scored"]
+    unavailable = [m for m, v in values.items() if v.get("status") != "scored"]
+    rubric = case.get("rubric") or {}
+    preservation = {a: v for a, v in rubric.items() if a not in PRESERVATION_EXCLUDED}
+    return {
+        "precision": values["precision"].get("value"), "recall": values["recall"].get("value"),
+        "factual_status": {m: v.get("status", "not_run") for m, v in values.items()},
+        "factual_signal": None if unavailable else any(v["value"] < 1.0 for v in scored),
+        "unsupported_response_claims": [t["claim"] for t in (values["precision"].get("response_claims") or {}).get("unsupported_texts", [])],
+        "unsupported_reference_claims": [t["claim"] for t in (values["recall"].get("reference_claims") or {}).get("unsupported_texts", [])],
+        "rubric": {a: v.get("value") if v.get("status") == "scored" else v.get("status") for a, v in rubric.items()},
+        "rubric_signal": None if not preservation or any(v["status"] != "scored" for v in preservation.values())
+                         else any(v["value"] == "fail" for v in preservation.values()),
+        "failed_aspects": sorted(a for a, v in preservation.items() if v.get("value") == "fail"),
+        "unnecessary_change": (rubric.get("unnecessary_change") or {}).get("value"),
+    }
+
+
+def tally(rows: list, key: str) -> dict:
+    available = [r for r in rows if r[key] is not None]
+    return {"signalled": sum(bool(r[key]) for r in available), "available": len(available), "unavailable": len(rows) - len(available),
+            "rate": round(sum(bool(r[key]) for r in available) / len(available), 2) if available else None}
+
+
+MERGE_KEYS = ("atomicity", "coverage", "rubric_sha256", "aspects", "metrics", "claude_flags", "packages")
+
+
+def merge_runs(runs: list) -> dict:
+    """同じ設定で分割実行した ragas-run.json を1つにまとめる。設定が違う run や重複ケースは拒否する。"""
+    if not runs:
+        raise ValueError("no runs to merge")
+    first = runs[0]["config"]
+    for run in runs[1:]:
+        for key in MERGE_KEYS:
+            if run["config"].get(key) != first.get(key):
+                raise ValueError(f"runs have different config: {key}")
+    cases = [case for run in runs for case in run["cases"]]
+    if len({case["id"] for case in cases}) != len(cases):
+        raise ValueError("duplicate case id across runs")
+    summaries = [run.get("call_summary", {}) for run in runs]
+    total = {key: round(sum(s.get(key, 0) for s in summaries), 4) for key in
+             ("calls", "cache_hits", "failures", "seconds", "cost_usd_list_price", "calls_without_cost")}
+    complete = all(run.get("status") == "complete" for run in runs)
+    return {"schema_version": 1, "status": "complete" if complete else "partial_or_with_errors", "config": first,
+            "merged_from": len(runs), "models": sorted({m for run in runs for m in run.get("models", [])}),
+            "call_summary": total, "cases": cases}
+
+
+def calibrate(run: dict, labels: dict) -> dict:
+    """採点結果を構成による期待ラベルと突き合わせる。ラベルは人の確認前で、実運用の成績ではない。"""
+    table = labels.get("labels")
+    if not isinstance(table, dict):
+        raise ValueError("labels file has no labels")
+    rows = []
+    for case in run["cases"]:
+        label = table.get(case["id"])
+        if label is None:
+            raise ValueError(f"no label for case {case['id']}")
+        row = {"id": case["id"], "expected": label["expected_preservation"], "perturbation": label["perturbation"],
+               "violated_aspect": label.get("violated_aspect"), "source_id": label["source_id"], "errors": case.get("errors", [])}
+        row.update(case_signals(case))
+        aspect = row["violated_aspect"]
+        row["targeted_hit"] = None if not aspect or aspect not in row["rubric"] or row["rubric"][aspect] in ("error", None) \
+            else row["rubric"][aspect] == "fail"
+        rows.append(row)
+    summary = {}
+    for expected in ("fail", "pass"):
+        group = [r for r in rows if r["expected"] == expected]
+        part = {"cases": len(group), "factual_signal": tally(group, "factual_signal"), "rubric_signal": tally(group, "rubric_signal"),
+                "unnecessary_change_fail": {"signalled": sum(r["unnecessary_change"] == "fail" for r in group),
+                                            "available": sum(r["unnecessary_change"] in ("pass", "fail", "uncertain") for r in group)},
+                "uncertain_in_any_aspect": sum("uncertain" in r["rubric"].values() for r in group),
+                "cases_with_errors": sum(bool(r["errors"]) for r in group)}
+        if expected == "fail":
+            part["targeted_aspect_hit"] = tally(group, "targeted_hit")
+            counts = [len(r["failed_aspects"]) for r in group if r["rubric_signal"] is not None]
+            part["failed_aspects_per_case"] = {"values": counts, "note": "1件の欠陥に対し複数の観点が同時に fail なら、観点が弁別していない"}
+        summary[expected] = part
+    return {"schema_version": 1, "status": "constructed_labels_not_human_confirmed", "rules": [
+                "factual の信号: 採点できた precision/recall のどちらかが 1.0 未満。閾値なし",
+                "rubric の信号: unnecessary_change を除く保持の観点のどれかが fail",
+                "狙い撃ち: violated_aspect が fail", "unnecessary_change は別集計"],
+            "caveats": ["ラベルは構成によるもので人の確認前", "人工例の成績は実運用の見逃し率・誤警告率ではない",
+                        "13件・出典2文書。率は記述値で、信頼区間や有効性の根拠にしない"],
+            "labels_basis": labels.get("notice"), "run_status": run.get("status"), "run_config": run.get("config"),
+            "run_models": run.get("models"), "run_calls": run.get("call_summary"), "summary": summary, "cases": rows}
+
+
+def render_calibration(report: dict) -> str:
+    lines = ["# Ragas 校正（人工ケース・構成ラベル）", "", "> ラベルは構成によるもので人の確認前。実運用の成績ではない。件数が少なく、率は記述値。", "",
+             f"- 呼出し: {report['run_calls']}、モデル: {', '.join(report['run_models'] or [])}", ""]
+    for expected, part in report["summary"].items():
+        f, r = part["factual_signal"], part["rubric_signal"]
+        lines += [f"## 期待ラベル {expected}（{part['cases']} 件）",
+                  f"- factual の信号（precision/recall < 1）: {f['signalled']}/{f['available']}（採点不能 {f['unavailable']}）",
+                  f"- rubric の信号（保持の観点のいずれか fail）: {r['signalled']}/{r['available']}（採点不能 {r['unavailable']}）",
+                  f"- unnecessary_change が fail: {part['unnecessary_change_fail']['signalled']}/{part['unnecessary_change_fail']['available']}"]
+        if expected == "fail":
+            t = part["targeted_aspect_hit"]
+            lines += [f"- 狙い撃ち（違反した観点が fail）: {t['signalled']}/{t['available']}",
+                      f"- 1件あたり fail になった観点数: {part['failed_aspects_per_case']['values']}"]
+        lines.append("")
+    lines += ["## ケース別", "", "| id | 期待 | 欠陥 | precision | recall | 保持で fail の観点 | 不要な変更 |", "|---|---|---|---|---|---|---|"]
+    for r in report["cases"]:
+        lines.append(f"| {r['id']} | {r['expected']} | {r['perturbation']} | {r['precision']} | {r['recall']} | "
+                     f"{', '.join(r['failed_aspects']) or '—'} | {r['unnecessary_change']} |")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def compare_llm(ragas_run: dict, eval_run: dict) -> dict:
+    """同じ候補への既存のLLM採点（evaluate_readability の run.json）と Ragas の信号を並べる。
+
+    人手の確認を含まないため、どちらが正しいかは判定しない。一致・不一致の件数を数えるだけ。
+    """
+    outputs = {o["id"]: o for o in eval_run.get("outputs", [])}
+    cases = {c["id"]: c for c in eval_run["suite"]["cases"]}
+    judgments = {j["id"]: j for call in eval_run.get("grading_calls", []) for j in call["judgments"]}
+    items = {i["source_id"]: i for i in eval_run.get("grading_items", []) if i["kind"] == "generated"}
+    rows = []
+    for case in ragas_run["cases"]:
+        output = outputs.get(case["id"])
+        if output is None:
+            raise ValueError(f"no generated output for case {case['id']}")
+        original = cases[output["case_id"]]["text"]
+        judgment = judgments.get(items[case["id"]]["id"]) if case["id"] in items else None
+        row = {"id": case["id"], "case_id": output["case_id"], "repeat": output.get("repeat"), "original": original,
+               "candidate": output["text"], "identical_to_original": output["text"].strip() == original.strip(),
+               "existing_grader": judgment["status"] if judgment else "missing", "existing_reason": judgment["reason"] if judgment else None,
+               "errors": case.get("errors", [])}
+        row.update(case_signals(case))
+        rows.append(row)
+    crosstab = {}
+    for row in rows:
+        key = f"grader={row['existing_grader']} | factual_signal={row['factual_signal']} | rubric_signal={row['rubric_signal']}"
+        crosstab[key] = crosstab.get(key, 0) + 1
+    return {"schema_version": 1, "status": "no_human_labels", "note": "人手確認のラベルを含まない。一致・不一致の件数であり、正しさの評価ではない。",
+            "skill_sha256": eval_run.get("skill_sha256"), "generation_models": sorted({m for o in outputs.values() for m in o.get("model_ids", [])}),
+            "grading_models": sorted({m for c in eval_run.get("grading_calls", []) for m in c.get("model_ids", [])}),
+            "crosstab": dict(sorted(crosstab.items())), "cases": rows}
+
+
+def render_compare(report: dict) -> str:
+    lines = ["# 既存のLLM採点と Ragas の並置", "", f"> {report['note']}", "",
+             f"- 生成モデル: {', '.join(report['generation_models'])}、採点モデル（既存）: {', '.join(report['grading_models'])}", "",
+             "## 件数", ""] + [f"- {key}: {count}" for key, count in report["crosstab"].items()] + [""]
+    for r in report["cases"]:
+        lines += [f"## {r['id']}（{r['case_id']} / 反復{r['repeat']}）{' 原文と同一' if r['identical_to_original'] else ''}", "",
+                  f"- 原文: {r['original']}", f"- 候補: {r['candidate']}",
+                  f"- 既存のLLM採点: {r['existing_grader']}", f"- Ragas: precision={r['precision']} recall={r['recall']}、保持で fail の観点={r['failed_aspects'] or '—'}、不要な変更={r['unnecessary_change']}"]
+        for label, key in (("候補にあり原文で支持されない主張", "unsupported_response_claims"), ("原文にあり候補で支持されない主張", "unsupported_reference_claims")):
+            lines += [f"  - {label}: {c}" for c in r[key]]
+        lines.append("")
+    return "\n".join(lines)
+
+
 def execute(tasks: dict, out_dir: Path, args, aspects: tuple, metrics: list) -> int:
     classes = load_ragas()
     llm_class = make_llm_class(classes[0])
@@ -387,6 +554,14 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("check", help="Ragas・固定版・Claude CLI の有無を調べる（通信なし）")
+    calib = sub.add_parser("calibrate", help="採点結果を構成による期待ラベルと突き合わせる（通信なし）")
+    calib.add_argument("--run", type=Path, nargs="+", required=True, help="score --execute の ragas-run.json（分割実行は複数指定して統合）")
+    calib.add_argument("--labels", type=Path, required=True, help="期待ラベル JSON（evals/ragas-calibration/artificial-labels.json）")
+    calib.add_argument("--out-dir", type=Path, required=True, help="新規ディレクトリ。上書き禁止")
+    comp = sub.add_parser("compare-llm", help="既存のLLM採点（evaluate_readability の run.json）と Ragas の結果を並べる（通信なし）")
+    comp.add_argument("--ragas-run", type=Path, nargs="+", required=True, help="ragas-run.json（分割実行は複数指定して統合）")
+    comp.add_argument("--eval-run", type=Path, required=True)
+    comp.add_argument("--out-dir", type=Path, required=True, help="新規ディレクトリ。上書き禁止")
     score = sub.add_parser("score", help="cases JSON を採点する。既定は準備のみ")
     score.add_argument("--input", type=Path, required=True)
     score.add_argument("--out-dir", type=Path, required=True, help="新規ディレクトリ。上書き禁止")
@@ -401,6 +576,34 @@ def main(argv=None) -> int:
         report = check_environment()
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 1 if report["problems"] else 0
+    if args.command == "calibrate":
+        try:
+            runs = [json.loads(path.read_text(encoding="utf-8")) for path in args.run]
+            labels = json.loads(args.labels.read_text(encoding="utf-8"))
+            if any(not isinstance(run, dict) or "cases" not in run or "config" not in run for run in runs):
+                raise ValueError("run file is not a ragas-run.json")
+            report = calibrate(merge_runs(runs), labels)
+            args.out_dir.mkdir(parents=True, exist_ok=False)
+            evaluation.save_json(args.out_dir / "ragas-calibration.json", report)
+            (args.out_dir / "ragas-calibration.md").write_text(render_calibration(report), encoding="utf-8")
+        except (OSError, ValueError, KeyError) as error:
+            print(f"ragas failed: {error}", file=sys.stderr)
+            return 2
+        print(str(args.out_dir.resolve()))
+        return 0
+    if args.command == "compare-llm":
+        try:
+            ragas_run = merge_runs([json.loads(path.read_text(encoding="utf-8")) for path in args.ragas_run])
+            eval_run = json.loads(args.eval_run.read_text(encoding="utf-8"))
+            report = compare_llm(ragas_run, eval_run)
+            args.out_dir.mkdir(parents=True, exist_ok=False)
+            evaluation.save_json(args.out_dir / "ragas-vs-llm.json", report)
+            (args.out_dir / "ragas-vs-llm.md").write_text(render_compare(report), encoding="utf-8")
+        except (OSError, ValueError, KeyError) as error:
+            print(f"ragas failed: {error}", file=sys.stderr)
+            return 2
+        print(str(args.out_dir.resolve()))
+        return 0
     try:
         tasks = read_cases(args.input)
         aspects, metrics = PROFILES[args.profile], list(dict.fromkeys(args.metrics))
