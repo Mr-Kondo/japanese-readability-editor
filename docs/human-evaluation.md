@@ -198,6 +198,18 @@ python3 tools/feedback_readability.py export --organizer /tmp/jre-pairs/organize
 
 この出力はスキルやテストへ自動反映しません。公開前に文章と引用の機密情報を確認し、同じ失敗が繰り返す規則・例だけを人が修正します。開発に使ったケースとは別の未使用文書で旧新版を再比較してください。意味関係の判定は引き続き人手またはモデル評価を要し、JSON出力だけで自動検証になったとは扱いません。
 
+## 人手とLLMの判定を照合する
+
+匿名比較と同じ二候補入力で `compare_readability.py auto --judge` を実行した場合、その出力を使います。照合コマンド自体は外部通信しません。
+
+```bash
+python3 tools/feedback_readability.py calibrate --organizer /tmp/jre-pairs/organizer.json --decisions /tmp/jre-confirmation/decisions.json --tasks /tmp/jre-pair-auto/tasks.json --llm-answers /tmp/jre-pair-auto/llm-answers.json --out-dir /tmp/jre-calibration
+```
+
+`calibration.json` と `calibration.md` に、確認済み人手判定を行、LLM判定を列にした混同行列を保存します。`confirmed_problem` を意味保持の `fail`、`no_problem` を `pass`、`unresolved` を `uncertain` として扱います。候補のID・版だけでなく原文・候補・依頼・文脈・対象読者の一致を検証し、同じIDに別の文章を混ぜません。確認記録は全候補を残し、LLMの途中失敗による未回答は `missing` にします。
+
+意味改変の検出率は、全確認済み不合格を分母とする値とLLM回答済みだけを分母とする値を分けます。LLM合格中の人手不合格は、人手側の判定が確定したLLM合格だけを分母にします。各率に `numerator/denominator/rate` を保存し、分母ゼロなら `null`。人手未解決、LLM判断不能、LLM欠測も別記します。人工例での成績は実運用の誤り頻度・適合率には読み替えず、二候補間の選好と原文との選好も直接比較しません。
+
 ## 限界と改善への接続
 
 平均評点を単一の総合品質点にしません。評点が高くても意味改変は独立した不具合です。反復生成や複数人の票を独立文書と数えず、信頼区間・一致係数・有意差は未実装です。Cの検査対象もJSON内の文字列であり、元ファイルの文字コード・バイト保持までは保証しません。

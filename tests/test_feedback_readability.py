@@ -65,6 +65,52 @@ class FeedbackReadabilityTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "different source content"):
             feedback.candidate_index(self.assignments)
 
+    def test_calibration_keeps_false_pass_uncertain_missing_and_unresolved_separate(self):
+        document = confirmed_document(self.assignments)
+        entries = document["decisions"]
+        entries[1].update(status="no_problem", confirmer="checker", reason="保持を確認。", quote=entries[1]["input"]["candidate"])
+        entries[2].update(**{k: entries[0][k] for k in ("status", "confirmer", "reason", "preserve", "forbid", "rule_ids")}, quote=entries[2]["input"]["candidate"])
+        tasks = comparison.automatic_tasks(comparison.read_pairs(REPO_ROOT / "evals/blind-comparison-example.json"))
+        judgments = []
+        statuses = {(e["source_id"], e["variant"]): s for e, s in zip(entries, ("pass", "uncertain", "uncertain"))}
+        for task in tasks["cases"]:
+            status = statuses.get((task["provenance"]["source_id"], task["provenance"]["variant"]))
+            if status is None:
+                continue
+            judgments.append({"id": task["id"], "contract": status,
+                "scores": {d: None for d in comparison.review.DIMENSIONS}, "reason": "照合した。", "suggestion": "",
+                "preference": "uncertain"})
+        answers = {**{k: tasks[k] for k in ("schema_version", "rubric_version", "task_sha256")},
+                   "method": "llm", "reviewer": "test-judge", "reviews": judgments}
+        decisions = feedback.checked_decisions(document, self.assignments)
+        report = feedback.calibration(self.assignments, decisions, tasks, answers)
+        self.assertEqual(report["false_pass_among_resolved_llm_pass"], {"numerator": 1, "denominator": 1, "rate": 1})
+        self.assertEqual(report["fail_detection_all_confirmed"]["denominator"], 2)
+        self.assertEqual(report["confusion_matrix"]["fail"], {"pass": 1, "uncertain": 1})
+        self.assertEqual(report["human_unresolved"], 3)
+        self.assertEqual(report["llm_uncertain"], 2)
+        self.assertEqual(report["llm_missing"], 3)
+        answers["reviews"] = []
+        self.assertIsNone(feedback.calibration(self.assignments, decisions, tasks, answers)["fail_detection_judged"]["rate"])
+
+    def test_calibration_rejects_changed_content_even_with_matching_ids(self):
+        document = confirmed_document(self.assignments)
+        decisions = feedback.checked_decisions(document, self.assignments)
+        tasks = comparison.automatic_tasks(comparison.read_pairs(REPO_ROOT / "evals/blind-comparison-example.json"))
+        for fault in ("content", "provenance", "missing", "mode"):
+            with self.subTest(fault=fault):
+                changed = copy.deepcopy(tasks)
+                if fault == "content": changed["cases"][0]["context"] = "別資料"
+                elif fault == "provenance": changed["cases"][0]["provenance"]["variant"] = "other"
+                elif fault == "missing": changed["cases"].pop()
+                else: changed["cases"][0]["mode"] = "A"
+                with self.assertRaises(ValueError):
+                    feedback.matched_automatic_tasks(changed, self.assignments)
+        answers = {"schema_version": 1, "rubric_version": comparison.review.RUBRIC, "task_sha256": "wrong",
+                   "method": "llm", "reviewer": "test-judge", "reviews": []}
+        with self.assertRaises(ValueError):
+            feedback.calibration(self.assignments, decisions, tasks, answers)
+
     def test_cli_does_not_overwrite_decisions_or_source_answers(self):
         with temporary_directory() as tmp:
             root = Path(tmp)
