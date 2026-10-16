@@ -1,0 +1,2167 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "config": {
+    "tool_version": 1,
+    "rubric_version": "ragas-ja-rubric-v1",
+    "rubric_sha256": "7f37f4309a2786203f376adfebd3d62e08df4be0d1d448c23480dd4f39dc81d1",
+    "metrics": [
+      "factual",
+      "rubric"
+    ],
+    "profile": "gov-org",
+    "aspects": [
+      "negation_polarity",
+      "condition_scope",
+      "actor_target",
+      "modality_strength",
+      "numbers_order",
+      "ungrounded_specificity",
+      "unnecessary_change"
+    ],
+    "atomicity": "high",
+    "coverage": "high",
+    "ragas_prompts": "Ragas 0.4.3 既定（英語の指示と例。日本語への適合は未検証）",
+    "llm_adapter": "ClaudeCliLLM（JSON指示をプロンプト末尾に付加、ツールなし、逐次実行、同一プロンプトは再利用）",
+    "claude_flags": [
+      "--print",
+      "--safe-mode",
+      "--strict-mcp-config",
+      "--tools",
+      "",
+      "--no-session-persistence",
+      "--model",
+      "sonnet",
+      "--effort",
+      "medium",
+      "--output-format",
+      "json"
+    ],
+    "claude_system": "提供された文章を処理してください。ツールは使用しないでください。",
+    "claude_cli_version": "2.1.301 (Claude Code)",
+    "temperature_and_seed": "CLI から指定できない（不明）",
+    "python": "3.13.16",
+    "platform": "Linux-6.18.44-fc-v139-x86_64-with-glibc2.39",
+    "packages": {
+      "ragas": "0.4.3",
+      "langchain-community": "0.3.31",
+      "langchain-core": "1.6.11",
+      "langchain": "1.4.6",
+      "instructor": "1.3.2",
+      "openai": "1.109.1",
+      "pydantic": "2.14.1",
+      "numpy": "2.5.4"
+    }
+  },
+  "started_at": "2026-10-16T12:03:49.775646+00:00",
+  "input": {
+    "path": "/tmp/claude-0/-home-user-japanese-readability-editor/d82b977d-e7e5-5997-a1e1-2ff559cf0a60/scratchpad/art-part1.json",
+    "cases": 5,
+    "task_sha256": "83f7d5e8071f3c63d53081961706783b58408475e0449d93d92354c69971d396"
+  },
+  "cases": [
+    {
+      "id": "control-s3a",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文と候補は完全に同一である。「平日（土日及び祝日、年末年始を除く）」の除外条件や、「監視は24時間365日行うこと」という義務表現も候補でそのまま保たれており、否定・禁止・許可の反転や追加・削除はない。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一である。「平日（土日及び祝日、年末年始を除く）の9時から17時まで」という範囲と除外条件、および「ただし、情報システムの監視は24時間365日行うこと」という例外・義務の関係がそのまま保たれており、条件・例外・範囲の脱落、追加、変更はない。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする。ただし、情報システムの監視は24時間365日行うこと。」と候補は完全に同一であり、「運用・保守業者」「情報システムの監視」といった主体・対象・修飾先や、括弧書きの修飾先も変化していない。入れ替え・追加・省略はないため、この観点では原文の意味・働きが保たれている。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一である。「運用時間は…9時から17時までとする」という規定の強さも、「情報システムの監視は24時間365日行うこと」という義務表現も、そのまま保たれている。時制や義務・推奨の強さに変更はない。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「平日（土日及び祝日、年末年始を除く）の9時から17時まで」「24時間365日行うこと」と、候補の同じ表現を比べると、時間帯・除外日・監視の頻度・「ただし」による順序や関係がすべて一字一句同一で、数値・単位・期限・頻度・順序に変更はない。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一で、「平日（土日及び祝日、年末年始を除く）の9時から17時まで」「情報システムの監視は24時間365日行うこと」のいずれも変更がない。原文にない主体、条件、完了状態、理由、具体例、固有名の追加は見られないため、意味・働きは保たれている。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする。ただし、情報システムの監視は24時間365日行うこと。」と候補は完全に同一で、書換えが一切ない。原文はすでに明確であり、無変更が適切なので、不要な変更はなく意味・義務の強さも保たれている。"
+        }
+      }
+    },
+    {
+      "id": "paraphrase-s3a",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 7,
+            "supported": 7,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 7,
+            "supported": 7,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「平日（土日及び祝日、年末年始を除く）の9時から17時までとする」は、候補で「土日及び祝日、年末年始を除く平日の9時から17時までとする」となり、「除く」という除外の働きが同じ範囲にかかっていて保たれている。また「ただし、情報システムの監視は24時間365日行うこと」は、義務の肯定表現がそのまま残っている。否定・禁止の反転、追加、削除はない。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「平日（土日及び祝日、年末年始を除く）の9時から17時まで」は、候補で「土日及び祝日、年末年始を除く平日の9時から17時まで」と語順が変わっただけで、除外範囲（土日・祝日・年末年始）と時間帯（9時〜17時）は保たれている。「ただし、情報システムの監視は24時間365日行うこと」という例外と義務の強さ（「行うこと」）も同一である。条件・例外・範囲の脱落や変更はない。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「平日（土日及び祝日、年末年始を除く）」と括弧書きで平日から除外する日を示し、候補は「土日及び祝日、年末年始を除く平日」と前置修飾に変えている。除外対象（土日・祝日・年末年始）と修飾先（平日）の関係は同じで、「運用・保守業者の運用時間」「9時から17時まで」も保たれている。「ただし、情報システムの監視は24時間365日行うこと」も主体・対象・義務の強さともに変化なし。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「運用時間は…9時から17時までとする」と「監視は24時間365日行うこと」は、候補でも「とする」「行うこと」のまま保たれており、義務の強さも現在・予定の時制も変わっていない。「平日（土日及び祝日、年末年始を除く）」を「土日及び祝日、年末年始を除く平日」に語順変更しただけで、この観点では意味・働きは同じである。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「平日（土日及び祝日、年末年始を除く）の9時から17時まで」は、候補で「土日及び祝日、年末年始を除く平日の9時から17時まで」と語順が変わっただけで、除外対象（土日・祝日・年末年始）と時間帯（9時〜17時）は同じです。「ただし、情報システムの監視は24時間365日行うこと」も、数値・単位・頻度ともに完全に保たれており、先後関係の変化もありません。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「平日（土日及び祝日、年末年始を除く）の9時から17時まで」を、候補は「土日及び祝日、年末年始を除く平日の9時から17時まで」と括弧を連体修飾に改めただけである。主体、条件、期限、「ただし、情報システムの監視は24時間365日行うこと」の義務の強さも保たれており、原文にない主体・条件・完了状態・理由・具体例・固有名の追加は見当たらない。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「平日（土日及び祝日、年末年始を除く）の9時から17時まで」を、候補は「土日及び祝日、年末年始を除く平日の9時から17時まで」と括弧を外して語順を整えている。除外条件（土日・祝日・年末年始）、時間帯（9時〜17時）、「ただし、情報システムの監視は24時間365日行うこと」という義務表現はすべて原文のまま保たれている。変更は括弧書きを前置修飾にしただけの最小限の言い換えで、意味や働きは変わっておらず、読みやすさも損なっていない。"
+        }
+      }
+    },
+    {
+      "id": "number-s3a",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.83,
+          "status": "scored",
+          "value": 0.83,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 5,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "運用・保守業者の運用時間は平日の9時から18時までとする。",
+                "reason": "文脈では運用時間は9時から17時までと明記されており、18時までではない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.83,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.83,
+          "status": "scored",
+          "value": 0.83,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 5,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "運用・保守業者の運用時間は平日の9時から18時までとする。",
+                "reason": "文脈では運用時間は9時から17時までと明記されており、18時までではない。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 6,
+            "supported": 5,
+            "unsupported": 1,
+            "coverage": 0.83,
+            "unsupported_texts": [
+              {
+                "claim": "運用・保守業者の運用時間は平日の9時から17時までとする。",
+                "reason": "文脈では運用時間は9時から18時までと明記されており、17時までではない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.83,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "否定・禁止の観点では、原文の「平日（土日及び祝日、年末年始を除く）」の除外条件と、「監視は24時間365日行うこと」の義務が、候補でも同じ形で保たれている。否定・禁止の反転や追加・削除はない。なお「17時まで」が候補で「18時まで」に変わっているが、これは時刻の変更であり、この観点の対象ではない。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「9時から17時まで」が、候補では「9時から18時まで」に変わっている。運用時間の範囲（終了時刻）が1時間延びており、範囲の変更にあたる。「平日（土日及び祝日、年末年始を除く）」の除外条件や、「ただし、情報システムの監視は24時間365日行うこと」の例外は保たれているが、時間範囲が変わっているためfail。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は運用時間を「9時から17時まで」としているが、候補は「9時から18時まで」となっている。動作の主体（運用・保守業者）、対象（情報システムの監視）、修飾先（平日の括弧内の除外条件、24時間365日）は保たれている。しかし終了時刻の変更は、主体・対象・修飾先・宛先の入れ替えや追加・省略ではなく、数値・条件の変更であり、この観点の範囲外である。この観点では原文の関係は保持されている。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「9時から17時までとする」に対し、候補は「9時から18時までとする」と終了時刻が変わっている。「とする」という規定の強さや「行うこと」の義務、現在形の時制は保たれているが、運用時間の内容自体が変更されている。ただしこれは時刻（数値）の変更であり、義務の強さ・時制の観点では原文の働きは保たれている。「監視は24時間365日行うこと」も同一である。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は運用時間を「9時から17時まで」としているが、候補は「9時から18時まで」に変わっており、終了時刻（数値）が変更されている。「24時間365日」の監視や平日の除外条件は保たれているものの、運用時間の数値が異なるため、この観点ではfail。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「9時から17時まで」が候補では「9時から18時まで」に変わっている。これは原文にない時刻の追加・変更であり、運用時間の条件が異なる。観点である原文にない具体化（条件・数値の追加）に該当し、原文の意味が保たれていない。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は運用時間を「9時から17時まで」としているが、候補は「9時から18時まで」に変更されている。これは読みやすさのための言い換えではなく、運用時間という調達上の要件（条件）の数値そのものを変えており、不要かつ意味を変える書換えである。他の部分（「平日（土日及び祝日、年末年始を除く）」「24時間365日行うこと」）は原文どおり保たれているが、時刻の変更により原文の働きは保たれていない。"
+        }
+      }
+    },
+    {
+      "id": "exception-drop-s3a",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.67,
+          "status": "scored",
+          "value": 0.67,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 6,
+            "supported": 4,
+            "unsupported": 2,
+            "coverage": 0.67,
+            "unsupported_texts": [
+              {
+                "claim": "情報システムの監視は24時間365日行うこと。",
+                "reason": "文脈には情報システムの監視に関する記述がなく、24時間365日の監視要件は読み取れない。"
+              },
+              {
+                "claim": "情報システムの監視の24時間365日実施は、運用・保守業者の運用時間の例外である。",
+                "reason": "文脈には情報システムの監視や、運用時間の例外に関する記述がなく、この内容は推論できない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.67,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「ただし、情報システムの監視は24時間365日行うこと。」という義務を課す文を含み、運用時間の9時から17時という限定の例外として監視を常時行うことを求めている。候補はこの文を削除しており、「運用時間は…9時から17時までとする」だけが残るため、24時間監視の義務が消え、夜間・休日の監視は不要とも読める。これは義務（肯定の要求）の削除であり、かつ「ただし」による例外の働きも失われている。否定・禁止の観点では、時間外の監視をしなくてもよいという方向への意味変化があるためfailとする。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「ただし、情報システムの監視は24時間365日行うこと。」という但し書きで、運用時間（平日9時から17時）の例外として監視の24時間365日実施を義務づけている。候補はこの文を完全に削除しており、「ただし」による例外と、監視の範囲（24時間365日）および「行うこと」という義務が脱落している。このため、候補は運用時間が平日9時〜17時のみと読め、原文と条件・例外・範囲が異なる。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「ただし、情報システムの監視は24時間365日行うこと。」という、運用時間とは別に監視の対象（情報システム）と実施範囲（24時間365日）を定める手続・義務を含む。候補はこの一文を完全に省略しており、「情報システムの監視」という対象と、その実施の要求が失われている。主体・対象・修飾先の保持という観点で、原文の働きが保たれていない。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文には「ただし、情報システムの監視は24時間365日行うこと。」という義務を表す文があり、「行うこと」で監視の実施が義務付けられている。候補ではこの文が丸ごと削除されており、24時間365日監視の義務が失われている。そのため、運用時間の「とする」は保たれているものの、義務の働きが原文と異なっている。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文には「ただし、情報システムの監視は24時間365日行うこと。」とあり、監視の頻度・期間（24時間365日）が規定されている。候補ではこの一文が削除され、「24時間365日」という頻度の条件が失われている。残った「9時から17時まで」の運用時間だけでは監視が常時必要という要件が伝わらず、数値・頻度の保持という観点で原文と異なる意味になっている。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「ただし、情報システムの監視は24時間365日行うこと。」という但し書きが候補では丸ごと削除されている。ただしこの観点は「原文にない主体、条件、完了状態、理由、具体例、固有名の追加」の有無であり、候補は「運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする。」と原文の前半をそのまま保っていて、新たな主体・条件・理由・具体例・固有名は加えられていない。脱落は別観点の問題であり、この観点では具体化の追加はないのでpassとする。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「ただし、情報システムの監視は24時間365日行うこと。」という義務を課す文を含むが、候補はこの文を削除している。これは言い換えや最小変更ではなく、「24時間365日の監視」という義務の内容が失われており、運用時間（9時から17時）のみが残るため、監視が常時不要とも読め、原文の意味・義務の強さが保たれていない。"
+        }
+      }
+    },
+    {
+      "id": "negation-flip-s3b",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.67,
+          "status": "scored",
+          "value": 0.67,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することを求める。",
+                "reason": "コンテキストでは、運用時間と同等の体制を維持することは求めないと明記されており、この主張は内容と矛盾する。"
+              }
+            ]
+          },
+          "recomputed_value": 0.67,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.67,
+          "status": "scored",
+          "value": 0.67,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することを求める。",
+                "reason": "コンテキストでは、運用時間と同等の体制を維持することは求めないと明記されており、この主張は内容と矛盾する。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "coverage": 0.67,
+            "unsupported_texts": [
+              {
+                "claim": "夜間や休日におけるシステム障害時の連絡体制について、運用時間と同等の体制を維持することは求められない。",
+                "reason": "文脈では「運用時間と同等の体制を維持することを求め」と述べており、維持が求められているため、この主張は文脈と矛盾する。"
+              }
+            ]
+          },
+          "recomputed_value": 0.67,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「運用時間と同等の体制を維持することは求めない」と同等体制の維持を求めない（不要とする）内容だが、候補は「運用時間と同等の体制を維持することを求め」と否定を肯定に反転させ、求めない事項を義務として課している。これは義務の有無が逆転する変更であり、否定の保持に反する。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「運用時間と同等の体制を維持することは求めないが」と、同等体制の維持を要求しない（例外・緩和）としている。候補は「維持することを求め」となり、要求しない条件が要求する条件に反転している。調達側が課す義務の範囲が変わっており、「求めないが、〜提案すること」という譲歩関係も失われている。よって条件・範囲が保たれていない。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「運用時間と同等の体制を維持することは求めない」と、同等体制の維持を求めないとしているが、候補は「維持することを求め」と逆に義務化している。提案を求める対象（「障害の重要性に応じた機動的な体制」）は保たれているものの、調達側が受注者に求める内容（同等体制の維持の要否）が反転しており、義務の宛先・対象が原文と異なる働きになっている。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「運用時間と同等の体制を維持することは求めない」とあり、同等体制の維持を要求しない（要求の否定）である。一方、候補は「維持することを求め」と肯定の要求に変わっており、義務の強さと向きが逆転している。「提案すること」の部分は保たれているが、前半の「求めない」が「求め」になったため、原文の意味・働きが失われている。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「運用時間と同等の体制を維持することは求めない」と、同等体制の維持を要求しないとしているが、候補は「維持することを求め」と要求に反転している。数値・期限・順序そのものの変更ではないが、運用時間と同等という水準の要求有無が逆になり、時間帯ごとの体制水準（運用時間帯と夜間・休日の関係）の働きが変わっている。この観点では原文の働きが保たれていないためfail。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「運用時間と同等の体制を維持することは求めないが」と同等体制の維持を求めないとしているのに対し、候補は「維持することを求め」と逆に求める内容になっている。これは原文にない義務の追加・条件の変更であり、原文にない具体化（要求事項の付加）にあたる。意味・義務の強さが保たれていない。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「運用時間と同等の体制を維持することは求めないが」と、同等の体制維持を求めないと明示している。候補は「維持することを求め」と肯定に変えており、義務の内容が正反対になっている。これは読みやすさのための言い換えではなく、調達要件の意味を変える不要かつ有害な書換えである。"
+        }
+      }
+    }
+  ],
+  "models": [
+    "claude-haiku-5-5",
+    "claude-sonnet-5-5"
+  ],
+  "calls": [
+    {
+      "index": 1,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "544664483cc12ad18442cd3e6a2ccc45112810819b6ae155b23595c8bf010839",
+      "cache_hit": false,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までとする。",
+          "運用・保守業者の運用時間の平日には、土日が含まれない。",
+          "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+          "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+          "情報システムの監視は24時間365日行うこと。",
+          "情報システムの監視の24時間365日実施は、運用・保守業者の運用時間の例外である。"
+        ]
+      },
+      "error": null,
+      "seconds": 7.01,
+      "cost_usd": 0.0057816
+    },
+    {
+      "index": 2,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "dc08d7b2a45664a1b727703b0d36b0279af2217a13d53cf4275dc58c02a78a70",
+      "cache_hit": false,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までとする。",
+            "reason": "文脈に、運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、土日が含まれない。",
+            "reason": "文脈の括弧書きで、平日から土日が除かれていることが明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+            "reason": "文脈の括弧書きで、平日から祝日が除かれていることが明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+            "reason": "文脈の括弧書きで、平日から年末年始が除かれていることが明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に、ただし書きとして情報システムの監視は24時間365日行うことと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視の24時間365日実施は、運用・保守業者の運用時間の例外である。",
+            "reason": "文脈では「ただし」を用いて、運用時間が平日9時から17時である一方、情報システムの監視は24時間365日行うとしており、監視が運用時間の例外であることが読み取れる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 9.38,
+      "cost_usd": 0.018169599999999998
+    },
+    {
+      "index": 3,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "544664483cc12ad18442cd3e6a2ccc45112810819b6ae155b23595c8bf010839",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までとする。",
+          "運用・保守業者の運用時間の平日には、土日が含まれない。",
+          "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+          "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+          "情報システムの監視は24時間365日行うこと。",
+          "情報システムの監視の24時間365日実施は、運用・保守業者の運用時間の例外である。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 4,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "dc08d7b2a45664a1b727703b0d36b0279af2217a13d53cf4275dc58c02a78a70",
+      "cache_hit": true,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までとする。",
+            "reason": "文脈に、運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、土日が含まれない。",
+            "reason": "文脈の括弧書きで、平日から土日が除かれていることが明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+            "reason": "文脈の括弧書きで、平日から祝日が除かれていることが明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+            "reason": "文脈の括弧書きで、平日から年末年始が除かれていることが明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に、ただし書きとして情報システムの監視は24時間365日行うことと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視の24時間365日実施は、運用・保守業者の運用時間の例外である。",
+            "reason": "文脈では「ただし」を用いて、運用時間が平日9時から17時である一方、情報システムの監視は24時間365日行うとしており、監視が運用時間の例外であることが読み取れる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 5,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "544664483cc12ad18442cd3e6a2ccc45112810819b6ae155b23595c8bf010839",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までとする。",
+          "運用・保守業者の運用時間の平日には、土日が含まれない。",
+          "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+          "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+          "情報システムの監視は24時間365日行うこと。",
+          "情報システムの監視の24時間365日実施は、運用・保守業者の運用時間の例外である。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 6,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "dc08d7b2a45664a1b727703b0d36b0279af2217a13d53cf4275dc58c02a78a70",
+      "cache_hit": true,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までとする。",
+            "reason": "文脈に、運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、土日が含まれない。",
+            "reason": "文脈の括弧書きで、平日から土日が除かれていることが明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+            "reason": "文脈の括弧書きで、平日から祝日が除かれていることが明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+            "reason": "文脈の括弧書きで、平日から年末年始が除かれていることが明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に、ただし書きとして情報システムの監視は24時間365日行うことと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視の24時間365日実施は、運用・保守業者の運用時間の例外である。",
+            "reason": "文脈では「ただし」を用いて、運用時間が平日9時から17時である一方、情報システムの監視は24時間365日行うとしており、監視が運用時間の例外であることが読み取れる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 7,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "194c80152fa3f9819e64880778bf0aba5a1c4f4aae5ad66eaa39593d6c50b12c",
+      "cache_hit": false,
+      "raw_file": "c0007.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文と候補は完全に同一である。「平日（土日及び祝日、年末年始を除く）」の除外条件や、「監視は24時間365日行うこと」という義務表現も候補でそのまま保たれており、否定・禁止・許可の反転や追加・削除はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.64,
+      "cost_usd": 0.0051555
+    },
+    {
+      "index": 8,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "cc67ac1692b95a327a22b628fbb68f317c44db9aad10f45ef3c39bd60c8154d6",
+      "cache_hit": false,
+      "raw_file": "c0008.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一である。「平日（土日及び祝日、年末年始を除く）の9時から17時まで」という範囲と除外条件、および「ただし、情報システムの監視は24時間365日行うこと」という例外・義務の関係がそのまま保たれており、条件・例外・範囲の脱落、追加、変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.79,
+      "cost_usd": 0.0055716
+    },
+    {
+      "index": 9,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "0c003f9b71a05cb6aa06cd4b936cbee1b03428d4ba1af2355b740eceaf3d5561",
+      "cache_hit": false,
+      "raw_file": "c0009.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする。ただし、情報システムの監視は24時間365日行うこと。」と候補は完全に同一であり、「運用・保守業者」「情報システムの監視」といった主体・対象・修飾先や、括弧書きの修飾先も変化していない。入れ替え・追加・省略はないため、この観点では原文の意味・働きが保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.83,
+      "cost_usd": 0.0060466999999999995
+    },
+    {
+      "index": 10,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "082d7c802314c4521f65712150ba84c496395566e951d96607efacbd6798c699",
+      "cache_hit": false,
+      "raw_file": "c0010.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一である。「運用時間は…9時から17時までとする」という規定の強さも、「情報システムの監視は24時間365日行うこと」という義務表現も、そのまま保たれている。時制や義務・推奨の強さに変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.27,
+      "cost_usd": 0.0051206
+    },
+    {
+      "index": 11,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "54a05055e8f23faba3efbd03a88390ce973272390077c8078040e1f29c3071c8",
+      "cache_hit": false,
+      "raw_file": "c0011.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「平日（土日及び祝日、年末年始を除く）の9時から17時まで」「24時間365日行うこと」と、候補の同じ表現を比べると、時間帯・除外日・監視の頻度・「ただし」による順序や関係がすべて一字一句同一で、数値・単位・期限・頻度・順序に変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.4,
+      "cost_usd": 0.005571700000000001
+    },
+    {
+      "index": 12,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "1e84c2d5d74331831233a081fa98011bf5595f61a6e186c22752d5c0414e05d4",
+      "cache_hit": false,
+      "raw_file": "c0012.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一で、「平日（土日及び祝日、年末年始を除く）の9時から17時まで」「情報システムの監視は24時間365日行うこと」のいずれも変更がない。原文にない主体、条件、完了状態、理由、具体例、固有名の追加は見られないため、意味・働きは保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.33,
+      "cost_usd": 0.0053708
+    },
+    {
+      "index": 13,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "1ef65bbd24c48d991ecbff5e00a44b31a31f1164cd17cbb3d36d0c2cf1fd12d6",
+      "cache_hit": false,
+      "raw_file": "c0013.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする。ただし、情報システムの監視は24時間365日行うこと。」と候補は完全に同一で、書換えが一切ない。原文はすでに明確であり、無変更が適切なので、不要な変更はなく意味・義務の強さも保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.38,
+      "cost_usd": 0.0055144999999999994
+    },
+    {
+      "index": 14,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "17f402133358acb2f6ef25d503cd99a7271742cfb75a163ed14e92ccfeab8e51",
+      "cache_hit": false,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は、平日の9時から17時までとする。",
+          "運用・保守業者の運用時間には、土曜日及び日曜日は含まれない。",
+          "運用・保守業者の運用時間には、祝日は含まれない。",
+          "運用・保守業者の運用時間には、年末年始は含まれない。",
+          "情報システムの監視は24時間行うこと。",
+          "情報システムの監視は365日行うこと。",
+          "情報システムの監視は、運用・保守業者の運用時間の例外である。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.96,
+      "cost_usd": 0.0059109
+    },
+    {
+      "index": 15,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "df90943ce8f33c5e1557bf91123ff29b815042ddf35319eba1449d625b06c50f",
+      "cache_hit": false,
+      "raw_file": "c0015.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は、平日の9時から17時までとする。",
+            "reason": "文脈では、運用時間は平日(土日及び祝日、年末年始を除く)の9時から17時までと明記されており、この主張はその内容と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には、土曜日及び日曜日は含まれない。",
+            "reason": "文脈で平日から土日が除かれているため、土曜日及び日曜日は運用時間に含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には、祝日は含まれない。",
+            "reason": "文脈で平日から祝日が除かれていると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には、年末年始は含まれない。",
+            "reason": "文脈で年末年始が運用時間から除かれていると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間行うこと。",
+            "reason": "文脈に「情報システムの監視は24時間365日行うこと」とあり、24時間の監視が求められている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は365日行うこと。",
+            "reason": "文脈に「24時間365日行うこと」とあり、365日の監視が求められている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は、運用・保守業者の運用時間の例外である。",
+            "reason": "文脈の「ただし」という表現により、監視は9時から17時の平日という運用時間の制限に対する例外として扱われていると読み取れる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 8.63,
+      "cost_usd": 0.0183435
+    },
+    {
+      "index": 16,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "17f402133358acb2f6ef25d503cd99a7271742cfb75a163ed14e92ccfeab8e51",
+      "cache_hit": true,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は、平日の9時から17時までとする。",
+          "運用・保守業者の運用時間には、土曜日及び日曜日は含まれない。",
+          "運用・保守業者の運用時間には、祝日は含まれない。",
+          "運用・保守業者の運用時間には、年末年始は含まれない。",
+          "情報システムの監視は24時間行うこと。",
+          "情報システムの監視は365日行うこと。",
+          "情報システムの監視は、運用・保守業者の運用時間の例外である。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 17,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "df90943ce8f33c5e1557bf91123ff29b815042ddf35319eba1449d625b06c50f",
+      "cache_hit": true,
+      "raw_file": "c0015.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は、平日の9時から17時までとする。",
+            "reason": "文脈では、運用時間は平日(土日及び祝日、年末年始を除く)の9時から17時までと明記されており、この主張はその内容と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には、土曜日及び日曜日は含まれない。",
+            "reason": "文脈で平日から土日が除かれているため、土曜日及び日曜日は運用時間に含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には、祝日は含まれない。",
+            "reason": "文脈で平日から祝日が除かれていると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には、年末年始は含まれない。",
+            "reason": "文脈で年末年始が運用時間から除かれていると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間行うこと。",
+            "reason": "文脈に「情報システムの監視は24時間365日行うこと」とあり、24時間の監視が求められている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は365日行うこと。",
+            "reason": "文脈に「24時間365日行うこと」とあり、365日の監視が求められている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は、運用・保守業者の運用時間の例外である。",
+            "reason": "文脈の「ただし」という表現により、監視は9時から17時の平日という運用時間の制限に対する例外として扱われていると読み取れる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 18,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "544664483cc12ad18442cd3e6a2ccc45112810819b6ae155b23595c8bf010839",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までとする。",
+          "運用・保守業者の運用時間の平日には、土日が含まれない。",
+          "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+          "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+          "情報システムの監視は24時間365日行うこと。",
+          "情報システムの監視の24時間365日実施は、運用・保守業者の運用時間の例外である。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 19,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "9756cece1664be3a22cf2647c87b550055c50fabf15194a2a0314fa3d9dff88b",
+      "cache_hit": false,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までとする。",
+            "reason": "文脈では、運用時間は土日及び祝日、年末年始を除く平日の9時から17時までと明記されており、この主張はその内容と一致している。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、土日が含まれない。",
+            "reason": "文脈に「土日及び祝日、年末年始を除く平日」とあり、土日は運用時間から除かれている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+            "reason": "文脈に「土日及び祝日、年末年始を除く平日」とあり、祝日は運用時間から除かれている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+            "reason": "文脈に「土日及び祝日、年末年始を除く平日」とあり、年末年始は運用時間から除かれている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に「情報システムの監視は24時間365日行うこと」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視の24時間365日実施は、運用・保守業者の運用時間の例外である。",
+            "reason": "文脈の「ただし」という表現により、情報システムの監視は9時から17時の平日という運用時間の例外として24時間365日行うことが示されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 12.14,
+      "cost_usd": 0.0186435
+    },
+    {
+      "index": 20,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "8dbbc632c340707eaef883df83e28696c74cb4f9e8577c737c29d89186408d8d",
+      "cache_hit": false,
+      "raw_file": "c0020.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「平日（土日及び祝日、年末年始を除く）の9時から17時までとする」は、候補で「土日及び祝日、年末年始を除く平日の9時から17時までとする」となり、「除く」という除外の働きが同じ範囲にかかっていて保たれている。また「ただし、情報システムの監視は24時間365日行うこと」は、義務の肯定表現がそのまま残っている。否定・禁止の反転、追加、削除はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.22,
+      "cost_usd": 0.0057988
+    },
+    {
+      "index": 21,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "92f93eaef4f04af3b8a63d13a0baf3e4371c84bbf2c1f585556705b46c2c78ea",
+      "cache_hit": false,
+      "raw_file": "c0021.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「平日（土日及び祝日、年末年始を除く）の9時から17時まで」は、候補で「土日及び祝日、年末年始を除く平日の9時から17時まで」と語順が変わっただけで、除外範囲（土日・祝日・年末年始）と時間帯（9時〜17時）は保たれている。「ただし、情報システムの監視は24時間365日行うこと」という例外と義務の強さ（「行うこと」）も同一である。条件・例外・範囲の脱落や変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.47,
+      "cost_usd": 0.0059869
+    },
+    {
+      "index": 22,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "e6e883140f724b2b90cb3779872ca881ef48951c4595ac1fa016ba3ef226cc9c",
+      "cache_hit": false,
+      "raw_file": "c0022.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「平日（土日及び祝日、年末年始を除く）」と括弧書きで平日から除外する日を示し、候補は「土日及び祝日、年末年始を除く平日」と前置修飾に変えている。除外対象（土日・祝日・年末年始）と修飾先（平日）の関係は同じで、「運用・保守業者の運用時間」「9時から17時まで」も保たれている。「ただし、情報システムの監視は24時間365日行うこと」も主体・対象・義務の強さともに変化なし。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.3,
+      "cost_usd": 0.0062145
+    },
+    {
+      "index": 23,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "3371b7d9524ea5f472c6f139337babf5ae0a27db4a65e1a796e89386596007b7",
+      "cache_hit": false,
+      "raw_file": "c0023.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「運用時間は…9時から17時までとする」と「監視は24時間365日行うこと」は、候補でも「とする」「行うこと」のまま保たれており、義務の強さも現在・予定の時制も変わっていない。「平日（土日及び祝日、年末年始を除く）」を「土日及び祝日、年末年始を除く平日」に語順変更しただけで、この観点では意味・働きは同じである。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.56,
+      "cost_usd": 0.0058529
+    },
+    {
+      "index": 24,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "b6b9278798a296bdc1f678702b0ff025151b36997263966c99c7a21db3540d5e",
+      "cache_hit": false,
+      "raw_file": "c0024.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「平日（土日及び祝日、年末年始を除く）の9時から17時まで」は、候補で「土日及び祝日、年末年始を除く平日の9時から17時まで」と語順が変わっただけで、除外対象（土日・祝日・年末年始）と時間帯（9時〜17時）は同じです。「ただし、情報システムの監視は24時間365日行うこと」も、数値・単位・頻度ともに完全に保たれており、先後関係の変化もありません。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.27,
+      "cost_usd": 0.010921
+    },
+    {
+      "index": 25,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "a47fa83f8e13ab6f03d0c4df1ebc741bcc963c711f07a7854eff537c25daab7b",
+      "cache_hit": false,
+      "raw_file": "c0025.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「平日（土日及び祝日、年末年始を除く）の9時から17時まで」を、候補は「土日及び祝日、年末年始を除く平日の9時から17時まで」と括弧を連体修飾に改めただけである。主体、条件、期限、「ただし、情報システムの監視は24時間365日行うこと」の義務の強さも保たれており、原文にない主体・条件・完了状態・理由・具体例・固有名の追加は見当たらない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.74,
+      "cost_usd": 0.0110538
+    },
+    {
+      "index": 26,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "01328eb1e443abe576040ce1ca5939e7ff2823dd61d6cd8de5161ca2b7d5a070",
+      "cache_hit": false,
+      "raw_file": "c0026.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「平日（土日及び祝日、年末年始を除く）の9時から17時まで」を、候補は「土日及び祝日、年末年始を除く平日の9時から17時まで」と括弧を外して語順を整えている。除外条件（土日・祝日・年末年始）、時間帯（9時〜17時）、「ただし、情報システムの監視は24時間365日行うこと」という義務表現はすべて原文のまま保たれている。変更は括弧書きを前置修飾にしただけの最小限の言い換えで、意味や働きは変わっておらず、読みやすさも損なっていない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.74,
+      "cost_usd": 0.011530900000000002
+    },
+    {
+      "index": 27,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "19475a9791d4b1b286e6ff9ee322a2419dc48361251d3ca5df7d283ecfb9c24f",
+      "cache_hit": false,
+      "raw_file": "c0027.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から18時までとする。",
+          "運用・保守業者の運用時間の平日には、土日が含まれない。",
+          "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+          "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+          "情報システムの監視は24時間365日行うこと。",
+          "情報システムの監視は、運用・保守業者の運用時間の例外として行われる。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.75,
+      "cost_usd": 0.011201800000000001
+    },
+    {
+      "index": 28,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "e0420bdd27c8bf862ca05eb20160386d718af5eb5f5e30e6ed519276cd2e885c",
+      "cache_hit": false,
+      "raw_file": "c0028.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から18時までとする。",
+            "reason": "文脈では運用時間は9時から17時までと明記されており、18時までではない。",
+            "verdict": 0
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、土日が含まれない。",
+            "reason": "文脈に平日は土日及び祝日、年末年始を除くと記載されており、土日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+            "reason": "文脈に平日は土日及び祝日、年末年始を除くと記載されており、祝日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+            "reason": "文脈に平日は土日及び祝日、年末年始を除くと記載されており、年末年始は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に情報システムの監視は24時間365日行うことと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は、運用・保守業者の運用時間の例外として行われる。",
+            "reason": "文脈では「ただし」により監視が24時間365日行われると述べられており、運用時間の例外であることが示されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 7.39,
+      "cost_usd": 0.017941600000000002
+    },
+    {
+      "index": 29,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "19475a9791d4b1b286e6ff9ee322a2419dc48361251d3ca5df7d283ecfb9c24f",
+      "cache_hit": true,
+      "raw_file": "c0027.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から18時までとする。",
+          "運用・保守業者の運用時間の平日には、土日が含まれない。",
+          "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+          "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+          "情報システムの監視は24時間365日行うこと。",
+          "情報システムの監視は、運用・保守業者の運用時間の例外として行われる。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 30,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "e0420bdd27c8bf862ca05eb20160386d718af5eb5f5e30e6ed519276cd2e885c",
+      "cache_hit": true,
+      "raw_file": "c0028.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から18時までとする。",
+            "reason": "文脈では運用時間は9時から17時までと明記されており、18時までではない。",
+            "verdict": 0
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、土日が含まれない。",
+            "reason": "文脈に平日は土日及び祝日、年末年始を除くと記載されており、土日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+            "reason": "文脈に平日は土日及び祝日、年末年始を除くと記載されており、祝日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+            "reason": "文脈に平日は土日及び祝日、年末年始を除くと記載されており、年末年始は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に情報システムの監視は24時間365日行うことと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は、運用・保守業者の運用時間の例外として行われる。",
+            "reason": "文脈では「ただし」により監視が24時間365日行われると述べられており、運用時間の例外であることが示されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 31,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "544664483cc12ad18442cd3e6a2ccc45112810819b6ae155b23595c8bf010839",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までとする。",
+          "運用・保守業者の運用時間の平日には、土日が含まれない。",
+          "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+          "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+          "情報システムの監視は24時間365日行うこと。",
+          "情報システムの監視の24時間365日実施は、運用・保守業者の運用時間の例外である。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 32,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "bb6e021764953aeefa418932147cc54d2545427700ef28d345731dc964b16c8a",
+      "cache_hit": false,
+      "raw_file": "c0032.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までとする。",
+            "reason": "文脈では運用時間は9時から18時までと明記されており、17時までではない。",
+            "verdict": 0
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、土日が含まれない。",
+            "reason": "文脈では平日から土日及び祝日、年末年始を除くと明記されているため、土日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+            "reason": "文脈で平日から祝日を除くと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+            "reason": "文脈で平日から年末年始を除くと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に「情報システムの監視は24時間365日行うこと」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視の24時間365日実施は、運用・保守業者の運用時間の例外である。",
+            "reason": "文脈では「ただし」を用いて、運用時間の規定に対し監視は24時間365日行うと例外的に定めており、運用時間の例外といえる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 7.9,
+      "cost_usd": 0.0178341
+    },
+    {
+      "index": 33,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "8be7c2bab200c8c9dc8bf7c24c8a8523e83447fbb42716f0d821bf38ad1d9933",
+      "cache_hit": false,
+      "raw_file": "c0033.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "否定・禁止の観点では、原文の「平日（土日及び祝日、年末年始を除く）」の除外条件と、「監視は24時間365日行うこと」の義務が、候補でも同じ形で保たれている。否定・禁止の反転や追加・削除はない。なお「17時まで」が候補で「18時まで」に変わっているが、これは時刻の変更であり、この観点の対象ではない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.53,
+      "cost_usd": 0.010756
+    },
+    {
+      "index": 34,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "e0677b0a7913ddbb4be8acf6c6a3677b2a78bb772166c63b4885617b6bdcae6d",
+      "cache_hit": false,
+      "raw_file": "c0034.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「9時から17時まで」が、候補では「9時から18時まで」に変わっている。運用時間の範囲（終了時刻）が1時間延びており、範囲の変更にあたる。「平日（土日及び祝日、年末年始を除く）」の除外条件や、「ただし、情報システムの監視は24時間365日行うこと」の例外は保たれているが、時間範囲が変わっているためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.15,
+      "cost_usd": 0.011004300000000002
+    },
+    {
+      "index": 35,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "c9ff4c9d9a3b7987f6029e3df39089be6aa2eb39df4cafc9aedc58987de0b480",
+      "cache_hit": false,
+      "raw_file": "c0035.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は運用時間を「9時から17時まで」としているが、候補は「9時から18時まで」となっている。動作の主体（運用・保守業者）、対象（情報システムの監視）、修飾先（平日の括弧内の除外条件、24時間365日）は保たれている。しかし終了時刻の変更は、主体・対象・修飾先・宛先の入れ替えや追加・省略ではなく、数値・条件の変更であり、この観点の範囲外である。この観点では原文の関係は保持されている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 13.11,
+      "cost_usd": 0.011046599999999998
+    },
+    {
+      "index": 36,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "b28e692a2f5f42bca1eb9dde4880f9dd9bbce797c2370559000ff429eddf18cd",
+      "cache_hit": false,
+      "raw_file": "c0036.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「9時から17時までとする」に対し、候補は「9時から18時までとする」と終了時刻が変わっている。「とする」という規定の強さや「行うこと」の義務、現在形の時制は保たれているが、運用時間の内容自体が変更されている。ただしこれは時刻（数値）の変更であり、義務の強さ・時制の観点では原文の働きは保たれている。「監視は24時間365日行うこと」も同一である。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.94,
+      "cost_usd": 0.0111508
+    },
+    {
+      "index": 37,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "34629ad9cdf014fb784a50b040652b46a557bf0bc094d9d344cd7ddd4af231c4",
+      "cache_hit": false,
+      "raw_file": "c0037.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は運用時間を「9時から17時まで」としているが、候補は「9時から18時まで」に変わっており、終了時刻（数値）が変更されている。「24時間365日」の監視や平日の除外条件は保たれているものの、運用時間の数値が異なるため、この観点ではfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.61,
+      "cost_usd": 0.010273099999999999
+    },
+    {
+      "index": 38,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "0aa61423b4c4812c951ffcacd7796c08d3567302d71aba2099abbd72d9332124",
+      "cache_hit": false,
+      "raw_file": "c0038.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「9時から17時まで」が候補では「9時から18時まで」に変わっている。これは原文にない時刻の追加・変更であり、運用時間の条件が異なる。観点である原文にない具体化（条件・数値の追加）に該当し、原文の意味が保たれていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.34,
+      "cost_usd": 0.010401399999999998
+    },
+    {
+      "index": 39,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "5ecf6300b49332db89853f24f0735f5c71cb3b68fcf36bc2b743f2f26bbfe3a1",
+      "cache_hit": false,
+      "raw_file": "c0039.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は運用時間を「9時から17時まで」としているが、候補は「9時から18時まで」に変更されている。これは読みやすさのための言い換えではなく、運用時間という調達上の要件（条件）の数値そのものを変えており、不要かつ意味を変える書換えである。他の部分（「平日（土日及び祝日、年末年始を除く）」「24時間365日行うこと」）は原文どおり保たれているが、時刻の変更により原文の働きは保たれていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 8.51,
+      "cost_usd": 0.0110025
+    },
+    {
+      "index": 40,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "07eeda144984d05edff399e7a39631eda9d6396b563cff57ba88fa8ab719b6ef",
+      "cache_hit": false,
+      "raw_file": "c0040.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間の平日には土日が含まれない。",
+          "運用・保守業者の運用時間の平日には祝日が含まれない。",
+          "運用・保守業者の運用時間の平日には年末年始が含まれない。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.47,
+      "cost_usd": 0.0051962
+    },
+    {
+      "index": 41,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "16caf62d1ad2ed214d2906c1bfb9578a68564f42914a0e8cd77b11edda944586",
+      "cache_hit": false,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "コンテキストには、運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されているため、この記述は直接推論できる。ただし、情報システムの監視は24時間365日行うとされているが、これは運用時間とは別の要件である。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には土日が含まれない。",
+            "reason": "コンテキストでは、平日から土日を除くと明記されているため、この記述は直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には祝日が含まれない。",
+            "reason": "コンテキストでは、平日から祝日を除くと明記されているため、この記述は直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には年末年始が含まれない。",
+            "reason": "コンテキストでは、平日から年末年始を除くと明記されているため、この記述は直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 7.27,
+      "cost_usd": 0.0167827
+    },
+    {
+      "index": 42,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "07eeda144984d05edff399e7a39631eda9d6396b563cff57ba88fa8ab719b6ef",
+      "cache_hit": true,
+      "raw_file": "c0040.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間の平日には土日が含まれない。",
+          "運用・保守業者の運用時間の平日には祝日が含まれない。",
+          "運用・保守業者の運用時間の平日には年末年始が含まれない。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 43,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "16caf62d1ad2ed214d2906c1bfb9578a68564f42914a0e8cd77b11edda944586",
+      "cache_hit": true,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "コンテキストには、運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されているため、この記述は直接推論できる。ただし、情報システムの監視は24時間365日行うとされているが、これは運用時間とは別の要件である。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には土日が含まれない。",
+            "reason": "コンテキストでは、平日から土日を除くと明記されているため、この記述は直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には祝日が含まれない。",
+            "reason": "コンテキストでは、平日から祝日を除くと明記されているため、この記述は直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には年末年始が含まれない。",
+            "reason": "コンテキストでは、平日から年末年始を除くと明記されているため、この記述は直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 44,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "544664483cc12ad18442cd3e6a2ccc45112810819b6ae155b23595c8bf010839",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までとする。",
+          "運用・保守業者の運用時間の平日には、土日が含まれない。",
+          "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+          "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+          "情報システムの監視は24時間365日行うこと。",
+          "情報システムの監視の24時間365日実施は、運用・保守業者の運用時間の例外である。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 45,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "15c63ebb21d4d9c50dd0127f3f7c3f5092f18ba985195ae25a74cacf79e16f0f",
+      "cache_hit": false,
+      "raw_file": "c0045.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までとする。",
+            "reason": "文脈では、運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されており、この主張はその内容と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、土日が含まれない。",
+            "reason": "文脈の括弧書きで、土日が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、祝日が含まれない。",
+            "reason": "文脈の括弧書きで、祝日が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には、年末年始が含まれない。",
+            "reason": "文脈の括弧書きで、年末年始が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈には情報システムの監視に関する記述がなく、24時間365日の監視要件は読み取れない。",
+            "verdict": 0
+          },
+          {
+            "statement": "情報システムの監視の24時間365日実施は、運用・保守業者の運用時間の例外である。",
+            "reason": "文脈には情報システムの監視や、運用時間の例外に関する記述がなく、この内容は推論できない。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 12.24,
+      "cost_usd": 0.017651899999999998
+    },
+    {
+      "index": 46,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9a143f441ab6f17e9246e21bf548199f8127733e2110a0046cbb49eb4af29cf1",
+      "cache_hit": false,
+      "raw_file": "c0046.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「ただし、情報システムの監視は24時間365日行うこと。」という義務を課す文を含み、運用時間の9時から17時という限定の例外として監視を常時行うことを求めている。候補はこの文を削除しており、「運用時間は…9時から17時までとする」だけが残るため、24時間監視の義務が消え、夜間・休日の監視は不要とも読める。これは義務（肯定の要求）の削除であり、かつ「ただし」による例外の働きも失われている。否定・禁止の観点では、時間外の監視をしなくてもよいという方向への意味変化があるためfailとする。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 7.15,
+      "cost_usd": 0.0065026
+    },
+    {
+      "index": 47,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "2b2f8c03463a020615f772d3e12d0ef2f809e05358628fd802fc9a24fd4462ba",
+      "cache_hit": false,
+      "raw_file": "c0047.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「ただし、情報システムの監視は24時間365日行うこと。」という但し書きで、運用時間（平日9時から17時）の例外として監視の24時間365日実施を義務づけている。候補はこの文を完全に削除しており、「ただし」による例外と、監視の範囲（24時間365日）および「行うこと」という義務が脱落している。このため、候補は運用時間が平日9時〜17時のみと読め、原文と条件・例外・範囲が異なる。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 7.7,
+      "cost_usd": 0.005853700000000001
+    },
+    {
+      "index": 48,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "d4db0bec5b9bc31142c553a982b178b8d9c3080af3dcb0da902fcdd4a8130f7e",
+      "cache_hit": false,
+      "raw_file": "c0048.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「ただし、情報システムの監視は24時間365日行うこと。」という、運用時間とは別に監視の対象（情報システム）と実施範囲（24時間365日）を定める手続・義務を含む。候補はこの一文を完全に省略しており、「情報システムの監視」という対象と、その実施の要求が失われている。主体・対象・修飾先の保持という観点で、原文の働きが保たれていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 7.93,
+      "cost_usd": 0.0058293
+    },
+    {
+      "index": 49,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "6649c966cf57c7da95c502ddfa36d8f0912fc4ee77a42eedf51cd31ac928ecb6",
+      "cache_hit": false,
+      "raw_file": "c0049.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文には「ただし、情報システムの監視は24時間365日行うこと。」という義務を表す文があり、「行うこと」で監視の実施が義務付けられている。候補ではこの文が丸ごと削除されており、24時間365日監視の義務が失われている。そのため、運用時間の「とする」は保たれているものの、義務の働きが原文と異なっている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 12.61,
+      "cost_usd": 0.005625700000000001
+    },
+    {
+      "index": 50,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "d6fb7596a2383de2ab67982737189db941aa68da50506a2e1e3b82f693c4bc18",
+      "cache_hit": false,
+      "raw_file": "c0050.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文には「ただし、情報システムの監視は24時間365日行うこと。」とあり、監視の頻度・期間（24時間365日）が規定されている。候補ではこの一文が削除され、「24時間365日」という頻度の条件が失われている。残った「9時から17時まで」の運用時間だけでは監視が常時必要という要件が伝わらず、数値・頻度の保持という観点で原文と異なる意味になっている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.94,
+      "cost_usd": 0.0106454
+    },
+    {
+      "index": 51,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "bec308454b646a339f6963cfd27d3153000e64e450a5c8a40af8a104b45ebf7f",
+      "cache_hit": false,
+      "raw_file": "c0051.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「ただし、情報システムの監視は24時間365日行うこと。」という但し書きが候補では丸ごと削除されている。ただしこの観点は「原文にない主体、条件、完了状態、理由、具体例、固有名の追加」の有無であり、候補は「運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする。」と原文の前半をそのまま保っていて、新たな主体・条件・理由・具体例・固有名は加えられていない。脱落は別観点の問題であり、この観点では具体化の追加はないのでpassとする。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 14.77,
+      "cost_usd": 0.0063174
+    },
+    {
+      "index": 52,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "c7f7c9f17f5285471b344b481a6cb5e63df8e0cad619f71912ecd8c77626926e",
+      "cache_hit": false,
+      "raw_file": "c0052.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「ただし、情報システムの監視は24時間365日行うこと。」という義務を課す文を含むが、候補はこの文を削除している。これは言い換えや最小変更ではなく、「24時間365日の監視」という義務の内容が失われており、運用時間（9時から17時）のみが残るため、監視が常時不要とも読め、原文の意味・義務の強さが保たれていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 7.0,
+      "cost_usd": 0.0057396
+    },
+    {
+      "index": 53,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "700979aa09e49a9c929a7123c21733eb6df490aecd30dda6a78b27b0c737eb18",
+      "cache_hit": false,
+      "raw_file": "c0053.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "夜間や休日にシステム障害が発生することがある。",
+          "夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することを求める。",
+          "夜間や休日におけるシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案すること。"
+        ]
+      },
+      "error": null,
+      "seconds": 6.1,
+      "cost_usd": 0.0107517
+    },
+    {
+      "index": 54,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "aecd24d424f2e42bb56a97a8403fd7286b9f9271251e74264df40a01681439fa",
+      "cache_hit": false,
+      "raw_file": "c0054.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "夜間や休日にシステム障害が発生することがある。",
+            "reason": "コンテキストは夜間や休日のシステム障害時の連絡体制について述べており、障害が発生しうることが前提となっている。ただし、実際に発生すると明示的に述べているわけではないが、体制を求めている以上、発生しうることは直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することを求める。",
+            "reason": "コンテキストでは、運用時間と同等の体制を維持することは求めないと明記されており、この主張は内容と矛盾する。",
+            "verdict": 0
+          },
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案すること。",
+            "reason": "コンテキストに、障害の重要性に応じた機動的な体制を提案することと明記されており、この主張と一致する。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 7.27,
+      "cost_usd": 0.0160365
+    },
+    {
+      "index": 55,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "700979aa09e49a9c929a7123c21733eb6df490aecd30dda6a78b27b0c737eb18",
+      "cache_hit": true,
+      "raw_file": "c0053.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "夜間や休日にシステム障害が発生することがある。",
+          "夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することを求める。",
+          "夜間や休日におけるシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案すること。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 56,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "aecd24d424f2e42bb56a97a8403fd7286b9f9271251e74264df40a01681439fa",
+      "cache_hit": true,
+      "raw_file": "c0054.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "夜間や休日にシステム障害が発生することがある。",
+            "reason": "コンテキストは夜間や休日のシステム障害時の連絡体制について述べており、障害が発生しうることが前提となっている。ただし、実際に発生すると明示的に述べているわけではないが、体制を求めている以上、発生しうることは直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することを求める。",
+            "reason": "コンテキストでは、運用時間と同等の体制を維持することは求めないと明記されており、この主張は内容と矛盾する。",
+            "verdict": 0
+          },
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案すること。",
+            "reason": "コンテキストに、障害の重要性に応じた機動的な体制を提案することと明記されており、この主張と一致する。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 57,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "05360f74006ff08b0ff49e0fff2d272dd6dd4a8eb95004d435478a2e6d8ab237",
+      "cache_hit": false,
+      "raw_file": "c0057.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "この文章は夜間や休日におけるシステム障害時の連絡体制について述べている。",
+          "夜間や休日におけるシステム障害時の連絡体制について、運用時間と同等の体制を維持することは求められない。",
+          "夜間や休日におけるシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案することが求められる。"
+        ]
+      },
+      "error": null,
+      "seconds": 8.53,
+      "cost_usd": 0.0054348
+    },
+    {
+      "index": 58,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "d29ffce81382dcb037f5da6263b2181399c3bb540bdafea831d40b15ed833778",
+      "cache_hit": false,
+      "raw_file": "c0058.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "この文章は夜間や休日におけるシステム障害時の連絡体制について述べている。",
+            "reason": "文脈は「夜間や休日におけるシステム障害時の連絡体制について」と明記しており、この文章がその連絡体制について述べていることは直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制について、運用時間と同等の体制を維持することは求められない。",
+            "reason": "文脈では「運用時間と同等の体制を維持することを求め」と述べており、維持が求められているため、この主張は文脈と矛盾する。",
+            "verdict": 0
+          },
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案することが求められる。",
+            "reason": "文脈に「障害の重要性に応じた機動的な体制を提案すること」とあり、提案が求められていることが直接読み取れる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 16.41,
+      "cost_usd": 0.0163118
+    },
+    {
+      "index": 59,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "b915d25ae433ea5ae043d8eaac4bcebd6b6b38ef1771d9413cd2381091d51de2",
+      "cache_hit": false,
+      "raw_file": "c0059.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「運用時間と同等の体制を維持することは求めない」と同等体制の維持を求めない（不要とする）内容だが、候補は「運用時間と同等の体制を維持することを求め」と否定を肯定に反転させ、求めない事項を義務として課している。これは義務の有無が逆転する変更であり、否定の保持に反する。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.77,
+      "cost_usd": 0.010885
+    },
+    {
+      "index": 60,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "62206e37d6109203b0295ec15d26696987fa5219ae802b7b8487a433c96d6ce1",
+      "cache_hit": false,
+      "raw_file": "c0060.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「運用時間と同等の体制を維持することは求めないが」と、同等体制の維持を要求しない（例外・緩和）としている。候補は「維持することを求め」となり、要求しない条件が要求する条件に反転している。調達側が課す義務の範囲が変わっており、「求めないが、〜提案すること」という譲歩関係も失われている。よって条件・範囲が保たれていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 9.56,
+      "cost_usd": 0.0109653
+    },
+    {
+      "index": 61,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "a616ed520318ee44005d46ced9157ae9613776c1fcd94ebe6a57df047f2ecc10",
+      "cache_hit": false,
+      "raw_file": "c0061.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「運用時間と同等の体制を維持することは求めない」と、同等体制の維持を求めないとしているが、候補は「維持することを求め」と逆に義務化している。提案を求める対象（「障害の重要性に応じた機動的な体制」）は保たれているものの、調達側が受注者に求める内容（同等体制の維持の要否）が反転しており、義務の宛先・対象が原文と異なる働きになっている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 7.73,
+      "cost_usd": 0.0109336
+    },
+    {
+      "index": 62,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "81f883519c61e177a81fac5d68b7df643230ed7b0ab49a2b64825ebe7f28daeb",
+      "cache_hit": false,
+      "raw_file": "c0062.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「運用時間と同等の体制を維持することは求めない」とあり、同等体制の維持を要求しない（要求の否定）である。一方、候補は「維持することを求め」と肯定の要求に変わっており、義務の強さと向きが逆転している。「提案すること」の部分は保たれているが、前半の「求めない」が「求め」になったため、原文の意味・働きが失われている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.21,
+      "cost_usd": 0.0110248
+    },
+    {
+      "index": 63,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "3fd2bdc0908c00d42452ff54a3be55bb23a55fe555cbb55f65d6cdff00c724fe",
+      "cache_hit": false,
+      "raw_file": "c0063.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「運用時間と同等の体制を維持することは求めない」と、同等体制の維持を要求しないとしているが、候補は「維持することを求め」と要求に反転している。数値・期限・順序そのものの変更ではないが、運用時間と同等という水準の要求有無が逆になり、時間帯ごとの体制水準（運用時間帯と夜間・休日の関係）の働きが変わっている。この観点では原文の働きが保たれていないためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.56,
+      "cost_usd": 0.0109886
+    },
+    {
+      "index": 64,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "f4a5ad5cc2505467d4659c0b34385ed92fa2863c02d95c9073a9dfc150ca2a2f",
+      "cache_hit": false,
+      "raw_file": "c0064.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「運用時間と同等の体制を維持することは求めないが」と同等体制の維持を求めないとしているのに対し、候補は「維持することを求め」と逆に求める内容になっている。これは原文にない義務の追加・条件の変更であり、原文にない具体化（要求事項の付加）にあたる。意味・義務の強さが保たれていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 9.14,
+      "cost_usd": 0.010711899999999998
+    },
+    {
+      "index": 65,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "f48b40ed293ca4bb607437f0aa22c452f10f7ab3fd6a0d1436022b5edf1db535",
+      "cache_hit": false,
+      "raw_file": "c0065.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「運用時間と同等の体制を維持することは求めないが」と、同等の体制維持を求めないと明示している。候補は「維持することを求め」と肯定に変えており、義務の内容が正反対になっている。これは読みやすさのための言い換えではなく、調達要件の意味を変える不要かつ有害な書換えである。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 8.03,
+      "cost_usd": 0.010645500000000002
+    }
+  ],
+  "call_summary": {
+    "calls": 65,
+    "cache_hits": 15,
+    "failures": 0,
+    "seconds": 396.7,
+    "cost_usd_list_price": 0.496,
+    "calls_without_cost": 0
+  },
+  "finished_at": "2026-10-16T12:10:37.141203+00:00"
+}

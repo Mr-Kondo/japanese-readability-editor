@@ -1,0 +1,608 @@
+{
+  "schema_version": 1,
+  "status": "constructed_labels_not_human_confirmed",
+  "rules": [
+    "factual の信号: 採点できた precision/recall のどちらかが 1.0 未満。閾値なし",
+    "rubric の信号: unnecessary_change を除く保持の観点のどれかが fail",
+    "狙い撃ち: violated_aspect が fail",
+    "unnecessary_change は別集計"
+  ],
+  "caveats": [
+    "ラベルは構成によるもので人の確認前",
+    "人工例の成績は実運用の見逃し率・誤警告率ではない",
+    "13件・出典2文書。率は記述値で、信頼区間や有効性の根拠にしない"
+  ],
+  "labels_basis": "校正用の人工ケースの期待ラベル。ラベルは構成によるもので、人の確認前。confirmed_by が空のラベルを人手判定済みとして扱わない。",
+  "run_status": "complete",
+  "run_config": {
+    "tool_version": 1,
+    "rubric_version": "ragas-ja-rubric-v1",
+    "rubric_sha256": "7f37f4309a2786203f376adfebd3d62e08df4be0d1d448c23480dd4f39dc81d1",
+    "metrics": [
+      "factual",
+      "rubric"
+    ],
+    "profile": "gov-org",
+    "aspects": [
+      "negation_polarity",
+      "condition_scope",
+      "actor_target",
+      "modality_strength",
+      "numbers_order",
+      "ungrounded_specificity",
+      "unnecessary_change"
+    ],
+    "atomicity": "high",
+    "coverage": "high",
+    "ragas_prompts": "Ragas 0.4.3 既定（英語の指示と例。日本語への適合は未検証）",
+    "llm_adapter": "ClaudeCliLLM（JSON指示をプロンプト末尾に付加、ツールなし、逐次実行、同一プロンプトは再利用）",
+    "claude_flags": [
+      "--print",
+      "--safe-mode",
+      "--strict-mcp-config",
+      "--tools",
+      "",
+      "--no-session-persistence",
+      "--model",
+      "sonnet",
+      "--effort",
+      "medium",
+      "--output-format",
+      "json"
+    ],
+    "claude_system": "提供された文章を処理してください。ツールは使用しないでください。",
+    "claude_cli_version": "2.1.301 (Claude Code)",
+    "temperature_and_seed": "CLI から指定できない（不明）",
+    "python": "3.13.16",
+    "platform": "Linux-6.18.44-fc-v139-x86_64-with-glibc2.39",
+    "packages": {
+      "ragas": "0.4.3",
+      "langchain-community": "0.3.31",
+      "langchain-core": "1.6.11",
+      "langchain": "1.4.6",
+      "instructor": "1.3.2",
+      "openai": "1.109.1",
+      "pydantic": "2.14.1",
+      "numpy": "2.5.4"
+    }
+  },
+  "run_models": [
+    "claude-haiku-5-5",
+    "claude-sonnet-5-5"
+  ],
+  "run_calls": {
+    "calls": 169,
+    "cache_hits": 38,
+    "failures": 0,
+    "seconds": 1031.3,
+    "cost_usd_list_price": 1.4601,
+    "calls_without_cost": 0
+  },
+  "summary": {
+    "fail": {
+      "cases": 8,
+      "factual_signal": {
+        "signalled": 8,
+        "available": 8,
+        "unavailable": 0,
+        "rate": 1.0
+      },
+      "rubric_signal": {
+        "signalled": 8,
+        "available": 8,
+        "unavailable": 0,
+        "rate": 1.0
+      },
+      "unnecessary_change_fail": {
+        "signalled": 8,
+        "available": 8
+      },
+      "uncertain_in_any_aspect": 0,
+      "cases_with_errors": 0,
+      "targeted_aspect_hit": {
+        "signalled": 8,
+        "available": 8,
+        "unavailable": 0,
+        "rate": 1.0
+      },
+      "failed_aspects_per_case": {
+        "values": [
+          3,
+          5,
+          6,
+          3,
+          4,
+          4,
+          5,
+          4
+        ],
+        "note": "1件の欠陥に対し複数の観点が同時に fail なら、観点が弁別していない"
+      }
+    },
+    "pass": {
+      "cases": 5,
+      "factual_signal": {
+        "signalled": 1,
+        "available": 5,
+        "unavailable": 0,
+        "rate": 0.2
+      },
+      "rubric_signal": {
+        "signalled": 0,
+        "available": 5,
+        "unavailable": 0,
+        "rate": 0.0
+      },
+      "unnecessary_change_fail": {
+        "signalled": 0,
+        "available": 5
+      },
+      "uncertain_in_any_aspect": 0,
+      "cases_with_errors": 0
+    }
+  },
+  "cases": [
+    {
+      "id": "control-s3a",
+      "expected": "pass",
+      "perturbation": "control_unchanged",
+      "violated_aspect": null,
+      "source_id": "da-requirements-template",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass",
+      "targeted_hit": null
+    },
+    {
+      "id": "paraphrase-s3a",
+      "expected": "pass",
+      "perturbation": "legitimate_paraphrase",
+      "violated_aspect": null,
+      "source_id": "da-requirements-template",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass",
+      "targeted_hit": null
+    },
+    {
+      "id": "number-s3a",
+      "expected": "fail",
+      "perturbation": "number_changed",
+      "violated_aspect": "numbers_order",
+      "source_id": "da-requirements-template",
+      "errors": [],
+      "precision": 0.83,
+      "recall": 0.83,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [
+        "運用・保守業者の運用時間は平日の9時から18時までとする。"
+      ],
+      "unsupported_reference_claims": [
+        "運用・保守業者の運用時間は平日の9時から17時までとする。"
+      ],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "fail",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "fail",
+        "ungrounded_specificity": "fail",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "condition_scope",
+        "numbers_order",
+        "ungrounded_specificity"
+      ],
+      "unnecessary_change": "fail",
+      "targeted_hit": true
+    },
+    {
+      "id": "exception-drop-s3a",
+      "expected": "fail",
+      "perturbation": "exception_dropped",
+      "violated_aspect": "condition_scope",
+      "source_id": "da-requirements-template",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 0.67,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [
+        "情報システムの監視は24時間365日行うこと。",
+        "情報システムの監視の24時間365日実施は、運用・保守業者の運用時間の例外である。"
+      ],
+      "rubric": {
+        "negation_polarity": "fail",
+        "condition_scope": "fail",
+        "actor_target": "fail",
+        "modality_strength": "fail",
+        "numbers_order": "fail",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "actor_target",
+        "condition_scope",
+        "modality_strength",
+        "negation_polarity",
+        "numbers_order"
+      ],
+      "unnecessary_change": "fail",
+      "targeted_hit": true
+    },
+    {
+      "id": "negation-flip-s3b",
+      "expected": "fail",
+      "perturbation": "negation_flipped",
+      "violated_aspect": "negation_polarity",
+      "source_id": "da-requirements-template",
+      "errors": [],
+      "precision": 0.67,
+      "recall": 0.67,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [
+        "夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することを求める。"
+      ],
+      "unsupported_reference_claims": [
+        "夜間や休日におけるシステム障害時の連絡体制について、運用時間と同等の体制を維持することは求められない。"
+      ],
+      "rubric": {
+        "negation_polarity": "fail",
+        "condition_scope": "fail",
+        "actor_target": "fail",
+        "modality_strength": "fail",
+        "numbers_order": "fail",
+        "ungrounded_specificity": "fail",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "actor_target",
+        "condition_scope",
+        "modality_strength",
+        "negation_polarity",
+        "numbers_order",
+        "ungrounded_specificity"
+      ],
+      "unnecessary_change": "fail",
+      "targeted_hit": true
+    },
+    {
+      "id": "strength-s3b",
+      "expected": "fail",
+      "perturbation": "required_to_recommended",
+      "violated_aspect": "modality_strength",
+      "source_id": "da-requirements-template",
+      "errors": [],
+      "precision": 0.67,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [
+        "夜間や休日におけるシステム障害時の連絡体制が存在する。"
+      ],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "fail",
+        "condition_scope": "fail",
+        "actor_target": "pass",
+        "modality_strength": "fail",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "condition_scope",
+        "modality_strength",
+        "negation_polarity"
+      ],
+      "unnecessary_change": "fail",
+      "targeted_hit": true
+    },
+    {
+      "id": "partial-negation-s5",
+      "expected": "fail",
+      "perturbation": "partial_negation_to_full",
+      "violated_aspect": "negation_polarity",
+      "source_id": "da-ds-120",
+      "errors": [],
+      "precision": 0.67,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [
+        "要件定義で検討する機能の全てを実現することはできない。"
+      ],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "fail",
+        "condition_scope": "fail",
+        "actor_target": "fail",
+        "modality_strength": "fail",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "actor_target",
+        "condition_scope",
+        "modality_strength",
+        "negation_polarity"
+      ],
+      "unnecessary_change": "fail",
+      "targeted_hit": true
+    },
+    {
+      "id": "paraphrase-s5",
+      "expected": "pass",
+      "perturbation": "legitimate_paraphrase",
+      "violated_aspect": null,
+      "source_id": "da-ds-120",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass",
+      "targeted_hit": null
+    },
+    {
+      "id": "tense-s5",
+      "expected": "fail",
+      "perturbation": "frequency_and_tense_changed",
+      "violated_aspect": "modality_strength",
+      "source_id": "da-ds-120",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 0.8,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [
+        "予算やスケジュールの関係で実現する機能を絞らなければならないことはよくある。"
+      ],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "fail",
+        "actor_target": "pass",
+        "modality_strength": "fail",
+        "numbers_order": "fail",
+        "ungrounded_specificity": "fail",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "condition_scope",
+        "modality_strength",
+        "numbers_order",
+        "ungrounded_specificity"
+      ],
+      "unnecessary_change": "fail",
+      "targeted_hit": true
+    },
+    {
+      "id": "control-s6",
+      "expected": "pass",
+      "perturbation": "control_unchanged",
+      "violated_aspect": null,
+      "source_id": "da-ds-120",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass",
+      "targeted_hit": null
+    },
+    {
+      "id": "ungrounded-s6",
+      "expected": "fail",
+      "perturbation": "ungrounded_certainty_added",
+      "violated_aspect": "ungrounded_specificity",
+      "source_id": "da-ds-120",
+      "errors": [],
+      "precision": 0.4,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [
+        "調達後に変更内容が判明した場合は、追加の契約変更が必ず発生する。",
+        "調達後に変更内容が判明した場合は、追加のコストが必ず発生する。",
+        "調達後に変更内容が判明した場合に追加の契約変更とコストが発生することに留意すべきである。"
+      ],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "fail",
+        "actor_target": "fail",
+        "modality_strength": "fail",
+        "numbers_order": "fail",
+        "ungrounded_specificity": "fail",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "actor_target",
+        "condition_scope",
+        "modality_strength",
+        "numbers_order",
+        "ungrounded_specificity"
+      ],
+      "unnecessary_change": "fail",
+      "targeted_hit": true
+    },
+    {
+      "id": "timing-swap-s6",
+      "expected": "fail",
+      "perturbation": "timing_swapped",
+      "violated_aspect": "numbers_order",
+      "source_id": "da-ds-120",
+      "errors": [],
+      "precision": 0.5,
+      "recall": 0.4,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [
+        "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で収集する。",
+        "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で最新化を行うべきである。"
+      ],
+      "unsupported_reference_claims": [
+        "既存のサービス・業務の資料はサービス・業務企画時点で収集する。",
+        "既存の情報システムの資料はサービス・業務企画時点で収集する。",
+        "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化を行うべきである。"
+      ],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "fail",
+        "actor_target": "fail",
+        "modality_strength": "fail",
+        "numbers_order": "fail",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "actor_target",
+        "condition_scope",
+        "modality_strength",
+        "numbers_order"
+      ],
+      "unnecessary_change": "fail",
+      "targeted_hit": true
+    },
+    {
+      "id": "paraphrase-s6",
+      "expected": "pass",
+      "perturbation": "legitimate_paraphrase",
+      "violated_aspect": null,
+      "source_id": "da-ds-120",
+      "errors": [],
+      "precision": 0.75,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [
+        "調達後に変更内容が判明する可能性について留意すべきである。"
+      ],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass",
+      "targeted_hit": null
+    }
+  ]
+}
