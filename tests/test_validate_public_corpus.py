@@ -55,13 +55,31 @@ class ManifestTest(unittest.TestCase):
         errors = self.errors(document)
         self.assertTrue(any(fragment in e for e in errors), f"{fragment!r} not in {errors}")
 
-    def test_committed_skeleton_is_valid_and_has_no_text(self):
+    def test_committed_manifest_is_valid_and_records_no_unperformed_human_confirmation(self):
         document = json.loads((REPO_ROOT / "evals/public-documents/manifest.json").read_text(encoding="utf-8"))
         errors, report = corpus.check_manifest(document)
         self.assertEqual(errors, [])
-        self.assertEqual(document["excerpts"], [])
-        self.assertEqual(report["groups"]["digital-agency"]["adopted"], 0)
-        self.assertEqual(report["groups"]["digital-agency"]["sources"], {"planned": 5, "collected": 0})
+        group = report["groups"]["digital-agency"]
+        self.assertEqual(group["sources"], {"planned": 0, "collected": 5})
+        # 人の確認が済むまで採用しない。確認者・確認日・検証者を assistant が埋めてはならない。
+        self.assertEqual(group["adopted"], 0)
+        for item in document["excerpts"]:
+            self.assertIn(item["status"], ("candidate", "excluded"))
+            if item["status"] == "candidate":
+                self.assertEqual(item["correspondence"]["checked_by"], "")
+                self.assertEqual(item["third_party_content"], "unchecked")
+                self.assertTrue(all(p["confirmed_by"] == "" and p["reason"] == "" for p in item["preserve"]))
+                self.assertTrue(all(q["verified_by"] == "" and q["verification_reason"] == "" for q in item["questions"]))
+
+    def test_committed_manifest_keeps_series_and_splits_apart(self):
+        document = json.loads((REPO_ROOT / "evals/public-documents/manifest.json").read_text(encoding="utf-8"))
+        lineage = {s["id"]: s.get("lineage_id", s["id"]) for s in document["sources"]}
+        splits = {}
+        for item in document["excerpts"]:
+            if item["status"] == "candidate":
+                splits.setdefault(lineage[item["source_id"]], set()).add(item["split"])
+        self.assertTrue(all(len(v) == 1 for v in splits.values()), splits)
+        self.assertEqual(lineage["da-ds-100"], lineage["da-ds-110"])  # DS-110 は DS-100 の条文を逐条引用する
 
     def test_complete_excerpt_passes_and_is_reported(self):
         errors, report = corpus.check_manifest(manifest(excerpt()))
@@ -119,6 +137,12 @@ class ManifestTest(unittest.TestCase):
         stub = {k: v for k, v in excerpt().items() if k in ("id", "source_id", "text", "text_sha256", "transform_history")}
         self.assertError(manifest({**stub, "status": "excluded"}), "除外理由")
         self.assertEqual(self.errors(manifest({**stub, "status": "excluded", "exclusion_reason": "文脈が欠ける"})), [])
+
+    def test_excluded_may_keep_only_locator_and_reason_without_text(self):
+        stub = {"id": "x1", "source_id": "s1", "status": "excluded", "locator": "P10-P12", "exclusion_reason": "表を参照する"}
+        self.assertEqual(self.errors(manifest(stub)), [])
+        self.assertError(manifest({**stub, "exclusion_reason": ""}), "exclusion_reason")
+        self.assertError(manifest({k: v for k, v in stub.items() if k != "locator"}), "locator")
 
     def test_questions_reuse_comprehension_rules(self):
         question = {"id": "q1", "prompt": "何日以内か", "options": ["3営業日", "5営業日"], "answer_index": 1,
@@ -199,6 +223,20 @@ class CliTest(unittest.TestCase):
             self.assertEqual(code, 1)
             self.assertIn("NG:", err)
             self.assertEqual(self.run_cli("--manifest", str(Path(folder, "missing.json")))[0], 2)
+
+    def test_readiness_lists_unconfirmed_items_without_failing(self):
+        draft = excerpt(status="candidate", third_party_content="unchecked")
+        draft["preserve"][0]["confirmed_by"] = ""
+        self.assertEqual(corpus.check_manifest(manifest(draft))[0], [])
+        blockers = corpus.adoption_blockers(manifest(draft))["e1"]
+        self.assertTrue(any("third_party_content" in b for b in blockers))
+        self.assertTrue(any("confirmed_by" in b for b in blockers))
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder, "m.json")
+            path.write_text(json.dumps(manifest(draft)), encoding="utf-8")
+            code, out, _ = self.run_cli("--manifest", str(path), "--readiness")
+        self.assertEqual(code, 0)
+        self.assertIn("e1", json.loads(out)["adoption_blockers"])
 
     def test_cases_require_split(self):
         code, _, _ = self.run_cli("--manifest", str(REPO_ROOT / "evals/public-documents/manifest.json"), "--cases", "x.json")

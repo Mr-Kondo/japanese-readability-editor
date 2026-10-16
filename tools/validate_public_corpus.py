@@ -163,6 +163,11 @@ def check_excerpt(excerpt, sources: dict, errors: list) -> None:
     if source.get("status") != "collected":
         errors.append(f"{label}: 出典 {source['id']!r} が collected でない（未収集の出典から抜粋を作らない）")
         return
+    if status == "excluded" and "text" not in excerpt:
+        # 除外した抜粋は、理由と所在（locator）だけを残してよい。本文を再配布しない。
+        if not present(excerpt, "exclusion_reason") or not present(excerpt, "locator"):
+            errors.append(f"{label}: 除外には exclusion_reason と locator が必要")
+        return
     if not present(excerpt, "text") or excerpt.get("text_sha256") != sha256_text(excerpt["text"]):
         errors.append(f"{label}: text が空、または text_sha256 と一致しない")
         return
@@ -303,11 +308,24 @@ def check_cases(manifest: dict, cases_document, split: str, document_id_by: str)
                     "source_titles": {i: sources[i]["title"] for i in sources_used}}
 
 
+def adoption_blockers(manifest: dict) -> dict:
+    """candidate を adopted とみなして検査し、採用までに残る不備（主に人の確認）を抜粋ごとに返す。"""
+    sources = {s["id"]: s for s in manifest["sources"] if isinstance(s, dict) and "id" in s}
+    blockers = {}
+    for excerpt in manifest["excerpts"]:
+        if isinstance(excerpt, dict) and excerpt.get("status") == "candidate":
+            errors = []
+            check_excerpt({**excerpt, "status": "adopted"}, sources, errors)
+            blockers[excerpt["id"]] = [e.split(": ", 1)[1] for e in errors]
+    return blockers
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--manifest", type=Path, required=True, help="公開文書の台帳 JSON")
     parser.add_argument("--cases", type=Path, help="既存CLIへ渡す cases JSON。台帳との一致と分割を検査する")
     parser.add_argument("--split", choices=SPLITS, help="--cases に混ぜてよい分割（--cases では必須）")
+    parser.add_argument("--readiness", action="store_true", help="candidate を採用するまでに残る不備（人の確認）を一覧する。終了コードには影響しない")
     parser.add_argument("--document-id-by", choices=("source", "excerpt"), default="source",
                         help="document_id の単位。比較・統計は source、理解問題は excerpt（既定 source）")
     args = parser.parse_args(argv)
@@ -320,6 +338,8 @@ def main(argv=None) -> int:
         print(f"corpus check failed: {error}", file=sys.stderr)
         return 2
     errors, report = check_manifest(manifest)
+    if args.readiness and not errors:
+        report["adoption_blockers"] = adoption_blockers(manifest)
     if args.cases and not errors:
         case_errors, case_report = check_cases(manifest, cases, args.split, args.document_id_by)
         errors += case_errors

@@ -4,15 +4,1647 @@
     "digital-agency": {
       "issue": 40,
       "target_excerpts": 10,
-      "note": "予備評価の出発点であり、統計的十分性の根拠ではない。業務・技術文書として、青空文庫の群と結果を混ぜない。"
+      "note": "予備評価の出発点であり、統計的十分性の根拠ではない。業務・技術文書として、青空文庫の群と結果を混ぜない。",
+      "split_policy": {
+        "decided_on": "2026-10-16",
+        "decided_before": "モデル出力の生成・閲覧（まだ生成していない）",
+        "rule": "原本（系列）単位。DS-100 と DS-110 は DS-110 が DS-100 の条文を逐条で引用するため同じ系列（da-ds-100-110）とし、同じ側に置く。",
+        "tuning": [
+          "da-ds-120",
+          "da-requirements-template"
+        ],
+        "final": [
+          "da-ds-100",
+          "da-ds-110",
+          "da-procurement-spec-template"
+        ],
+        "topic_separation": "調整用は要件定義・要件記述（DS-120 第5章、要件定義書テンプレート）、最終評価用は予算・計画・調達・契約（DS-100、DS-110 第6章、調達仕様書テンプレート）。同じ条項の解説・テンプレートが両側に入らないようにした。トピックと分割が交絡する限界がある。",
+        "limits": "全て同じ提供者（デジタル庁）の標準ガイドライン群。著者・系列の偏りは抑えられていない。"
+      },
+      "selection": {
+        "criteria": [
+          "その抜粋だけで、手順・役割・要件のいずれかが読める",
+          "主体・条件・期限・例外・成果物のいずれかを含む",
+          "表・図・他節の番号参照に依存して文意が欠けない（依存するものは除外し理由を記録）",
+          "テンプレートの未記入欄（XXX、○○省）や条件付き選択ブロックを含まない",
+          "DS-110 は逐条引用ではなく解説部分のみ",
+          "変更不要の対照例を含める"
+        ],
+        "method": "各文書の本文を段落単位で抽出し、「場合／までに／以内／ただし／してはならない」等を含む段落を走査して、トピックが重ならないよう人（assistant）が選んだ。走査した全段落は記録していない。モデル出力は選定前に存在しない。",
+        "candidates": 11,
+        "excluded": 6,
+        "status_note": "採用（adopted）は0件。保持要件・理解問題・原本との対応・第三者権利の確認が人手で終わるまで全て candidate。"
+      }
     }
   },
   "sources": [
-    {"id": "da-ds-100", "group": "digital-agency", "status": "planned", "title": "DS-100", "url": "https://www.digital.go.jp/resources/standard_guidelines"},
-    {"id": "da-ds-110", "group": "digital-agency", "status": "planned", "title": "DS-110", "url": "https://www.digital.go.jp/resources/standard_guidelines"},
-    {"id": "da-ds-120", "group": "digital-agency", "status": "planned", "title": "DS-120", "url": "https://www.digital.go.jp/resources/standard_guidelines"},
-    {"id": "da-requirements-template", "group": "digital-agency", "status": "planned", "title": "要件定義書標準テンプレート", "url": "https://www.digital.go.jp/resources/standard_guidelines"},
-    {"id": "da-procurement-spec-template", "group": "digital-agency", "status": "planned", "title": "調達仕様書標準テンプレート", "url": "https://www.digital.go.jp/resources/standard_guidelines"}
+    {
+      "id": "da-ds-100",
+      "group": "digital-agency",
+      "status": "collected",
+      "lineage_id": "da-ds-100-110",
+      "title": "DS-100 デジタル・ガバメント推進標準ガイドライン",
+      "provider": "デジタル庁",
+      "author": "デジタル庁",
+      "url": "https://www.digital.go.jp/resources/standard_guidelines",
+      "download_url": "https://www.digital.go.jp/assets/contents/node/basic_page/field_ref_resources/e2a06143-ed29-4f1d-9c31-0f06fca67afc/c1029448/20260715_resources_standard_guidelines_guideline_02.zip",
+      "version": "策定又は最終改定日 2026-06-12／配布ファイル 20260715 版（ページ掲載 2026-07-15 更新）",
+      "format": "ZIP（Word／PDF）",
+      "retrieved_on": "2026-10-16",
+      "raw_sha256": "49420f1b8ffb84843cfb053345be4b057043a61f3b0b099c31ee5e4106e9b21c",
+      "license": {
+        "body": {
+          "name": "公共データ利用規約（第1.0版）（PDL1.0）",
+          "url": "https://www.digital.go.jp/resources/open_data/public_data_license_v1.0",
+          "checked_on": "2026-10-16",
+          "redistribution": "allowed",
+          "attribution": "出典：「デジタル・ガバメント推進標準ガイドライン」（デジタル庁）（https://www.digital.go.jp/resources/standard_guidelines）",
+          "modification_notice": "「デジタル・ガバメント推進標準ガイドライン」（デジタル庁）（https://www.digital.go.jp/resources/standard_guidelines）を抜粋・テキスト化して作成（japanese-readability-editor）。デジタル庁が作成・確認した文書ではない。",
+          "basis": "コピーライトポリシー（https://www.digital.go.jp/copyright-policy、最終更新2026-05-12）は、権利表記がない限りPDL1.0を適用すると述べる。取り出したWordの本文／ヘッダ／フッタに個別の権利表記は見つからなかった（文字列検索のみ。PDFと、取り出していない章は未確認）。PDL1.0は第三者の権利を利用者の責任で確認することを求める。"
+        },
+        "bibliographic": {
+          "name": "公共データ利用規約（第1.0版）（PDL1.0）",
+          "url": "https://www.digital.go.jp/resources/open_data/public_data_license_v1.0",
+          "checked_on": "2026-10-16",
+          "redistribution": "allowed",
+          "basis": "題名・文書番号・日付はサイトの掲載情報。サイト内容として同じ規約が適用されると読んだ。"
+        }
+      },
+      "attributes": {
+        "position": "Normative（順守内容）",
+        "zip_url_page": "https://www.digital.go.jp/resources/standard_guidelines",
+        "document_in_zip": "デジタル・ガバメント推進標準ガイドライン.docx",
+        "note": ""
+      }
+    },
+    {
+      "id": "da-ds-110",
+      "group": "digital-agency",
+      "status": "collected",
+      "lineage_id": "da-ds-100-110",
+      "title": "DS-110 デジタル・ガバメント推進標準ガイドライン解説書",
+      "provider": "デジタル庁",
+      "author": "デジタル庁",
+      "url": "https://www.digital.go.jp/resources/standard_guidelines",
+      "download_url": "https://www.digital.go.jp/assets/contents/node/basic_page/field_ref_resources/e2a06143-ed29-4f1d-9c31-0f06fca67afc/a7e9ec55/20260715_resources_standard_guidelines_guideline_04.zip",
+      "version": "策定又は最終改定日 2026-06-12／配布ファイル 20260715 版（ページ掲載 2026-07-15 更新）",
+      "format": "ZIP（Word／PDF）",
+      "retrieved_on": "2026-10-16",
+      "raw_sha256": "759f29a45df4272131dac168e7395564ef1af2f5ab6fbfe32a25e4efdb3e5667",
+      "license": {
+        "body": {
+          "name": "公共データ利用規約（第1.0版）（PDL1.0）",
+          "url": "https://www.digital.go.jp/resources/open_data/public_data_license_v1.0",
+          "checked_on": "2026-10-16",
+          "redistribution": "allowed",
+          "attribution": "出典：「デジタル・ガバメント推進標準ガイドライン解説書」（デジタル庁）（https://www.digital.go.jp/resources/standard_guidelines）",
+          "modification_notice": "「デジタル・ガバメント推進標準ガイドライン解説書」（デジタル庁）（https://www.digital.go.jp/resources/standard_guidelines）を抜粋・テキスト化して作成（japanese-readability-editor）。デジタル庁が作成・確認した文書ではない。",
+          "basis": "コピーライトポリシー（https://www.digital.go.jp/copyright-policy、最終更新2026-05-12）は、権利表記がない限りPDL1.0を適用すると述べる。取り出したWordの本文／ヘッダ／フッタに個別の権利表記は見つからなかった（文字列検索のみ。PDFと、取り出していない章は未確認）。PDL1.0は第三者の権利を利用者の責任で確認することを求める。"
+        },
+        "bibliographic": {
+          "name": "公共データ利用規約（第1.0版）（PDL1.0）",
+          "url": "https://www.digital.go.jp/resources/open_data/public_data_license_v1.0",
+          "checked_on": "2026-10-16",
+          "redistribution": "allowed",
+          "basis": "題名・文書番号・日付はサイトの掲載情報。サイト内容として同じ規約が適用されると読んだ。"
+        }
+      },
+      "attributes": {
+        "position": "Informative（参考）",
+        "zip_url_page": "https://www.digital.go.jp/resources/standard_guidelines",
+        "document_in_zip": "第６章調達.docx",
+        "note": "DS-100 の条文を逐条で引用する（OriginalBodyText スタイル）。引用部分は抜粋しない。DS-100 と同じ系列として扱う。"
+      }
+    },
+    {
+      "id": "da-ds-120",
+      "group": "digital-agency",
+      "status": "collected",
+      "lineage_id": "da-ds-120",
+      "title": "DS-120 デジタル・ガバメント推進標準ガイドライン実践ガイドブック",
+      "provider": "デジタル庁",
+      "author": "デジタル庁",
+      "url": "https://www.digital.go.jp/resources/standard_guidelines",
+      "download_url": "https://www.digital.go.jp/assets/contents/node/basic_page/field_ref_resources/e2a06143-ed29-4f1d-9c31-0f06fca67afc/ade13b7d/20260715_resources_standard_guidelines_guideline_06.zip",
+      "version": "策定又は最終改定日 2026-06-12／配布ファイル 20260715 版（ページ掲載 2026-07-15 更新）",
+      "format": "ZIP（Word／PDF）",
+      "retrieved_on": "2026-10-16",
+      "raw_sha256": "c01029e08d33d55acd49e90d741f94bcee76a6ca815c5e2e8ca6bb955a687d5d",
+      "license": {
+        "body": {
+          "name": "公共データ利用規約（第1.0版）（PDL1.0）",
+          "url": "https://www.digital.go.jp/resources/open_data/public_data_license_v1.0",
+          "checked_on": "2026-10-16",
+          "redistribution": "allowed",
+          "attribution": "出典：「デジタル・ガバメント推進標準ガイドライン実践ガイドブック」（デジタル庁）（https://www.digital.go.jp/resources/standard_guidelines）",
+          "modification_notice": "「デジタル・ガバメント推進標準ガイドライン実践ガイドブック」（デジタル庁）（https://www.digital.go.jp/resources/standard_guidelines）を抜粋・テキスト化して作成（japanese-readability-editor）。デジタル庁が作成・確認した文書ではない。",
+          "basis": "コピーライトポリシー（https://www.digital.go.jp/copyright-policy、最終更新2026-05-12）は、権利表記がない限りPDL1.0を適用すると述べる。取り出したWordの本文／ヘッダ／フッタに個別の権利表記は見つからなかった（文字列検索のみ。PDFと、取り出していない章は未確認）。PDL1.0は第三者の権利を利用者の責任で確認することを求める。"
+        },
+        "bibliographic": {
+          "name": "公共データ利用規約（第1.0版）（PDL1.0）",
+          "url": "https://www.digital.go.jp/resources/open_data/public_data_license_v1.0",
+          "checked_on": "2026-10-16",
+          "redistribution": "allowed",
+          "basis": "題名・文書番号・日付はサイトの掲載情報。サイト内容として同じ規約が適用されると読んだ。"
+        }
+      },
+      "attributes": {
+        "position": "Informative（参考）",
+        "zip_url_page": "https://www.digital.go.jp/resources/standard_guidelines",
+        "document_in_zip": "第５章要件定義.docx",
+        "note": ""
+      }
+    },
+    {
+      "id": "da-requirements-template",
+      "group": "digital-agency",
+      "status": "collected",
+      "lineage_id": "da-requirements-template",
+      "title": "要件定義書標準テンプレート（DS-120 第5章）",
+      "provider": "デジタル庁",
+      "author": "デジタル庁",
+      "url": "https://www.digital.go.jp/resources/standard_guidelines",
+      "download_url": "https://www.digital.go.jp/assets/contents/node/basic_page/field_ref_resources/e2a06143-ed29-4f1d-9c31-0f06fca67afc/9117f22a/20260715_resources_standard_guidelines_guideline_07.zip",
+      "version": "策定又は最終改定日 2026-06-12／配布ファイル 20260715 版（ページ掲載 2026-07-15 更新）",
+      "format": "ZIP（Word／PDF）",
+      "retrieved_on": "2026-10-16",
+      "raw_sha256": "ce582513fb9cbf5665d0f19b78c75b476978b972a07f012a671eff262b921a2a",
+      "license": {
+        "body": {
+          "name": "公共データ利用規約（第1.0版）（PDL1.0）",
+          "url": "https://www.digital.go.jp/resources/open_data/public_data_license_v1.0",
+          "checked_on": "2026-10-16",
+          "redistribution": "allowed",
+          "attribution": "出典：「要件定義書標準テンプレート」（デジタル庁）（https://www.digital.go.jp/resources/standard_guidelines）",
+          "modification_notice": "「要件定義書標準テンプレート」（デジタル庁）（https://www.digital.go.jp/resources/standard_guidelines）を抜粋・テキスト化して作成（japanese-readability-editor）。デジタル庁が作成・確認した文書ではない。",
+          "basis": "コピーライトポリシー（https://www.digital.go.jp/copyright-policy、最終更新2026-05-12）は、権利表記がない限りPDL1.0を適用すると述べる。取り出したWordの本文／ヘッダ／フッタに個別の権利表記は見つからなかった（文字列検索のみ。PDFと、取り出していない章は未確認）。PDL1.0は第三者の権利を利用者の責任で確認することを求める。"
+        },
+        "bibliographic": {
+          "name": "公共データ利用規約（第1.0版）（PDL1.0）",
+          "url": "https://www.digital.go.jp/resources/open_data/public_data_license_v1.0",
+          "checked_on": "2026-10-16",
+          "redistribution": "allowed",
+          "basis": "題名・文書番号・日付はサイトの掲載情報。サイト内容として同じ規約が適用されると読んだ。"
+        }
+      },
+      "attributes": {
+        "position": "テンプレート（本書は参考文書であり、遵守を求めるものではないと冒頭に記載）",
+        "zip_url_page": "https://www.digital.go.jp/resources/standard_guidelines",
+        "document_in_zip": "要件定義書標準テンプレート.docx",
+        "note": "ZIP内の「５章」フォルダ。PDF版は同梱されていない。"
+      }
+    },
+    {
+      "id": "da-procurement-spec-template",
+      "group": "digital-agency",
+      "status": "collected",
+      "lineage_id": "da-procurement-spec-template",
+      "title": "調達仕様書標準テンプレート（DS-120 第6章）",
+      "provider": "デジタル庁",
+      "author": "デジタル庁",
+      "url": "https://www.digital.go.jp/resources/standard_guidelines",
+      "download_url": "https://www.digital.go.jp/assets/contents/node/basic_page/field_ref_resources/e2a06143-ed29-4f1d-9c31-0f06fca67afc/9117f22a/20260715_resources_standard_guidelines_guideline_07.zip",
+      "version": "策定又は最終改定日 2026-06-12／配布ファイル 20260715 版（ページ掲載 2026-07-15 更新）",
+      "format": "ZIP（Word／PDF）",
+      "retrieved_on": "2026-10-16",
+      "raw_sha256": "ce582513fb9cbf5665d0f19b78c75b476978b972a07f012a671eff262b921a2a",
+      "license": {
+        "body": {
+          "name": "公共データ利用規約（第1.0版）（PDL1.0）",
+          "url": "https://www.digital.go.jp/resources/open_data/public_data_license_v1.0",
+          "checked_on": "2026-10-16",
+          "redistribution": "allowed",
+          "attribution": "出典：「調達仕様書標準テンプレート」（デジタル庁）（https://www.digital.go.jp/resources/standard_guidelines）",
+          "modification_notice": "「調達仕様書標準テンプレート」（デジタル庁）（https://www.digital.go.jp/resources/standard_guidelines）を抜粋・テキスト化して作成（japanese-readability-editor）。デジタル庁が作成・確認した文書ではない。",
+          "basis": "コピーライトポリシー（https://www.digital.go.jp/copyright-policy、最終更新2026-05-12）は、権利表記がない限りPDL1.0を適用すると述べる。取り出したWordの本文／ヘッダ／フッタに個別の権利表記は見つからなかった（文字列検索のみ。PDFと、取り出していない章は未確認）。PDL1.0は第三者の権利を利用者の責任で確認することを求める。"
+        },
+        "bibliographic": {
+          "name": "公共データ利用規約（第1.0版）（PDL1.0）",
+          "url": "https://www.digital.go.jp/resources/open_data/public_data_license_v1.0",
+          "checked_on": "2026-10-16",
+          "redistribution": "allowed",
+          "basis": "題名・文書番号・日付はサイトの掲載情報。サイト内容として同じ規約が適用されると読んだ。"
+        }
+      },
+      "attributes": {
+        "position": "テンプレート（参考文書）",
+        "zip_url_page": "https://www.digital.go.jp/resources/standard_guidelines",
+        "document_in_zip": "調達仕様書標準テンプレート.docx",
+        "note": "ZIP内の「６章」フォルダ。PDF版は同梱されていない。"
+      }
+    }
   ],
-  "excerpts": []
+  "excerpts": [
+    {
+      "id": "da100-budget-execution",
+      "source_id": "da-ds-100",
+      "status": "candidate",
+      "role": "change_target",
+      "split": "final",
+      "topic": "予算の執行計画の変更・報告・繰越し",
+      "locator": "デジタル・ガバメント推進標準ガイドライン.docx P337-P342",
+      "correspondence": {
+        "method": "Word抽出文と同梱PDFの本文を段落単位で照合（空白除去後の部分一致）",
+        "machine_result": "6/6 段落が一致（空白除去後の部分一致）",
+        "checked_by": "",
+        "checked_on": ""
+      },
+      "third_party_content": "unchecked",
+      "third_party_note": "予備確認：法令・申合せ・通達の名称を参照するのみで、図・写真・第三者の著作物の転載は見当たらない。人の確認が必要。",
+      "text": "執行計画の変更\nＰＭＯは、配分を受けた予算について、執行計画外の事業へ充当してはならない。ＰＭＯは、執行計画の変更を行う場合には、デジタル庁に協議する。\nＰＭＯは､配分を受けた予算についてＰＪＭＯから報告される執行実績を把握し､デジタル庁へ報告を行う。\nデジタル庁は、ＰＭＯからの執行計画の変更の協議、執行実績の報告を踏まえ、執行計画の変更を行い、予算の再配分を行う。\n繰越し\n各府省に配分した後の予算について繰越しを行う場合には、各府省にて繰越しの手続を行う。繰越しの手続を行った後、繰り越した金額についてデジタル庁に報告する。",
+      "text_sha256": "c5f86f56d2603a3c926627ae76ac960a0a27d8a38bf8c75672b4b7bfe953a6f2",
+      "transform_history": [
+        {
+          "step": "unzip",
+          "tool": "python3 zipfile（標準ライブラリ）",
+          "input_sha256": "49420f1b8ffb84843cfb053345be4b057043a61f3b0b099c31ee5e4106e9b21c",
+          "output_sha256": "7268c0b239b64702ab81881dcc75bda3e8e04648a85038a81bec00327920e544",
+          "note": "ZIP内 20260715_resources_standard_guidelines_guideline_02/デジタル・ガバメント推進標準ガイドライン.docx"
+        },
+        {
+          "step": "extract-docx-text",
+          "tool": "tools/extract_docx_text.py",
+          "input_sha256": "7268c0b239b64702ab81881dcc75bda3e8e04648a85038a81bec00327920e544",
+          "output_sha256": "b476b85b8901af261aa1938a5d97fc3fdb6510337f8590be360c0d7e8e28e244",
+          "note": "標準出力（UTF-8）全体のSHA-256"
+        },
+        {
+          "step": "select-paragraphs",
+          "tool": "識別子 P337〜P342 の空でない段落を、前後の空白を除き改行（\\n）で連結（段落内の改行は \\n のまま）",
+          "input_sha256": "b476b85b8901af261aa1938a5d97fc3fdb6510337f8590be360c0d7e8e28e244",
+          "output_sha256": "c5f86f56d2603a3c926627ae76ac960a0a27d8a38bf8c75672b4b7bfe953a6f2"
+        }
+      ],
+      "preserve": [
+        {
+          "kind": "strength",
+          "quote": "執行計画外の事業へ充当してはならない",
+          "strength": "normative",
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "禁止（してはならない）を許可・努力義務に弱めない",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "執行計画の変更を行う場合には、デジタル庁に協議する",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "変更時の協議先と、協議が条件であること",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "actor",
+          "quote": "ＰＪＭＯから報告される執行実績を把握し",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "報告の流れ：ＰＪＭＯ→ＰＭＯ→デジタル庁。主体の入れ替え・省略を不具合とする",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "actor",
+          "quote": "デジタル庁は、ＰＭＯからの執行計画の変更の協議、執行実績の報告を踏まえ、執行計画の変更を行い、予算の再配分を行う",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "再配分の主体はデジタル庁",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "actor",
+          "quote": "各府省にて繰越しの手続を行う",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "繰越しの手続の主体は各府省（ＰＭＯやデジタル庁にしない）",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "deadline",
+          "quote": "繰越しの手続を行った後、繰り越した金額についてデジタル庁に報告する",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "手続→報告の順序と報告先",
+          "confirmed_by": "",
+          "reason": ""
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-diversion",
+          "prompt": "ＰＭＯが、配分を受けた予算を執行計画外の事業へ充当することについて、どう定められているか。",
+          "options": [
+            "充当してはならない",
+            "デジタル庁に協議すれば充当できる",
+            "各府省の判断で充当できる"
+          ],
+          "answer_index": 0,
+          "evidence": "執行計画外の事業へ充当してはならない",
+          "verified_by": "",
+          "verification_reason": ""
+        },
+        {
+          "id": "q-carryover",
+          "prompt": "配分した後の予算を繰り越す場合、繰越しの手続を行うのは誰か。",
+          "options": [
+            "各府省",
+            "デジタル庁",
+            "ＰＭＯ"
+          ],
+          "answer_index": 0,
+          "evidence": "各府省にて繰越しの手続を行う",
+          "verified_by": "",
+          "verification_reason": ""
+        }
+      ],
+      "draft_status": "保持要件と理解問題は assistant による草案。人が原文と照合し、confirmed_by／reason／verified_by／verification_reason を記入して初めて採用できる。"
+    },
+    {
+      "id": "da100-project-plan-stages",
+      "source_id": "da-ds-100",
+      "status": "candidate",
+      "role": "change_target",
+      "split": "final",
+      "topic": "プロジェクト計画書の段階ごとの具体化",
+      "locator": "デジタル・ガバメント推進標準ガイドライン.docx P546-P552",
+      "correspondence": {
+        "method": "Word抽出文と同梱PDFの本文を段落単位で照合（空白除去後の部分一致）",
+        "machine_result": "7/7 段落が一致（空白除去後の部分一致）。うち1段落はPDFのページ見出し・ページ番号が途中に入るため、その前後で分けて一致を確認",
+        "checked_by": "",
+        "checked_on": ""
+      },
+      "third_party_content": "unchecked",
+      "third_party_note": "予備確認：法令・申合せ・通達の名称を参照するのみで、図・写真・第三者の著作物の転載は見当たらない。人の確認が必要。",
+      "text": "ＰＪＭＯは、プロジェクトの構想段階において、プロジェクト計画の概要を整理し、プロジェクト計画書の素案を作成するものとする。\n当初計画段階\nＰＪＭＯは、プロジェクト計画書の素案が決定されてから、サービス・業務企画終了時までに、政策目的やプロジェクトの目標に基づき設定した業務効果に関する指標及び情報システム効果に関する指標、プロジェクトを推進する体制と各々の役割・責任、全体のスケジュール等について具体化・詳細化し、プロジェクト計画書に反映するものとする。\n調達及び設計・開発開始前\nＰＪＭＯは、調達及び設計・開発を開始する前までに、サービス・業務企画及び要件定義を基にして、当初計画段階のプロジェクト計画書に詳細な内容を盛り込み、設計・開発段階前のプロジェクト計画書を具体化・詳細化するものとする。\n運用及び保守開始前\nＰＪＭＯは、運用及び保守を開始する前までに、運用開始後の評価指標等を具体化・詳細化し、プロジェクト計画書に反映するものとする。",
+      "text_sha256": "0eef6660714dd396611c019806f43646a17a1d1bafe47408e41b77082cff4b66",
+      "transform_history": [
+        {
+          "step": "unzip",
+          "tool": "python3 zipfile（標準ライブラリ）",
+          "input_sha256": "49420f1b8ffb84843cfb053345be4b057043a61f3b0b099c31ee5e4106e9b21c",
+          "output_sha256": "7268c0b239b64702ab81881dcc75bda3e8e04648a85038a81bec00327920e544",
+          "note": "ZIP内 20260715_resources_standard_guidelines_guideline_02/デジタル・ガバメント推進標準ガイドライン.docx"
+        },
+        {
+          "step": "extract-docx-text",
+          "tool": "tools/extract_docx_text.py",
+          "input_sha256": "7268c0b239b64702ab81881dcc75bda3e8e04648a85038a81bec00327920e544",
+          "output_sha256": "b476b85b8901af261aa1938a5d97fc3fdb6510337f8590be360c0d7e8e28e244",
+          "note": "標準出力（UTF-8）全体のSHA-256"
+        },
+        {
+          "step": "select-paragraphs",
+          "tool": "識別子 P546〜P552 の空でない段落を、前後の空白を除き改行（\\n）で連結（段落内の改行は \\n のまま）",
+          "input_sha256": "b476b85b8901af261aa1938a5d97fc3fdb6510337f8590be360c0d7e8e28e244",
+          "output_sha256": "0eef6660714dd396611c019806f43646a17a1d1bafe47408e41b77082cff4b66"
+        }
+      ],
+      "preserve": [
+        {
+          "kind": "actor",
+          "quote": "ＰＪＭＯは、プロジェクトの構想段階において、プロジェクト計画の概要を整理し、プロジェクト計画書の素案を作成するものとする",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "素案の作成主体と時期（構想段階）",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "deadline",
+          "quote": "サービス・業務企画終了時までに",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "当初計画段階の期限。他の段階の期限と混ぜない",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "deadline",
+          "quote": "調達及び設計・開発を開始する前までに",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "設計・開発段階前の期限",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "deadline",
+          "quote": "運用及び保守を開始する前までに",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "運用開始後の評価指標等を反映する期限",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "strength",
+          "quote": "プロジェクト計画書に反映するものとする",
+          "strength": "normative",
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "「ものとする」は義務。推奨（望ましい）に弱めない",
+          "confirmed_by": "",
+          "reason": ""
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-before-procurement",
+          "prompt": "調達及び設計・開発を開始する前までに、ＰＪＭＯは何をするか。",
+          "options": [
+            "サービス・業務企画及び要件定義を基に、当初計画段階のプロジェクト計画書に詳細な内容を盛り込み、設計・開発段階前のプロジェクト計画書を具体化・詳細化する",
+            "運用開始後の評価指標等を具体化・詳細化し、プロジェクト計画書に反映する",
+            "プロジェクト計画書の素案を作成する"
+          ],
+          "answer_index": 0,
+          "evidence": "サービス・業務企画及び要件定義を基にして、当初計画段階のプロジェクト計画書に詳細な内容を盛り込み",
+          "verified_by": "",
+          "verification_reason": ""
+        },
+        {
+          "id": "q-operation-metrics",
+          "prompt": "運用開始後の評価指標等を具体化・詳細化してプロジェクト計画書に反映するのは、いつまでか。",
+          "options": [
+            "サービス・業務企画終了時まで",
+            "調達及び設計・開発を開始する前まで",
+            "運用及び保守を開始する前まで"
+          ],
+          "answer_index": 2,
+          "evidence": "運用及び保守を開始する前までに、運用開始後の評価指標等を具体化・詳細化し",
+          "verified_by": "",
+          "verification_reason": ""
+        }
+      ],
+      "draft_status": "保持要件と理解問題は assistant による草案。人が原文と照合し、confirmed_by／reason／verified_by／verification_reason を記入して初めて採用できる。"
+    },
+    {
+      "id": "da100-first-process-review-and-rfi",
+      "source_id": "da-ds-100",
+      "status": "candidate",
+      "role": "change_target",
+      "split": "final",
+      "topic": "第一次工程レビューと意見招請",
+      "locator": "デジタル・ガバメント推進標準ガイドライン.docx P889-P893",
+      "correspondence": {
+        "method": "Word抽出文と同梱PDFの本文を段落単位で照合（空白除去後の部分一致）",
+        "machine_result": "5/5 段落が一致（空白除去後の部分一致）",
+        "checked_by": "",
+        "checked_on": ""
+      },
+      "third_party_content": "unchecked",
+      "third_party_note": "予備確認：法令・申合せ・通達の名称を参照するのみで、図・写真・第三者の著作物の転載は見当たらない。人の確認が必要。",
+      "text": "第一次工程レビューの実施\nＰＪＭＯは、ＰＭＯが指定したプロジェクトについて、調達仕様書に添付する要件定義書の作成終了前（意見招請を行うものにあっては意見招請前）までに、「第２章４．2) プロジェクトの工程レビュー」に基づき、第一次工程レビューを実施するものとする。その際、調達仕様書の内容が適正なものとなっているか否かの確認を行うものとする。\n意見招請の実施\nＰＪＭＯは、予定価格が80万ＳＤＲ以上と見込まれる調達案件については、「政府調達手続に関する運用指針」（平成26年3月31日関係省庁申合せ）に基づき、意見招請を行うものとする。\nなお、意見招請を行うに当たっては、調達仕様書等の案の内容についての十分な理解が得られるよう、事業者に対する説明等を積極的に行うものとする。また、事業者との質疑応答を通じて、提供すべき情報が明確で、かつ、漏れがないことを確認する。意見招請の結果を踏まえて、調達仕様書等の案に修正が必要な場合はこれを修正し、確定するものとする。",
+      "text_sha256": "9aa0777345dd3213bcba7c5a5b988b438f9c026ef05891bec305c4afb7fd5190",
+      "transform_history": [
+        {
+          "step": "unzip",
+          "tool": "python3 zipfile（標準ライブラリ）",
+          "input_sha256": "49420f1b8ffb84843cfb053345be4b057043a61f3b0b099c31ee5e4106e9b21c",
+          "output_sha256": "7268c0b239b64702ab81881dcc75bda3e8e04648a85038a81bec00327920e544",
+          "note": "ZIP内 20260715_resources_standard_guidelines_guideline_02/デジタル・ガバメント推進標準ガイドライン.docx"
+        },
+        {
+          "step": "extract-docx-text",
+          "tool": "tools/extract_docx_text.py",
+          "input_sha256": "7268c0b239b64702ab81881dcc75bda3e8e04648a85038a81bec00327920e544",
+          "output_sha256": "b476b85b8901af261aa1938a5d97fc3fdb6510337f8590be360c0d7e8e28e244",
+          "note": "標準出力（UTF-8）全体のSHA-256"
+        },
+        {
+          "step": "select-paragraphs",
+          "tool": "識別子 P889〜P893 の空でない段落を、前後の空白を除き改行（\\n）で連結（段落内の改行は \\n のまま）",
+          "input_sha256": "b476b85b8901af261aa1938a5d97fc3fdb6510337f8590be360c0d7e8e28e244",
+          "output_sha256": "9aa0777345dd3213bcba7c5a5b988b438f9c026ef05891bec305c4afb7fd5190"
+        }
+      ],
+      "preserve": [
+        {
+          "kind": "condition",
+          "quote": "ＰＭＯが指定したプロジェクトについて",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "第一次工程レビューの対象範囲（全プロジェクトにしない）",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "deadline",
+          "quote": "調達仕様書に添付する要件定義書の作成終了前（意見招請を行うものにあっては意見招請前）までに",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "期限と、意見招請がある場合の例外",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "number",
+          "quote": "予定価格が80万ＳＤＲ以上と見込まれる調達案件については",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "意見招請の対象条件と金額（80万ＳＤＲ）",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "function",
+          "quote": "調達仕様書の内容が適正なものとなっているか否かの確認を行う",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "工程レビューの目的",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "調達仕様書等の案に修正が必要な場合はこれを修正し、確定するものとする",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "修正は必要な場合のみ。結果を踏まえて確定する順序",
+          "confirmed_by": "",
+          "reason": ""
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-rfi-condition",
+          "prompt": "意見招請を行うのは、どのような調達案件か。",
+          "options": [
+            "予定価格が80万ＳＤＲ以上と見込まれる調達案件",
+            "全ての調達案件",
+            "ＰＭＯが指定したプロジェクトの調達案件"
+          ],
+          "answer_index": 0,
+          "evidence": "予定価格が80万ＳＤＲ以上と見込まれる調達案件については",
+          "verified_by": "",
+          "verification_reason": ""
+        },
+        {
+          "id": "q-review-target",
+          "prompt": "第一次工程レビューを実施する対象は、どのプロジェクトか。",
+          "options": [
+            "ＰＭＯが指定したプロジェクト",
+            "予定価格が80万ＳＤＲ以上のプロジェクト",
+            "全てのプロジェクト"
+          ],
+          "answer_index": 0,
+          "evidence": "ＰＭＯが指定したプロジェクトについて",
+          "verified_by": "",
+          "verification_reason": ""
+        }
+      ],
+      "draft_status": "保持要件と理解問題は assistant による草案。人が原文と照合し、confirmed_by／reason／verified_by／verification_reason を記入して初めて採用できる。",
+      "context_note": "他節（第2章4.2）と外部の申合せ・指針への参照を含む。参照先の内容は保持要件に含めない。"
+    },
+    {
+      "id": "da110-negotiated-contract",
+      "source_id": "da-ds-110",
+      "status": "candidate",
+      "role": "change_target",
+      "split": "final",
+      "topic": "随意契約を選択できる場合（解説）",
+      "locator": "第６章調達.docx P83-P87",
+      "correspondence": {
+        "method": "Word抽出文と同梱PDFの本文を段落単位で照合（空白除去後の部分一致）",
+        "machine_result": "5/5 段落が一致（空白除去後の部分一致）",
+        "checked_by": "",
+        "checked_on": ""
+      },
+      "third_party_content": "unchecked",
+      "third_party_note": "予備確認：法令・申合せ・通達の名称を参照するのみで、図・写真・第三者の著作物の転載は見当たらない。人の確認が必要。",
+      "text": "「随意契約を行う場合」とは、政府情報システムにおける調達においては一般競争入札が原則であるが、以下のいずれかの条件を満たし、かつ、ＰＪＭＯが対象事業者と調達内容の実現方法や作業内容について十分に交渉を行える環境にある場合において、随意契約を選択することを指す。\n随意契約の対象となる事業者以外に調達対象が存在せず、かつ、当該調達がサービス・業務を遂行するに当たり必要不可欠である場合。\n契約の対象となる事業者との随意契約を行った方が、一般競争入札を行うより、コストを下げられることが合理的に説明できる場合。\nなお、ＰＪＭＯが事業者との交渉や意思決定等を行う際には、「第２章２．2) ケ 記録管理」に基づき、交渉経緯等の記録を必ず残し、後から確認できるようにしておくことが重要である。\n随意契約を行う場合は、政府調達に関する協定、会計法、予決令等に照らし、随意契約とする理由・根拠を十分に検討し、「公共調達の適正化について」（平成18年8月25日財計第2017号）に沿った取組が必要であることに留意する。また、専門的・技術的な判断を要する場合は、専門知識を持つ有識者による第三者チェックや評価を受けることが肝要である。",
+      "text_sha256": "826372c6758d5a3ab28c9e1dc549bfaa051d093d00aaee2b3d8cd80bb9de5c9f",
+      "transform_history": [
+        {
+          "step": "unzip",
+          "tool": "python3 zipfile（標準ライブラリ）",
+          "input_sha256": "759f29a45df4272131dac168e7395564ef1af2f5ab6fbfe32a25e4efdb3e5667",
+          "output_sha256": "f6b0249411414b72a4142b18a19c5944369e4c4e23dd01a3403f91586033da19",
+          "note": "ZIP内 20260715_resources_standard_guidelines_guideline_04/第６章調達.docx"
+        },
+        {
+          "step": "extract-docx-text",
+          "tool": "tools/extract_docx_text.py",
+          "input_sha256": "f6b0249411414b72a4142b18a19c5944369e4c4e23dd01a3403f91586033da19",
+          "output_sha256": "26f744ef1595b49ff971e0a5523777e0581e237ccec3c9bc9eb22ae7a7b1423c",
+          "note": "標準出力（UTF-8）全体のSHA-256"
+        },
+        {
+          "step": "select-paragraphs",
+          "tool": "識別子 P83〜P87 の空でない段落を、前後の空白を除き改行（\\n）で連結（段落内の改行は \\n のまま）",
+          "input_sha256": "26f744ef1595b49ff971e0a5523777e0581e237ccec3c9bc9eb22ae7a7b1423c",
+          "output_sha256": "826372c6758d5a3ab28c9e1dc549bfaa051d093d00aaee2b3d8cd80bb9de5c9f"
+        }
+      ],
+      "preserve": [
+        {
+          "kind": "exception",
+          "quote": "一般競争入札が原則であるが",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "原則は一般競争入札。随意契約は例外",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "以下のいずれかの条件を満たし、かつ、ＰＪＭＯが対象事業者と調達内容の実現方法や作業内容について十分に交渉を行える環境にある場合",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "「いずれか」と「かつ」の論理関係を崩さない",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "随意契約の対象となる事業者以外に調達対象が存在せず、かつ、当該調達がサービス・業務を遂行するに当たり必要不可欠である場合",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "条件1は二つの要件の連言",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "コストを下げられることが合理的に説明できる場合",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "条件2。説明できることが要件",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "strength",
+          "quote": "交渉経緯等の記録を必ず残し",
+          "strength": "informative",
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "「必ず」の強さ（解説だが記録は必須として書かれている）",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "専門的・技術的な判断を要する場合は、専門知識を持つ有識者による第三者チェックや評価を受けることが肝要である",
+          "strength": "informative",
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "適用範囲（専門的・技術的な判断を要する場合）と強さ（肝要）",
+          "confirmed_by": "",
+          "reason": ""
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-negotiation-env",
+          "prompt": "随意契約を選択できるのは、条件のいずれかを満たし、かつ、ＰＪＭＯがどのような環境にある場合か。",
+          "options": [
+            "対象事業者と調達内容の実現方法や作業内容について十分に交渉を行える環境",
+            "対象事業者以外の複数の事業者から提案を受けられる環境",
+            "第三者の有識者が審査できる環境"
+          ],
+          "answer_index": 0,
+          "evidence": "十分に交渉を行える環境にある場合",
+          "verified_by": "",
+          "verification_reason": ""
+        },
+        {
+          "id": "q-record",
+          "prompt": "ＰＪＭＯが事業者との交渉や意思決定等を行う際に、必ず残すものは何か。",
+          "options": [
+            "交渉経緯等の記録",
+            "第三者の評価書",
+            "予定価格の算出根拠"
+          ],
+          "answer_index": 0,
+          "evidence": "交渉経緯等の記録を必ず残し",
+          "verified_by": "",
+          "verification_reason": ""
+        }
+      ],
+      "draft_status": "保持要件と理解問題は assistant による草案。人が原文と照合し、confirmed_by／reason／verified_by／verification_reason を記入して初めて採用できる。",
+      "context_note": "他節（第2章2.2ケ 記録管理）と通達への参照を含む。"
+    },
+    {
+      "id": "da110-open-call",
+      "source_id": "da-ds-110",
+      "status": "candidate",
+      "role": "change_target",
+      "split": "final",
+      "topic": "公募の意義と、要件を満たす者の数による扱い（解説）",
+      "locator": "第６章調達.docx P98-P101",
+      "correspondence": {
+        "method": "Word抽出文と同梱PDFの本文を段落単位で照合（空白除去後の部分一致）",
+        "machine_result": "4/4 段落が一致（空白除去後の部分一致）。うち1段落はPDFのページ見出し・ページ番号が途中に入るため、その前後で分けて一致を確認",
+        "checked_by": "",
+        "checked_on": ""
+      },
+      "third_party_content": "unchecked",
+      "third_party_note": "予備確認：法令・申合せ・通達の名称を参照するのみで、図・写真・第三者の著作物の転載は見当たらない。人の確認が必要。",
+      "text": "「公募」とは、政策目的達成のため、どのような設備又は技術等が必要であるかをＷｅｂサイト等で具体的に明らかにした上で、参加者を募ることをいう。\nすなわち、特殊な設備又は技術等が不可欠な場合であっても、それを有する者が複数存在する可能性を排除せず、必要な設備又は技術等を明示した上で参加者を募るものである。\nしたがって、当初から複数の者による競争が存在することが考えられるようなものについては、原則として、一般競争入札（総合評価落札方式を含む。）を行うこととし、事務又は事業の性格等から、これによらない場合には、企画競争を行うものとする。\n公募を行った結果を踏まえ、示した要件を満たす者が一者しかなく、ほかにはないことが明らかとなった場合は、その者と契約をすることがやむを得ないが、当該要件を満たす者が複数ある場合には、原則、総合評価落札方式による一般競争入札又は企画競争を行う。",
+      "text_sha256": "8413f75df7a881a59f212db198db9d22da644af85bebfde7b3703403df7d3a02",
+      "transform_history": [
+        {
+          "step": "unzip",
+          "tool": "python3 zipfile（標準ライブラリ）",
+          "input_sha256": "759f29a45df4272131dac168e7395564ef1af2f5ab6fbfe32a25e4efdb3e5667",
+          "output_sha256": "f6b0249411414b72a4142b18a19c5944369e4c4e23dd01a3403f91586033da19",
+          "note": "ZIP内 20260715_resources_standard_guidelines_guideline_04/第６章調達.docx"
+        },
+        {
+          "step": "extract-docx-text",
+          "tool": "tools/extract_docx_text.py",
+          "input_sha256": "f6b0249411414b72a4142b18a19c5944369e4c4e23dd01a3403f91586033da19",
+          "output_sha256": "26f744ef1595b49ff971e0a5523777e0581e237ccec3c9bc9eb22ae7a7b1423c",
+          "note": "標準出力（UTF-8）全体のSHA-256"
+        },
+        {
+          "step": "select-paragraphs",
+          "tool": "識別子 P98〜P101 の空でない段落を、前後の空白を除き改行（\\n）で連結（段落内の改行は \\n のまま）",
+          "input_sha256": "26f744ef1595b49ff971e0a5523777e0581e237ccec3c9bc9eb22ae7a7b1423c",
+          "output_sha256": "8413f75df7a881a59f212db198db9d22da644af85bebfde7b3703403df7d3a02"
+        }
+      ],
+      "preserve": [
+        {
+          "kind": "claim",
+          "quote": "「公募」とは、政策目的達成のため、どのような設備又は技術等が必要であるかをＷｅｂサイト等で具体的に明らかにした上で、参加者を募ることをいう",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "公募の定義",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "原則として、一般競争入札（総合評価落札方式を含む。）を行うこととし、事務又は事業の性格等から、これによらない場合には、企画競争を行うものとする",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "原則と、これによらない場合の扱い",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "示した要件を満たす者が一者しかなく、ほかにはないことが明らかとなった場合は、その者と契約をすることがやむを得ない",
+          "strength": "informative",
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "「やむを得ない」は積極的な推奨や義務ではない",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "当該要件を満たす者が複数ある場合には、原則、総合評価落札方式による一般競争入札又は企画競争を行う",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "要件を満たす者が複数の場合の扱い",
+          "confirmed_by": "",
+          "reason": ""
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-single",
+          "prompt": "公募の結果、示した要件を満たす者が一者しかなく、ほかにはないことが明らかとなった場合は、どう扱うか。",
+          "options": [
+            "その者と契約をすることがやむを得ない",
+            "必ず企画競争を行う",
+            "改めて一般競争入札を行う"
+          ],
+          "answer_index": 0,
+          "evidence": "その者と契約をすることがやむを得ない",
+          "verified_by": "",
+          "verification_reason": ""
+        },
+        {
+          "id": "q-multiple",
+          "prompt": "公募の結果、要件を満たす者が複数ある場合は、どうするか。",
+          "options": [
+            "原則、総合評価落札方式による一般競争入札又は企画競争を行う",
+            "最初に応募した者と契約する",
+            "随意契約を行う"
+          ],
+          "answer_index": 0,
+          "evidence": "原則、総合評価落札方式による一般競争入札又は企画競争を行う",
+          "verified_by": "",
+          "verification_reason": ""
+        }
+      ],
+      "draft_status": "保持要件と理解問題は assistant による草案。人が原文と照合し、confirmed_by／reason／verified_by／verification_reason を記入して初めて採用できる。"
+    },
+    {
+      "id": "dapt-meetings",
+      "source_id": "da-procurement-spec-template",
+      "status": "candidate",
+      "role": "change_target",
+      "split": "final",
+      "topic": "受託者が開催する会議と議事録（調達仕様書の記載例）",
+      "locator": "調達仕様書標準テンプレート.docx P335-P340",
+      "correspondence": {
+        "method": "同梱PDFなし。Wordのみ",
+        "machine_result": "PDF が同梱されていないため未実施",
+        "checked_by": "",
+        "checked_on": ""
+      },
+      "third_party_content": "unchecked",
+      "third_party_note": "予備確認：法令・申合せ・通達の名称を参照するのみで、図・写真・第三者の著作物の転載は見当たらない。人の確認が必要。",
+      "text": "会議開催\n受託者は、定例会を週1回程度開催するとともに、業務の進捗状況を設計・開発実施要領に基づき報告すること。\n受託者は各開発工程の完了に当たり、工程完了判定会議を開催し、主管課の承認を得ること。なお、開催要否は主管課と協議の上決定すること。\nまた、本システムの移行前には、移行開始判定を目的とした移行判定会議を実施すること。\n本システムの稼働前には、稼働判定を目的とした稼働判定会議を実施すること。\n主管課から要請があった場合、又は、受託者が必要と判断した場合、必要資料を作成の上、定例会とは別に会議を開催すること。\n会議開催方法については、原則としてオンライン会議とすること。主管課から要請があった場合、又は、受託者が必要と判断した場合は、主管課と受託者で協議の上、対面で開催すること。\n受託者は、会議終了後、3日以内（行政機関の休日（行政機関の休日に関する法律（昭和63年12月13日法律第91号）第１条第１項各号に掲げる日をいう。）を除く。）に議事録を作成し、主管課の承認を受けること。",
+      "text_sha256": "c40ae847ff92d0207bb8486009705b50a5bcef67ce5f2bd346e92312aa87696e",
+      "transform_history": [
+        {
+          "step": "unzip",
+          "tool": "python3 zipfile（標準ライブラリ）",
+          "input_sha256": "ce582513fb9cbf5665d0f19b78c75b476978b972a07f012a671eff262b921a2a",
+          "output_sha256": "ca786b313119f0966f19ec9e74786e35e942eed6e343eaf4dda69d99f6e8ba17",
+          "note": "ZIP内 20260715_resources_standard_guidelines_guideline_07/６章/調達仕様書標準テンプレート.docx"
+        },
+        {
+          "step": "extract-docx-text",
+          "tool": "tools/extract_docx_text.py",
+          "input_sha256": "ca786b313119f0966f19ec9e74786e35e942eed6e343eaf4dda69d99f6e8ba17",
+          "output_sha256": "548f861f558ae6361dda4d19ebda839d7f339e2417c0081bd5f25c2ba61fd4d8",
+          "note": "標準出力（UTF-8）全体のSHA-256"
+        },
+        {
+          "step": "select-paragraphs",
+          "tool": "識別子 P335〜P340 の空でない段落を、前後の空白を除き改行（\\n）で連結（段落内の改行は \\n のまま）",
+          "input_sha256": "548f861f558ae6361dda4d19ebda839d7f339e2417c0081bd5f25c2ba61fd4d8",
+          "output_sha256": "c40ae847ff92d0207bb8486009705b50a5bcef67ce5f2bd346e92312aa87696e"
+        }
+      ],
+      "preserve": [
+        {
+          "kind": "number",
+          "quote": "定例会を週1回程度開催する",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "頻度（週1回程度）",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "各開発工程の完了に当たり、工程完了判定会議を開催し、主管課の承認を得ること。なお、開催要否は主管課と協議の上決定すること",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "承認を得ることと、開催要否は協議して決めること",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "主管課から要請があった場合、又は、受託者が必要と判断した場合",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "臨時会議の開催条件（どちらか一方でよい）",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "exception",
+          "quote": "原則としてオンライン会議とすること",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "原則オンライン。例外の条件を残す",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "exception",
+          "quote": "主管課と受託者で協議の上、対面で開催すること",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "対面にする場合は協議が必要",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "deadline",
+          "quote": "3日以内",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "議事録の期限。行政機関の休日を除く条件も保つ",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "deliverable",
+          "quote": "議事録を作成し、主管課の承認を受けること",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "成果物（議事録）と承認",
+          "confirmed_by": "",
+          "reason": ""
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-minutes-deadline",
+          "prompt": "会議終了後、議事録を作成する期限は、何日以内か。",
+          "options": [
+            "3日以内",
+            "5日以内",
+            "次の定例会まで"
+          ],
+          "answer_index": 0,
+          "evidence": "3日以内",
+          "verified_by": "",
+          "verification_reason": ""
+        },
+        {
+          "id": "q-face-to-face",
+          "prompt": "会議を対面で開催するのは、どのような場合か。",
+          "options": [
+            "主管課から要請があった場合、又は受託者が必要と判断した場合に、主管課と受託者で協議の上で開催する",
+            "常に対面で開催する",
+            "オンライン会議ができない場合に限る"
+          ],
+          "answer_index": 0,
+          "evidence": "主管課から要請があった場合、又は、受託者が必要と判断した場合は、主管課と受託者で協議の上、対面で開催すること",
+          "verified_by": "",
+          "verification_reason": ""
+        }
+      ],
+      "draft_status": "保持要件と理解問題は assistant による草案。人が原文と照合し、confirmed_by／reason／verified_by／verification_reason を記入して初めて採用できる。",
+      "context_note": "自動番号（(1)〜(5)）は復元していない。"
+    },
+    {
+      "id": "dapt-subcontract-approval",
+      "source_id": "da-procurement-spec-template",
+      "status": "candidate",
+      "role": "change_target",
+      "split": "final",
+      "topic": "再委託の承認手続と再々委託の報告（調達仕様書の記載例）",
+      "locator": "調達仕様書標準テンプレート.docx P579-P585",
+      "correspondence": {
+        "method": "同梱PDFなし。Wordのみ",
+        "machine_result": "PDF が同梱されていないため未実施",
+        "checked_by": "",
+        "checked_on": ""
+      },
+      "third_party_content": "unchecked",
+      "third_party_note": "予備確認：法令・申合せ・通達の名称を参照するのみで、図・写真・第三者の著作物の転載は見当たらない。人の確認が必要。",
+      "text": "承認手続\n本業務の実施の一部を合理的な理由及び必要性により再委託する場合には、以下の内容を記載した「別紙8　再委託承認申請書」を主管課に提出し、あらかじめ承認を受けること。\n再委託の相手方の商号又は名称、住所\n再委託を行う業務の範囲\n再委託の必要性及び契約金額等\n前項による再委託の相手方の変更等を行う必要が生じた場合も、前項と同様に再委託に関する書面を主管課に提出し、承認を受けること。\n再々委託には、当該再々委託の相手方の商号又は名称及び住所並びに再々委託を行う業務の範囲を書面で報告すること。",
+      "text_sha256": "75c23e7617acaa3ff947e443af1bef123adb85dd81279501b9a015fd19b0db96",
+      "transform_history": [
+        {
+          "step": "unzip",
+          "tool": "python3 zipfile（標準ライブラリ）",
+          "input_sha256": "ce582513fb9cbf5665d0f19b78c75b476978b972a07f012a671eff262b921a2a",
+          "output_sha256": "ca786b313119f0966f19ec9e74786e35e942eed6e343eaf4dda69d99f6e8ba17",
+          "note": "ZIP内 20260715_resources_standard_guidelines_guideline_07/６章/調達仕様書標準テンプレート.docx"
+        },
+        {
+          "step": "extract-docx-text",
+          "tool": "tools/extract_docx_text.py",
+          "input_sha256": "ca786b313119f0966f19ec9e74786e35e942eed6e343eaf4dda69d99f6e8ba17",
+          "output_sha256": "548f861f558ae6361dda4d19ebda839d7f339e2417c0081bd5f25c2ba61fd4d8",
+          "note": "標準出力（UTF-8）全体のSHA-256"
+        },
+        {
+          "step": "select-paragraphs",
+          "tool": "識別子 P579〜P585 の空でない段落を、前後の空白を除き改行（\\n）で連結（段落内の改行は \\n のまま）",
+          "input_sha256": "548f861f558ae6361dda4d19ebda839d7f339e2417c0081bd5f25c2ba61fd4d8",
+          "output_sha256": "75c23e7617acaa3ff947e443af1bef123adb85dd81279501b9a015fd19b0db96"
+        }
+      ],
+      "preserve": [
+        {
+          "kind": "condition",
+          "quote": "合理的な理由及び必要性により再委託する場合には",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "適用条件",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "deadline",
+          "quote": "あらかじめ承認を受けること",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "承認は事後でなく事前",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "deliverable",
+          "quote": "再委託承認申請書",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "提出する書面と、その記載事項（相手方の商号又は名称・住所、業務の範囲、必要性及び契約金額等）",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "再委託の相手方の変更等を行う必要が生じた場合も、前項と同様に再委託に関する書面を主管課に提出し、承認を受けること",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "変更時も承認が必要",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "strength",
+          "quote": "書面で報告すること",
+          "strength": "normative",
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "再々委託は「報告」であり「承認」ではない。承認と報告を取り違えない",
+          "confirmed_by": "",
+          "reason": ""
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-prior",
+          "prompt": "合理的な理由及び必要性により再委託する場合、受託者は、いつ承認を受けなければならないか。",
+          "options": [
+            "あらかじめ（再委託の前に）",
+            "再委託の後、速やかに",
+            "契約期間の終了時"
+          ],
+          "answer_index": 0,
+          "evidence": "あらかじめ承認を受けること",
+          "verified_by": "",
+          "verification_reason": ""
+        },
+        {
+          "id": "q-sub-sub",
+          "prompt": "再々委託を行う場合、受託者は、主管課に対して何をしなければならないか。",
+          "options": [
+            "相手方の商号又は名称及び住所並びに業務の範囲を書面で報告する",
+            "書面で承認を受ける",
+            "口頭で連絡する"
+          ],
+          "answer_index": 0,
+          "evidence": "書面で報告すること",
+          "verified_by": "",
+          "verification_reason": ""
+        }
+      ],
+      "draft_status": "保持要件と理解問題は assistant による草案。人が原文と照合し、confirmed_by／reason／verified_by／verification_reason を記入して初めて採用できる。",
+      "context_note": "自動番号は復元していない（「前項」は直前の項を指す）。別紙8は本抜粋に含まれない。"
+    },
+    {
+      "id": "dapt-acceptance",
+      "source_id": "da-procurement-spec-template",
+      "status": "candidate",
+      "role": "no_change_control",
+      "split": "final",
+      "topic": "検収（調達仕様書の記載例）",
+      "locator": "調達仕様書標準テンプレート.docx P547-P549",
+      "correspondence": {
+        "method": "同梱PDFなし。Wordのみ",
+        "machine_result": "PDF が同梱されていないため未実施",
+        "checked_by": "",
+        "checked_on": ""
+      },
+      "third_party_content": "unchecked",
+      "third_party_note": "予備確認：法令・申合せ・通達の名称を参照するのみで、図・写真・第三者の著作物の転載は見当たらない。人の確認が必要。",
+      "text": "検収\n本業務の受託者は、成果物等について、納品期日までに主管課に内容の説明を実施し、検収を受けること。\n検収の結果、成果物等に不備又は誤り等が見つかった場合には、直ちに必要な修正、改修、交換等を行うこと。また、変更点について主管課に説明を行った上で、指定された日時までに再度納品すること。",
+      "text_sha256": "2ca40ce57ef8824b8088f0c84a707415c632a756b5d3f7c95b17b16ee8596fc9",
+      "transform_history": [
+        {
+          "step": "unzip",
+          "tool": "python3 zipfile（標準ライブラリ）",
+          "input_sha256": "ce582513fb9cbf5665d0f19b78c75b476978b972a07f012a671eff262b921a2a",
+          "output_sha256": "ca786b313119f0966f19ec9e74786e35e942eed6e343eaf4dda69d99f6e8ba17",
+          "note": "ZIP内 20260715_resources_standard_guidelines_guideline_07/６章/調達仕様書標準テンプレート.docx"
+        },
+        {
+          "step": "extract-docx-text",
+          "tool": "tools/extract_docx_text.py",
+          "input_sha256": "ca786b313119f0966f19ec9e74786e35e942eed6e343eaf4dda69d99f6e8ba17",
+          "output_sha256": "548f861f558ae6361dda4d19ebda839d7f339e2417c0081bd5f25c2ba61fd4d8",
+          "note": "標準出力（UTF-8）全体のSHA-256"
+        },
+        {
+          "step": "select-paragraphs",
+          "tool": "識別子 P547〜P549 の空でない段落を、前後の空白を除き改行（\\n）で連結（段落内の改行は \\n のまま）",
+          "input_sha256": "548f861f558ae6361dda4d19ebda839d7f339e2417c0081bd5f25c2ba61fd4d8",
+          "output_sha256": "2ca40ce57ef8824b8088f0c84a707415c632a756b5d3f7c95b17b16ee8596fc9"
+        }
+      ],
+      "preserve": [
+        {
+          "kind": "deadline",
+          "quote": "納品期日までに主管課に内容の説明を実施し、検収を受けること",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "期限（納品期日まで）、主体（受託者）、完了条件（検収を受ける）",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "検収の結果、成果物等に不備又は誤り等が見つかった場合には、直ちに必要な修正、改修、交換等を行うこと",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "条件（検収で不備が見つかった場合）と「直ちに」",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "deadline",
+          "quote": "変更点について主管課に説明を行った上で、指定された日時までに再度納品すること",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "説明→再納品の順序と期限",
+          "confirmed_by": "",
+          "reason": ""
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-resubmit",
+          "prompt": "検収の結果、不備が見つかった場合、受託者は再度納品する前に何をしなければならないか。",
+          "options": [
+            "変更点について主管課に説明を行う",
+            "契約の解除を申し出る",
+            "次の検収を待つ"
+          ],
+          "answer_index": 0,
+          "evidence": "変更点について主管課に説明を行った上で",
+          "verified_by": "",
+          "verification_reason": ""
+        },
+        {
+          "id": "q-explanation",
+          "prompt": "成果物等の内容の説明と検収は、いつまでに受けなければならないか。",
+          "options": [
+            "納品期日まで",
+            "指定された日時まで",
+            "契約期間の終了後"
+          ],
+          "answer_index": 0,
+          "evidence": "納品期日までに主管課に内容の説明を実施し、検収を受けること",
+          "verified_by": "",
+          "verification_reason": ""
+        }
+      ],
+      "draft_status": "保持要件と理解問題は assistant による草案。人が原文と照合し、confirmed_by／reason／verified_by／verification_reason を記入して初めて採用できる。",
+      "no_change_reason": "各文に主体（受託者）、期限（納品期日までに／指定された日時までに）、条件（不備又は誤り等が見つかった場合）、完了条件（検収を受ける）が明示され、短く、構造修正の必要が小さいと、評価前に判断した。この判断は人の確認が必要。"
+    },
+    {
+      "id": "da120-refresh-materials",
+      "source_id": "da-ds-120",
+      "status": "candidate",
+      "role": "change_target",
+      "split": "tuning",
+      "topic": "既存の資料の最新化（実践ガイドブック）",
+      "locator": "第５章要件定義.docx P169-P170",
+      "correspondence": {
+        "method": "Word抽出文と同梱PDFの本文を段落単位で照合（空白除去後の部分一致）",
+        "machine_result": "2/2 段落が一致（空白除去後の部分一致）",
+        "checked_by": "",
+        "checked_on": ""
+      },
+      "third_party_content": "unchecked",
+      "third_party_note": "予備確認：法令・申合せ・通達の名称を参照するのみで、図・写真・第三者の著作物の転載は見当たらない。人の確認が必要。",
+      "text": "既存の資料を最新化する\n既存のサービス・業務や情報システムは、プロジェクトが進行している最中にも改善や機能追加が行われる可能性があります。既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集しますが、要件定義を開始する時点で最新化を行いましょう。調達後に変更内容が判明した場合は、追加のコストがかかる可能性がありますので、留意してください。",
+      "text_sha256": "494cd7d8089bcec7905a904cba72284054532fd8bcb1939b6c99334d6b42679b",
+      "transform_history": [
+        {
+          "step": "unzip",
+          "tool": "python3 zipfile（標準ライブラリ）",
+          "input_sha256": "c01029e08d33d55acd49e90d741f94bcee76a6ca815c5e2e8ca6bb955a687d5d",
+          "output_sha256": "c0c29852a6b9f761e03e9420bab03e3df40ac7772168601846db598a8dacd364",
+          "note": "ZIP内 20260715_resources_standard_guidelines_guideline_06/第５章要件定義.docx"
+        },
+        {
+          "step": "extract-docx-text",
+          "tool": "tools/extract_docx_text.py",
+          "input_sha256": "c0c29852a6b9f761e03e9420bab03e3df40ac7772168601846db598a8dacd364",
+          "output_sha256": "18a3079de41329667f8dc8beff31b392d4168304b9702f5623850d73b80502da",
+          "note": "標準出力（UTF-8）全体のSHA-256"
+        },
+        {
+          "step": "select-paragraphs",
+          "tool": "識別子 P169〜P170 の空でない段落を、前後の空白を除き改行（\\n）で連結（段落内の改行は \\n のまま）",
+          "input_sha256": "18a3079de41329667f8dc8beff31b392d4168304b9702f5623850d73b80502da",
+          "output_sha256": "494cd7d8089bcec7905a904cba72284054532fd8bcb1939b6c99334d6b42679b"
+        }
+      ],
+      "preserve": [
+        {
+          "kind": "condition",
+          "quote": "サービス・業務企画時点で収集します",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "収集の時点（企画時点）と最新化の時点（要件定義開始時点）を取り違えない",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "deadline",
+          "quote": "要件定義を開始する時点で最新化を行いましょう",
+          "strength": "informative",
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "最新化の時点。「しましょう」は推奨",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります",
+          "strength": "informative",
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "可能性であり、確定ではない",
+          "confirmed_by": "",
+          "reason": ""
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-refresh-time",
+          "prompt": "既存のサービス・業務や情報システムの資料を最新化するのは、いつか。",
+          "options": [
+            "要件定義を開始する時点",
+            "サービス・業務企画時点",
+            "調達後"
+          ],
+          "answer_index": 0,
+          "evidence": "要件定義を開始する時点で最新化を行いましょう",
+          "verified_by": "",
+          "verification_reason": ""
+        },
+        {
+          "id": "q-cost",
+          "prompt": "調達後に変更内容が判明した場合、どうなる可能性があるか。",
+          "options": [
+            "追加のコストがかかる可能性がある",
+            "契約が自動的に解除される",
+            "資料の収集が不要になる"
+          ],
+          "answer_index": 0,
+          "evidence": "追加のコストがかかる可能性があります",
+          "verified_by": "",
+          "verification_reason": ""
+        }
+      ],
+      "draft_status": "保持要件と理解問題は assistant による草案。人が原文と照合し、confirmed_by／reason／verified_by／verification_reason を記入して初めて採用できる。"
+    },
+    {
+      "id": "da120-feature-priority",
+      "source_id": "da-ds-120",
+      "status": "candidate",
+      "role": "change_target",
+      "split": "tuning",
+      "topic": "機能の優先順位付け（実践ガイドブック）",
+      "locator": "第５章要件定義.docx P189-P190",
+      "correspondence": {
+        "method": "Word抽出文と同梱PDFの本文を段落単位で照合（空白除去後の部分一致）",
+        "machine_result": "2/2 段落が一致（空白除去後の部分一致）。うち1段落はPDFのページ見出し・ページ番号が途中に入るため、その前後で分けて一致を確認",
+        "checked_by": "",
+        "checked_on": ""
+      },
+      "third_party_content": "unchecked",
+      "third_party_note": "予備確認：法令・申合せ・通達の名称を参照するのみで、図・写真・第三者の著作物の転載は見当たらない。人の確認が必要。",
+      "text": "要件定義で検討する機能は、必ずしも全てを実現できるわけではありません。予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります。\n機能の実現要否を検討する際には、政策目的やプロジェクト目標との関係、費用対効果等の観点を主眼として優先順位を判断していきます。また、機能を代替する方法（業務担当者の手作業や運用・保守作業にする等）も合わせて検討します。",
+      "text_sha256": "f57e3a971eb2722d8938575a4625ecb4d3608489d302132099501fc62af271af",
+      "transform_history": [
+        {
+          "step": "unzip",
+          "tool": "python3 zipfile（標準ライブラリ）",
+          "input_sha256": "c01029e08d33d55acd49e90d741f94bcee76a6ca815c5e2e8ca6bb955a687d5d",
+          "output_sha256": "c0c29852a6b9f761e03e9420bab03e3df40ac7772168601846db598a8dacd364",
+          "note": "ZIP内 20260715_resources_standard_guidelines_guideline_06/第５章要件定義.docx"
+        },
+        {
+          "step": "extract-docx-text",
+          "tool": "tools/extract_docx_text.py",
+          "input_sha256": "c0c29852a6b9f761e03e9420bab03e3df40ac7772168601846db598a8dacd364",
+          "output_sha256": "18a3079de41329667f8dc8beff31b392d4168304b9702f5623850d73b80502da",
+          "note": "標準出力（UTF-8）全体のSHA-256"
+        },
+        {
+          "step": "select-paragraphs",
+          "tool": "識別子 P189〜P190 の空でない段落を、前後の空白を除き改行（\\n）で連結（段落内の改行は \\n のまま）",
+          "input_sha256": "18a3079de41329667f8dc8beff31b392d4168304b9702f5623850d73b80502da",
+          "output_sha256": "f57e3a971eb2722d8938575a4625ecb4d3608489d302132099501fc62af271af"
+        }
+      ],
+      "preserve": [
+        {
+          "kind": "claim",
+          "quote": "必ずしも全てを実現できるわけではありません",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "「必ずしも〜ない」は部分否定。「全て実現できない」にしない",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "claim",
+          "quote": "予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "絞る理由（予算・スケジュール）と頻度",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "condition",
+          "quote": "政策目的やプロジェクト目標との関係、費用対効果等の観点を主眼として優先順位を判断していきます",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "判断の観点",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "function",
+          "quote": "機能を代替する方法（業務担当者の手作業や運用・保守作業にする等）も合わせて検討します",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "代替方法の検討も行うこと",
+          "confirmed_by": "",
+          "reason": ""
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-priority-view",
+          "prompt": "機能の実現要否を検討する際、優先順位は主にどの観点で判断するか。",
+          "options": [
+            "政策目的やプロジェクト目標との関係、費用対効果等",
+            "事業者から提案された機能の数",
+            "担当者の経験年数"
+          ],
+          "answer_index": 0,
+          "evidence": "政策目的やプロジェクト目標との関係、費用対効果等の観点を主眼として優先順位を判断",
+          "verified_by": "",
+          "verification_reason": ""
+        },
+        {
+          "id": "q-alternative",
+          "prompt": "実現する機能を絞る場合に、あわせて検討するのは何か。",
+          "options": [
+            "機能を代替する方法",
+            "予算の増額",
+            "スケジュールの延長"
+          ],
+          "answer_index": 0,
+          "evidence": "機能を代替する方法（業務担当者の手作業や運用・保守作業にする等）も合わせて検討します",
+          "verified_by": "",
+          "verification_reason": ""
+        }
+      ],
+      "draft_status": "保持要件と理解問題は assistant による草案。人が原文と照合し、confirmed_by／reason／verified_by／verification_reason を記入して初めて採用できる。"
+    },
+    {
+      "id": "dart-operation-hours",
+      "source_id": "da-requirements-template",
+      "status": "candidate",
+      "role": "change_target",
+      "split": "tuning",
+      "topic": "運用時間とシステム障害時の対応（要件定義書の記載例）",
+      "locator": "要件定義書標準テンプレート.docx P110-P114",
+      "correspondence": {
+        "method": "同梱PDFなし。Wordのみ",
+        "machine_result": "PDF が同梱されていないため未実施",
+        "checked_by": "",
+        "checked_on": ""
+      },
+      "third_party_content": "unchecked",
+      "third_party_note": "予備確認：法令・申合せ・通達の名称を参照するのみで、図・写真・第三者の著作物の転載は見当たらない。人の確認が必要。",
+      "text": "運用時間\n運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする。ただし、情報システムの監視は24時間365日行うこと。\n夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することは求めないが、障害の重要性に応じた機動的な体制を提案すること。\nシステム障害時の対応\nシステム障害時は復旧を優先し、一次対応を速やかに実施すること。障害の原因究明・恒久的対策は、原則としてシステム復旧後、翌開庁日の運用時間内にシステム保守として実施すること。",
+      "text_sha256": "271da02a49e01f8062c3fd0f45c19713ab02309c0ab1ed699358dcf7be400c2b",
+      "transform_history": [
+        {
+          "step": "unzip",
+          "tool": "python3 zipfile（標準ライブラリ）",
+          "input_sha256": "ce582513fb9cbf5665d0f19b78c75b476978b972a07f012a671eff262b921a2a",
+          "output_sha256": "29f34fc98729f2d1ea3e4136b09c7abbc2254a6b23c9aff3fa2817eb238781c2",
+          "note": "ZIP内 20260715_resources_standard_guidelines_guideline_07/５章/要件定義書標準テンプレート.docx"
+        },
+        {
+          "step": "extract-docx-text",
+          "tool": "tools/extract_docx_text.py",
+          "input_sha256": "29f34fc98729f2d1ea3e4136b09c7abbc2254a6b23c9aff3fa2817eb238781c2",
+          "output_sha256": "aa112a76dad6956d55145dacbd62a2541979f102e4fbc6220b3a58611388ddb1",
+          "note": "標準出力（UTF-8）全体のSHA-256"
+        },
+        {
+          "step": "select-paragraphs",
+          "tool": "識別子 P110〜P114 の空でない段落を、前後の空白を除き改行（\\n）で連結（段落内の改行は \\n のまま）",
+          "input_sha256": "aa112a76dad6956d55145dacbd62a2541979f102e4fbc6220b3a58611388ddb1",
+          "output_sha256": "271da02a49e01f8062c3fd0f45c19713ab02309c0ab1ed699358dcf7be400c2b"
+        }
+      ],
+      "preserve": [
+        {
+          "kind": "number",
+          "quote": "平日（土日及び祝日、年末年始を除く）の9時から17時まで",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "運用時間と除外日",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "exception",
+          "quote": "ただし、情報システムの監視は24時間365日行うこと",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "運用時間の例外：監視は24時間365日",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "strength",
+          "quote": "運用時間と同等の体制を維持することは求めないが、障害の重要性に応じた機動的な体制を提案すること",
+          "strength": "normative",
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "「求めない」と「提案すること」の区別。体制維持を要求に変えない",
+          "confirmed_by": "",
+          "reason": ""
+        },
+        {
+          "kind": "deadline",
+          "quote": "障害の原因究明・恒久的対策は、原則としてシステム復旧後、翌開庁日の運用時間内にシステム保守として実施すること",
+          "strength": null,
+          "allowed_changes": [
+            "文の分割・結合、語順や接続表現の整理（主体・条件・期限・義務の強さ・完了条件を変えない範囲）"
+          ],
+          "proposed_reason": "復旧優先→原因究明の順序と、原則・時期",
+          "confirmed_by": "",
+          "reason": ""
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-monitoring",
+          "prompt": "運用・保守業者の運用時間が平日の9時から17時までのとき、24時間365日行うことが求められているのは何か。",
+          "options": [
+            "情報システムの監視",
+            "運用作業全般",
+            "ヘルプデスク対応"
+          ],
+          "answer_index": 0,
+          "evidence": "情報システムの監視は24時間365日行うこと",
+          "verified_by": "",
+          "verification_reason": ""
+        },
+        {
+          "id": "q-night-system",
+          "prompt": "夜間や休日のシステム障害時の連絡体制について、運用時間と同等の体制は求められているか。",
+          "options": [
+            "求められていない（機動的な体制の提案が求められる）",
+            "求められている",
+            "記載がない"
+          ],
+          "answer_index": 0,
+          "evidence": "運用時間と同等の体制を維持することは求めないが",
+          "verified_by": "",
+          "verification_reason": ""
+        }
+      ],
+      "draft_status": "保持要件と理解問題は assistant による草案。人が原文と照合し、confirmed_by／reason／verified_by／verification_reason を記入して初めて採用できる。"
+    },
+    {
+      "id": "x-da110-p82",
+      "source_id": "da-ds-110",
+      "status": "excluded",
+      "locator": "第６章調達.docx P82",
+      "exclusion_reason": "DS-100 の条文を逐条で引用した行（OriginalBodyText）。DS-100 と別の原本として数えない。解説部分のみを抜粋する。"
+    },
+    {
+      "id": "x-dapt-p578",
+      "source_id": "da-procurement-spec-template",
+      "status": "excluded",
+      "locator": "調達仕様書標準テンプレート.docx P578",
+      "exclusion_reason": "他節（2.3、8.4）の番号参照に依存し、抜粋だけでは要件が完結しない。"
+    },
+    {
+      "id": "x-dart-p109",
+      "source_id": "da-requirements-template",
+      "status": "excluded",
+      "locator": "要件定義書標準テンプレート.docx P109",
+      "exclusion_reason": "「表５」（利用者数の表）への参照に依存する。"
+    },
+    {
+      "id": "x-dart-p116-p117",
+      "source_id": "da-requirements-template",
+      "status": "excluded",
+      "locator": "要件定義書標準テンプレート.docx P116-P117",
+      "exclusion_reason": "条件付きの代替ブロック（【プロジェクトの特性上ミッションクリティカルである場合】）。選択肢であり、確定した要求ではない。"
+    },
+    {
+      "id": "x-dart-p160-p161",
+      "source_id": "da-requirements-template",
+      "status": "excluded",
+      "locator": "要件定義書標準テンプレート.docx P159-P161",
+      "exclusion_reason": "「表12 機能一覧」への参照に依存し、【受託者から提案を受ける場合】の選択ブロックである。"
+    },
+    {
+      "id": "x-da120-p182-p184",
+      "source_id": "da-ds-120",
+      "status": "excluded",
+      "locator": "第５章要件定義.docx P182-P184",
+      "exclusion_reason": "表5-2・様式例5-1（図表）への参照に依存する。"
+    }
+  ]
 }
