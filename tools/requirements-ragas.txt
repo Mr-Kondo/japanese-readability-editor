@@ -1,0 +1,6 @@
+# Ragas による任意の自動評価（Issue #45）に必要な依存。スキル配布物・通常のオフライン処理・CI には含めない。
+#   python3 -m venv .venv-ragas && .venv-ragas/bin/python -m pip install -r tools/requirements-ragas.txt -c tools/ragas-constraints.txt
+# ragas 0.4.3 は langchain-community 0.4 以降と組み合わせると import 時に失敗する（vertexai の chat model が削除されたため）。
+# そのため langchain-community は 0.3 系に固定する。依存の解決版は ragas-constraints.txt に記録した。
+ragas==0.4.3
+langchain-community==0.3.31

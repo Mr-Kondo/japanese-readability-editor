@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "status": "no_human_labels",
+  "note": "人手確認のラベルを含まない。一致・不一致の件数であり、正しさの評価ではない。",
+  "skill_sha256": {
+    "SKILL.md": "6745696a14e35de26f1633679e201281803c9c49be755970e8fafc2724da1d6c",
+    "assets/examples.md": "6c88e9fac4c6dc71696371ccd374b075137d5eae8718f5c2f1410a818406c129",
+    "assets/fiction-context-template.md": "e67c21a43b46461d6210649a9431e64a9b9c39495b8aba8983ead22021db75d1",
+    "assets/fiction-examples.md": "e4f887cb7d4a81471dac11efa396904450c97f1090549e6bd59d51ee48ea0679",
+    "assets/kokugo-cases.md": "49ab4c1ccf26d8a74508e2adad99392e6f130c07ddd70b437b6c98ccdd519444",
+    "data/ijidokun.json": "58accc6387763bf70328902abde2c25997ba4063dd1f1ccc6a1b11a69f862c27",
+    "data/joyo-kanji.json": "cfdaaab5492623ff35204a265369df91e2a1f5b96b653fdbb82f2ce63d8a1071",
+    "data/kokugo-rules.json": "4dff22598f8aef19e69783191c50d1f92b60ae1835c8685164600749c115dfe9",
+    "data/kokugo-sources.json": "a06a488900558456398582452666221fac2e3686d179f4530d721f0fcbaa9875",
+    "references/fiction-checks.md": "853635b948e92ee5c6040a86c67a7bcc714d5285c6c98dea31cc8dece6636d23",
+    "references/fiction-writing.md": "59156cab15a2db52c878b597b92670c184ef80ed1fe04a60c3db32a0a65c8c52",
+    "references/kokugo-notation.md": "d64be2295478fbde177578e8a127b30f64da2ed52faf34d9b93ee5e92c3f7316",
+    "references/kokugo-official.md": "5f9fd41e79de039230e397a0edeceee3a46611a2453337e4f64346548f93aac4",
+    "references/kokugo-policy.md": "9803cb0c54c64f508ec8454fef099b4aea34bf95022f216001d99f4267d5a034",
+    "references/kokugo-sources.md": "ec5ae053fe3719b714db4cf8aaafe836dc6b211379cf2b65433db2dc49461b55",
+    "references/readability-rules.md": "4c80708f4cab02224191ce32fe76a8b29df6831d6f1977aa80163f8f9690a86e",
+    "scripts/check_fiction.py": "ce3fffe051fedcd3cebf4a7f062edbb8420b46ee59a0bac73bd7ed01033ac755",
+    "scripts/check_kokugo.py": "0e8db6e995ea673eeb7138d7b286ec1fcdf7aeedfde000da68d5603c6a7f3be2",
+    "scripts/compare_rewrite.py": "7c5ad203930465e0ff6ff028c44ca2690afbfab530642bfcf949667d46a389ee",
+    "scripts/kokugo_engine.py": "31b42bb833cd9bb7c762e98db614d9216c4bec375cf8a0768fb82ab11c4da1bd",
+    "scripts/measure.py": "28d7425cbf7619b024fc3eb1ea491154ad5007459807d7d1c6ee11aa95c9993e",
+    "scripts/validate_kokugo_rules.py": "fad2d931fda9881913a1dbce6377d1775fdba2da921acffb040cf1e2e3546bed",
+    "scripts/verify_preservation.py": "11e3e142fa5abbed4ed9f75b50b146e2464f499161dcc6d524c64376ed4b78b9"
+  },
+  "generation_models": [
+    "claude-haiku-5-5",
+    "claude-sonnet-5-5"
+  ],
+  "grading_models": [
+    "claude-haiku-5-5",
+    "claude-sonnet-5-5"
+  ],
+  "crosstab": {
+    "grader=pass | factual_signal=False | rubric_signal=False": 7,
+    "grader=pass | factual_signal=False | rubric_signal=True": 1,
+    "grader=pass | factual_signal=True | rubric_signal=False": 1
+  },
+  "cases": [
+    {
+      "id": "g001",
+      "case_id": "da120-refresh-materials",
+      "repeat": 1,
+      "original": "既存の資料を最新化する\n既存のサービス・業務や情報システムは、プロジェクトが進行している最中にも改善や機能追加が行われる可能性があります。既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集しますが、要件定義を開始する時点で最新化を行いましょう。調達後に変更内容が判明した場合は、追加のコストがかかる可能性がありますので、留意してください。",
+      "candidate": "既存の資料を最新化する\n\n既存のサービス・業務や情報システムは、プロジェクトの進行中にも、改善や機能追加が行われる可能性があります。\n\nこれらの資料は、サービス・業務の企画時点で収集しますが、要件定義を開始する時点で最新化しましょう。\n\n調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります。留意してください。",
+      "identical_to_original": false,
+      "existing_grader": "pass",
+      "existing_reason": "収集は企画時点、最新化は要件定義開始時点という区別が保たれ、「しましょう」の推奨も同じ。「これらの資料」は既存のサービス・業務や情報システムの資料を指し、「可能性があります」も確定にしていない。",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "fail",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "condition_scope"
+      ],
+      "unnecessary_change": "pass"
+    },
+    {
+      "id": "g002",
+      "case_id": "da120-feature-priority",
+      "repeat": 1,
+      "original": "要件定義で検討する機能は、必ずしも全てを実現できるわけではありません。予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります。\n機能の実現要否を検討する際には、政策目的やプロジェクト目標との関係、費用対効果等の観点を主眼として優先順位を判断していきます。また、機能を代替する方法（業務担当者の手作業や運用・保守作業にする等）も合わせて検討します。",
+      "candidate": "要件定義で検討する機能は、全てを実現できるとは限りません。予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります。\n\n機能を実現するかどうかを検討する際は、政策目的やプロジェクト目標との関係、費用対効果等の観点を主な判断材料として、優先順位を判断します。また、機能を代替する方法（業務担当者の手作業や運用・保守作業にする等）も合わせて検討します。",
+      "identical_to_original": false,
+      "existing_grader": "pass",
+      "existing_reason": "「全てを実現できるとは限りません」は部分否定のまま。「主眼として」を「主な判断材料として」と言い換えたが、判断の観点としての意味は変わらない。絞る理由や代替方法の検討も保たれる。",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 0.75,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [
+        "機能の実現要否を検討する際には、政策目的との関係を主眼として優先順位を判断する。",
+        "機能の実現要否を検討する際には、プロジェクト目標との関係を主眼として優先順位を判断する。",
+        "機能の実現要否を検討する際には、費用対効果の観点を主眼として優先順位を判断する。"
+      ],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass"
+    },
+    {
+      "id": "g003",
+      "case_id": "dart-operation-hours",
+      "repeat": 1,
+      "original": "運用時間\n運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする。ただし、情報システムの監視は24時間365日行うこと。\n夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することは求めないが、障害の重要性に応じた機動的な体制を提案すること。\nシステム障害時の対応\nシステム障害時は復旧を優先し、一次対応を速やかに実施すること。障害の原因究明・恒久的対策は、原則としてシステム復旧後、翌開庁日の運用時間内にシステム保守として実施すること。",
+      "candidate": "運用時間\n\n運用・保守業者の運用時間は、平日の9時から17時までとする。土日、祝日及び年末年始は除く。ただし、情報システムの監視は24時間365日行うこと。\n\n夜間や休日にシステム障害が起きたときの連絡体制は、運用時間と同等の体制を維持することは求めない。ただし、障害の重要性に応じた機動的な体制を提案すること。\n\nシステム障害時の対応\n\nシステム障害時は復旧を優先し、一次対応を速やかに実施すること。障害の原因究明と恒久的対策は、原則としてシステム復旧後、翌開庁日の運用時間内にシステム保守として実施すること。",
+      "identical_to_original": false,
+      "existing_grader": "pass",
+      "existing_reason": "運用時間と除外日、監視24時間365日の例外が保たれる。「システム障害が起きたとき」は「システム障害時」と同じ意味。「求めない。ただし…提案すること」の区別も維持され、原因究明の順序・原則・時期も同じ。",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass"
+    },
+    {
+      "id": "g004",
+      "case_id": "da120-refresh-materials",
+      "repeat": 2,
+      "original": "既存の資料を最新化する\n既存のサービス・業務や情報システムは、プロジェクトが進行している最中にも改善や機能追加が行われる可能性があります。既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集しますが、要件定義を開始する時点で最新化を行いましょう。調達後に変更内容が判明した場合は、追加のコストがかかる可能性がありますので、留意してください。",
+      "candidate": "既存の資料を最新化する\n\n既存のサービス・業務や情報システムは、プロジェクトの進行中にも、改善や機能追加が行われる可能性があります。\n\nこれらの資料はサービス・業務企画時点で収集しますが、要件定義を開始する時点で最新化しましょう。\n\n調達後に変更内容が判明した場合は、追加のコストがかかる可能性がありますので、留意してください。",
+      "identical_to_original": false,
+      "existing_grader": "pass",
+      "existing_reason": "「収集は企画時点、最新化は要件定義開始時点」の区別、「しましょう」の推奨、「可能性がありますので、留意してください」の依頼が原文どおり保たれている。「これらの資料」も妥当な言い換え。",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass"
+    },
+    {
+      "id": "g005",
+      "case_id": "da120-feature-priority",
+      "repeat": 2,
+      "original": "要件定義で検討する機能は、必ずしも全てを実現できるわけではありません。予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります。\n機能の実現要否を検討する際には、政策目的やプロジェクト目標との関係、費用対効果等の観点を主眼として優先順位を判断していきます。また、機能を代替する方法（業務担当者の手作業や運用・保守作業にする等）も合わせて検討します。",
+      "candidate": "要件定義で検討する機能は、必ずしも全てを実現できるわけではありません。予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります。\n\n機能の実現の要否を検討する際には、政策目的やプロジェクト目標との関係、費用対効果などの観点を主眼として、優先順位を判断していきます。また、機能を代替する方法（業務担当者の手作業や運用・保守作業にする等）もあわせて検討します。",
+      "identical_to_original": false,
+      "existing_grader": "pass",
+      "existing_reason": "「必ずしも全てを実現できるわけではありません」の部分否定、絞る理由と頻度、判断の観点、代替方法の検討がすべて保たれている。「の要否」「など」「あわせて」は表記上の違いのみ。",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass"
+    },
+    {
+      "id": "g006",
+      "case_id": "dart-operation-hours",
+      "repeat": 2,
+      "original": "運用時間\n運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする。ただし、情報システムの監視は24時間365日行うこと。\n夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することは求めないが、障害の重要性に応じた機動的な体制を提案すること。\nシステム障害時の対応\nシステム障害時は復旧を優先し、一次対応を速やかに実施すること。障害の原因究明・恒久的対策は、原則としてシステム復旧後、翌開庁日の運用時間内にシステム保守として実施すること。",
+      "candidate": "運用時間\n\n運用・保守業者の運用時間は、平日の9時から17時までとする。土日、祝日及び年末年始は除く。ただし、情報システムの監視は24時間365日行うこと。\n\n夜間や休日にシステム障害が発生した場合の連絡体制は、運用時間と同等の体制を維持することまでは求めない。ただし、障害の重要性に応じた機動的な体制を提案すること。\n\nシステム障害時の対応\n\nシステム障害時は復旧を優先し、一次対応を速やかに実施すること。障害の原因究明と恒久的対策は、原則としてシステム復旧後、翌開庁日の運用時間内にシステム保守として実施すること。",
+      "identical_to_original": false,
+      "existing_grader": "pass",
+      "existing_reason": "「平日の9時から17時」に「土日、祝日及び年末年始は除く」を別文で残し、除外日は同じ。「監視は24時間365日行うこと」の例外も保たれる。「求めない。ただし…提案すること」で求めない点と提案の義務の区別も維持。原因究明の順序・原則・時期も同じ。",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass"
+    },
+    {
+      "id": "g007",
+      "case_id": "da120-refresh-materials",
+      "repeat": 3,
+      "original": "既存の資料を最新化する\n既存のサービス・業務や情報システムは、プロジェクトが進行している最中にも改善や機能追加が行われる可能性があります。既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集しますが、要件定義を開始する時点で最新化を行いましょう。調達後に変更内容が判明した場合は、追加のコストがかかる可能性がありますので、留意してください。",
+      "candidate": "既存の資料を最新化する\n\n既存のサービス・業務や情報システムは、プロジェクトの進行中にも、改善や機能追加が行われる可能性があります。\n\nこれらの資料はサービス・業務企画時点で収集しますが、要件定義を開始する時点で最新化しましょう。\n\n調達後に変更内容が判明した場合は、追加のコストがかかる可能性がありますので、留意してください。",
+      "identical_to_original": false,
+      "existing_grader": "pass",
+      "existing_reason": "収集時点と最新化時点の区別、「しましょう」の推奨、「可能性がありますので、留意してください」が保たれている。「これらの資料」も既存の資料を指し、意味は同じ。",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass"
+    },
+    {
+      "id": "g008",
+      "case_id": "da120-feature-priority",
+      "repeat": 3,
+      "original": "要件定義で検討する機能は、必ずしも全てを実現できるわけではありません。予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります。\n機能の実現要否を検討する際には、政策目的やプロジェクト目標との関係、費用対効果等の観点を主眼として優先順位を判断していきます。また、機能を代替する方法（業務担当者の手作業や運用・保守作業にする等）も合わせて検討します。",
+      "candidate": "要件定義で検討する機能を、全て実現できるとは限りません。予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります。\n\n機能を実現するかどうかを検討する際には、政策目的やプロジェクト目標との関係、費用対効果等の観点を主眼として、優先順位を判断します。また、機能を代替する方法（業務担当者の手作業や運用・保守作業にする等）も合わせて検討します。",
+      "identical_to_original": false,
+      "existing_grader": "pass",
+      "existing_reason": "「全て実現できるとは限りません」は「必ずしも全てを実現できるわけではない」と同じ部分否定。絞る理由と頻度、判断の観点、代替方法の検討も保たれている。",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass"
+    },
+    {
+      "id": "g009",
+      "case_id": "dart-operation-hours",
+      "repeat": 3,
+      "original": "運用時間\n運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする。ただし、情報システムの監視は24時間365日行うこと。\n夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することは求めないが、障害の重要性に応じた機動的な体制を提案すること。\nシステム障害時の対応\nシステム障害時は復旧を優先し、一次対応を速やかに実施すること。障害の原因究明・恒久的対策は、原則としてシステム復旧後、翌開庁日の運用時間内にシステム保守として実施すること。",
+      "candidate": "運用時間\n運用・保守業者の運用時間は、平日の9時から17時までとする。土日、祝日及び年末年始は除く。ただし、情報システムの監視は24時間365日行うこと。\n\n夜間や休日のシステム障害時の連絡体制については、運用時間と同等の体制を維持することは求めない。ただし、障害の重要性に応じた機動的な体制を提案すること。\n\nシステム障害時の対応\nシステム障害時は復旧を優先し、一次対応を速やかに実施すること。障害の原因究明と恒久的対策は、原則としてシステム復旧後、翌開庁日の運用時間内にシステム保守として実施すること。",
+      "identical_to_original": false,
+      "existing_grader": "pass",
+      "existing_reason": "除外日は「土日、祝日及び年末年始は除く」で保たれ、監視24時間365日の例外もある。「求めない。ただし…提案すること」で求めない点と提案の義務の区別が維持され、原因究明の順序・原則・時期も同じ。",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass"
+    }
+  ]
+}

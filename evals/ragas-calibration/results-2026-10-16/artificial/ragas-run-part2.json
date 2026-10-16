@@ -1,0 +1,1640 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "config": {
+    "tool_version": 1,
+    "rubric_version": "ragas-ja-rubric-v1",
+    "rubric_sha256": "7f37f4309a2786203f376adfebd3d62e08df4be0d1d448c23480dd4f39dc81d1",
+    "metrics": [
+      "factual",
+      "rubric"
+    ],
+    "profile": "gov-org",
+    "aspects": [
+      "negation_polarity",
+      "condition_scope",
+      "actor_target",
+      "modality_strength",
+      "numbers_order",
+      "ungrounded_specificity",
+      "unnecessary_change"
+    ],
+    "atomicity": "high",
+    "coverage": "high",
+    "ragas_prompts": "Ragas 0.4.3 既定（英語の指示と例。日本語への適合は未検証）",
+    "llm_adapter": "ClaudeCliLLM（JSON指示をプロンプト末尾に付加、ツールなし、逐次実行、同一プロンプトは再利用）",
+    "claude_flags": [
+      "--print",
+      "--safe-mode",
+      "--strict-mcp-config",
+      "--tools",
+      "",
+      "--no-session-persistence",
+      "--model",
+      "sonnet",
+      "--effort",
+      "medium",
+      "--output-format",
+      "json"
+    ],
+    "claude_system": "提供された文章を処理してください。ツールは使用しないでください。",
+    "claude_cli_version": "2.1.301 (Claude Code)",
+    "temperature_and_seed": "CLI から指定できない（不明）",
+    "python": "3.13.16",
+    "platform": "Linux-6.18.44-fc-v139-x86_64-with-glibc2.39",
+    "packages": {
+      "ragas": "0.4.3",
+      "langchain-community": "0.3.31",
+      "langchain-core": "1.6.11",
+      "langchain": "1.4.6",
+      "instructor": "1.3.2",
+      "openai": "1.109.1",
+      "pydantic": "2.14.1",
+      "numpy": "2.5.4"
+    }
+  },
+  "started_at": "2026-10-16T12:03:49.865427+00:00",
+  "input": {
+    "path": "/tmp/claude-0/-home-user-japanese-readability-editor/d82b977d-e7e5-5997-a1e1-2ff559cf0a60/scratchpad/art-part2.json",
+    "cases": 4,
+    "task_sha256": "a2a834457072bde671f94de2420128b87326f1ae4c17a48c16b3ef136141de57"
+  },
+  "cases": [
+    {
+      "id": "strength-s3b",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.67,
+          "status": "scored",
+          "value": 0.67,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "夜間や休日におけるシステム障害時の連絡体制が存在する。",
+                "reason": "文脈は夜間や休日のシステム障害時の連絡体制について提案を求めているだけで、そのような連絡体制がすでに存在するとは述べていない。したがって、存在していることは直接推論できない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.67,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "夜間や休日におけるシステム障害時の連絡体制が存在する。",
+                "reason": "文脈は夜間や休日のシステム障害時の連絡体制について提案を求めているだけで、そのような連絡体制がすでに存在するとは述べていない。したがって、存在していることは直接推論できない。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「求めないが」の否定部分は候補でも「求めないが」として保たれており、否定・肯定の反転や追加・削除はない。ただし、原文の「提案すること」は義務を表す指示だが、候補は「提案することが望ましい」となり、義務が推奨に弱まっている。これは禁止と許可の入れ替えに近い働きの変化で、必須の提案要求が任意になっている。否定の観点では、提案の義務という肯定的な要求が緩和されているため、原文と異なる働きになっていると判断する。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「提案すること」と、障害の重要性に応じた機動的な体制の提案を義務として求めている。候補は「提案することが望ましい」とし、義務を努力目標・推奨に弱めている。「運用時間と同等の体制を維持することは求めないが」という範囲の限定は保たれているが、提案の要否という条件・範囲の働きが「必須」から「任意」に変わっており、原文の意味が保たれていない。なお義務の強さは別観点でも問題になり得るが、提案が求められる範囲（必須か任意か）が変わる点でこの観点でもfailと判断する。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「提案すること」と、提案を義務づける表現で、提案の主体（事業者）と対象（機動的な体制）は変わらない。候補は「提案することが望ましい」となり、提案の義務が努力目標に弱まっている。ただし、この変化は主に義務の強さの変化で、主体・対象・修飾先の入れ替え・追加・省略には当たらない。「障害の重要性に応じた」の修飾先も「機動的な体制」のままで、「夜間や休日におけるシステム障害時の連絡体制」という対象も保たれている。この観点では意味・働きは保たれている。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「提案すること」と、提案を義務づける指示の形になっている。候補は「提案することが望ましい」とし、義務を推奨に弱めている。「求めない」の対象である同等体制の維持とは別に、機動的な体制の提案自体は必須だったが、候補では任意に近くなる。時制は現在のまま変化なし。義務の強さが変わっているためfail。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は数値・単位・期限・頻度・先後関係の保持です。原文「運用時間と同等の体制を維持することは求めないが」「機動的な体制を提案すること」に対し、候補も同じ「求めないが」の対比構造と「提案する」内容を保っており、数値・期限・頻度・順序の変更はありません。「提案すること」が「提案することが望ましい」に変わり義務の強さは弱まっていますが、それは別観点（義務の強さ）の問題であり、この観点ではfailにしません。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は、原文にない主体・条件・完了状態・理由・具体例・固有名の追加の有無である。原文「提案すること」に対し候補は「提案することが望ましい」とした。これは義務の強さを弱める変更だが、新たな主体、条件、理由、具体例、固有名の追加ではない。他の部分「夜間や休日におけるシステム障害時の連絡体制」「運用時間と同等の体制を維持することは求めない」「障害の重要性に応じた機動的な体制」は原文のまま保たれている。よって、この観点では具体化の追加はなくpassとする。義務の弱化は別の観点の問題である。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「提案すること」は提案を義務づける強い表現だが、候補は「提案することが望ましい」に変えており、義務が推奨に弱まっている。依頼は「義務の強さを保って」なので、読みやすさに必要のない書換えで、文の働きが変わっている。"
+        }
+      }
+    },
+    {
+      "id": "partial-negation-s5",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.67,
+          "status": "scored",
+          "value": 0.67,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "要件定義で検討する機能の全てを実現することはできない。",
+                "reason": "文脈では「必ずしも全てを実現できるわけではありません」と述べられているだけで、全てを実現することが不可能だとは言っていません。全て実現できる場合もあり得るため、この主張は断定的すぎて文脈から直接推論できません。"
+              }
+            ]
+          },
+          "recomputed_value": 0.67,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "要件定義で検討する機能の全てを実現することはできない。",
+                "reason": "文脈では「必ずしも全てを実現できるわけではありません」と述べられているだけで、全てを実現することが不可能だとは言っていません。全て実現できる場合もあり得るため、この主張は断定的すぎて文脈から直接推論できません。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「必ずしも全てを実現できるわけではありません」で部分否定、つまり全てを実現できる場合もあり得るという含みを持つ。候補は「全てを実現することはできません」と全面的・断定的な否定になっており、「全て実現できる場合もある」という余地が消えている。否定の働きが部分否定から全否定へ変わっているため、この観点では意味が保たれていない。後半の「絞らなければならない」は両者で同じく保たれている。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「必ずしも全てを実現できるわけではありません」は部分否定で、一部は実現できるが全ては実現できない場合がある、という意味です。候補の「全てを実現することはできません」は全否定に近く、全てが実現できないと断定しており、「必ずしも」が持つ「場合による」という範囲・条件の含みが失われています。結果として、全てを実現できるケースの余地が消え、範囲が変わっています。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「必ずしも全てを実現できるわけではありません」と部分否定で、全てが実現できるとは限らない（一部は実現できる）意味。候補は「全てを実現することはできません」と全否定的に読め、実現可能な機能の範囲（対象）が「一部は可能」から「全て不可」へ変わっている。ただし「全てを」の否定の及ぶ範囲という修飾関係の変化であり、主体・対象の保持という観点では、否定の対象範囲（「全て」にかかる部分否定が「実現」にかかる全否定になる）が変わっているためfailとする。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「必ずしも全てを実現できるわけではありません」は部分否定で、一部は実現できる可能性を残し、可能性の強さを弱めている。候補の「全てを実現することはできません」は全否定に近く、全機能の実現が不可能だと断定する形になっている。「できる」の可能性の程度が変わっているため、この観点では意味が保たれていない。「絞らなければならない」は両者で同じで、時制も変わっていない。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「必ずしも全てを実現できるわけではありません」で部分否定（実現できる場合もある）だが、候補は「全てを実現することはできません」と全否定的になり、「全てを実現できる場合もある」という含みが失われている。数値・期限・頻度・順序そのものの変更ではない。ただし「全て」の範囲に関わる量的な意味が、「一部は実現できない」から「常に全ては実現できない」へと変わっている。頻度の「よくあります」と先後関係は保たれている。この観点（数値・単位・期限・頻度・順序）では直接の変更はなく、部分否定から全否定への変化は主に否定・断定の強さの観点に属する。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「必ずしも全てを実現できるわけではありません」と部分否定で、一部は実現できない場合があるという意味です。候補は「全てを実現することはできません」と全否定的になり、実現可否の程度が変わっています。ただし、これは断定の強まりという意味変化であり、この観点（原文にない主体、条件、完了状態、理由、具体例、固有名の追加）に該当する新しい要素の追加はありません。「予算やスケジュールの関係から」以降は原文と同一です。したがって、この観点ではpassです。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「必ずしも全てを実現できるわけではありません」と部分否定で、一部は実現できない可能性があるという意味です。候補は「全てを実現することはできません」と全否定に近い表現に変わり、「全て実現できる場合もある」という含みが失われ、断定が強まっています。これは読みやすさに必要のない変更で、意味も変えています。後続の「実現する機能を絞らなければならないことはよくあります」は同一なので問題ありません。"
+        }
+      }
+    },
+    {
+      "id": "paraphrase-s5",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「必ずしも全てを実現できるわけではありません」は部分否定で、候補の「全て実現できるとは限りません」も同じ部分否定であり、意味が保たれている。また「絞らなければならないことはよくあります」は義務表現を含むが、候補の「絞らなければならない場面はよくあります」でも「なければならない」の義務と肯定の関係が維持されている。否定の追加・削除や禁止と許可の入れ替えはない。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「必ずしも全てを実現できるわけではありません」は部分否定で、候補「全て実現できるとは限りません」も同じ部分否定であり保たれている。「予算やスケジュールの関係から」は候補「予算やスケジュールの都合で」と原因条件が同じ。「絞らなければならないことはよくあります」は候補「絞らなければならない場面はよくあります」で、義務の強さと頻度も保たれ、範囲・条件の脱落や追加はない。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「必ずしも全てを実現できるわけではありません」は部分否定で、候補「全て実現できるとは限りません」も同じ部分否定。主体（暗黙の実施側）や対象「要件定義で検討する機能」も保たれている。「予算やスケジュールの関係から」は「予算やスケジュールの都合で」に、「ことはよくあります」は「場面はよくあります」に変わっているが、「絞らなければならない」の対象「実現する機能」と原因「予算やスケジュール」の修飾関係は変わらない。主体・対象・修飾先の入れ替え、追加、省略はない。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「必ずしも全てを実現できるわけではありません」は部分否定で、候補の「全て実現できるとは限りません」も同じ部分否定で、可能性の程度は保たれている。「絞らなければならないことはよくあります」は「絞らなければならない場面はよくあります」となり、「しなければならない」の義務の強さも現在時制も維持されている。「よくあります」の頻度表現も同じ。義務・可能の強さと時制の変更はない。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は数値・単位・期限・頻度・順序の保持です。原文の「必ずしも全てを実現できるわけではありません」は候補で「全て実現できるとは限りません」となり、部分否定が保たれています。頻度表現の「よくあります」は候補でも「よくあります」と同じです。「予算やスケジュールの関係から」は「都合で」に変わっていますが、数値・期限・順序には影響しません。「絞らなければならない」も維持されています。数値・期限・頻度・先後関係に変更はありません。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「必ずしも全てを実現できるわけではありません」は候補「全て実現できるとは限りません」で部分否定が保たれている。「予算やスケジュールの関係から」は「予算やスケジュールの都合で」と言い換えただけで、理由の内容は同じ。「絞らなければならないことはよくあります」も「絞らなければならない場面はよくあります」で、「場面」は「こと」の自然な言い換えの範囲であり、新たな主体・条件・完了状態・具体例・固有名の追加はない。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「必ずしも全てを実現できるわけではありません」は部分否定で、候補「全て実現できるとは限りません」も同じ部分否定であり、意味が保たれている。「予算やスケジュールの関係から」を「都合で」に、「ことはよくあります」を「場面はよくあります」に変えているが、「絞らなければならない」という義務の強さや「よくある」という頻度は変わっていない。「関係から」を「都合で」とする言い換えは自然で、読みやすさの範囲内にある。意味・主体・条件に変化はなく、過剰な書換えとも言えない。"
+        }
+      }
+    },
+    {
+      "id": "tense-s5",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.8,
+          "status": "scored",
+          "value": 0.8,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 5,
+            "supported": 4,
+            "unsupported": 1,
+            "coverage": 0.8,
+            "unsupported_texts": [
+              {
+                "claim": "予算やスケジュールの関係で実現する機能を絞らなければならないことはよくある。",
+                "reason": "文脈には「絞らなければならないことがありました」とあるだけで、それが「よくある」ほど頻繁であるという情報はない。頻度についての記述が文脈から直接読み取れない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.8,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「絞らなければならないことはよくあります」は義務（しなければならない）を含む一般的な事実を述べている。候補は「絞らなければならないことがありました」で、「なければならない」という義務の表現は保たれ、否定・禁止の反転や追加・削除はない。「よくあります」から「ありました」への変化は頻度・時制の違いだが、否定・禁止の観点では影響しない。「必ずしも全てを実現できるわけではありません」の部分否定も両者で同一に保たれている。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「絞らなければならないことはよくあります」と、一般的な傾向（頻度）を現在形で述べている。候補は「絞らなければならないことがありました」と過去の一回的・過去の事実に変わり、「よく」という頻度の範囲が脱落している。一般的な事象から過去の出来事へ範囲・時制が変わるため、範囲の保持の観点で原文と異なる。なお「必ずしも全てを実現できるわけではありません」の部分分的否定は保たれている。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「絞らなければならないことはよくあります」は一般的な傾向を述べる現在形の記述だが、候補「絞らなければならないことがありました」は過去の特定の出来事の報告になっている。動作の主体や対象（「実現する機能を絞る」）自体は保たれており、「予算やスケジュールの関係から」の修飾先も変わらない。違いは時制・頻度（他観点）であり、主体・対象・修飾先の入れ替え・追加・省略はないため、この観点ではpass。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「絞らなければならないことはよくあります」は現在の一般的・恒常的な傾向を述べる現在時制の記述です。候補は「絞らなければならないことがありました」と過去形に変わり、特定の過去の出来事を述べる文になっています。また「よくあります」という頻度の含意も「ありました」で弱まっています。「なければならない」という義務の強さ自体は保たれていますが、時制が現在から過去に変更されているため、この観点ではfailです。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「よくあります」は現在の一般的な頻度を表すが、候補は「ありました」と過去の一回的・過去の出来事に変えている。頻度（「よくある」）が失われ、時制も一般論から過去の事実へ変わっているため、頻度・時間関係の保持という観点では原文と異なる。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「よくあります」は一般的・現在の傾向を述べる表現だが、候補は「ありました」と過去の特定の出来事に変えている。これは頻度の一般論が失われ、過去の経験という原文にない時間的限定・具体化を加えている。主体や固有名などの追加はないが、一般的事実が過去の事例に置き換わっている点で原文の働きが保たれていない。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「よくあります」（現在の一般的傾向）が、候補では「ありました」（過去の特定の経験）に変わっている。さらに、原文の「絞らなければならない」という義務の一般的な性質は、候補では過去の出来事として語られ、「よく」という頻度表現も失われている。原文はすでに明確で変更の必要がなかったのに、時制と頻度の意味を変える不要な書換えをしているため、原文の働きが保たれていない。"
+        }
+      }
+    }
+  ],
+  "models": [
+    "claude-haiku-5-5",
+    "claude-sonnet-5-5"
+  ],
+  "calls": [
+    {
+      "index": 1,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "c57cf4578a0e3190a76d59ae623e145bb4c2a42a7997556f7bdd4b80a1d95e39",
+      "cache_hit": false,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "夜間や休日におけるシステム障害時の連絡体制が存在する。",
+          "夜間や休日のシステム障害時の連絡体制については、運用時間と同等の体制を維持することは求められない。",
+          "夜間や休日のシステム障害時の連絡体制として、障害の重要性に応じた機動的な体制を提案することが望ましい。"
+        ]
+      },
+      "error": null,
+      "seconds": 6.07,
+      "cost_usd": 0.0054681
+    },
+    {
+      "index": 2,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "4c325a27fd65b347559de8c5e9d32c96c87f76b84ff2e2f155a08ffa50021f3c",
+      "cache_hit": false,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制が存在する。",
+            "reason": "文脈は夜間や休日のシステム障害時の連絡体制について提案を求めているだけで、そのような連絡体制がすでに存在するとは述べていない。したがって、存在していることは直接推論できない。",
+            "verdict": 0
+          },
+          {
+            "statement": "夜間や休日のシステム障害時の連絡体制については、運用時間と同等の体制を維持することは求められない。",
+            "reason": "文脈に「運用時間と同等の体制を維持することは求めない」と明記されており、この内容と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "夜間や休日のシステム障害時の連絡体制として、障害の重要性に応じた機動的な体制を提案することが望ましい。",
+            "reason": "文脈に「障害の重要性に応じた機動的な体制を提案すること」とあり、提案が求められていることから、提案することが望ましいという内容は直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 8.22,
+      "cost_usd": 0.0163513
+    },
+    {
+      "index": 3,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "c57cf4578a0e3190a76d59ae623e145bb4c2a42a7997556f7bdd4b80a1d95e39",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "夜間や休日におけるシステム障害時の連絡体制が存在する。",
+          "夜間や休日のシステム障害時の連絡体制については、運用時間と同等の体制を維持することは求められない。",
+          "夜間や休日のシステム障害時の連絡体制として、障害の重要性に応じた機動的な体制を提案することが望ましい。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 4,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "4c325a27fd65b347559de8c5e9d32c96c87f76b84ff2e2f155a08ffa50021f3c",
+      "cache_hit": true,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制が存在する。",
+            "reason": "文脈は夜間や休日のシステム障害時の連絡体制について提案を求めているだけで、そのような連絡体制がすでに存在するとは述べていない。したがって、存在していることは直接推論できない。",
+            "verdict": 0
+          },
+          {
+            "statement": "夜間や休日のシステム障害時の連絡体制については、運用時間と同等の体制を維持することは求められない。",
+            "reason": "文脈に「運用時間と同等の体制を維持することは求めない」と明記されており、この内容と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "夜間や休日のシステム障害時の連絡体制として、障害の重要性に応じた機動的な体制を提案することが望ましい。",
+            "reason": "文脈に「障害の重要性に応じた機動的な体制を提案すること」とあり、提案が求められていることから、提案することが望ましいという内容は直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 5,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "05360f74006ff08b0ff49e0fff2d272dd6dd4a8eb95004d435478a2e6d8ab237",
+      "cache_hit": false,
+      "raw_file": "c0005.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "夜間や休日にシステム障害が発生した場合の連絡体制について述べている。",
+          "夜間や休日のシステム障害時の連絡体制は、運用時間と同等の体制を維持することを求めない。",
+          "夜間や休日のシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案すること。"
+        ]
+      },
+      "error": null,
+      "seconds": 7.82,
+      "cost_usd": 0.0053513
+    },
+    {
+      "index": 6,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "1b2c5d86180375c1a0d397a8694f1c21ef6bd33ad763bee52e7d4337214e75d5",
+      "cache_hit": false,
+      "raw_file": "c0006.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "夜間や休日にシステム障害が発生した場合の連絡体制について述べている。",
+            "reason": "文脈は、夜間や休日におけるシステム障害時の連絡体制について述べているため、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "夜間や休日のシステム障害時の連絡体制は、運用時間と同等の体制を維持することを求めない。",
+            "reason": "文脈に「運用時間と同等の体制を維持することは求めない」と明記されているため、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "夜間や休日のシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案すること。",
+            "reason": "文脈には「障害の重要性に応じた機動的な体制を提案することが望ましい」とあり、提案することが望ましいという内容と一致するため、この主張は文脈から推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.08,
+      "cost_usd": 0.0161301
+    },
+    {
+      "index": 7,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "2092c5c0329c16653b23f356a2542327d1563dd7070ae0d7c3d355ef2a516c2a",
+      "cache_hit": false,
+      "raw_file": "c0007.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「求めないが」の否定部分は候補でも「求めないが」として保たれており、否定・肯定の反転や追加・削除はない。ただし、原文の「提案すること」は義務を表す指示だが、候補は「提案することが望ましい」となり、義務が推奨に弱まっている。これは禁止と許可の入れ替えに近い働きの変化で、必須の提案要求が任意になっている。否定の観点では、提案の義務という肯定的な要求が緩和されているため、原文と異なる働きになっていると判断する。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 8.5,
+      "cost_usd": 0.0061847000000000004
+    },
+    {
+      "index": 8,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "d25117eff4e5cc90a1e39b50cdb89d19ff03f5a6cd0c591ce3537146dec601fb",
+      "cache_hit": false,
+      "raw_file": "c0008.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「提案すること」と、障害の重要性に応じた機動的な体制の提案を義務として求めている。候補は「提案することが望ましい」とし、義務を努力目標・推奨に弱めている。「運用時間と同等の体制を維持することは求めないが」という範囲の限定は保たれているが、提案の要否という条件・範囲の働きが「必須」から「任意」に変わっており、原文の意味が保たれていない。なお義務の強さは別観点でも問題になり得るが、提案が求められる範囲（必須か任意か）が変わる点でこの観点でもfailと判断する。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 8.88,
+      "cost_usd": 0.0064568
+    },
+    {
+      "index": 9,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "7376b27957f10d7bf1edd85c456df45e59d305c9dee9a88d6f64b73fff7e52ea",
+      "cache_hit": false,
+      "raw_file": "c0009.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「提案すること」と、提案を義務づける表現で、提案の主体（事業者）と対象（機動的な体制）は変わらない。候補は「提案することが望ましい」となり、提案の義務が努力目標に弱まっている。ただし、この変化は主に義務の強さの変化で、主体・対象・修飾先の入れ替え・追加・省略には当たらない。「障害の重要性に応じた」の修飾先も「機動的な体制」のままで、「夜間や休日におけるシステム障害時の連絡体制」という対象も保たれている。この観点では意味・働きは保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.83,
+      "cost_usd": 0.006447400000000001
+    },
+    {
+      "index": 10,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "fc4bbdd821a1d310c562b8bf4f8a67eaf91dc95002fe8537e8b3ffeee4b5929a",
+      "cache_hit": false,
+      "raw_file": "c0010.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「提案すること」と、提案を義務づける指示の形になっている。候補は「提案することが望ましい」とし、義務を推奨に弱めている。「求めない」の対象である同等体制の維持とは別に、機動的な体制の提案自体は必須だったが、候補では任意に近くなる。時制は現在のまま変化なし。義務の強さが変わっているためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 7.24,
+      "cost_usd": 0.005531800000000001
+    },
+    {
+      "index": 11,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "cc4cd2c5f551b18788a04c62568ecd9053c50aeaecb872f086215bee6b19515f",
+      "cache_hit": false,
+      "raw_file": "c0011.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は数値・単位・期限・頻度・先後関係の保持です。原文「運用時間と同等の体制を維持することは求めないが」「機動的な体制を提案すること」に対し、候補も同じ「求めないが」の対比構造と「提案する」内容を保っており、数値・期限・頻度・順序の変更はありません。「提案すること」が「提案することが望ましい」に変わり義務の強さは弱まっていますが、それは別観点（義務の強さ）の問題であり、この観点ではfailにしません。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.52,
+      "cost_usd": 0.011090200000000001
+    },
+    {
+      "index": 12,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "653120b9eb47e76a1ce946dd947af7acba4c94b2c9271adb0aea4707e88fce14",
+      "cache_hit": false,
+      "raw_file": "c0012.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は、原文にない主体・条件・完了状態・理由・具体例・固有名の追加の有無である。原文「提案すること」に対し候補は「提案することが望ましい」とした。これは義務の強さを弱める変更だが、新たな主体、条件、理由、具体例、固有名の追加ではない。他の部分「夜間や休日におけるシステム障害時の連絡体制」「運用時間と同等の体制を維持することは求めない」「障害の重要性に応じた機動的な体制」は原文のまま保たれている。よって、この観点では具体化の追加はなくpassとする。義務の弱化は別の観点の問題である。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.13,
+      "cost_usd": 0.006585000000000001
+    },
+    {
+      "index": 13,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "ea994a901555439ab26ff0daa4d948c64a8b50a0e73dc8e520ccb8264e399c0d",
+      "cache_hit": false,
+      "raw_file": "c0013.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「提案すること」は提案を義務づける強い表現だが、候補は「提案することが望ましい」に変えており、義務が推奨に弱まっている。依頼は「義務の強さを保って」なので、読みやすさに必要のない書換えで、文の働きが変わっている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.22,
+      "cost_usd": 0.0053087
+    },
+    {
+      "index": 14,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "cc3c38e008a5e1dccbf4ae85cd7a305ff5ee62209696ab1c8cba9b964e8cb85b",
+      "cache_hit": false,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能の全てを実現することはできない。",
+          "予算の関係から、実現する機能を絞らなければならないことはよくある。",
+          "スケジュールの関係から、実現する機能を絞らなければならないことはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 6.17,
+      "cost_usd": 0.0103964
+    },
+    {
+      "index": 15,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "f0dbfedeb6e4b54e61eb4155475a77d8ffa1e7186975411fc7d4daf7d8f2510c",
+      "cache_hit": false,
+      "raw_file": "c0015.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能の全てを実現することはできない。",
+            "reason": "文脈では「必ずしも全てを実現できるわけではありません」と述べられているだけで、全てを実現することが不可能だとは言っていません。全て実現できる場合もあり得るため、この主張は断定的すぎて文脈から直接推論できません。",
+            "verdict": 0
+          },
+          {
+            "statement": "予算の関係から、実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」と明記されており、予算の関係もその理由に含まれています。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの関係から、実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」と明記されており、スケジュールの関係もその理由に含まれています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.74,
+      "cost_usd": 0.016236399999999998
+    },
+    {
+      "index": 16,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "cc3c38e008a5e1dccbf4ae85cd7a305ff5ee62209696ab1c8cba9b964e8cb85b",
+      "cache_hit": true,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能の全てを実現することはできない。",
+          "予算の関係から、実現する機能を絞らなければならないことはよくある。",
+          "スケジュールの関係から、実現する機能を絞らなければならないことはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 17,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "f0dbfedeb6e4b54e61eb4155475a77d8ffa1e7186975411fc7d4daf7d8f2510c",
+      "cache_hit": true,
+      "raw_file": "c0015.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能の全てを実現することはできない。",
+            "reason": "文脈では「必ずしも全てを実現できるわけではありません」と述べられているだけで、全てを実現することが不可能だとは言っていません。全て実現できる場合もあり得るため、この主張は断定的すぎて文脈から直接推論できません。",
+            "verdict": 0
+          },
+          {
+            "statement": "予算の関係から、実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」と明記されており、予算の関係もその理由に含まれています。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの関係から、実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」と明記されており、スケジュールの関係もその理由に含まれています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 18,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2ad326f588c2f220e8f00328bdce763b4c16506a1499bacf9a8f89dd4a173780",
+      "cache_hit": false,
+      "raw_file": "c0018.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義では機能を検討する。",
+          "要件定義で検討する機能の全てを実現できるとは限らない。",
+          "予算の関係から、実現する機能を絞らなければならないことがある。",
+          "スケジュールの関係から、実現する機能を絞らなければならないことがある。",
+          "予算やスケジュールの関係で実現する機能を絞らなければならないことはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.92,
+      "cost_usd": 0.0108692
+    },
+    {
+      "index": 19,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "a5b0e4342d017bedd1d62546ee8d3039a418a1c9aceab66d958c2726f68e088f",
+      "cache_hit": false,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義では機能を検討する。",
+            "reason": "文脈に「要件定義で検討する機能」とあり、要件定義で機能を検討することが前提として述べられているため、推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "要件定義で検討する機能の全てを実現できるとは限らない。",
+            "reason": "文脈に「要件定義で検討する機能は、全てを実現することはできません」とあり、全ての機能を実現できるとは限らないという内容と合致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算の関係から、実現する機能を絞らなければならないことがある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、予算が理由で機能を絞る場合があることが読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの関係から、実現する機能を絞らなければならないことがある。",
+            "reason": "文脈に、スケジュールの関係から実現する機能を絞らなければならないことがよくあると述べられているため、推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの関係で実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈の「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とほぼ同じ内容であり、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 13.95,
+      "cost_usd": 0.0174646
+    },
+    {
+      "index": 20,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "102bac861d7935e3e6aebfea01bd4ea0d16c162334047ce481a3d2d0c4a89160",
+      "cache_hit": false,
+      "raw_file": "c0020.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「必ずしも全てを実現できるわけではありません」で部分否定、つまり全てを実現できる場合もあり得るという含みを持つ。候補は「全てを実現することはできません」と全面的・断定的な否定になっており、「全て実現できる場合もある」という余地が消えている。否定の働きが部分否定から全否定へ変わっているため、この観点では意味が保たれていない。後半の「絞らなければならない」は両者で同じく保たれている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.64,
+      "cost_usd": 0.0110975
+    },
+    {
+      "index": 21,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "1e3b19061f7f8694ed62663caa89a9e2dc55e3edcd7a06bc77cd9cd45ce5bd6a",
+      "cache_hit": false,
+      "raw_file": "c0021.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「必ずしも全てを実現できるわけではありません」は部分否定で、一部は実現できるが全ては実現できない場合がある、という意味です。候補の「全てを実現することはできません」は全否定に近く、全てが実現できないと断定しており、「必ずしも」が持つ「場合による」という範囲・条件の含みが失われています。結果として、全てを実現できるケースの余地が消え、範囲が変わっています。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.7,
+      "cost_usd": 0.0110468
+    },
+    {
+      "index": 22,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "52fe3fdb585d6685128f64ddb4dec89a3265c3336599dea73f984bc0de43e3be",
+      "cache_hit": false,
+      "raw_file": "c0022.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「必ずしも全てを実現できるわけではありません」と部分否定で、全てが実現できるとは限らない（一部は実現できる）意味。候補は「全てを実現することはできません」と全否定的に読め、実現可能な機能の範囲（対象）が「一部は可能」から「全て不可」へ変わっている。ただし「全てを」の否定の及ぶ範囲という修飾関係の変化であり、主体・対象の保持という観点では、否定の対象範囲（「全て」にかかる部分否定が「実現」にかかる全否定になる）が変わっているためfailとする。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 7.0,
+      "cost_usd": 0.0115121
+    },
+    {
+      "index": 23,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "22f38dc78b96636c8ff9d8e9d9bef6b3bf0507e236c49634b798729e0a419a1b",
+      "cache_hit": false,
+      "raw_file": "c0023.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「必ずしも全てを実現できるわけではありません」は部分否定で、一部は実現できる可能性を残し、可能性の強さを弱めている。候補の「全てを実現することはできません」は全否定に近く、全機能の実現が不可能だと断定する形になっている。「できる」の可能性の程度が変わっているため、この観点では意味が保たれていない。「絞らなければならない」は両者で同じで、時制も変わっていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 8.46,
+      "cost_usd": 0.0111743
+    },
+    {
+      "index": 24,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "745b363b9d7d0a11fb7ffdb363023fe3d9564ac848ef321f4350f5f59208393c",
+      "cache_hit": false,
+      "raw_file": "c0024.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「必ずしも全てを実現できるわけではありません」で部分否定（実現できる場合もある）だが、候補は「全てを実現することはできません」と全否定的になり、「全てを実現できる場合もある」という含みが失われている。数値・期限・頻度・順序そのものの変更ではない。ただし「全て」の範囲に関わる量的な意味が、「一部は実現できない」から「常に全ては実現できない」へと変わっている。頻度の「よくあります」と先後関係は保たれている。この観点（数値・単位・期限・頻度・順序）では直接の変更はなく、部分否定から全否定への変化は主に否定・断定の強さの観点に属する。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.95,
+      "cost_usd": 0.0117161
+    },
+    {
+      "index": 25,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "5134aff31a7be4408f954cfa0f05407b20ab7780cc6876156643e2809dcfba8e",
+      "cache_hit": false,
+      "raw_file": "c0025.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「必ずしも全てを実現できるわけではありません」と部分否定で、一部は実現できない場合があるという意味です。候補は「全てを実現することはできません」と全否定的になり、実現可否の程度が変わっています。ただし、これは断定の強まりという意味変化であり、この観点（原文にない主体、条件、完了状態、理由、具体例、固有名の追加）に該当する新しい要素の追加はありません。「予算やスケジュールの関係から」以降は原文と同一です。したがって、この観点ではpassです。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 8.75,
+      "cost_usd": 0.0113009
+    },
+    {
+      "index": 26,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "c82bb2946b60bb971f306923981d36d38d39f9a7e3ef8208d57a3c31b2af0d08",
+      "cache_hit": false,
+      "raw_file": "c0026.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「必ずしも全てを実現できるわけではありません」と部分否定で、一部は実現できない可能性があるという意味です。候補は「全てを実現することはできません」と全否定に近い表現に変わり、「全て実現できる場合もある」という含みが失われ、断定が強まっています。これは読みやすさに必要のない変更で、意味も変えています。後続の「実現する機能を絞らなければならないことはよくあります」は同一なので問題ありません。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.58,
+      "cost_usd": 0.0110825
+    },
+    {
+      "index": 27,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "7e31c675658d387ceba3a1e572faa59ae48f55f4c256f56f973347cb82b3d28c",
+      "cache_hit": false,
+      "raw_file": "c0027.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能を全て実現できるとは限らない。",
+          "予算の都合で、実現する機能を絞らなければならない場面がある。",
+          "スケジュールの都合で、実現する機能を絞らなければならない場面がある。",
+          "予算やスケジュールの都合で実現する機能を絞らなければならない場面はよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 6.79,
+      "cost_usd": 0.0109641
+    },
+    {
+      "index": 28,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "2004e27cd2c6e7189019ecc48a2d4afd9d88677d669757e2284796619a52eb73",
+      "cache_hit": false,
+      "raw_file": "c0028.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能を全て実現できるとは限らない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません」とあり、この主張と一致します。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算の都合で、実現する機能を絞らなければならない場面がある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、予算が理由で機能を絞る場面があることが読み取れます。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの都合で、実現する機能を絞らなければならない場面がある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、スケジュールが理由で機能を絞る場面があることが読み取れます。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの都合で実現する機能を絞らなければならない場面はよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」と明記されており、この主張と一致します。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 8.31,
+      "cost_usd": 0.01714
+    },
+    {
+      "index": 29,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "7e31c675658d387ceba3a1e572faa59ae48f55f4c256f56f973347cb82b3d28c",
+      "cache_hit": true,
+      "raw_file": "c0027.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能を全て実現できるとは限らない。",
+          "予算の都合で、実現する機能を絞らなければならない場面がある。",
+          "スケジュールの都合で、実現する機能を絞らなければならない場面がある。",
+          "予算やスケジュールの都合で実現する機能を絞らなければならない場面はよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 30,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "2004e27cd2c6e7189019ecc48a2d4afd9d88677d669757e2284796619a52eb73",
+      "cache_hit": true,
+      "raw_file": "c0028.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能を全て実現できるとは限らない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません」とあり、この主張と一致します。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算の都合で、実現する機能を絞らなければならない場面がある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、予算が理由で機能を絞る場面があることが読み取れます。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの都合で、実現する機能を絞らなければならない場面がある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、スケジュールが理由で機能を絞る場面があることが読み取れます。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの都合で実現する機能を絞らなければならない場面はよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」と明記されており、この主張と一致します。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 31,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2ad326f588c2f220e8f00328bdce763b4c16506a1499bacf9a8f89dd4a173780",
+      "cache_hit": true,
+      "raw_file": "c0018.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義では機能を検討する。",
+          "要件定義で検討する機能の全てを実現できるとは限らない。",
+          "予算の関係から、実現する機能を絞らなければならないことがある。",
+          "スケジュールの関係から、実現する機能を絞らなければならないことがある。",
+          "予算やスケジュールの関係で実現する機能を絞らなければならないことはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 32,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "9993d4a050caa3ab22a11b57eb42ca7e693d252fc33a2169503c6fb322b2b1c4",
+      "cache_hit": false,
+      "raw_file": "c0032.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義では機能を検討する。",
+            "reason": "文脈に「要件定義で検討する機能」とあり、要件定義で機能を検討することが前提として示されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "要件定義で検討する機能を全て実現できるとは限らない。",
+            "reason": "文脈の冒頭で「要件定義で検討する機能を全て実現できるとは限りません」と明確に述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算の関係から、実現する機能を絞らなければならないことがある。",
+            "reason": "文脈に「予算やスケジュールの都合で、実現する機能を絞らなければならない場面はよくあります」とあり、予算の都合で機能を絞る場合があることが読み取れます。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの関係から、実現する機能を絞らなければならないことがある。",
+            "reason": "文脈に、スケジュールの都合で実現する機能を絞らなければならない場面があると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの関係で実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈に「予算やスケジュールの都合で、実現する機能を絞らなければならない場面はよくあります」とあり、そのまま対応しています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 7.24,
+      "cost_usd": 0.0176348
+    },
+    {
+      "index": 33,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "a3b4af365bb4abb9f9c6833160fbe330adfbf1590151493e09b8f9207a855650",
+      "cache_hit": false,
+      "raw_file": "c0033.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「必ずしも全てを実現できるわけではありません」は部分否定で、候補の「全て実現できるとは限りません」も同じ部分否定であり、意味が保たれている。また「絞らなければならないことはよくあります」は義務表現を含むが、候補の「絞らなければならない場面はよくあります」でも「なければならない」の義務と肯定の関係が維持されている。否定の追加・削除や禁止と許可の入れ替えはない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.88,
+      "cost_usd": 0.011064199999999998
+    },
+    {
+      "index": 34,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "8fdc28b31179c714e6b896c00bf31048899ffa2f15ca434424a277dbc0f74e00",
+      "cache_hit": false,
+      "raw_file": "c0034.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「必ずしも全てを実現できるわけではありません」は部分否定で、候補「全て実現できるとは限りません」も同じ部分否定であり保たれている。「予算やスケジュールの関係から」は候補「予算やスケジュールの都合で」と原因条件が同じ。「絞らなければならないことはよくあります」は候補「絞らなければならない場面はよくあります」で、義務の強さと頻度も保たれ、範囲・条件の脱落や追加はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.0,
+      "cost_usd": 0.011209999999999998
+    },
+    {
+      "index": 35,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "b922bce6313b847db82e62c312b929944428c861f5ead2f341c94c8804ee8005",
+      "cache_hit": false,
+      "raw_file": "c0035.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「必ずしも全てを実現できるわけではありません」は部分否定で、候補「全て実現できるとは限りません」も同じ部分否定。主体（暗黙の実施側）や対象「要件定義で検討する機能」も保たれている。「予算やスケジュールの関係から」は「予算やスケジュールの都合で」に、「ことはよくあります」は「場面はよくあります」に変わっているが、「絞らなければならない」の対象「実現する機能」と原因「予算やスケジュール」の修飾関係は変わらない。主体・対象・修飾先の入れ替え、追加、省略はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 9.64,
+      "cost_usd": 0.011539800000000001
+    },
+    {
+      "index": 36,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "e73c2263a6609711d1b8cad9ef7f2ed1181a6d1f4df7cb3003b16d8d4f5ab9bd",
+      "cache_hit": false,
+      "raw_file": "c0036.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「必ずしも全てを実現できるわけではありません」は部分否定で、候補の「全て実現できるとは限りません」も同じ部分否定で、可能性の程度は保たれている。「絞らなければならないことはよくあります」は「絞らなければならない場面はよくあります」となり、「しなければならない」の義務の強さも現在時制も維持されている。「よくあります」の頻度表現も同じ。義務・可能の強さと時制の変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.31,
+      "cost_usd": 0.011201000000000001
+    },
+    {
+      "index": 37,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9c338a9ba1cad7d2a9578e6b34d713409e65d44dc32cbc4d6b24eb53bdf80810",
+      "cache_hit": false,
+      "raw_file": "c0037.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は数値・単位・期限・頻度・順序の保持です。原文の「必ずしも全てを実現できるわけではありません」は候補で「全て実現できるとは限りません」となり、部分否定が保たれています。頻度表現の「よくあります」は候補でも「よくあります」と同じです。「予算やスケジュールの関係から」は「都合で」に変わっていますが、数値・期限・順序には影響しません。「絞らなければならない」も維持されています。数値・期限・頻度・先後関係に変更はありません。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.35,
+      "cost_usd": 0.0110528
+    },
+    {
+      "index": 38,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "91c8619f9e4af39f7e9e4051d0bb4a79ea774ef7d005038f77370cf65a1f1d32",
+      "cache_hit": false,
+      "raw_file": "c0038.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「必ずしも全てを実現できるわけではありません」は候補「全て実現できるとは限りません」で部分否定が保たれている。「予算やスケジュールの関係から」は「予算やスケジュールの都合で」と言い換えただけで、理由の内容は同じ。「絞らなければならないことはよくあります」も「絞らなければならない場面はよくあります」で、「場面」は「こと」の自然な言い換えの範囲であり、新たな主体・条件・完了状態・具体例・固有名の追加はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 8.57,
+      "cost_usd": 0.0112516
+    },
+    {
+      "index": 39,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "d57359847b7363ee571213417e1712014872ff3c5d296f91e102bfc6b2a47fa4",
+      "cache_hit": false,
+      "raw_file": "c0039.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「必ずしも全てを実現できるわけではありません」は部分否定で、候補「全て実現できるとは限りません」も同じ部分否定であり、意味が保たれている。「予算やスケジュールの関係から」を「都合で」に、「ことはよくあります」を「場面はよくあります」に変えているが、「絞らなければならない」という義務の強さや「よくある」という頻度は変わっていない。「関係から」を「都合で」とする言い換えは自然で、読みやすさの範囲内にある。意味・主体・条件に変化はなく、過剰な書換えとも言えない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.01,
+      "cost_usd": 0.011532200000000001
+    },
+    {
+      "index": 40,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "5d716869d0eac1cdcd8d1698688c8afebf941524851addc517eb3d8b69ee010b",
+      "cache_hit": false,
+      "raw_file": "c0040.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+          "要件定義では機能を検討する。",
+          "予算の関係から、実現する機能を絞らなければならないことがあった。",
+          "スケジュールの関係から、実現する機能を絞らなければならないことがあった。"
+        ]
+      },
+      "error": null,
+      "seconds": 6.5,
+      "cost_usd": 0.010771000000000001
+    },
+    {
+      "index": 41,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "fa54a3748d7f27a424ea335d755e3207b3623590d6ed6466ccf40a90d7c44a95",
+      "cache_hit": false,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません」と明記されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "要件定義では機能を検討する。",
+            "reason": "文脈に「要件定義で検討する機能」という表現があり、要件定義で機能を検討することが前提となっているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算の関係から、実現する機能を絞らなければならないことがあった。",
+            "reason": "文脈には「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、予算の関係で機能を絞る必要が生じることが述べられているため、推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの関係から、実現する機能を絞らなければならないことがあった。",
+            "reason": "文脈に、スケジュールの関係から実現する機能を絞らなければならないことがよくあると述べられているため、推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 9.51,
+      "cost_usd": 0.0167501
+    },
+    {
+      "index": 42,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "5d716869d0eac1cdcd8d1698688c8afebf941524851addc517eb3d8b69ee010b",
+      "cache_hit": true,
+      "raw_file": "c0040.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+          "要件定義では機能を検討する。",
+          "予算の関係から、実現する機能を絞らなければならないことがあった。",
+          "スケジュールの関係から、実現する機能を絞らなければならないことがあった。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 43,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "fa54a3748d7f27a424ea335d755e3207b3623590d6ed6466ccf40a90d7c44a95",
+      "cache_hit": true,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません」と明記されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "要件定義では機能を検討する。",
+            "reason": "文脈に「要件定義で検討する機能」という表現があり、要件定義で機能を検討することが前提となっているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算の関係から、実現する機能を絞らなければならないことがあった。",
+            "reason": "文脈には「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、予算の関係で機能を絞る必要が生じることが述べられているため、推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの関係から、実現する機能を絞らなければならないことがあった。",
+            "reason": "文脈に、スケジュールの関係から実現する機能を絞らなければならないことがよくあると述べられているため、推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 44,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2ad326f588c2f220e8f00328bdce763b4c16506a1499bacf9a8f89dd4a173780",
+      "cache_hit": true,
+      "raw_file": "c0018.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義では機能を検討する。",
+          "要件定義で検討する機能の全てを実現できるとは限らない。",
+          "予算の関係から、実現する機能を絞らなければならないことがある。",
+          "スケジュールの関係から、実現する機能を絞らなければならないことがある。",
+          "予算やスケジュールの関係で実現する機能を絞らなければならないことはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 45,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "3a5509d518c88f9bf93fe132ccf134b71fb74e023d0198c73a7da15f0cffab9b",
+      "cache_hit": false,
+      "raw_file": "c0045.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義では機能を検討する。",
+            "reason": "文脈に「要件定義で検討する機能」とあり、要件定義で機能を検討することが読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "要件定義で検討する機能の全てを実現できるとは限らない。",
+            "reason": "文脈に「必ずしも全てを実現できるわけではありません」とあり、この内容と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算の関係から、実現する機能を絞らなければならないことがある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことがありました」とあり、予算の関係で絞ることがあると読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの関係から、実現する機能を絞らなければならないことがある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことがありました」とあり、スケジュールの関係で絞ることがあると読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの関係で実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈には「絞らなければならないことがありました」とあるだけで、それが「よくある」ほど頻繁であるという情報はない。頻度についての記述が文脈から直接読み取れない。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 7.02,
+      "cost_usd": 0.0176077
+    },
+    {
+      "index": 46,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9eb298144ca67cc7da68e16d756892ece3c389baa17df789bab3a244c89a821b",
+      "cache_hit": false,
+      "raw_file": "c0046.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「絞らなければならないことはよくあります」は義務（しなければならない）を含む一般的な事実を述べている。候補は「絞らなければならないことがありました」で、「なければならない」という義務の表現は保たれ、否定・禁止の反転や追加・削除はない。「よくあります」から「ありました」への変化は頻度・時制の違いだが、否定・禁止の観点では影響しない。「必ずしも全てを実現できるわけではありません」の部分否定も両者で同一に保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.92,
+      "cost_usd": 0.0112846
+    },
+    {
+      "index": 47,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "074b6dc8faf1c80788395b80018efe484357188609bbcf357c52833d50a2bacd",
+      "cache_hit": false,
+      "raw_file": "c0047.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「絞らなければならないことはよくあります」と、一般的な傾向（頻度）を現在形で述べている。候補は「絞らなければならないことがありました」と過去の一回的・過去の事実に変わり、「よく」という頻度の範囲が脱落している。一般的な事象から過去の出来事へ範囲・時制が変わるため、範囲の保持の観点で原文と異なる。なお「必ずしも全てを実現できるわけではありません」の部分分的否定は保たれている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 9.5,
+      "cost_usd": 0.0112389
+    },
+    {
+      "index": 48,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9446cdb35e778f85d7a0c4fbcb5c5852f211a4eeef81fea3b0620dfebcfca3be",
+      "cache_hit": false,
+      "raw_file": "c0048.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「絞らなければならないことはよくあります」は一般的な傾向を述べる現在形の記述だが、候補「絞らなければならないことがありました」は過去の特定の出来事の報告になっている。動作の主体や対象（「実現する機能を絞る」）自体は保たれており、「予算やスケジュールの関係から」の修飾先も変わらない。違いは時制・頻度（他観点）であり、主体・対象・修飾先の入れ替え・追加・省略はないため、この観点ではpass。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 8.36,
+      "cost_usd": 0.011178700000000001
+    },
+    {
+      "index": 49,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "57e5c4dad17151a63352981806f6c8ceb7ee1d924a7a9c4af2143765ffb1d49d",
+      "cache_hit": false,
+      "raw_file": "c0049.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「絞らなければならないことはよくあります」は現在の一般的・恒常的な傾向を述べる現在時制の記述です。候補は「絞らなければならないことがありました」と過去形に変わり、特定の過去の出来事を述べる文になっています。また「よくあります」という頻度の含意も「ありました」で弱まっています。「なければならない」という義務の強さ自体は保たれていますが、時制が現在から過去に変更されているため、この観点ではfailです。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 9.9,
+      "cost_usd": 0.0113024
+    },
+    {
+      "index": 50,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "34728f2519da460bb8e7a95033303f43d8d984001c46811a705e5b56e885eb08",
+      "cache_hit": false,
+      "raw_file": "c0050.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「よくあります」は現在の一般的な頻度を表すが、候補は「ありました」と過去の一回的・過去の出来事に変えている。頻度（「よくある」）が失われ、時制も一般論から過去の事実へ変わっているため、頻度・時間関係の保持という観点では原文と異なる。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 8.57,
+      "cost_usd": 0.0104852
+    },
+    {
+      "index": 51,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "7f3806c6ac1201e671da53561de5f24e1615a38ed265afc07fc815738df281e0",
+      "cache_hit": false,
+      "raw_file": "c0051.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「よくあります」は一般的・現在の傾向を述べる表現だが、候補は「ありました」と過去の特定の出来事に変えている。これは頻度の一般論が失われ、過去の経験という原文にない時間的限定・具体化を加えている。主体や固有名などの追加はないが、一般的事実が過去の事例に置き換わっている点で原文の働きが保たれていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 8.14,
+      "cost_usd": 0.0108175
+    },
+    {
+      "index": 52,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "97fdcdef37f34de21cf7f3512dc6539808df04fc6b35b88af980ed4f81e8fe59",
+      "cache_hit": false,
+      "raw_file": "c0052.json",
+      "model_ids": [
+        "claude-haiku-5-5",
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「よくあります」（現在の一般的傾向）が、候補では「ありました」（過去の特定の経験）に変わっている。さらに、原文の「絞らなければならない」という義務の一般的な性質は、候補では過去の出来事として語られ、「よく」という頻度表現も失われている。原文はすでに明確で変更の必要がなかったのに、時制と頻度の意味を変える不要な書換えをしているため、原文の働きが保たれていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 11.85,
+      "cost_usd": 0.011032100000000001
+    }
+  ],
+  "call_summary": {
+    "calls": 52,
+    "cache_hits": 10,
+    "failures": 0,
+    "seconds": 322.7,
+    "cost_usd_list_price": 0.4719,
+    "calls_without_cost": 0
+  },
+  "finished_at": "2026-10-16T12:09:21.447364+00:00"
+}
