@@ -171,7 +171,32 @@ python3 tools/compare_readability.py auto --input evals/blind-comparison-example
 
 既存の自動検証を再利用し、各候補を独立に検査します。`tasks.json` の `provenance.variant` で版名、`document_id` で原文を追跡できます。`--judge` を付けると各候補をClaudeへ送信し、単独評価の評点・原文との選好・理由を取得します。版名と生成情報はモデルへ渡しません。人手の二候補間選好とは別の評価で、自動集計から二候補の勝率を出しません。自動検証の終了コードは単独評価と同じ `0/1/2` です。
 
-人手回答とLLM回答は混ぜず、匿名比較の集計は人手専用です。理解問題・裁定画面・信頼区間・スキルへの自動反映は含めません。
+人手回答とLLM回答は混ぜず、匿名比較の集計は人手専用です。確認記録は次の手順で別ファイルに残します。
+
+## 指摘を確認し、回帰ケースにする
+
+不一致一覧と元回答を原文・資料に照らして確認します。多数決だけで正解を決めず、一人で評価した場合も確認の根拠を残してください。
+
+```bash
+python3 tools/feedback_readability.py prepare --organizer /tmp/jre-pairs/organizer.json --out-dir /tmp/jre-confirmation
+```
+
+`decisions.json` は主催者用です。各候補の `input`、ID、ハッシュは変更せず、以下を編集します。
+
+- `status`：`confirmed_problem`（意味保持の問題を確認）／`no_problem`（意味保持を確認）／`unresolved`（未解決）。読みやすさの好みだけで意味保持の不合格にはしません。
+- 確定した判定には `confirmer`（確認者）、`reason`（根拠）、`quote`（候補内の引用）を必須にします。欠落は周辺の文を引用して説明します。
+- `origin`：`artificial`（人工例）／`model_output`（実際のモデル出力）／`unknown`。人工例を実運用の失敗として扱わないでください。
+- 問題を確認した候補には `preserve`（保持要件）、`forbid`（禁止事項）、`rule_ids`（関連規則の識別子）を空でない文字列配列で記入します。唯一の正解文を指定する必要はありません。
+
+元回答と独立して保存し、確認記録から開発用ケースを出力します。
+
+```bash
+python3 tools/feedback_readability.py export --organizer /tmp/jre-pairs/organizer.json --decisions /tmp/jre-confirmation/decisions.json --out-dir /tmp/jre-regression
+```
+
+`regression-cases.json` は既存の `evaluate_readability.py` が読み込む `cases/controls` 形式です。確認済み問題を再生成用ケースと不合格対照例にし、問題なしの候補は合格対照例にします。未解決は出力しません。確認済み問題がゼロならエラーにし、出力先を作りません。入力不一致・重複・項目の欠落・存在しない引用も拒否します。両コマンドとも `0=完了、2=エラー` で、既存の出力先は上書きしません。
+
+この出力はスキルやテストへ自動反映しません。公開前に文章と引用の機密情報を確認し、同じ失敗が繰り返す規則・例だけを人が修正します。開発に使ったケースとは別の未使用文書で旧新版を再比較してください。意味関係の判定は引き続き人手またはモデル評価を要し、JSON出力だけで自動検証になったとは扱いません。
 
 ## 限界と改善への接続
 
