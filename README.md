@@ -23,36 +23,67 @@
 
 目的は、日本語を短くすることではありません。数値、条件、例外、因果関係、主体、固有名詞、技術用語、API名、コマンド、コード、URL、引用、出典を、読みやすさのために削ったり簡略化したりしません。
 
+## 更新する
+
+入れた方法に合わせて、[更新手順](docs/installation.md#更新する)を選んでください。
+
+| 入れた方法 | 更新方法 |
+|---|---|
+| `tools/install.py` でコピー | リポジトリを `git pull` し、同じ配置先へ `--on-conflict backup` を付けて再配置する |
+| `tools/install.py --link` | `git pull` で正本を更新する |
+| ZIP・生成物のアップロード | [最新の Release](https://github.com/Mr-Kondo/japanese-readability-editor/releases/latest) の生成物に置き換える |
+| Claude Code のプラグイン | マーケットプレースを更新してから、プラグインを更新する |
+
 ## クイックスタート
 
 ### Codex、Claude Code などに入れる
 
-Python 3.10 以上が必要です。リポジトリを取得し、`--dry-run` で配置先を確かめます。何も書き込みません。
+Python 3.10 以上と Git が必要です。まずリポジトリを取得します。
 
 ```bash
 git clone https://github.com/Mr-Kondo/japanese-readability-editor.git
 cd japanese-readability-editor
-python3 tools/install.py --scope user --target all --dry-run
 ```
 
-Windows では、`python3` ではなく `python` で実行する場合があります。その場合は、コマンドの `python3` を `python` に読み替えてください([Python のコマンド名](docs/installation.md#python-のコマンド名))。
+Windows では、`python3` を `python` に読み替える場合があります([Python のコマンド名](docs/installation.md#python-のコマンド名))。
 
-問題がなければ、`--dry-run` を外して実行します。`all` の代わりに、使う環境の target だけを指定することもできます。環境ごとの `--target` は、[インストール](docs/installation.md#インストールする)の表にあります。
+使う環境の `--target` を選びます。
+
+| 環境 | `--target` |
+|---|---|
+| Codex、GitHub Copilot、Gemini CLI | `common` |
+| Claude Code | `claude-code` |
+| Antigravity(IDE と CLI) | `antigravity` |
+| OpenCode | `opencode` |
+| Hermes Agent | `hermes` |
+
+次は Codex などの共通配置に入れる例です。`common` を上の表の値に替えてください。複数なら `common,claude-code` のように指定できます。
+
+```bash
+python3 tools/install.py --scope user --target common --dry-run
+```
+
+表示された配置先を確認し、問題がなければ実行します。
+
+```bash
+python3 tools/install.py --scope user --target common
+```
+
+既に入っている場合は、[更新手順](docs/installation.md#更新する)を使います。特定のプロジェクトへの導入や、複数環境にまとめて入れる方法は、[インストールの詳細](docs/installation.md#インストールする)にあります。
 
 ### OpenCode、Hermes Agent に入れる
 
-`--target all` には含みません。`--target opencode` か `--target hermes` を指定します。配置先は、環境変数やプロファイルで変わるので、先に `--dry-run` で、実際の配置先と決め方を確かめます。配置先の決め方、プロジェクトへの導入、重複の確認、検証は、[インストール](docs/installation.md#opencode-と-hermes-agent-に入れる)にあります。
+上の手順で `--target opencode` または `--target hermes` を指定します。環境変数やプロファイルによって配置先が変わるため、`--dry-run` の出力を確認してください。既存の共通配置との重複や、プロジェクトへの導入条件は、[環境固有の設定](docs/installation.md#opencode-と-hermes-agent-に入れる)にあります。
 
 ### ChatGPT Work、Claude Cowork、Gemini Apps に入れる
 
-これらの環境は、配置先のディレクトリを持ちません。[最新の Release](https://github.com/Mr-Kondo/japanese-readability-editor/releases/latest) から生成物をダウンロードし、各製品の画面からアップロードします。環境ごとにアップロードするものと手順は、[インストール](docs/installation.md#アップロード型の環境に入れる)にあります。
+[最新の Release](https://github.com/Mr-Kondo/japanese-readability-editor/releases/latest) の生成物を、各製品の画面からアップロードします。リポジトリの取得は不要です。[アップロードするものと手順](docs/installation.md#アップロード型の環境に入れる)を確認してください。
 
 ### そのほかの手順
 
 - [特定のプロジェクトに入れる](docs/installation.md#特定のプロジェクトに入れる)
-- [更新する](docs/installation.md#更新する)
-- [動作を確認する](docs/installation.md#動作を確認する)。どの環境でも、実際に依頼して確かめられます。
-- [削除する](docs/installation.md#削除する)。`tools/uninstall.py` が、`tools/install.py` で配置したものを削除します。インストールしたときと同じ `--scope` と `--target` を指定し、まず `--dry-run` で、削除するものを確かめます(何も削除しません)。
+- [動作を確認する](docs/installation.md#動作を確認する)
+- [削除する](docs/installation.md#削除する)
 - [Claude Code のプラグインとして入れる](docs/environments.md#プラグインとして入れる)
 
 ## 使い方

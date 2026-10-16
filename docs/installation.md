@@ -1,6 +1,83 @@
 # インストール
 
-取得から、動作確認、更新、削除までを、順に説明します。手早く入れるだけなら、README の「[クイックスタート](../README.md#クイックスタート)」で足ります。
+既に使っている場合は「[更新する](#更新する)」へ進んでください。初めて入れる場合は、使う環境に合わせて手順を選びます。
+
+- [Codex、Claude Code などにインストールする](#必要なもの)
+- [ChatGPT Work、Claude Cowork、Gemini Apps にアップロードする](#アップロード型の環境に入れる)
+- [動作を確認する](#動作を確認する)
+- [OpenCode と Hermes Agent の配置先・重複を確認する](#opencode-と-hermes-agent-に入れる)
+- [削除する](#削除する)
+- [SudachiPy を入れる（任意）](#sudachipy-を入れる任意)
+
+手早く入れる場合は、README の「[クイックスタート](../README.md#クイックスタート)」を使ってください。
+
+## 更新する
+
+### コピーで入れた場合
+
+取得済みリポジトリのディレクトリで `git pull` し、`--on-conflict backup` を付けて配置し直します。以前の版は退避されます。
+
+`--scope`、`--target` と、配置先を指定する引数は、インストール時と同じ値にしてください。以下は `--target all` で入れた場合の例です。
+
+```bash
+git pull
+python3 tools/install.py --scope user --target all --on-conflict backup
+```
+
+内容が変わっていなければ、`--on-conflict backup` を付けても、退避は作りません。変わったときだけ、以前のものを `skills.bak/` へ退避して、置き直します。
+
+OpenCode と Hermes も、同じです。配置先を指定した引数は、インストールしたときと同じにします。
+
+```bash
+python3 tools/install.py --scope user --target opencode --on-conflict backup
+python3 tools/install.py --scope user --target hermes --on-conflict backup
+```
+
+### リンクで入れた場合
+
+`--link` でインストールした場合は、複製ではなく正本へのリンクなので、`git pull` だけで反映されます。ただし、リポジトリを移動すると、リンクが切れます。
+
+複製で入れたものをリンクに切り替える場合は、`--on-conflict backup` を付けます。付けないと、既にある複製を残したまま、何もせずに終わります。
+
+```bash
+python3 tools/install.py --scope user --target all --link --on-conflict backup
+```
+
+### アップロードで入れた場合
+
+アップロード型の環境では、新しい ZIP を、もう一度アップロードします。ZIP は、Release からダウンロードするか、`python3 tools/package.py` で作ります。
+
+ChatGPT では、同じ名前の Skill があると、置き換えの確認(Skill already exists)が出ます。「Replace existing」を選ぶと、同じ Skill が更新されます。重複はしません。置き換えた後の表示は、[実機確認](chatgpt-work-checks.md#同じ名前の-skill-の置き換え)にあります。
+
+Claude のアプリでは、Skill の詳細画面から置き換えます。2026-10-07 に、Pro プランのアカウントで確かめました。
+
+1. Customize → Skills で、`japanese-readability-editor` を開きます。
+2. 右上の「⋮」から「Replace」を選びます。
+3. 新しい ZIP を選び、「Upload」を押します。アップロードのときに、セキュリティスキャンが走ります。
+
+置き換えると、同じ Skill の版が1つ上がります(v1 から v2 など)。有効のままです。一覧の行の「⋮」には、「Replace」がありません。置き換えた直後は、前の版の内容が表示されることがあります。ページを再読み込みすると、新しい版が表示されます。
+
+### Claude Code のプラグインで入れた場合
+
+Claude Code のプラグインとして入れた場合は、マーケットプレースを更新してから、プラグインを更新します。
+
+```bash
+claude plugin marketplace update japanese-readability-editor
+claude plugin update japanese-readability-editor@japanese-readability-editor
+```
+
+`claude plugin update` だけでは、更新されません。手元に取得したマーケットプレースが古いままなので、「already at the latest version」と表示されます。更新した後は、Claude Code を再起動します。
+
+プラグインの版は、コミットの短いハッシュで表示されます。`claude plugin list` の `Version` で確かめられます。
+
+### 退避した版へ戻す
+
+退避したものは、元の場所へ戻せば復元できます。インストーラの出力に、退避先の名前(`japanese-readability-editor-<日時>`)が出ます。置き直したものを消してから、退避したものを戻します。
+
+```bash
+rm -r ~/.hermes/skills/japanese-readability-editor
+mv ~/.hermes/skills.bak/japanese-readability-editor-20261010-120000 ~/.hermes/skills/japanese-readability-editor
+```
 
 ## 必要なもの
 
@@ -49,7 +126,7 @@ python3 tools/validate_skill.py
 python3 tools/install.py --scope user --target all --dry-run
 ```
 
-問題がなければ、`--dry-run` を外して実行します。使う環境に合わせて、次の表から引数を選び、`python3 tools/install.py` に続けて指定します。
+使う環境だけに入れる場合は、次の表から引数を選びます。`--dry-run` を付けて配置先を確認し、問題がなければ外して実行してください。
 
 | 使う環境 | ユーザー全体に入れる | 特定のプロジェクトに入れる |
 |---|---|---|
@@ -58,15 +135,14 @@ python3 tools/install.py --scope user --target all --dry-run
 | Antigravity(IDE と CLI) | `--scope user --target antigravity` | `--scope workspace --target common` |
 | OpenCode | `--scope user --target opencode` | `--scope workspace --target opencode` |
 | Hermes Agent | `--scope user --target hermes` | `--scope workspace --target hermes`(使う前に `hermes skills trust` が要る) |
-| すべて | `--scope user --target all` | `--scope workspace --target all` |
+| OpenCode・Hermes 以外をまとめて | `--scope user --target all` | `--scope workspace --target all` |
 
 `all` に、OpenCode と Hermes Agent は含みません。使っていない製品の設定ディレクトリを、ホームに作らないためです。OpenCode と Hermes の導入は、「[OpenCode と Hermes Agent に入れる](#opencode-と-hermes-agent-に入れる)」にあります。
 
 たとえば、Codex と Claude Code をユーザー全体で使う場合は、次のとおりです。
 
 ```bash
-python3 tools/install.py --scope user --target codex
-python3 tools/install.py --scope user --target claude-code
+python3 tools/install.py --scope user --target common,claude-code
 ```
 
 `--target` は、繰り返しても、カンマ区切りでも指定できます。同じ場所になる target は、1回だけ配置します。
@@ -109,6 +185,59 @@ python3 tools/install.py --scope workspace --target all --workspace /path/to/pro
 - 配置は、複製が終わってから所定の場所へ移すので、途中で失敗しても中途半端なものを残しません。
 - 既定はコピーです。`--link` でシンボリックリンクにできます。Windows では権限が必要な場合があります。Hermes の Docker や SSH などの backend には、リンクは送られません(Hermes のソースの読み取り。実機では未確認)。
 - コピーで配置した直後(`--link` のときを除く)に、構造、メタデータ、参照先、正本との一致を確かめます(`verify   OK`)。スクリプトまで実行して確かめるには、「[配置した Skill を検証する](#配置した-skill-を検証する)」を使います。
+
+## アップロード型の環境に入れる
+
+ChatGPT Work、Claude Cowork、Gemini Apps は、配置先のディレクトリを持ちません。生成物を用意して、各製品の画面からアップロードします。
+
+生成物は、次のどちらかで用意します。
+
+- [最新の Release](https://github.com/Mr-Kondo/japanese-readability-editor/releases/latest) からダウンロードする(リポジトリの取得は不要)
+- 手元で作る
+
+Release からダウンロードするコマンドは、次のとおりです。ダウンロード後に、SHA-256 を照合できます。
+
+```bash
+gh release download --repo Mr-Kondo/japanese-readability-editor --pattern 'japanese-readability-editor.*'
+shasum -a 256 -c japanese-readability-editor.sha256
+```
+
+`--pattern` は、タグを指定しないときに必須です。
+
+手元で作るコマンドは、次のとおりです。
+
+```bash
+python3 tools/package.py
+```
+
+Release に添付されるのは、ZIP、SHA-256、Gemini Apps 向けの指示文(`gemini-apps-instructions.md`)です。Gemini Apps 向けのフォルダは添付されないので、必要なら手元で作ります。
+
+| 環境 | アップロードするもの | 手順 |
+|---|---|---|
+| ChatGPT Work | `dist/japanese-readability-editor.zip` | [ChatGPT Work](environments.md#chatgpt-work) |
+| Claude Cowork | `dist/japanese-readability-editor.zip` | [Claude Cowork](environments.md#claude-cowork) |
+| Gemini Apps | `dist/gemini-apps/japanese-readability-editor/`、または `dist/gemini-apps-instructions.md` の貼り付け | [Gemini Apps](environments.md#gemini-apps) |
+
+## 動作を確認する
+
+環境ごとに、Skill が読み込まれたかを確認します。表示されない場合は、セッションを開き直してください。
+
+| 環境 | 確認方法 |
+|---|---|
+| Codex | `/skills` の一覧に出る。`$japanese-readability-editor` で呼べる |
+| Claude Code | `/` のメニューに `japanese-readability-editor` が出る |
+| Gemini CLI | `/skills list`、または端末で `gemini skills list`。追加した直後は `/skills reload` |
+| Antigravity | `/japanese-readability-editor` で呼べる |
+| GitHub Copilot | 公式資料に確認方法の記載を見つけられなかったため、次の依頼で試す |
+| OpenCode | 一覧するコマンドは、手元の 2.0.20 には見つけられなかった。`opencode serve` を起動し、`OPENCODE_PASSWORD` に起動時のパスワードを設定して `opencode api --server <URL> GET /api/skill` を 3 回以上呼ぶと、一覧が取れた。`python3 tools/verify_install.py --scope user --target opencode` で配置を確かめ、依頼して試す |
+| Hermes Agent | `hermes skills list` の一覧に出る。セッションで `/japanese-readability-editor` を呼べる。プロファイルを使うなら、同じ `-p` を付ける |
+
+どの環境でも、実際に依頼して確かめられます。
+
+```text
+次の文章を japanese-readability-editor で校正して。
+「このシステムは、ユーザーから入力されたデータを受け取り、それを検証したうえで、問題がなければデータベースに保存し、問題があればエラーとして呼び出し元に返す。」
+```
 
 ## OpenCode と Hermes Agent に入れる
 
@@ -222,59 +351,34 @@ dist/hermes/
 
 リポジトリを取得している別の場所で配布物を作り、フォルダごと、対象のマシンの skills ディレクトリへコピーします。`INSTALL.md` は、skills ディレクトリに置きません。
 
-## 動作を確認する
+## 削除する
 
-環境ごとに、Skill が読み込まれたかを確認します。表示されない場合は、セッションを開き直してください。
+`tools/uninstall.py` で、配置先の `japanese-readability-editor/` を削除できます。配置先の指定は、インストーラと同じです(`--scope`、`--target`、`--workspace`、`--home`、`--dest`、`--hermes-home`、`--profile`、`--opencode-config-dir`)。インストールしたときと同じ値を指定してください。
 
-| 環境 | 確認方法 |
+まず `--dry-run` で、削除するものを確認します。何も削除しません。
+
+```bash
+python3 tools/uninstall.py --scope user --target all --dry-run
+```
+
+問題がなければ、`--dry-run` を外して実行します。
+
+```bash
+python3 tools/uninstall.py --scope user --target all
+```
+
+- 削除するのは、配置先の `japanese-readability-editor/` だけです。`skills/` ディレクトリと、ほかの Skill は残します。
+- `--link` で入れた場合は、リンクだけを削除します。リンクの先にある正本は消えません。
+- `SKILL.md` を持たないディレクトリと、このリポジトリの正本そのものは、削除を断ります。断った配置先があっても、ほかの配置先は処理します。終了コードは 1 になります。
+- 配置先がなければ、何もしません。
+- `--on-conflict backup` で退避したものは、`skills.bak/` に残ります。既定では削除しません。`--include-backups` を付けると、`japanese-readability-editor-<日時>/` を削除します。`skills.bak/` が空になれば、それも削除します。
+
+次の環境で入れたものは、このスクリプトでは削除できません。
+
+| 入れ方 | 削除の方法 |
 |---|---|
-| Codex | `/skills` の一覧に出る。`$japanese-readability-editor` で呼べる |
-| Claude Code | `/` のメニューに `japanese-readability-editor` が出る |
-| Gemini CLI | `/skills list`、または端末で `gemini skills list`。追加した直後は `/skills reload` |
-| Antigravity | `/japanese-readability-editor` で呼べる |
-| GitHub Copilot | 公式資料に確認方法の記載を見つけられなかったため、次の依頼で試す |
-| OpenCode | 一覧するコマンドは、手元の 2.0.20 には見つけられなかった。`opencode serve` を起動し、`OPENCODE_PASSWORD` に起動時のパスワードを設定して `opencode api --server <URL> GET /api/skill` を 3 回以上呼ぶと、一覧が取れた。`python3 tools/verify_install.py --scope user --target opencode` で配置を確かめ、依頼して試す |
-| Hermes Agent | `hermes skills list` の一覧に出る。セッションで `/japanese-readability-editor` を呼べる。プロファイルを使うなら、同じ `-p` を付ける |
-
-どの環境でも、実際に依頼して確かめられます。
-
-```text
-次の文章を japanese-readability-editor で校正して。
-「このシステムは、ユーザーから入力されたデータを受け取り、それを検証したうえで、問題がなければデータベースに保存し、問題があればエラーとして呼び出し元に返す。」
-```
-
-## アップロード型の環境に入れる
-
-ChatGPT Work、Claude Cowork、Gemini Apps は、配置先のディレクトリを持ちません。生成物を用意して、各製品の画面からアップロードします。
-
-生成物は、次のどちらかで用意します。
-
-- [最新の Release](https://github.com/Mr-Kondo/japanese-readability-editor/releases/latest) からダウンロードする(リポジトリの取得は不要)
-- 手元で作る
-
-Release からダウンロードするコマンドは、次のとおりです。ダウンロード後に、SHA-256 を照合できます。
-
-```bash
-gh release download --repo Mr-Kondo/japanese-readability-editor --pattern 'japanese-readability-editor.*'
-shasum -a 256 -c japanese-readability-editor.sha256
-```
-
-`--pattern` は、タグを指定しないときに必須です。
-
-手元で作るコマンドは、次のとおりです。
-
-```bash
-python3 tools/package.py
-```
-
-Release に添付されるのは、ZIP、SHA-256、Gemini Apps 向けの指示文(`gemini-apps-instructions.md`)です。Gemini Apps 向けのフォルダは添付されないので、必要なら手元で作ります。
-
-| 環境 | アップロードするもの | 手順 |
-|---|---|---|
-| ChatGPT Work | `dist/japanese-readability-editor.zip` | [ChatGPT Work](environments.md#chatgpt-work) |
-| Claude Cowork | `dist/japanese-readability-editor.zip` | [Claude Cowork](environments.md#claude-cowork) |
-| Gemini Apps | `dist/gemini-apps/japanese-readability-editor/`、または `dist/gemini-apps-instructions.md` の貼り付け | [Gemini Apps](environments.md#gemini-apps) |
-
+| Claude Code のプラグイン | `claude plugin uninstall japanese-readability-editor@japanese-readability-editor` |
+| ChatGPT Work、Claude Cowork、Gemini Apps | 各製品の画面から、アップロードしたものを削除する(手順は、この文書では確かめていません) |
 ## SudachiPy を入れる(任意)
 
 `compare_rewrite.py` は、SudachiPy と辞書が入っていれば、否定と文の対応をより正確に判定します。入っていなければ、標準ライブラリだけで動きます。どちらで動いたかは、出力の `tokenizer` で分かります。
@@ -320,92 +424,3 @@ SudachiPy と辞書は、ZIP には含めません。小さい small の辞書�
 - Claude のアプリでは、組織のネットワークの設定によります([Claude Help Center](https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude))。Team の既定は、パッケージ管理ツール(PyPI など)だけを許可します。Enterprise の新しい組織では、既定で無効です。Cowork での扱いは、確認できていません。
 - Copilot のクラウドエージェントでは、既定の許可リストに、Python のパッケージ置き場が含まれます([GitHub Docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-firewall))。
 - Codex のクラウド環境では、setup script がネットワークを使えます。エージェントの実行中は、既定では使えません([Codex: Cloud environments](https://learn.chatgpt.com/docs/environments/cloud-environment))。
-
-## 更新する
-
-リポジトリを更新してから、`--on-conflict` を付けて配置し直します。`backup` は、以前のものを退避してから配置します。
-
-```bash
-git pull
-python3 tools/install.py --scope user --target all --on-conflict backup
-```
-
-内容が変わっていなければ、`--on-conflict backup` を付けても、退避は作りません。変わったときだけ、以前のものを `skills.bak/` へ退避して、置き直します。
-
-退避したものは、元の場所へ戻せば復元できます。インストーラの出力に、退避先の名前(`japanese-readability-editor-<日時>`)が出ます。置き直したものを消してから、退避したものを戻します。
-
-```bash
-rm -r ~/.hermes/skills/japanese-readability-editor
-mv ~/.hermes/skills.bak/japanese-readability-editor-20261010-120000 ~/.hermes/skills/japanese-readability-editor
-```
-
-
-OpenCode と Hermes も、同じです。配置先を指定した引数は、インストールしたときと同じにします。
-
-```bash
-python3 tools/install.py --scope user --target opencode --on-conflict backup
-python3 tools/install.py --scope user --target hermes --on-conflict backup
-```
-
-`--link` でインストールした場合は、複製ではなく正本へのリンクなので、`git pull` だけで反映されます。ただし、リポジトリを移動すると、リンクが切れます。
-
-複製で入れたものをリンクに切り替える場合は、`--on-conflict backup` を付けます。付けないと、既にある複製を残したまま、何もせずに終わります。
-
-```bash
-python3 tools/install.py --scope user --target all --link --on-conflict backup
-```
-
-アップロード型の環境では、新しい ZIP を、もう一度アップロードします。ZIP は、Release からダウンロードするか、`python3 tools/package.py` で作ります。
-
-ChatGPT では、同じ名前の Skill があると、置き換えの確認(Skill already exists)が出ます。「Replace existing」を選ぶと、同じ Skill が更新されます。重複はしません。置き換えた後の表示は、[実機確認](chatgpt-work-checks.md#同じ名前の-skill-の置き換え)にあります。
-
-Claude のアプリでは、Skill の詳細画面から置き換えます。2026-10-07 に、Pro プランのアカウントで確かめました。
-
-1. Customize → Skills で、`japanese-readability-editor` を開きます。
-2. 右上の「⋮」から「Replace」を選びます。
-3. 新しい ZIP を選び、「Upload」を押します。アップロードのときに、セキュリティスキャンが走ります。
-
-置き換えると、同じ Skill の版が1つ上がります(v1 から v2 など)。有効のままです。一覧の行の「⋮」には、「Replace」がありません。置き換えた直後は、前の版の内容が表示されることがあります。ページを再読み込みすると、新しい版が表示されます。
-
-Claude Code のプラグインとして入れた場合は、マーケットプレースを更新してから、プラグインを更新します。
-
-```bash
-claude plugin marketplace update japanese-readability-editor
-```
-
-```bash
-claude plugin update japanese-readability-editor@japanese-readability-editor
-```
-
-`claude plugin update` だけでは、更新されません。手元に取得したマーケットプレースが古いままなので、「already at the latest version」と表示されます。更新した後は、Claude Code を再起動します。
-
-プラグインの版は、コミットの短いハッシュで表示されます。`claude plugin list` の `Version` で確かめられます。
-
-## 削除する
-
-`tools/uninstall.py` で、配置先の `japanese-readability-editor/` を削除できます。配置先の指定は、インストーラと同じです(`--scope`、`--target`、`--workspace`、`--home`、`--dest`、`--hermes-home`、`--profile`、`--opencode-config-dir`)。インストールしたときと同じ値を指定してください。
-
-まず `--dry-run` で、削除するものを確認します。何も削除しません。
-
-```bash
-python3 tools/uninstall.py --scope user --target all --dry-run
-```
-
-問題がなければ、`--dry-run` を外して実行します。
-
-```bash
-python3 tools/uninstall.py --scope user --target all
-```
-
-- 削除するのは、配置先の `japanese-readability-editor/` だけです。`skills/` ディレクトリと、ほかの Skill は残します。
-- `--link` で入れた場合は、リンクだけを削除します。リンクの先にある正本は消えません。
-- `SKILL.md` を持たないディレクトリと、このリポジトリの正本そのものは、削除を断ります。断った配置先があっても、ほかの配置先は処理します。終了コードは 1 になります。
-- 配置先がなければ、何もしません。
-- `--on-conflict backup` で退避したものは、`skills.bak/` に残ります。既定では削除しません。`--include-backups` を付けると、`japanese-readability-editor-<日時>/` を削除します。`skills.bak/` が空になれば、それも削除します。
-
-次の環境で入れたものは、このスクリプトでは削除できません。
-
-| 入れ方 | 削除の方法 |
-|---|---|
-| Claude Code のプラグイン | `claude plugin uninstall japanese-readability-editor@japanese-readability-editor` |
-| ChatGPT Work、Claude Cowork、Gemini Apps | 各製品の画面から、アップロードしたものを削除する(手順は、この文書では確かめていません) |
