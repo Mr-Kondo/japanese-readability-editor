@@ -1,0 +1,2819 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "config": {
+    "tool_version": 1,
+    "rubric_version": "ragas-ja-rubric-v1",
+    "rubric_sha256": "7f37f4309a2786203f376adfebd3d62e08df4be0d1d448c23480dd4f39dc81d1",
+    "metrics": [
+      "factual",
+      "rubric"
+    ],
+    "profile": "gov-org",
+    "aspects": [
+      "negation_polarity",
+      "condition_scope",
+      "actor_target",
+      "modality_strength",
+      "numbers_order",
+      "ungrounded_specificity",
+      "unnecessary_change"
+    ],
+    "atomicity": "high",
+    "coverage": "high",
+    "ragas_prompts": "Ragas 0.4.3 既定（英語の指示と例。日本語への適合は未検証）",
+    "llm_adapter": "ClaudeCliLLM（JSON指示をプロンプト末尾に付加、ツールなし、逐次実行、同一プロンプトは再利用）",
+    "claude_flags": [
+      "--print",
+      "--safe-mode",
+      "--strict-mcp-config",
+      "--tools",
+      "",
+      "--no-session-persistence",
+      "--model",
+      "sonnet",
+      "--effort",
+      "medium",
+      "--output-format",
+      "json"
+    ],
+    "claude_system": "提供された文章を処理してください。ツールは使用しないでください。",
+    "claude_cli_version": "2.1.292 (Claude Code)",
+    "temperature_and_seed": "CLI から指定できない（不明）",
+    "python": "3.13.16",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "packages": {
+      "ragas": "0.4.3",
+      "langchain-community": "0.3.31",
+      "langchain-core": "1.6.11",
+      "langchain": "1.4.6",
+      "instructor": "1.3.2",
+      "openai": "1.109.1",
+      "pydantic": "2.14.1",
+      "numpy": "2.5.4"
+    }
+  },
+  "started_at": "2026-10-16T23:27:04.570870+00:00",
+  "input": {
+    "path": "/tmp/claude-501/ragas-inputs/subtle-p2.json",
+    "cases": 7,
+    "task_sha256": "0affe2f493001eda53e30c429297e6637eb8d8ed6054c994172c8c755c677225"
+  },
+  "cases": [
+    {
+      "id": "necessity-s5",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「絞らなければならないことはよくあります」は、義務・必要性（〜しなければならない）を含む表現です。候補は「絞ることはよくあります」となり、「〜なければならない」が削除されています。ただしこれは二重否定による義務表現であり、否定・肯定の反転や禁止と許可の入れ替えとは異なります。「必ずしも全てを実現できるわけではありません」は両文で保たれています。否定の観点では、「ならない」の否定性が消えて義務が単なる事実に変わっていますが、これは義務の強さの変化であり、否定の追加・削除というより別観点の問題です。ただし「しなければならない」は否定を含む禁止・義務の枠組みであり、その働き（必要性）が失われています。禁止が許可に入れ替わったわけではないものの、義務の強さが落ちているため、この観点でも働きが保たれていないと判断します。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「実現する機能を絞らなければならないことはよくあります」と、絞る行為が「しなければならない」という必要性・制約（予算やスケジュールによる強制）を表しています。候補は「実現する機能を絞ることはよくあります」となり、「なければならない」が脱落して、単に絞ることが頻繁にあるという事実に変わっています。予算・スケジュールという条件から生じる必然性・義務の含意が失われているため、条件の働きが保たれていません。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「実現する機能を絞らなければならないことはよくあります」と、予算やスケジュールの制約により絞ることが避けられない（義務・必然性）ことを述べている。候補は「実現する機能を絞ることはよくあります」とし、「〜なければならない」が落ちている。動作の主体（機能を絞る側）や対象（実現する機能）、修飾先（予算やスケジュールの関係から）は保たれているが、制約によって絞らざるを得ないという含意が、単に絞ることが頻繁にあるという事実に弱まっている。ただしこの変化は主体・対象・修飾先・宛先の入れ替え・追加・省略ではなく、義務の強さという別観点の問題である。本観点では関係が保たれている。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「実現する機能を絞らなければならないことはよくあります」で、機能を絞る必要性（義務的・必然的な性質）を述べている。候補は「実現する機能を絞ることはよくあります」となり、「なければならない」が落ちて、単に絞る行為が頻繁にあるという事実の記述に変わっている。予算やスケジュールの制約によって絞らざるを得ないという必要性・義務の強さが失われているため、義務の強さの保持という観点では原文と異なる。時制は現在のまま保たれている。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は数値・単位・期限・頻度・先後関係の保持です。原文の「よくあります」は頻度を表し、候補の「よくあります」も同じ頻度表現で保たれています。数値、単位、期限、順序に変更はありません。原文の「絞らなければならないこと」が候補で「絞ること」に変わり義務の強さは弱まっていますが、これは数値・期限・順序ではなく別観点の問題なので、この観点では扱いません。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「実現する機能を絞らなければならないことはよくあります」と、絞ることが必要になる(義務・必然性)場面が多いと述べている。候補は「実現する機能を絞ることはよくあります」で、「なければならない」が落ちている。ただし、この観点は原文にない主体・条件・完了状態・理由・具体例・固有名の追加の有無である。候補に新たな主体、条件、理由、具体例、固有名は加わっておらず、「予算やスケジュールの関係から」も原文にある。義務の弱まりは別の観点の問題で、この観点では追加された具体化はない。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「実現する機能を絞らなければならないことはよくあります」とあり、義務・必要性（「なければならない」）を含む。候補は「実現する機能を絞ることはよくあります」となり、「なければならない」が削除され、予算やスケジュールの制約による必然性・義務の強さが失われている。原文は明確で、この削除は意味や読みやすさに必要のない変更であり、依頼の「義務の強さを保って」にも反する。第1文は無変更で問題ない。"
+        }
+      }
+    },
+    {
+      "id": "quantifier-k8s",
+      "document_id": "k8s-pod-lifecycle",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.8,
+          "status": "scored",
+          "value": 0.8,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 4,
+            "supported": 3,
+            "unsupported": 1,
+            "coverage": 0.75,
+            "unsupported_texts": [
+              {
+                "claim": "デフォルトでは、すべての削除は30秒以内に正常に行われる。",
+                "reason": "コンテキストでは「通常の削除」が30秒以内に正常に行われると述べているだけで、「すべての削除」とは述べていない。「すべて」への一般化はコンテキストから直接推論できない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.8,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「すべての削除は30秒以内に正常に行われます」が、候補では「通常の削除は30秒以内に正常に行われます」に変わっている。否定・禁止の反転、追加、削除はなく、「--grace-period」オプションの説明も同じ肯定表現のまま保たれている。「すべて」から「通常の」への変更は範囲の変化だが、否定・禁止の観点には関係しない。この観点では原文の働きが保たれている。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「すべての削除は30秒以内に正常に行われます」と範囲を全称で述べているが、候補は「通常の削除は」に変えている。「すべて」が「通常の」に置き換わったことで、例外の存在を示唆する形になり、範囲が全件から一部（通常のもの）に狭まっている。--grace-period オプションの記述は同一で保たれているが、削除対象の範囲が変更されているためfail。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「すべての削除は30秒以内に正常に行われます」と削除の全体を対象にしているが、候補は「通常の削除は」と対象を「通常の」ものに限定している。これにより、対象範囲が「すべて」から「通常のもの」に変わり、例外が暗示される。「kubectl delete コマンドは…--grace-period=<seconds> オプションをサポートします」の主体・対象・修飾先は保たれているが、前半の対象の範囲が変わっているためfail。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「すべての削除は30秒以内に正常に行われます」は全削除に対する現在形の事実記述で、候補は「通常の削除は…」と対象を限定している。ただし、観点は義務・推奨・可能の強さと時制の保持である。両者とも「行われます」という現在形の事実記述で、義務や推奨の強さは含まれず、時制も変わっていない。「サポートします」「指定できるようにする」も同一で保たれている。対象範囲の変更（「すべて」→「通常の」）は別観点の問題であり、この観点ではpass。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "数値「30秒以内」、オプション「--grace-period=<seconds>」、デフォルトの上書きに関する記述は、原文と候補で同一に保たれている。変更点は「すべての削除」から「通常の削除」への語の違いのみで、これは対象範囲の変更であり、数値・単位・期限・頻度・先後関係の変更には当たらない。この観点では原文の働きが保たれている。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「すべての削除は30秒以内に正常に行われます」と全削除を対象にしているが、候補は「通常の削除は」に変え、「通常の」という限定条件（通常でない削除は対象外という区別）を原文にない形で追加している。これにより適用範囲が「すべて」から「通常のもの」に狭まり、原文にない条件の具体化にあたる。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「すべての削除は30秒以内に正常に行われます」を、候補は「通常の削除は30秒以内に正常に行われます」に変えている。「すべての」から「通常の」への変更は、全削除に当てはまる記述を一部の削除に限定する意味変更であり、原文が明確で書換えの必要がないにもかかわらず、意味や条件を変えている。それ以外の文（kubectl delete と --grace-period=<seconds> の説明）は原文と同一で保たれている。よって不要な変更で、原文の意味・働きが保たれていない。"
+        }
+      }
+    },
+    {
+      "id": "strength-py",
+      "document_id": "py-tutorial-modules",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」と、「限って」により理解している場合以外の使用を実質的に制限する（条件付きの限定・禁止的含意）ものです。候補は「理解したうえでこれらのオプションを使うとよいでしょう」で、限定の「限って」が失われ、推奨が弱まって「理解していなくても使ってよいが、理解していた方がよい」とも読めます。これは実質的に、理解なしの使用の抑止という否定・禁止の働きが削除されており、原文の制限が保たれていません。義務の強さの変化も絡みますが、この観点では禁止的な限定の消失としてfailと判断します。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」と、条件「に限って」で使用を限定し、義務「べき」を示している。候補は「理解したうえでこれらのオプションを使うとよいでしょう」で、「に限って」の限定条件が失われ、単に理解した上での使用を勧める表現になっている。また「べき」から「とよい」へ弱まり、「理解していない場合は使うべきでない」という排他的な含意が消えている。条件の範囲（限定）が変わっているためfail。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」と、使用者（動作の主体）が自分の行為を理解していることを条件とし、「これらのオプション」を対象としている。候補は「理解したうえでこれらのオプションを使うとよいでしょう」で、「理解した」の対象（自分が何をしているか）が省略されているが、文脈上は使用者が自分の操作を理解することと読め、主体・対象は大きく変わらない。「これらのオプション」の対象と「いくつかのプログラム…依存している可能性」の修飾関係も保たれている。限定（に限って）や義務の強さの弱まりは別観点であり、この観点では主体・対象・修飾先の入れ替えや追加はないのでpass。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」で、「限って」による限定条件と「べきです」という強い推奨を表している。候補は「理解したうえでこれらのオプションを使うとよいでしょう」となり、「べき」が「とよい」に弱まり、「限って」の限定も失われている。推奨の強さが下がっているため、この観点では原文の働きが保たれていない。時制は現在のままで問題ない。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は数値・単位・期限・頻度・先後関係の保持です。原文「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」にも、候補「理解したうえでこれらのオプションを使うとよいでしょう」にも、数値・単位・期限・頻度の記述はありません。先後関係では、原文の「理解しているとき」という同時の条件が、候補では「理解したうえで」と理解が先で使用が後という順序に読めます。ただしこれは自然な言い換えの範囲で、働きの変化とは言えません。「限って」「べき」から「とよい」への変化は条件の限定や義務の強さの問題で、この観点の対象外です。したがって数値・期限・順序は保たれています。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」に対し、候補は「理解したうえでこれらのオプションを使うとよいでしょう」としている。候補は新たな主体、条件、完了状態、理由、具体例、固有名を追加しておらず、「理解したうえで」は原文の条件を言い換えたものにとどまる。義務の強さ（「限って〜べき」→「〜とよい」）や「限って」の限定性が弱まっているが、それは具体化の追加ではなく別観点の問題である。この観点では原文にない具体化は見当たらない。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」と、条件を限定する強い義務（「限って〜べき」）を述べている。候補は「理解したうえでこれらのオプションを使うとよいでしょう」となり、義務の強さが「推奨・提案」に弱まり、「限って」という排他的条件も消えている。また「自分が何をしているか」という理解の対象も「理解したうえで」と曖昧になった。読みやすさのために必要な変更ではなく、意味・義務の強さを変える不要な書換えである。"
+        }
+      }
+    },
+    {
+      "id": "qualifier-essay",
+      "document_id": "az-002359",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.83,
+          "status": "scored",
+          "value": 0.83,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 5,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "頭のいい人は科学者にはなれない。",
+                "reason": "文脈で科学者になれないとされているのは、頭がよくて、かつ自分を頭がいいと思い利口だと思う人である。頭のいい人すべてが科学者になれないとは述べていないため、一般化しすぎである。"
+              }
+            ]
+          },
+          "recomputed_value": 0.83,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.71,
+          "status": "scored",
+          "value": 0.71,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 5,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "頭のいい人は科学者にはなれない。",
+                "reason": "文脈で科学者になれないとされているのは、頭がよくて、かつ自分を頭がいいと思い利口だと思う人である。頭のいい人すべてが科学者になれないとは述べていないため、一般化しすぎである。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 6,
+            "supported": 4,
+            "unsupported": 2,
+            "coverage": 0.67,
+            "unsupported_texts": [
+              {
+                "claim": "頭がよくて、自分を頭がいいと思い利口だと思う人は、先生にはなれる。",
+                "reason": "文脈には「頭のいい人は先生にはなれても科学者にはなれない」とあり、頭のいい人が先生になれることは読み取れる。しかし「自分を頭がいいと思い利口だと思う人」という条件は文脈に明示されておらず、頭のいい人と自分を利口だと思う人を同一視することは直接には推論できない。"
+              },
+              {
+                "claim": "頭がよくて、自分を頭がいいと思い利口だと思う人は、科学者にはなれない。",
+                "reason": "文脈は「頭のいい人は科学者にはなれない」と述べているが、「自分を頭がいいと思い利口だと思う」という自己認識についての記述はなく、この限定は文脈から直接推論できない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.71,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「頭がよくて、そうして、自分を頭がいいと思い利口だと思う人は先生にはなれても科学者にはなれない」で、否定の対象は「頭がよく、かつ自分をそう思う人」。候補は「頭のいい人は先生にはなれても科学者にはなれない」と、自負する条件が消え、否定の適用範囲が「頭のいい人」全般に広がっている。後半の「初めて科学者にはなれるのである」は同一で、「なれない」の否定自体は保たれているが、原文では限定されていた否定の対象が一般化され、頭のいい人は謙虚でも科学者になれないという意味に変わっている。否定の働きが変わったためfail。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「頭がよくて、そうして、自分を頭がいいと思い利口だと思う人」と、頭がよいことに加えて自分をそう思い込む人という二重の条件で対象を限定している。候補は「頭のいい人は先生にはなれても科学者にはなれない」とし、「自分を頭がいいと思い利口だと思う」という条件が脱落している。そのため対象範囲が、自惚れた人から頭のいい人全般へ広がり、頭がよくても自覚して謙虚な人は科学者になれるという余地が消えている。後半の「初めて科学者にはなれる」という必要条件は保たれているが、前半の範囲変更は原文と異なる意味になる。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「頭がよくて、そうして、自分を頭がいいと思い利口だと思う人」と、頭がよいうえに自分をそう思う人を主語にしている。候補は「頭のいい人」とだけ述べ、「自分を頭がいいと思い利口だと思う」という修飾条件が省略されている。そのため、先生にはなれても科学者になれないという主張の対象が、自己認識を持つ人から頭のいい人全般へ広がり、動作の主体の範囲が変わっている。後半の「科学者にはなれる」の主体や宛先は保たれているが、前半の主体の限定が失われている。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は義務・推奨・可能の強さと時制の保持。原文の「先生にはなれても科学者にはなれない」「初めて科学者にはなれるのである」は、可能・不可能の断定と現在時制であり、候補も同じ「なれても…なれない」「初めて…なれるのである」を保ち、強さも時制も変わらない。候補は「自分を頭がいいと思い利口だと思う人」を「頭のいい人」に縮めており、対象が広がる点は別観点（論旨・限定）の問題で、本観点では扱わない。義務・推奨の表現は原文にもなく、時制の変更もないためpass。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は数値・単位・期限・頻度・先後関係の保持です。原文には数値や期限はなく、「初めて科学者にはなれる」という条件の順序（覚悟があって初めて）も候補で「覚悟があって、初めて科学者にはなれるのである」と同じく保たれています。「頭がよくて、そうして、自分を頭がいいと思い利口だと思う人」が「頭のいい人」に短縮されている点は、条件の内容の変更であり、数値・順序の観点ではありません。そのため、この観点では原文の働きは保たれています。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文の「頭がよくて、そうして、自分を頭がいいと思い利口だと思う人」から「自分を頭がいいと思い利口だと思う」という条件を削り、「頭のいい人」だけにしている。これは新しい主体や条件、具体例、固有名を加える変更ではなく、原文にある限定の省略である。後半の「人間の頭の力の限界を自覚して…覚悟があって、初めて科学者にはなれるのである」は原文のまま保たれており、追加された具体化はない。この観点（原文にない具体化の有無）では、追加はないためpassとする。なお、自己認識の条件が落ちて意味が変わる点は別観点（欠落）の問題であり、ここでは混ぜない。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「頭がよくて、そうして、自分を頭がいいと思い利口だと思う人」と、頭がよいうえに自分をそう思い込む人に限定している。候補は「頭のいい人は先生にはなれても科学者にはなれない」とこの限定を削除しており、単に頭のいい人全般が科学者になれないという意味に変わっている。原文の核心である「自分を頭がいいと思う」という自負・慢心への批判が失われ、後半の「人間の頭の力の限界を自覚して」という対比との関係も弱まる。読みやすさのために必要な変更ではなく、論旨を変える不要な削除なのでfail。"
+        }
+      }
+    },
+    {
+      "id": "actor-org",
+      "document_id": "ipa-o-using",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.87,
+          "status": "scored",
+          "value": 0.87,
+          "warnings": [],
+          "response_claims": {
+            "total": 8,
+            "supported": 7,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "セキュリティリスクが懸念される場合は、OSPOへ相談する。",
+                "reason": "コンテキストでは相談先はセキュリティ部門とされており、OSPOへの相談とは書かれていない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.87,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.87,
+          "status": "scored",
+          "value": 0.87,
+          "warnings": [],
+          "response_claims": {
+            "total": 8,
+            "supported": 7,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "セキュリティリスクが懸念される場合は、OSPOへ相談する。",
+                "reason": "コンテキストでは相談先はセキュリティ部門とされており、OSPOへの相談とは書かれていない。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 7,
+            "supported": 6,
+            "unsupported": 1,
+            "coverage": 0.86,
+            "unsupported_texts": [
+              {
+                "claim": "セキュリティリスクが懸念される場合は、セキュリティ部門へ相談する。",
+                "reason": "コンテキストでは相談先はOSPOであり、セキュリティ部門とは記載されていない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.87,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は否定・禁止の保持です。原文の「セキュリティリスクが懸念される場合（セキュリティ部門へ相談）」と候補の「（OSPOへ相談）」では、相談先が変わっていますが、否定・肯定の反転、否定の追加・削除、禁止と許可の入れ替えはありません。他の項目（「商用ライセンスが必要な可能性がある場合」「社内導入済みOSSリストにないソフトウェアの導入」など）も、「ない」を含む否定の働きがそのまま保たれています。相談先の変更は別の観点（担当・役割の保持）の問題であり、この観点ではpassです。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の3項目目「セキュリティリスクが懸念される場合（セキュリティ部門へ相談）」が、候補では「（OSPOへ相談）」に変わっている。相談先の変更は括弧内の条件付き手続き（誰に相談するか）の範囲・対象の変更にあたり、原文にない指定を加え、元の指定を脱落させている。他の3項目は原文と同一で、条件・範囲は保たれている。相談先の変更が1つあるため、この観点ではfail。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「（セキュリティ部門へ相談）」が、候補では「（OSPOへ相談）」に変わっている。手続の宛先が「セキュリティ部門」から「OSPO」へ入れ替わっており、相談先が異なる。他の3項目は原文と同一で保たれている。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "変更点は括弧内の相談先のみで、原文「セキュリティ部門へ相談」が候補では「OSPOへ相談」になっている。相談という行為の強さ（助言を求める程度）や時制は変わらず、「必要」「懸念される」「の場合」といった条件・義務表現も他の項目で同一に保たれている。相談先の変更は宛先という別の観点の問題であり、義務・推奨の強さや時制は保たれている。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は数値・単位・期限・頻度・先後関係の保持です。原文・候補とも数値、期限、頻度、順序を示す表現は含まれておらず、各項目の並びも同じです。相違は「（セキュリティ部門へ相談）」が「（OSPOへ相談）」に変わった点だけで、これは相談先（役割・担当）の変更であり、この観点の対象外です。他の項目は一字一句同じなので、数値・期限・順序の面では原文の働きが保たれています。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「セキュリティリスクが懸念される場合（セキュリティ部門へ相談）」と相談先を「セキュリティ部門」としているが、候補は「（OSPOへ相談）」に変わっている。原文にない固有の主体「OSPO」を追加し、相談先の担当主体を置き換えており、原文の役割・担当が保たれていない。他の箇条は原文と同一。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「（セキュリティ部門へ相談）」が、候補では「（OSPOへ相談）」に変わっている。これは言い換えではなく相談先の担当・役割が別の組織に置き換わっており、依頼の「役割・担当」を保つ要件にも反する。原文が明確であるにもかかわらず必要のない変更で、意味が変わっている。他の3項目は原文と同一で問題ない。"
+        }
+      }
+    },
+    {
+      "id": "paraphrase-py",
+      "document_id": "py-library-tempfile",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「使うことの出来る」は候補「使える」と可能の意味で同じ。原文「同じルールにより安全に作成されます」は候補「同じルールで安全に作成されます」と肯定の関係が保たれている。否定・禁止の追加、削除、反転はない。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「使うことの出来る」は候補で「使える」となり、可能の意味は保たれている。「mkstemp() と同じルールにより」は「同じルールで」に変わったが、基準（同じルールに従う）は同一で、「安全に作成されます」も保たれている。条件・例外・範囲の脱落、追加、変更はない。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「一時的な記憶領域として使うことの出来る file-like object を返します」は、候補で「一時的な記憶領域として使える file-like object を返します」となり、修飾先（file-like object）と動作主体（返す）は保たれている。「ファイルは mkstemp() と同じルールにより安全に作成されます」も「同じルールで安全に作成されます」と助詞の言い換えのみで、「mkstemp() と同じルール」という参照先、「安全に」の修飾先（作成される）、対象の「ファイル」も変わらない。主体・対象・修飾先の入れ替え、追加、省略は見られない。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「使うことの出来る」は可能を表し、候補の「使える」も同じ可能で、強さは変わらない。「返します」の現在形も保たれている。「作成されます」も現在形の受身のままで、「同じルールにより」を「同じルールで」にしても働きは変わらない。義務・推奨・時制の観点で意味は保たれている。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「使うことの出来る」は候補で「使える」に、「同じルールにより安全に作成されます」は「同じルールで安全に作成されます」に言い換えられている。数値・単位・期限・頻度・順序に関わる表現は原文にも候補にも含まれず、「mkstemp() と同じルール」という関係も保たれている。この観点での変更はない。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「使うことの出来る」は候補で「使える」に、「同じルールにより」は「同じルールで」に言い換えられているだけで、主体・条件・完了状態・理由・具体例・固有名の追加はない。「mkstemp()」「file-like object」「安全に作成」も保たれている。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「使うことの出来る」は候補で「使える」に、「同じルールにより」は「同じルールで」に変わっているが、いずれも意味は同じで、可能・手段の関係が保たれている。「mkstemp()」「file-like object」などの識別子や「安全に作成されます」という内容もそのまま維持されている。変更は軽微で、読みやすさを損なわず、意味や働きも変わっていないため、不要な書換えとまでは言えない。"
+        }
+      }
+    },
+    {
+      "id": "control-essay",
+      "document_id": "az-002364",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文と候補は完全に同一である。「できない」「ただしこれだけでは「充分なる条件」ではない」といった否定表現や、「必要条件の一つである」という肯定表現もすべてそのまま保たれており、否定・肯定の反転や追加・削除、禁止と許可の入れ替えは見られない。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一で、「少なくとも「必要条件」の一つである」や「ただしこれだけでは「充分なる条件」ではない」といった条件・範囲・留保の表現がすべてそのまま保たれている。脱落・追加・変更はない。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一で、「語学も数学も」「その修得」「飽きずに急がずに長く時間をかける事」「必要条件」「充分なる条件」といった動作の主体・対象・修飾先・関係がすべてそのまま保たれている。入れ替え・追加・省略はない。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一である。「できない」「必要条件の一つである」「充分なる条件ではない」といった可能・必要の強さや現在形の時制はすべてそのまま保たれており、変更はない。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文と候補は完全に同一である。「一気呵成にはできない」「長く時間をかける事」「少なくとも『必要条件』の一つ」「ただしこれだけでは『充分なる条件』ではない」という、数値・期限・頻度・先後関係に関わる表現や順序がすべてそのまま保たれており、変更は見られない。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一で、「必要条件」「充分なる条件」などの表現を含め、主体・条件・完了状態・理由・具体例・固有名の追加は一切ない。原文の意味と働きは保たれている。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一で、「一気呵成《いっきかせい》にはできない」「必要条件」の一つである」「充分なる条件」ではない」などの表現がすべてそのまま保たれている。原文はすでに明確であり、無変更は適切で、不要な書換えは一切ない。"
+        }
+      }
+    }
+  ],
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "calls": [
+    {
+      "index": 1,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2407c918215740be34e40e1902b630cfe63e5a4209db1aa5271d1df1eddf3281",
+      "cache_hit": false,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+          "予算の関係から、実現する機能を絞ることはよくある。",
+          "スケジュールの関係から、実現する機能を絞ることはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.89,
+      "cost_usd": 0.007472
+    },
+    {
+      "index": 2,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "ed2b334aedecc4fd2cabc9fd8a4266e1fd67ddb01b825424d3143afaf3772f0b",
+      "cache_hit": false,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません」と明記されているため、直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算の関係から、実現する機能を絞ることはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、予算の関係で機能を絞ることがよくあると読み取れます。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの関係から、実現する機能を絞ることはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、スケジュールの関係で機能を絞ることがよくあると読み取れます。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.13,
+      "cost_usd": 0.012757999999999999
+    },
+    {
+      "index": 3,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2407c918215740be34e40e1902b630cfe63e5a4209db1aa5271d1df1eddf3281",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+          "予算の関係から、実現する機能を絞ることはよくある。",
+          "スケジュールの関係から、実現する機能を絞ることはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 4,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "ed2b334aedecc4fd2cabc9fd8a4266e1fd67ddb01b825424d3143afaf3772f0b",
+      "cache_hit": true,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません」と明記されているため、直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算の関係から、実現する機能を絞ることはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、予算の関係で機能を絞ることがよくあると読み取れます。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの関係から、実現する機能を絞ることはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、スケジュールの関係で機能を絞ることがよくあると読み取れます。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 5,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2ad326f588c2f220e8f00328bdce763b4c16506a1499bacf9a8f89dd4a173780",
+      "cache_hit": false,
+      "raw_file": "c0005.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+          "予算の関係から、実現する機能を絞らなければならないことはよくある。",
+          "スケジュールの関係から、実現する機能を絞らなければならないことはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.27,
+      "cost_usd": 0.007575999999999999
+    },
+    {
+      "index": 6,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "d87af164e52fd49b544fb7d0e19a41749eaa1cd2f4a35c0309529ea73a256b3f",
+      "cache_hit": false,
+      "raw_file": "c0006.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません」と明記されており、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算の関係から、実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈には「予算やスケジュールの関係から、実現する機能を絞ることはよくあります」とあり、予算の関係で機能を絞ることがよくあると読み取れる。「絞らなければならない」という必然性まで述べてはいないが、実質的に同じ内容として推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの関係から、実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈には「予算やスケジュールの関係から、実現する機能を絞ることはよくあります」とあり、スケジュールの関係で機能を絞ることがよくあると読み取れるため、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.64,
+      "cost_usd": 0.013212
+    },
+    {
+      "index": 7,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9c31e2e296e65fd65b5b3aeecb40b6b2829c3b8b11b31e421f2797b12d552dbe",
+      "cache_hit": false,
+      "raw_file": "c0007.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「絞らなければならないことはよくあります」は、義務・必要性（〜しなければならない）を含む表現です。候補は「絞ることはよくあります」となり、「〜なければならない」が削除されています。ただしこれは二重否定による義務表現であり、否定・肯定の反転や禁止と許可の入れ替えとは異なります。「必ずしも全てを実現できるわけではありません」は両文で保たれています。否定の観点では、「ならない」の否定性が消えて義務が単なる事実に変わっていますが、これは義務の強さの変化であり、否定の追加・削除というより別観点の問題です。ただし「しなければならない」は否定を含む禁止・義務の枠組みであり、その働き（必要性）が失われています。禁止が許可に入れ替わったわけではないものの、義務の強さが落ちているため、この観点でも働きが保たれていないと判断します。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.35,
+      "cost_usd": 0.009462
+    },
+    {
+      "index": 8,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "0c4ca0cbf0ed59fd85927aceb3f67ad48e880779d4a16bb5912b23ee4028b3eb",
+      "cache_hit": false,
+      "raw_file": "c0008.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「実現する機能を絞らなければならないことはよくあります」と、絞る行為が「しなければならない」という必要性・制約（予算やスケジュールによる強制）を表しています。候補は「実現する機能を絞ることはよくあります」となり、「なければならない」が脱落して、単に絞ることが頻繁にあるという事実に変わっています。予算・スケジュールという条件から生じる必然性・義務の含意が失われているため、条件の働きが保たれていません。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.04,
+      "cost_usd": 0.008078
+    },
+    {
+      "index": 9,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "1d720a8373b04d4a0477086a9f932bcf45e5d5a7ef8ca219e3fa19d85338268e",
+      "cache_hit": false,
+      "raw_file": "c0009.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「実現する機能を絞らなければならないことはよくあります」と、予算やスケジュールの制約により絞ることが避けられない（義務・必然性）ことを述べている。候補は「実現する機能を絞ることはよくあります」とし、「〜なければならない」が落ちている。動作の主体（機能を絞る側）や対象（実現する機能）、修飾先（予算やスケジュールの関係から）は保たれているが、制約によって絞らざるを得ないという含意が、単に絞ることが頻繁にあるという事実に弱まっている。ただしこの変化は主体・対象・修飾先・宛先の入れ替え・追加・省略ではなく、義務の強さという別観点の問題である。本観点では関係が保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.69,
+      "cost_usd": 0.008876
+    },
+    {
+      "index": 10,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "42a1cc2d4c6cce87332582411f9ef95f0247277f9a67449357c167634530b049",
+      "cache_hit": false,
+      "raw_file": "c0010.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「実現する機能を絞らなければならないことはよくあります」で、機能を絞る必要性（義務的・必然的な性質）を述べている。候補は「実現する機能を絞ることはよくあります」となり、「なければならない」が落ちて、単に絞る行為が頻繁にあるという事実の記述に変わっている。予算やスケジュールの制約によって絞らざるを得ないという必要性・義務の強さが失われているため、義務の強さの保持という観点では原文と異なる。時制は現在のまま保たれている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.36,
+      "cost_usd": 0.008332
+    },
+    {
+      "index": 11,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "c79bcc78efa9c460503a0332ae37a2ad2e3beb55c649496f21299eb75685d7ff",
+      "cache_hit": false,
+      "raw_file": "c0011.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は数値・単位・期限・頻度・先後関係の保持です。原文の「よくあります」は頻度を表し、候補の「よくあります」も同じ頻度表現で保たれています。数値、単位、期限、順序に変更はありません。原文の「絞らなければならないこと」が候補で「絞ること」に変わり義務の強さは弱まっていますが、これは数値・期限・順序ではなく別観点の問題なので、この観点では扱いません。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.97,
+      "cost_usd": 0.007873999999999999
+    },
+    {
+      "index": 12,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "a90dae955d163e0da296983c46267d907d95fc9d4c7d38f3ef7010070972faf4",
+      "cache_hit": false,
+      "raw_file": "c0012.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「実現する機能を絞らなければならないことはよくあります」と、絞ることが必要になる(義務・必然性)場面が多いと述べている。候補は「実現する機能を絞ることはよくあります」で、「なければならない」が落ちている。ただし、この観点は原文にない主体・条件・完了状態・理由・具体例・固有名の追加の有無である。候補に新たな主体、条件、理由、具体例、固有名は加わっておらず、「予算やスケジュールの関係から」も原文にある。義務の弱まりは別の観点の問題で、この観点では追加された具体化はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.91,
+      "cost_usd": 0.00838
+    },
+    {
+      "index": 13,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "996ab4ccba76efee1ef5e743bacf53b33d993a8f9b1ceba7add4061d8c617c4a",
+      "cache_hit": false,
+      "raw_file": "c0013.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「実現する機能を絞らなければならないことはよくあります」とあり、義務・必要性（「なければならない」）を含む。候補は「実現する機能を絞ることはよくあります」となり、「なければならない」が削除され、予算やスケジュールの制約による必然性・義務の強さが失われている。原文は明確で、この削除は意味や読みやすさに必要のない変更であり、依頼の「義務の強さを保って」にも反する。第1文は無変更で問題ない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.2,
+      "cost_usd": 0.008034
+    },
+    {
+      "index": 14,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "d2793184859d8bd1b9dec2ed28170a6eddfc68345ce08ed5e36bd21246da7771",
+      "cache_hit": false,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "デフォルトでは、通常の削除は30秒以内に正常に行われる。",
+          "kubectl delete コマンドは --grace-period=<seconds> オプションをサポートする。",
+          "--grace-period=<seconds> オプションにより、ユーザーはデフォルト値を上書きできる。",
+          "--grace-period=<seconds> オプションにより、ユーザーは独自の値を指定できる。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.58,
+      "cost_usd": 0.008122
+    },
+    {
+      "index": 15,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "6a6aab1288b1571fc474bef4f766a5b1194f65661bb681e17d7f039533d58cc3",
+      "cache_hit": false,
+      "raw_file": "c0015.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "デフォルトでは、通常の削除は30秒以内に正常に行われる。",
+            "reason": "コンテキストには、デフォルトではすべての削除は30秒以内に正常に行われると記載されており、通常の削除もこれに含まれるため、推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "kubectl delete コマンドは --grace-period=<seconds> オプションをサポートする。",
+            "reason": "コンテキストに、kubectl delete コマンドが --grace-period=<seconds> オプションをサポートすると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "--grace-period=<seconds> オプションにより、ユーザーはデフォルト値を上書きできる。",
+            "reason": "コンテキストに、このオプションによりユーザーがデフォルト値を上書きできると記載されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "--grace-period=<seconds> オプションにより、ユーザーは独自の値を指定できる。",
+            "reason": "コンテキストに、このオプションによりユーザーがデフォルト値を上書きして独自の値を指定できると記載されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.65,
+      "cost_usd": 0.013734
+    },
+    {
+      "index": 16,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "d2793184859d8bd1b9dec2ed28170a6eddfc68345ce08ed5e36bd21246da7771",
+      "cache_hit": true,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "デフォルトでは、通常の削除は30秒以内に正常に行われる。",
+          "kubectl delete コマンドは --grace-period=<seconds> オプションをサポートする。",
+          "--grace-period=<seconds> オプションにより、ユーザーはデフォルト値を上書きできる。",
+          "--grace-period=<seconds> オプションにより、ユーザーは独自の値を指定できる。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 17,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "6a6aab1288b1571fc474bef4f766a5b1194f65661bb681e17d7f039533d58cc3",
+      "cache_hit": true,
+      "raw_file": "c0015.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "デフォルトでは、通常の削除は30秒以内に正常に行われる。",
+            "reason": "コンテキストには、デフォルトではすべての削除は30秒以内に正常に行われると記載されており、通常の削除もこれに含まれるため、推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "kubectl delete コマンドは --grace-period=<seconds> オプションをサポートする。",
+            "reason": "コンテキストに、kubectl delete コマンドが --grace-period=<seconds> オプションをサポートすると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "--grace-period=<seconds> オプションにより、ユーザーはデフォルト値を上書きできる。",
+            "reason": "コンテキストに、このオプションによりユーザーがデフォルト値を上書きできると記載されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "--grace-period=<seconds> オプションにより、ユーザーは独自の値を指定できる。",
+            "reason": "コンテキストに、このオプションによりユーザーがデフォルト値を上書きして独自の値を指定できると記載されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 18,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "614f989fde2f6ea98c158f094c5e98e8416b1ad3cbb8b38a22b3751a8d1e3950",
+      "cache_hit": false,
+      "raw_file": "c0018.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "デフォルトでは、すべての削除は30秒以内に正常に行われる。",
+          "kubectl delete コマンドは --grace-period=<seconds> オプションをサポートする。",
+          "--grace-period=<seconds> オプションにより、ユーザーはデフォルト値を上書きできる。",
+          "--grace-period=<seconds> オプションにより、ユーザーは独自の値を指定できる。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.62,
+      "cost_usd": 0.008114
+    },
+    {
+      "index": 19,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "6bbbdceaa85f2a513470157d8d80a4acc0e2a3d700d566074498f7444dc340dd",
+      "cache_hit": false,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "デフォルトでは、すべての削除は30秒以内に正常に行われる。",
+            "reason": "コンテキストでは「通常の削除」が30秒以内に正常に行われると述べているだけで、「すべての削除」とは述べていない。「すべて」への一般化はコンテキストから直接推論できない。",
+            "verdict": 0
+          },
+          {
+            "statement": "kubectl delete コマンドは --grace-period=<seconds> オプションをサポートする。",
+            "reason": "コンテキストに、kubectl delete コマンドが --grace-period=<seconds> オプションをサポートすると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "--grace-period=<seconds> オプションにより、ユーザーはデフォルト値を上書きできる。",
+            "reason": "コンテキストに、このオプションによりユーザーがデフォルト値を上書きできると記載されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "--grace-period=<seconds> オプションにより、ユーザーは独自の値を指定できる。",
+            "reason": "コンテキストに、このオプションによりユーザーが独自の値を指定できると記載されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.69,
+      "cost_usd": 0.013781999999999999
+    },
+    {
+      "index": 20,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "161a8a118210cec6e31345894d2eba3e306ea51ffe00e6c7efd5a789e34922f2",
+      "cache_hit": false,
+      "raw_file": "c0020.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「すべての削除は30秒以内に正常に行われます」が、候補では「通常の削除は30秒以内に正常に行われます」に変わっている。否定・禁止の反転、追加、削除はなく、「--grace-period」オプションの説明も同じ肯定表現のまま保たれている。「すべて」から「通常の」への変更は範囲の変化だが、否定・禁止の観点には関係しない。この観点では原文の働きが保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.98,
+      "cost_usd": 0.008194
+    },
+    {
+      "index": 21,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "cb0662078ef29692b4ffc81fc8cd120570ced149d8fb16dedda6e885d6c63d6e",
+      "cache_hit": false,
+      "raw_file": "c0021.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「すべての削除は30秒以内に正常に行われます」と範囲を全称で述べているが、候補は「通常の削除は」に変えている。「すべて」が「通常の」に置き換わったことで、例外の存在を示唆する形になり、範囲が全件から一部（通常のもの）に狭まっている。--grace-period オプションの記述は同一で保たれているが、削除対象の範囲が変更されているためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.94,
+      "cost_usd": 0.008174
+    },
+    {
+      "index": 22,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "8217097b6a8747b915d5a2db32bc8eb4788c5f7ff7bd5bdf0a778ba47706c930",
+      "cache_hit": false,
+      "raw_file": "c0022.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「すべての削除は30秒以内に正常に行われます」と削除の全体を対象にしているが、候補は「通常の削除は」と対象を「通常の」ものに限定している。これにより、対象範囲が「すべて」から「通常のもの」に変わり、例外が暗示される。「kubectl delete コマンドは…--grace-period=<seconds> オプションをサポートします」の主体・対象・修飾先は保たれているが、前半の対象の範囲が変わっているためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.67,
+      "cost_usd": 0.008262
+    },
+    {
+      "index": 23,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "929b26e30e3eb68bc226f5ab5038abb5432ae0e572be39a535f10d4f70acdbfb",
+      "cache_hit": false,
+      "raw_file": "c0023.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「すべての削除は30秒以内に正常に行われます」は全削除に対する現在形の事実記述で、候補は「通常の削除は…」と対象を限定している。ただし、観点は義務・推奨・可能の強さと時制の保持である。両者とも「行われます」という現在形の事実記述で、義務や推奨の強さは含まれず、時制も変わっていない。「サポートします」「指定できるようにする」も同一で保たれている。対象範囲の変更（「すべて」→「通常の」）は別観点の問題であり、この観点ではpass。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.23,
+      "cost_usd": 0.008676
+    },
+    {
+      "index": 24,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "e4c926c5d6158b50de145d10f84c0dad7c330bf94ea28daa0370f5500c7ee473",
+      "cache_hit": false,
+      "raw_file": "c0024.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "数値「30秒以内」、オプション「--grace-period=<seconds>」、デフォルトの上書きに関する記述は、原文と候補で同一に保たれている。変更点は「すべての削除」から「通常の削除」への語の違いのみで、これは対象範囲の変更であり、数値・単位・期限・頻度・先後関係の変更には当たらない。この観点では原文の働きが保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.39,
+      "cost_usd": 0.007926
+    },
+    {
+      "index": 25,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "d84f434de23cfef35da3aa42e68319f993ca656ff35903efd533fe75ecb885a2",
+      "cache_hit": false,
+      "raw_file": "c0025.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「すべての削除は30秒以内に正常に行われます」と全削除を対象にしているが、候補は「通常の削除は」に変え、「通常の」という限定条件（通常でない削除は対象外という区別）を原文にない形で追加している。これにより適用範囲が「すべて」から「通常のもの」に狭まり、原文にない条件の具体化にあたる。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 4.83,
+      "cost_usd": 0.00785
+    },
+    {
+      "index": 26,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "bf01f92ed014c6db443df00ba89701dee138ab7d245c3c3ecd46036d93a963ee",
+      "cache_hit": false,
+      "raw_file": "c0026.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「すべての削除は30秒以内に正常に行われます」を、候補は「通常の削除は30秒以内に正常に行われます」に変えている。「すべての」から「通常の」への変更は、全削除に当てはまる記述を一部の削除に限定する意味変更であり、原文が明確で書換えの必要がないにもかかわらず、意味や条件を変えている。それ以外の文（kubectl delete と --grace-period=<seconds> の説明）は原文と同一で保たれている。よって不要な変更で、原文の意味・働きが保たれていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.24,
+      "cost_usd": 0.008568000000000001
+    },
+    {
+      "index": 27,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "c4cefb8ef2427f20139e54cc35fd21cc896b51f1b23f5a654c4829528b58f78f",
+      "cache_hit": false,
+      "raw_file": "c0027.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いくつかのプログラムはこれらの除去されるものに依存している可能性がある。",
+          "これらのオプションを使う際は、その内容を理解したうえで使うとよい。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.13,
+      "cost_usd": 0.007266
+    },
+    {
+      "index": 28,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "5c62f964dfe52a94c51fa79bcc0d1ccd22e5a545d43ac7df3dcab66967f17908",
+      "cache_hit": false,
+      "raw_file": "c0028.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いくつかのプログラムはこれらの除去されるものに依存している可能性がある。",
+            "reason": "文脈には「いくつかのプログラムはこれらの除去されるものに依存している可能性があるため」と明記されており、この主張は文脈から直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "これらのオプションを使う際は、その内容を理解したうえで使うとよい。",
+            "reason": "文脈には「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」とあり、オプションを理解したうえで使うべきだという趣旨と一致している。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 4.86,
+      "cost_usd": 0.011626000000000001
+    },
+    {
+      "index": 29,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "c4cefb8ef2427f20139e54cc35fd21cc896b51f1b23f5a654c4829528b58f78f",
+      "cache_hit": true,
+      "raw_file": "c0027.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いくつかのプログラムはこれらの除去されるものに依存している可能性がある。",
+          "これらのオプションを使う際は、その内容を理解したうえで使うとよい。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 30,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "5c62f964dfe52a94c51fa79bcc0d1ccd22e5a545d43ac7df3dcab66967f17908",
+      "cache_hit": true,
+      "raw_file": "c0028.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いくつかのプログラムはこれらの除去されるものに依存している可能性がある。",
+            "reason": "文脈には「いくつかのプログラムはこれらの除去されるものに依存している可能性があるため」と明記されており、この主張は文脈から直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "これらのオプションを使う際は、その内容を理解したうえで使うとよい。",
+            "reason": "文脈には「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」とあり、オプションを理解したうえで使うべきだという趣旨と一致している。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 31,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "a522a8c81d6168b295320482d7ad75693324f71280e2897169dcbf3eca57e4ca",
+      "cache_hit": false,
+      "raw_file": "c0031.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いくつかのプログラムはこれらの除去されるものに依存している可能性がある。",
+          "これらのオプションは、自分が何をしているかを理解しているときに限って使うべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.0,
+      "cost_usd": 0.007304
+    },
+    {
+      "index": 32,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "9c5645d82fe8c482d5c5a1786b68d9d1eb4f85473cafe57f615802697b055b9d",
+      "cache_hit": false,
+      "raw_file": "c0032.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いくつかのプログラムはこれらの除去されるものに依存している可能性がある。",
+            "reason": "文脈には「いくつかのプログラムはこれらの除去されるものに依存している可能性がある」と明記されており、この主張は直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "これらのオプションは、自分が何をしているかを理解しているときに限って使うべきである。",
+            "reason": "文脈は「理解したうえでこれらのオプションを使うとよい」と述べており、理解したうえでの使用を推奨している。したがって、自分が何をしているかを理解している場合に使うべきだという趣旨は文脈から推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.58,
+      "cost_usd": 0.011766
+    },
+    {
+      "index": 33,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "dc84ac23cb2cce29d94b5d4b696c875fe79540b842e28ccbbe0a48d2f90efda7",
+      "cache_hit": false,
+      "raw_file": "c0033.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」と、「限って」により理解している場合以外の使用を実質的に制限する（条件付きの限定・禁止的含意）ものです。候補は「理解したうえでこれらのオプションを使うとよいでしょう」で、限定の「限って」が失われ、推奨が弱まって「理解していなくても使ってよいが、理解していた方がよい」とも読めます。これは実質的に、理解なしの使用の抑止という否定・禁止の働きが削除されており、原文の制限が保たれていません。義務の強さの変化も絡みますが、この観点では禁止的な限定の消失としてfailと判断します。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 7.25,
+      "cost_usd": 0.008804
+    },
+    {
+      "index": 34,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "1073ef33ad0e9a73abb4660b8a8bbec862c9dd07bffd5616ce81c1da0611c8a6",
+      "cache_hit": false,
+      "raw_file": "c0034.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」と、条件「に限って」で使用を限定し、義務「べき」を示している。候補は「理解したうえでこれらのオプションを使うとよいでしょう」で、「に限って」の限定条件が失われ、単に理解した上での使用を勧める表現になっている。また「べき」から「とよい」へ弱まり、「理解していない場合は使うべきでない」という排他的な含意が消えている。条件の範囲（限定）が変わっているためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.86,
+      "cost_usd": 0.008318
+    },
+    {
+      "index": 35,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "7c339963b0b1a0fc83609b47dd77d4a5003aa2fc050a74d5a5865bd2d7baad0a",
+      "cache_hit": false,
+      "raw_file": "c0035.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」と、使用者（動作の主体）が自分の行為を理解していることを条件とし、「これらのオプション」を対象としている。候補は「理解したうえでこれらのオプションを使うとよいでしょう」で、「理解した」の対象（自分が何をしているか）が省略されているが、文脈上は使用者が自分の操作を理解することと読め、主体・対象は大きく変わらない。「これらのオプション」の対象と「いくつかのプログラム…依存している可能性」の修飾関係も保たれている。限定（に限って）や義務の強さの弱まりは別観点であり、この観点では主体・対象・修飾先の入れ替えや追加はないのでpass。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.53,
+      "cost_usd": 0.008998
+    },
+    {
+      "index": 36,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "e2578c8fbea491578fb7781543a9dcbc1c88d85c442800832f7249e8bda54991",
+      "cache_hit": false,
+      "raw_file": "c0036.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」で、「限って」による限定条件と「べきです」という強い推奨を表している。候補は「理解したうえでこれらのオプションを使うとよいでしょう」となり、「べき」が「とよい」に弱まり、「限って」の限定も失われている。推奨の強さが下がっているため、この観点では原文の働きが保たれていない。時制は現在のままで問題ない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.03,
+      "cost_usd": 0.008132
+    },
+    {
+      "index": 37,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "0cdf8289ba1eb38c03fe0e37a96d27a94bcfb6de3badd001efed07c8b2f0ed90",
+      "cache_hit": false,
+      "raw_file": "c0037.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は数値・単位・期限・頻度・先後関係の保持です。原文「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」にも、候補「理解したうえでこれらのオプションを使うとよいでしょう」にも、数値・単位・期限・頻度の記述はありません。先後関係では、原文の「理解しているとき」という同時の条件が、候補では「理解したうえで」と理解が先で使用が後という順序に読めます。ただしこれは自然な言い換えの範囲で、働きの変化とは言えません。「限って」「べき」から「とよい」への変化は条件の限定や義務の強さの問題で、この観点の対象外です。したがって数値・期限・順序は保たれています。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.61,
+      "cost_usd": 0.008858000000000001
+    },
+    {
+      "index": 38,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "de71289c15241532218be13c0e0a5fe91c701b531a8d83e27a022b5d157712ae",
+      "cache_hit": false,
+      "raw_file": "c0038.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」に対し、候補は「理解したうえでこれらのオプションを使うとよいでしょう」としている。候補は新たな主体、条件、完了状態、理由、具体例、固有名を追加しておらず、「理解したうえで」は原文の条件を言い換えたものにとどまる。義務の強さ（「限って〜べき」→「〜とよい」）や「限って」の限定性が弱まっているが、それは具体化の追加ではなく別観点の問題である。この観点では原文にない具体化は見当たらない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.17,
+      "cost_usd": 0.008392
+    },
+    {
+      "index": 39,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "7450ab2924ef5c743be393feca8f70947abf0a6410ea0fa94454e2566bb25054",
+      "cache_hit": false,
+      "raw_file": "c0039.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」と、条件を限定する強い義務（「限って〜べき」）を述べている。候補は「理解したうえでこれらのオプションを使うとよいでしょう」となり、義務の強さが「推奨・提案」に弱まり、「限って」という排他的条件も消えている。また「自分が何をしているか」という理解の対象も「理解したうえで」と曖昧になった。読みやすさのために必要な変更ではなく、意味・義務の強さを変える不要な書換えである。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.43,
+      "cost_usd": 0.008338
+    },
+    {
+      "index": 40,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "21ad2df8b8ba430b80f9a38789e39b1251b60edd8a042f494efb7b1932442d3f",
+      "cache_hit": false,
+      "raw_file": "c0040.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "頭のいい人は先生になれる。",
+          "頭のいい人は科学者にはなれない。",
+          "科学者になるには、人間の頭の力の限界を自覚する必要がある。",
+          "科学者になるには、大自然の前に愚かな赤裸の自分を投げ出す必要がある。",
+          "科学者になるには、大自然の直接の教えにのみ傾聴する覚悟が必要である。",
+          "人間の頭の力の限界を自覚し、大自然の前に愚かな赤裸の自分を投げ出し、大自然の直接の教えにのみ傾聴する覚悟があって、初めて科学者になれる。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.11,
+      "cost_usd": 0.008984
+    },
+    {
+      "index": 41,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "98c32e379fb0b8eed6d54ff14d679ad0c69b4ce9cf651dd6d8d609e5ac5778f6",
+      "cache_hit": false,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "頭のいい人は先生になれる。",
+            "reason": "文脈には、頭がよくて自分を頭がいいと思い利口だと思う人は先生にはなれても科学者にはなれない、とある。したがってそのような人が先生になれることは読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は科学者にはなれない。",
+            "reason": "文脈で科学者になれないとされているのは、頭がよくて、かつ自分を頭がいいと思い利口だと思う人である。頭のいい人すべてが科学者になれないとは述べていないため、一般化しすぎである。",
+            "verdict": 0
+          },
+          {
+            "statement": "科学者になるには、人間の頭の力の限界を自覚する必要がある。",
+            "reason": "文脈に、人間の頭の力の限界を自覚して初めて科学者にはなれる、とあり、これは必要条件として述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "科学者になるには、大自然の前に愚かな赤裸の自分を投げ出す必要がある。",
+            "reason": "文脈に、大自然の前に愚かな赤裸の自分を投げ出すことが、科学者になるための条件の一つとして述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "科学者になるには、大自然の直接の教えにのみ傾聴する覚悟が必要である。",
+            "reason": "文脈に、大自然の直接の教えにのみ傾聴する覚悟があって初めて科学者になれる、とある。",
+            "verdict": 1
+          },
+          {
+            "statement": "人間の頭の力の限界を自覚し、大自然の前に愚かな赤裸の自分を投げ出し、大自然の直接の教えにのみ傾聴する覚悟があって、初めて科学者になれる。",
+            "reason": "この文は文脈の後半部分をほぼそのまま言い換えたものであり、文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.53,
+      "cost_usd": 0.01666
+    },
+    {
+      "index": 42,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "21ad2df8b8ba430b80f9a38789e39b1251b60edd8a042f494efb7b1932442d3f",
+      "cache_hit": true,
+      "raw_file": "c0040.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "頭のいい人は先生になれる。",
+          "頭のいい人は科学者にはなれない。",
+          "科学者になるには、人間の頭の力の限界を自覚する必要がある。",
+          "科学者になるには、大自然の前に愚かな赤裸の自分を投げ出す必要がある。",
+          "科学者になるには、大自然の直接の教えにのみ傾聴する覚悟が必要である。",
+          "人間の頭の力の限界を自覚し、大自然の前に愚かな赤裸の自分を投げ出し、大自然の直接の教えにのみ傾聴する覚悟があって、初めて科学者になれる。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 43,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "98c32e379fb0b8eed6d54ff14d679ad0c69b4ce9cf651dd6d8d609e5ac5778f6",
+      "cache_hit": true,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "頭のいい人は先生になれる。",
+            "reason": "文脈には、頭がよくて自分を頭がいいと思い利口だと思う人は先生にはなれても科学者にはなれない、とある。したがってそのような人が先生になれることは読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は科学者にはなれない。",
+            "reason": "文脈で科学者になれないとされているのは、頭がよくて、かつ自分を頭がいいと思い利口だと思う人である。頭のいい人すべてが科学者になれないとは述べていないため、一般化しすぎである。",
+            "verdict": 0
+          },
+          {
+            "statement": "科学者になるには、人間の頭の力の限界を自覚する必要がある。",
+            "reason": "文脈に、人間の頭の力の限界を自覚して初めて科学者にはなれる、とあり、これは必要条件として述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "科学者になるには、大自然の前に愚かな赤裸の自分を投げ出す必要がある。",
+            "reason": "文脈に、大自然の前に愚かな赤裸の自分を投げ出すことが、科学者になるための条件の一つとして述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "科学者になるには、大自然の直接の教えにのみ傾聴する覚悟が必要である。",
+            "reason": "文脈に、大自然の直接の教えにのみ傾聴する覚悟があって初めて科学者になれる、とある。",
+            "verdict": 1
+          },
+          {
+            "statement": "人間の頭の力の限界を自覚し、大自然の前に愚かな赤裸の自分を投げ出し、大自然の直接の教えにのみ傾聴する覚悟があって、初めて科学者になれる。",
+            "reason": "この文は文脈の後半部分をほぼそのまま言い換えたものであり、文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 44,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "773bb10f64ff42388c6bd49a58ab3e0587657fe404e1246dca6ff0c779c88fd5",
+      "cache_hit": false,
+      "raw_file": "c0044.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "頭がよくて、自分を頭がいいと思い利口だと思う人は、先生にはなれる。",
+          "頭がよくて、自分を頭がいいと思い利口だと思う人は、科学者にはなれない。",
+          "科学者になるには、人間の頭の力の限界を自覚している必要がある。",
+          "科学者になるには、大自然の前に愚かな赤裸の自分を投げ出す必要がある。",
+          "科学者になるには、大自然の直接の教えにのみ傾聴する覚悟が必要である。",
+          "人間の頭の力の限界を自覚し、大自然の前に愚かな赤裸の自分を投げ出し、大自然の直接の教えにのみ傾聴する覚悟があって、初めて科学者になれる。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.82,
+      "cost_usd": 0.009472
+    },
+    {
+      "index": 45,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "c890cffccb7b19e4ead830b1f002a9db54c2c85f57420247af5fdde2dc2bab00",
+      "cache_hit": false,
+      "raw_file": "c0045.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "頭がよくて、自分を頭がいいと思い利口だと思う人は、先生にはなれる。",
+            "reason": "文脈には「頭のいい人は先生にはなれても科学者にはなれない」とあり、頭のいい人が先生になれることは読み取れる。しかし「自分を頭がいいと思い利口だと思う人」という条件は文脈に明示されておらず、頭のいい人と自分を利口だと思う人を同一視することは直接には推論できない。",
+            "verdict": 0
+          },
+          {
+            "statement": "頭がよくて、自分を頭がいいと思い利口だと思う人は、科学者にはなれない。",
+            "reason": "文脈は「頭のいい人は科学者にはなれない」と述べているが、「自分を頭がいいと思い利口だと思う」という自己認識についての記述はなく、この限定は文脈から直接推論できない。",
+            "verdict": 0
+          },
+          {
+            "statement": "科学者になるには、人間の頭の力の限界を自覚している必要がある。",
+            "reason": "文脈に「人間の頭の力の限界を自覚して…覚悟があって、初めて科学者にはなれる」とあり、限界の自覚が科学者になる条件の一つであると直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "科学者になるには、大自然の前に愚かな赤裸の自分を投げ出す必要がある。",
+            "reason": "文脈に「大自然の前に愚かな赤裸の自分を投げ出し…初めて科学者にはなれる」とあり、これが条件の一つであると直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "科学者になるには、大自然の直接の教えにのみ傾聴する覚悟が必要である。",
+            "reason": "文脈に「ただ大自然の直接の教えにのみ傾聴する覚悟があって、初めて科学者にはなれる」とあり、直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "人間の頭の力の限界を自覚し、大自然の前に愚かな赤裸の自分を投げ出し、大自然の直接の教えにのみ傾聴する覚悟があって、初めて科学者になれる。",
+            "reason": "文脈の後半の文とほぼ同じ内容であり、文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 7.56,
+      "cost_usd": 0.018047999999999998
+    },
+    {
+      "index": 46,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9969e0b5d8089f43727452d7bf8bf7bbce8793252c08083250e30bef13709ddf",
+      "cache_hit": false,
+      "raw_file": "c0046.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「頭がよくて、そうして、自分を頭がいいと思い利口だと思う人は先生にはなれても科学者にはなれない」で、否定の対象は「頭がよく、かつ自分をそう思う人」。候補は「頭のいい人は先生にはなれても科学者にはなれない」と、自負する条件が消え、否定の適用範囲が「頭のいい人」全般に広がっている。後半の「初めて科学者にはなれるのである」は同一で、「なれない」の否定自体は保たれているが、原文では限定されていた否定の対象が一般化され、頭のいい人は謙虚でも科学者になれないという意味に変わっている。否定の働きが変わったためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.35,
+      "cost_usd": 0.009298
+    },
+    {
+      "index": 47,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "be169480c5052081c3e7da7cc790bf9680db39479a8b94cbef42beb00f3f9ea6",
+      "cache_hit": false,
+      "raw_file": "c0047.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「頭がよくて、そうして、自分を頭がいいと思い利口だと思う人」と、頭がよいことに加えて自分をそう思い込む人という二重の条件で対象を限定している。候補は「頭のいい人は先生にはなれても科学者にはなれない」とし、「自分を頭がいいと思い利口だと思う」という条件が脱落している。そのため対象範囲が、自惚れた人から頭のいい人全般へ広がり、頭がよくても自覚して謙虚な人は科学者になれるという余地が消えている。後半の「初めて科学者にはなれる」という必要条件は保たれているが、前半の範囲変更は原文と異なる意味になる。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 8.03,
+      "cost_usd": 0.009336
+    },
+    {
+      "index": 48,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "eedf93e7229a7945f93ae174dd31101dffe397445761202262e5ee74fedf8fee",
+      "cache_hit": false,
+      "raw_file": "c0048.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「頭がよくて、そうして、自分を頭がいいと思い利口だと思う人」と、頭がよいうえに自分をそう思う人を主語にしている。候補は「頭のいい人」とだけ述べ、「自分を頭がいいと思い利口だと思う」という修飾条件が省略されている。そのため、先生にはなれても科学者になれないという主張の対象が、自己認識を持つ人から頭のいい人全般へ広がり、動作の主体の範囲が変わっている。後半の「科学者にはなれる」の主体や宛先は保たれているが、前半の主体の限定が失われている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 7.12,
+      "cost_usd": 0.008969999999999999
+    },
+    {
+      "index": 49,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "d471196ae8232bb0076368f310a2bf9e19241e0db173c30a1086627571ab1cc5",
+      "cache_hit": false,
+      "raw_file": "c0049.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は義務・推奨・可能の強さと時制の保持。原文の「先生にはなれても科学者にはなれない」「初めて科学者にはなれるのである」は、可能・不可能の断定と現在時制であり、候補も同じ「なれても…なれない」「初めて…なれるのである」を保ち、強さも時制も変わらない。候補は「自分を頭がいいと思い利口だと思う人」を「頭のいい人」に縮めており、対象が広がる点は別観点（論旨・限定）の問題で、本観点では扱わない。義務・推奨の表現は原文にもなく、時制の変更もないためpass。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.48,
+      "cost_usd": 0.009176
+    },
+    {
+      "index": 50,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "c4376dad0469fff0a0d7cb60c307fc7628daba69489c7c924b747f42511da609",
+      "cache_hit": false,
+      "raw_file": "c0050.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は数値・単位・期限・頻度・先後関係の保持です。原文には数値や期限はなく、「初めて科学者にはなれる」という条件の順序（覚悟があって初めて）も候補で「覚悟があって、初めて科学者にはなれるのである」と同じく保たれています。「頭がよくて、そうして、自分を頭がいいと思い利口だと思う人」が「頭のいい人」に短縮されている点は、条件の内容の変更であり、数値・順序の観点ではありません。そのため、この観点では原文の働きは保たれています。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.14,
+      "cost_usd": 0.008742
+    },
+    {
+      "index": 51,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "65d64958afcd1d6fdb3a7ad993cfdb8d56a37fd5ae6edeaa553c0f3fb0378a8e",
+      "cache_hit": false,
+      "raw_file": "c0051.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文の「頭がよくて、そうして、自分を頭がいいと思い利口だと思う人」から「自分を頭がいいと思い利口だと思う」という条件を削り、「頭のいい人」だけにしている。これは新しい主体や条件、具体例、固有名を加える変更ではなく、原文にある限定の省略である。後半の「人間の頭の力の限界を自覚して…覚悟があって、初めて科学者にはなれるのである」は原文のまま保たれており、追加された具体化はない。この観点（原文にない具体化の有無）では、追加はないためpassとする。なお、自己認識の条件が落ちて意味が変わる点は別観点（欠落）の問題であり、ここでは混ぜない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.46,
+      "cost_usd": 0.009328
+    },
+    {
+      "index": 52,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "a84578938a1b20a1a661cf49ee1941fdd1a31af2f17b6cf9c56395153ef17667",
+      "cache_hit": false,
+      "raw_file": "c0052.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「頭がよくて、そうして、自分を頭がいいと思い利口だと思う人」と、頭がよいうえに自分をそう思い込む人に限定している。候補は「頭のいい人は先生にはなれても科学者にはなれない」とこの限定を削除しており、単に頭のいい人全般が科学者になれないという意味に変わっている。原文の核心である「自分を頭がいいと思う」という自負・慢心への批判が失われ、後半の「人間の頭の力の限界を自覚して」という対比との関係も弱まる。読みやすさのために必要な変更ではなく、論旨を変える不要な削除なのでfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.81,
+      "cost_usd": 0.00911
+    },
+    {
+      "index": 53,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "783090c0be6b8b4d91fde2569d4cf8f1a416b381863b92207de9387b91d98a9a",
+      "cache_hit": false,
+      "raw_file": "c0053.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "ソースコード提供義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "同一ライセンスでの頒布義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "著作権表示の義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "ライセンス文書の添付義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "商用ライセンスが必要な可能性がある場合は、確認が必要である。",
+          "セキュリティリスクが懸念される場合は、確認が必要である。",
+          "セキュリティリスクが懸念される場合は、OSPOへ相談する。",
+          "社内導入済みOSSリストにないソフトウェアを導入する場合は、確認が必要である。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.2,
+      "cost_usd": 0.009833999999999999
+    },
+    {
+      "index": 54,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "1cc0438df8194b29344b5aed4bca1e0d79ba61e6777fca396bfe5891a03fd7c4",
+      "cache_hit": false,
+      "raw_file": "c0054.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "ソースコード提供義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストにはソースコード提供義務など、利用形態に応じた確認が必要な条件を含むライセンスの場合と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "同一ライセンスでの頒布義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストに同一ライセンスでの頒布義務が、利用形態に応じた確認が必要な条件として挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "著作権表示の義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストに著作権表示・ライセンス文書の添付義務が、利用形態に応じた確認が必要な条件として挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "ライセンス文書の添付義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストにライセンス文書の添付義務が、利用形態に応じた確認が必要な条件として含まれている。",
+            "verdict": 1
+          },
+          {
+            "statement": "商用ライセンスが必要な可能性がある場合は、確認が必要である。",
+            "reason": "コンテキストでは商用ライセンスが必要な可能性がある場合が、確認が必要なケースの一つとして列挙されていると読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "セキュリティリスクが懸念される場合は、確認が必要である。",
+            "reason": "コンテキストにセキュリティリスクが懸念される場合が、セキュリティ部門へ相談すべきケースとして挙げられており、確認が必要な場合に該当する。",
+            "verdict": 1
+          },
+          {
+            "statement": "セキュリティリスクが懸念される場合は、OSPOへ相談する。",
+            "reason": "コンテキストでは相談先はセキュリティ部門とされており、OSPOへの相談とは書かれていない。",
+            "verdict": 0
+          },
+          {
+            "statement": "社内導入済みOSSリストにないソフトウェアを導入する場合は、確認が必要である。",
+            "reason": "コンテキストに社内導入済みOSSリストにないソフトウェアの導入が、確認が必要なケースの一つとして挙げられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 7.61,
+      "cost_usd": 0.018930000000000002
+    },
+    {
+      "index": 55,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "783090c0be6b8b4d91fde2569d4cf8f1a416b381863b92207de9387b91d98a9a",
+      "cache_hit": true,
+      "raw_file": "c0053.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "ソースコード提供義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "同一ライセンスでの頒布義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "著作権表示の義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "ライセンス文書の添付義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "商用ライセンスが必要な可能性がある場合は、確認が必要である。",
+          "セキュリティリスクが懸念される場合は、確認が必要である。",
+          "セキュリティリスクが懸念される場合は、OSPOへ相談する。",
+          "社内導入済みOSSリストにないソフトウェアを導入する場合は、確認が必要である。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 56,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "1cc0438df8194b29344b5aed4bca1e0d79ba61e6777fca396bfe5891a03fd7c4",
+      "cache_hit": true,
+      "raw_file": "c0054.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "ソースコード提供義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストにはソースコード提供義務など、利用形態に応じた確認が必要な条件を含むライセンスの場合と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "同一ライセンスでの頒布義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストに同一ライセンスでの頒布義務が、利用形態に応じた確認が必要な条件として挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "著作権表示の義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストに著作権表示・ライセンス文書の添付義務が、利用形態に応じた確認が必要な条件として挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "ライセンス文書の添付義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストにライセンス文書の添付義務が、利用形態に応じた確認が必要な条件として含まれている。",
+            "verdict": 1
+          },
+          {
+            "statement": "商用ライセンスが必要な可能性がある場合は、確認が必要である。",
+            "reason": "コンテキストでは商用ライセンスが必要な可能性がある場合が、確認が必要なケースの一つとして列挙されていると読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "セキュリティリスクが懸念される場合は、確認が必要である。",
+            "reason": "コンテキストにセキュリティリスクが懸念される場合が、セキュリティ部門へ相談すべきケースとして挙げられており、確認が必要な場合に該当する。",
+            "verdict": 1
+          },
+          {
+            "statement": "セキュリティリスクが懸念される場合は、OSPOへ相談する。",
+            "reason": "コンテキストでは相談先はセキュリティ部門とされており、OSPOへの相談とは書かれていない。",
+            "verdict": 0
+          },
+          {
+            "statement": "社内導入済みOSSリストにないソフトウェアを導入する場合は、確認が必要である。",
+            "reason": "コンテキストに社内導入済みOSSリストにないソフトウェアの導入が、確認が必要なケースの一つとして挙げられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 57,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "183180388ce32d6037269b09bb5f266bb6dd0f4401596325f3cebd3d22f1e86b",
+      "cache_hit": false,
+      "raw_file": "c0057.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "ソースコード提供義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "同一ライセンスでの頒布義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "著作権表示・ライセンス文書の添付義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "商用ライセンスが必要な可能性がある場合は、確認が必要である。",
+          "セキュリティリスクが懸念される場合は、確認が必要である。",
+          "セキュリティリスクが懸念される場合は、セキュリティ部門へ相談する。",
+          "社内導入済みOSSリストにないソフトウェアを導入する場合は、確認が必要である。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.8,
+      "cost_usd": 0.009572
+    },
+    {
+      "index": 58,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "eaf4354652f8099a361cd9fcf7e6da7daca3af2a4b4fdd715793f032463c82eb",
+      "cache_hit": false,
+      "raw_file": "c0058.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "ソースコード提供義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストに、ソースコード提供義務などの利用形態に応じた確認が必要な条件を含むライセンスの場合、と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "同一ライセンスでの頒布義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストに、同一ライセンスでの頒布義務を含む、利用形態に応じた確認が必要な条件のライセンスと記載されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "著作権表示・ライセンス文書の添付義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストに、著作権表示・ライセンス文書の添付義務も利用形態に応じた確認が必要な条件として挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "商用ライセンスが必要な可能性がある場合は、確認が必要である。",
+            "reason": "コンテキストは商用ライセンスが必要な可能性がある場合を列挙しているが、これは確認が必要なケースの一覧と解釈でき、直接的に確認が必要であると推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "セキュリティリスクが懸念される場合は、確認が必要である。",
+            "reason": "セキュリティリスクが懸念される場合がリストに含まれ、OSPOへ相談するとあるため、確認・相談が必要であると推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "セキュリティリスクが懸念される場合は、セキュリティ部門へ相談する。",
+            "reason": "コンテキストでは相談先はOSPOであり、セキュリティ部門とは記載されていない。",
+            "verdict": 0
+          },
+          {
+            "statement": "社内導入済みOSSリストにないソフトウェアを導入する場合は、確認が必要である。",
+            "reason": "社内導入済みOSSリストにないソフトウェアの導入が、確認が必要なケースの一つとして挙げられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 7.19,
+      "cost_usd": 0.018004
+    },
+    {
+      "index": 59,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "32ce9039e5953b9394586f115baff55a55f07432f4816d3af539091e0d0aa1f7",
+      "cache_hit": false,
+      "raw_file": "c0059.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は否定・禁止の保持です。原文の「セキュリティリスクが懸念される場合（セキュリティ部門へ相談）」と候補の「（OSPOへ相談）」では、相談先が変わっていますが、否定・肯定の反転、否定の追加・削除、禁止と許可の入れ替えはありません。他の項目（「商用ライセンスが必要な可能性がある場合」「社内導入済みOSSリストにないソフトウェアの導入」など）も、「ない」を含む否定の働きがそのまま保たれています。相談先の変更は別の観点（担当・役割の保持）の問題であり、この観点ではpassです。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.05,
+      "cost_usd": 0.009436
+    },
+    {
+      "index": 60,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "55c575ec9622643e624014f83855ba94114fd6817166a455753d73f02fa5977c",
+      "cache_hit": false,
+      "raw_file": "c0060.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の3項目目「セキュリティリスクが懸念される場合（セキュリティ部門へ相談）」が、候補では「（OSPOへ相談）」に変わっている。相談先の変更は括弧内の条件付き手続き（誰に相談するか）の範囲・対象の変更にあたり、原文にない指定を加え、元の指定を脱落させている。他の3項目は原文と同一で、条件・範囲は保たれている。相談先の変更が1つあるため、この観点ではfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.93,
+      "cost_usd": 0.008958
+    },
+    {
+      "index": 61,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "697fe0ec546387bff0c4a8fb8c73c809a9a77e0dc5f24f83861ebcfe3ea19de7",
+      "cache_hit": false,
+      "raw_file": "c0061.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「（セキュリティ部門へ相談）」が、候補では「（OSPOへ相談）」に変わっている。手続の宛先が「セキュリティ部門」から「OSPO」へ入れ替わっており、相談先が異なる。他の3項目は原文と同一で保たれている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.93,
+      "cost_usd": 0.008134
+    },
+    {
+      "index": 62,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "f2b57ca321bc0102a1d1ea6a0a9cbbc6ffbe9c71797862e8b8bac2b37b06a706",
+      "cache_hit": false,
+      "raw_file": "c0062.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "変更点は括弧内の相談先のみで、原文「セキュリティ部門へ相談」が候補では「OSPOへ相談」になっている。相談という行為の強さ（助言を求める程度）や時制は変わらず、「必要」「懸念される」「の場合」といった条件・義務表現も他の項目で同一に保たれている。相談先の変更は宛先という別の観点の問題であり、義務・推奨の強さや時制は保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.22,
+      "cost_usd": 0.00886
+    },
+    {
+      "index": 63,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "0881ee76eecf02126bbc4ffa7db35877e5e3c44f8484c9adcc84fca6c6e54440",
+      "cache_hit": false,
+      "raw_file": "c0063.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は数値・単位・期限・頻度・先後関係の保持です。原文・候補とも数値、期限、頻度、順序を示す表現は含まれておらず、各項目の並びも同じです。相違は「（セキュリティ部門へ相談）」が「（OSPOへ相談）」に変わった点だけで、これは相談先（役割・担当）の変更であり、この観点の対象外です。他の項目は一字一句同じなので、数値・期限・順序の面では原文の働きが保たれています。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.16,
+      "cost_usd": 0.008834
+    },
+    {
+      "index": 64,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "a629334c65976a9f500f069bf6da77b7220b0c689c7eef9b08f0ecacc0af063a",
+      "cache_hit": false,
+      "raw_file": "c0064.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「セキュリティリスクが懸念される場合（セキュリティ部門へ相談）」と相談先を「セキュリティ部門」としているが、候補は「（OSPOへ相談）」に変わっている。原文にない固有の主体「OSPO」を追加し、相談先の担当主体を置き換えており、原文の役割・担当が保たれていない。他の箇条は原文と同一。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.1,
+      "cost_usd": 0.008468
+    },
+    {
+      "index": 65,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "77f6321ce5beab110ee87936dcad28dfac953eca7230e12431a4e1d75563da74",
+      "cache_hit": false,
+      "raw_file": "c0065.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「（セキュリティ部門へ相談）」が、候補では「（OSPOへ相談）」に変わっている。これは言い換えではなく相談先の担当・役割が別の組織に置き換わっており、依頼の「役割・担当」を保つ要件にも反する。原文が明確であるにもかかわらず必要のない変更で、意味が変わっている。他の3項目は原文と同一で問題ない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 4.84,
+      "cost_usd": 0.0086
+    },
+    {
+      "index": 66,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "eaff96d79db98ff6133537078bf2dae0fb2620b01765390cd3bc8735b45f8f63",
+      "cache_hit": false,
+      "raw_file": "c0066.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "この関数は file-like object を返す。",
+          "返される file-like object は一時的な記憶領域として使える。",
+          "ファイルは安全に作成される。",
+          "ファイルは mkstemp() と同じルールで作成される。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.37,
+      "cost_usd": 0.00733
+    },
+    {
+      "index": 67,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "c45fade940e0fcb1262b3b1d91eda66f0c33bc8b4e004eaeb1f36baf4f5bca2f",
+      "cache_hit": false,
+      "raw_file": "c0067.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "この関数は file-like object を返す。",
+            "reason": "文脈に「一時的な記憶領域として使うことの出来る file-like object を返します」とあり、file-like object を返すことが明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "返される file-like object は一時的な記憶領域として使える。",
+            "reason": "文脈に、返される file-like object は一時的な記憶領域として使うことができると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "ファイルは安全に作成される。",
+            "reason": "文脈に「ファイルは mkstemp() と同じルールにより安全に作成されます」とあり、安全に作成されることが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "ファイルは mkstemp() と同じルールで作成される。",
+            "reason": "文脈に、ファイルは mkstemp() と同じルールにより作成されると明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.91,
+      "cost_usd": 0.012544
+    },
+    {
+      "index": 68,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "eaff96d79db98ff6133537078bf2dae0fb2620b01765390cd3bc8735b45f8f63",
+      "cache_hit": true,
+      "raw_file": "c0066.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "この関数は file-like object を返す。",
+          "返される file-like object は一時的な記憶領域として使える。",
+          "ファイルは安全に作成される。",
+          "ファイルは mkstemp() と同じルールで作成される。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 69,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "c45fade940e0fcb1262b3b1d91eda66f0c33bc8b4e004eaeb1f36baf4f5bca2f",
+      "cache_hit": true,
+      "raw_file": "c0067.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "この関数は file-like object を返す。",
+            "reason": "文脈に「一時的な記憶領域として使うことの出来る file-like object を返します」とあり、file-like object を返すことが明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "返される file-like object は一時的な記憶領域として使える。",
+            "reason": "文脈に、返される file-like object は一時的な記憶領域として使うことができると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "ファイルは安全に作成される。",
+            "reason": "文脈に「ファイルは mkstemp() と同じルールにより安全に作成されます」とあり、安全に作成されることが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "ファイルは mkstemp() と同じルールで作成される。",
+            "reason": "文脈に、ファイルは mkstemp() と同じルールにより作成されると明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 70,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "0c1db0e3e04e609023bd78cc2a6b657ec8b8ec6dc345a8ed21269dc22391dd6a",
+      "cache_hit": false,
+      "raw_file": "c0070.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "この関数は file-like object を返します。",
+          "返される file-like object は一時的な記憶領域として使うことができます。",
+          "返されるファイルは安全に作成されます。",
+          "ファイルは mkstemp() と同じルールにより作成されます。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.35,
+      "cost_usd": 0.007438
+    },
+    {
+      "index": 71,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "e76c4b140274d1ec6f61991bc43c3418558efaf6661d17dda65a790cc9df165c",
+      "cache_hit": false,
+      "raw_file": "c0071.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "この関数は file-like object を返します。",
+            "reason": "コンテキストに「一時的な記憶領域として使える file-like object を返します」と明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "返される file-like object は一時的な記憶領域として使うことができます。",
+            "reason": "コンテキストで、返される file-like object は一時的な記憶領域として使えるものだと述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "返されるファイルは安全に作成されます。",
+            "reason": "コンテキストに「ファイルは mkstemp() と同じルールで安全に作成されます」と記載されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "ファイルは mkstemp() と同じルールにより作成されます。",
+            "reason": "コンテキストにファイルが mkstemp() と同じルールで作成されると明記されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.39,
+      "cost_usd": 0.012398000000000001
+    },
+    {
+      "index": 72,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "10d909163720f153fd79d5364394a4ea7f89dc5d2b10083027655d833d1850e5",
+      "cache_hit": false,
+      "raw_file": "c0072.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「使うことの出来る」は候補「使える」と可能の意味で同じ。原文「同じルールにより安全に作成されます」は候補「同じルールで安全に作成されます」と肯定の関係が保たれている。否定・禁止の追加、削除、反転はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.53,
+      "cost_usd": 0.007236
+    },
+    {
+      "index": 73,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "da284baffd3913f65e0e0a9e086d3a539dc1af054b654c219e4efe4e16df6c0a",
+      "cache_hit": false,
+      "raw_file": "c0073.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「使うことの出来る」は候補で「使える」となり、可能の意味は保たれている。「mkstemp() と同じルールにより」は「同じルールで」に変わったが、基準（同じルールに従う）は同一で、「安全に作成されます」も保たれている。条件・例外・範囲の脱落、追加、変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.33,
+      "cost_usd": 0.007492
+    },
+    {
+      "index": 74,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "87bd47bbb9b626bdb52bc927a0546a634201bbe52b1b4f0c358a2f7b2474c6e7",
+      "cache_hit": false,
+      "raw_file": "c0074.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「一時的な記憶領域として使うことの出来る file-like object を返します」は、候補で「一時的な記憶領域として使える file-like object を返します」となり、修飾先（file-like object）と動作主体（返す）は保たれている。「ファイルは mkstemp() と同じルールにより安全に作成されます」も「同じルールで安全に作成されます」と助詞の言い換えのみで、「mkstemp() と同じルール」という参照先、「安全に」の修飾先（作成される）、対象の「ファイル」も変わらない。主体・対象・修飾先の入れ替え、追加、省略は見られない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.35,
+      "cost_usd": 0.008368
+    },
+    {
+      "index": 75,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "bd6bfad064c5ad897c49f767d266ddb27a1ee4b389298b75c833fc647b0fb98e",
+      "cache_hit": false,
+      "raw_file": "c0075.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「使うことの出来る」は可能を表し、候補の「使える」も同じ可能で、強さは変わらない。「返します」の現在形も保たれている。「作成されます」も現在形の受身のままで、「同じルールにより」を「同じルールで」にしても働きは変わらない。義務・推奨・時制の観点で意味は保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.81,
+      "cost_usd": 0.007606
+    },
+    {
+      "index": 76,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "45ce2425c4a97826a1321eec7f31cdde5cadb8b12d4214f7c4493c6a3afa2215",
+      "cache_hit": false,
+      "raw_file": "c0076.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「使うことの出来る」は候補で「使える」に、「同じルールにより安全に作成されます」は「同じルールで安全に作成されます」に言い換えられている。数値・単位・期限・頻度・順序に関わる表現は原文にも候補にも含まれず、「mkstemp() と同じルール」という関係も保たれている。この観点での変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.54,
+      "cost_usd": 0.007452
+    },
+    {
+      "index": 77,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "6ca7a908b3b2bfb4ed777c724edfceccd5688090d9003acd4df3d65d06adf55c",
+      "cache_hit": false,
+      "raw_file": "c0077.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「使うことの出来る」は候補で「使える」に、「同じルールにより」は「同じルールで」に言い換えられているだけで、主体・条件・完了状態・理由・具体例・固有名の追加はない。「mkstemp()」「file-like object」「安全に作成」も保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.54,
+      "cost_usd": 0.007242
+    },
+    {
+      "index": 78,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "f22c99c3b653052ce29a4b46283d32449b6db85cc4d0fb5327642f0665cb7f3b",
+      "cache_hit": false,
+      "raw_file": "c0078.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「使うことの出来る」は候補で「使える」に、「同じルールにより」は「同じルールで」に変わっているが、いずれも意味は同じで、可能・手段の関係が保たれている。「mkstemp()」「file-like object」などの識別子や「安全に作成されます」という内容もそのまま維持されている。変更は軽微で、読みやすさを損なわず、意味や働きも変わっていないため、不要な書換えとまでは言えない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.49,
+      "cost_usd": 0.007848
+    },
+    {
+      "index": 79,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "cc269a431c371adc06d558458dbfdcd87f175e86d2bd27dd7bcd2e6a5c7a33b5",
+      "cache_hit": false,
+      "raw_file": "c0079.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "語学の修得は一気呵成にはできない。",
+          "数学の修得は一気呵成にはできない。",
+          "語学や数学の修得には、飽きずに長く時間をかけることが必要である。",
+          "語学や数学の修得には、急がずに長く時間をかけることが必要である。",
+          "長く時間をかけることは、語学や数学の修得の少なくとも「必要条件」の一つである。",
+          "長く時間をかけることだけでは、語学や数学の修得の「充分なる条件」ではない。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.65,
+      "cost_usd": 0.008504000000000001
+    },
+    {
+      "index": 80,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "3ee4ee205e0a7b22d98d0ad624fc2ff333de6bd9aa5c7ec1c1d7ba7d72b9ffe9",
+      "cache_hit": false,
+      "raw_file": "c0080.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "語学の修得は一気呵成にはできない。",
+            "reason": "文脈に「語学も数学もその修得は一気呵成にはできない」とあり、直接述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "数学の修得は一気呵成にはできない。",
+            "reason": "文脈に「語学も数学もその修得は一気呵成にはできない」とあり、数学についても直接述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "語学や数学の修得には、飽きずに長く時間をかけることが必要である。",
+            "reason": "文脈では「飽きずに急がずに長く時間をかける事が、少なくとも「必要条件」の一つである」とあり、飽きずに長く時間をかけることが必要条件であると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "語学や数学の修得には、急がずに長く時間をかけることが必要である。",
+            "reason": "文脈では「飽きずに急がずに長く時間をかける事」が必要条件の一つとされており、急がずに長く時間をかけることも必要であると読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "長く時間をかけることは、語学や数学の修得の少なくとも「必要条件」の一つである。",
+            "reason": "文脈に「長く時間をかける事が、少なくとも「必要条件」の一つである」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "長く時間をかけることだけでは、語学や数学の修得の「充分なる条件」ではない。",
+            "reason": "文脈に「ただしこれだけでは「充分なる条件」ではない」とあり、時間をかけるだけでは十分条件にならないことが述べられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.33,
+      "cost_usd": 0.015818
+    },
+    {
+      "index": 81,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "cc269a431c371adc06d558458dbfdcd87f175e86d2bd27dd7bcd2e6a5c7a33b5",
+      "cache_hit": true,
+      "raw_file": "c0079.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "語学の修得は一気呵成にはできない。",
+          "数学の修得は一気呵成にはできない。",
+          "語学や数学の修得には、飽きずに長く時間をかけることが必要である。",
+          "語学や数学の修得には、急がずに長く時間をかけることが必要である。",
+          "長く時間をかけることは、語学や数学の修得の少なくとも「必要条件」の一つである。",
+          "長く時間をかけることだけでは、語学や数学の修得の「充分なる条件」ではない。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 82,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "3ee4ee205e0a7b22d98d0ad624fc2ff333de6bd9aa5c7ec1c1d7ba7d72b9ffe9",
+      "cache_hit": true,
+      "raw_file": "c0080.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "語学の修得は一気呵成にはできない。",
+            "reason": "文脈に「語学も数学もその修得は一気呵成にはできない」とあり、直接述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "数学の修得は一気呵成にはできない。",
+            "reason": "文脈に「語学も数学もその修得は一気呵成にはできない」とあり、数学についても直接述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "語学や数学の修得には、飽きずに長く時間をかけることが必要である。",
+            "reason": "文脈では「飽きずに急がずに長く時間をかける事が、少なくとも「必要条件」の一つである」とあり、飽きずに長く時間をかけることが必要条件であると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "語学や数学の修得には、急がずに長く時間をかけることが必要である。",
+            "reason": "文脈では「飽きずに急がずに長く時間をかける事」が必要条件の一つとされており、急がずに長く時間をかけることも必要であると読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "長く時間をかけることは、語学や数学の修得の少なくとも「必要条件」の一つである。",
+            "reason": "文脈に「長く時間をかける事が、少なくとも「必要条件」の一つである」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "長く時間をかけることだけでは、語学や数学の修得の「充分なる条件」ではない。",
+            "reason": "文脈に「ただしこれだけでは「充分なる条件」ではない」とあり、時間をかけるだけでは十分条件にならないことが述べられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 83,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "cc269a431c371adc06d558458dbfdcd87f175e86d2bd27dd7bcd2e6a5c7a33b5",
+      "cache_hit": true,
+      "raw_file": "c0079.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "語学の修得は一気呵成にはできない。",
+          "数学の修得は一気呵成にはできない。",
+          "語学や数学の修得には、飽きずに長く時間をかけることが必要である。",
+          "語学や数学の修得には、急がずに長く時間をかけることが必要である。",
+          "長く時間をかけることは、語学や数学の修得の少なくとも「必要条件」の一つである。",
+          "長く時間をかけることだけでは、語学や数学の修得の「充分なる条件」ではない。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 84,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "3ee4ee205e0a7b22d98d0ad624fc2ff333de6bd9aa5c7ec1c1d7ba7d72b9ffe9",
+      "cache_hit": true,
+      "raw_file": "c0080.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "語学の修得は一気呵成にはできない。",
+            "reason": "文脈に「語学も数学もその修得は一気呵成にはできない」とあり、直接述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "数学の修得は一気呵成にはできない。",
+            "reason": "文脈に「語学も数学もその修得は一気呵成にはできない」とあり、数学についても直接述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "語学や数学の修得には、飽きずに長く時間をかけることが必要である。",
+            "reason": "文脈では「飽きずに急がずに長く時間をかける事が、少なくとも「必要条件」の一つである」とあり、飽きずに長く時間をかけることが必要条件であると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "語学や数学の修得には、急がずに長く時間をかけることが必要である。",
+            "reason": "文脈では「飽きずに急がずに長く時間をかける事」が必要条件の一つとされており、急がずに長く時間をかけることも必要であると読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "長く時間をかけることは、語学や数学の修得の少なくとも「必要条件」の一つである。",
+            "reason": "文脈に「長く時間をかける事が、少なくとも「必要条件」の一つである」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "長く時間をかけることだけでは、語学や数学の修得の「充分なる条件」ではない。",
+            "reason": "文脈に「ただしこれだけでは「充分なる条件」ではない」とあり、時間をかけるだけでは十分条件にならないことが述べられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 85,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "419129aa9344430d8cc72a098824c51903707fac469fc7da1ebecf428ff300db",
+      "cache_hit": false,
+      "raw_file": "c0085.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文と候補は完全に同一である。「できない」「ただしこれだけでは「充分なる条件」ではない」といった否定表現や、「必要条件の一つである」という肯定表現もすべてそのまま保たれており、否定・肯定の反転や追加・削除、禁止と許可の入れ替えは見られない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.23,
+      "cost_usd": 0.007782
+    },
+    {
+      "index": 86,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "c8d8f82d11f75ae70e3c3f13770185390d5de0f53ded9e80836d29e3815f6224",
+      "cache_hit": false,
+      "raw_file": "c0086.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一で、「少なくとも「必要条件」の一つである」や「ただしこれだけでは「充分なる条件」ではない」といった条件・範囲・留保の表現がすべてそのまま保たれている。脱落・追加・変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.32,
+      "cost_usd": 0.007672
+    },
+    {
+      "index": 87,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9a4151bf51f673b72cab61adc2a39ab47279f57f2ed8438c09f0ea4aaed46699",
+      "cache_hit": false,
+      "raw_file": "c0087.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一で、「語学も数学も」「その修得」「飽きずに急がずに長く時間をかける事」「必要条件」「充分なる条件」といった動作の主体・対象・修飾先・関係がすべてそのまま保たれている。入れ替え・追加・省略はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.53,
+      "cost_usd": 0.007696000000000001
+    },
+    {
+      "index": 88,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "e390af8824660b26cf2caf08d18d6bfe3196cd11435e5545f90d04aca3a732c4",
+      "cache_hit": false,
+      "raw_file": "c0088.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一である。「できない」「必要条件の一つである」「充分なる条件ではない」といった可能・必要の強さや現在形の時制はすべてそのまま保たれており、変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.58,
+      "cost_usd": 0.007526
+    },
+    {
+      "index": 89,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "b65610651730149c53e4abcc5720507fc9131e223e5b045735f310456229d226",
+      "cache_hit": false,
+      "raw_file": "c0089.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文と候補は完全に同一である。「一気呵成にはできない」「長く時間をかける事」「少なくとも『必要条件』の一つ」「ただしこれだけでは『充分なる条件』ではない」という、数値・期限・頻度・先後関係に関わる表現や順序がすべてそのまま保たれており、変更は見られない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.07,
+      "cost_usd": 0.007768000000000001
+    },
+    {
+      "index": 90,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "8ff5ae05cf2298e50e2de2261510a3480e47f53ef5be56ebcff62653ba5145e4",
+      "cache_hit": false,
+      "raw_file": "c0090.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一で、「必要条件」「充分なる条件」などの表現を含め、主体・条件・完了状態・理由・具体例・固有名の追加は一切ない。原文の意味と働きは保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.18,
+      "cost_usd": 0.007406
+    },
+    {
+      "index": 91,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "672bb33495befda4a422b32ee0dc0d881e6d6ae0778af94ed3b989c726fb1f4e",
+      "cache_hit": false,
+      "raw_file": "c0091.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一で、「一気呵成《いっきかせい》にはできない」「必要条件」の一つである」「充分なる条件」ではない」などの表現がすべてそのまま保たれている。原文はすでに明確であり、無変更は適切で、不要な書換えは一切ない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.24,
+      "cost_usd": 0.007718000000000001
+    }
+  ],
+  "call_summary": {
+    "calls": 91,
+    "cache_hits": 16,
+    "failures": 0,
+    "seconds": 420.9,
+    "cost_usd_list_price": 0.7049,
+    "calls_without_cost": 0
+  },
+  "finished_at": "2026-10-16T23:34:30.887109+00:00"
+}

@@ -1,0 +1,2419 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "config": {
+    "tool_version": 1,
+    "rubric_version": "ragas-ja-rubric-v1",
+    "rubric_sha256": "7f37f4309a2786203f376adfebd3d62e08df4be0d1d448c23480dd4f39dc81d1",
+    "discriminate": false,
+    "metrics": [
+      "factual"
+    ],
+    "profile": "gov-org",
+    "aspects": [
+      "negation_polarity",
+      "condition_scope",
+      "actor_target",
+      "modality_strength",
+      "numbers_order",
+      "ungrounded_specificity",
+      "unnecessary_change"
+    ],
+    "atomicity": "high",
+    "coverage": "low",
+    "ragas_prompts": "Ragas 0.4.3 既定（英語の指示と例。日本語への適合は未検証）",
+    "llm_adapter": "ClaudeCliLLM（JSON指示をプロンプト末尾に付加、ツールなし、逐次実行、同一プロンプトは再利用）",
+    "claude_flags": [
+      "--print",
+      "--safe-mode",
+      "--strict-mcp-config",
+      "--tools",
+      "",
+      "--no-session-persistence",
+      "--model",
+      "sonnet",
+      "--effort",
+      "medium",
+      "--output-format",
+      "json"
+    ],
+    "claude_system": "提供された文章を処理してください。ツールは使用しないでください。",
+    "claude_cli_version": "2.1.292 (Claude Code)",
+    "temperature_and_seed": "CLI から指定できない（不明）",
+    "python": "3.13.16",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "packages": {
+      "ragas": "0.4.3",
+      "langchain-community": "0.3.31",
+      "langchain-core": "1.6.11",
+      "langchain": "1.4.6",
+      "instructor": "1.3.2",
+      "openai": "1.109.1",
+      "pydantic": "2.14.1",
+      "numpy": "2.5.4"
+    }
+  },
+  "started_at": "2026-10-16T23:35:23.339768+00:00",
+  "input": {
+    "path": "/tmp/claude-501/ragas-inputs/all-p3.json",
+    "cases": 11,
+    "task_sha256": "8e06da6d7c948009a311353d387fb7feb22d204f58921858057c5d98837dcddf"
+  },
+  "cases": [
+    {
+      "id": "number-s3a",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.67,
+          "status": "scored",
+          "value": 0.67,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "運用・保守業者の運用時間は平日の9時から18時までとする。",
+                "reason": "文脈では運用時間は平日の9時から17時までと明記されており、18時までとは記載されていないため、この主張は文脈と矛盾する。"
+              }
+            ]
+          },
+          "recomputed_value": 0.67,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.67,
+          "status": "scored",
+          "value": 0.67,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "運用・保守業者の運用時間は平日の9時から18時までとする。",
+                "reason": "文脈では運用時間は平日の9時から17時までと明記されており、18時までとは記載されていないため、この主張は文脈と矛盾する。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 5,
+            "supported": 4,
+            "unsupported": 1,
+            "coverage": 0.8,
+            "unsupported_texts": [
+              {
+                "claim": "運用・保守業者の運用時間は平日の9時から17時までである。",
+                "reason": "文脈では運用時間は平日の9時から18時までと明記されており、17時までではない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.67,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "strength-s3b",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.67,
+          "status": "scored",
+          "value": 0.67,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 2,
+            "supported": 1,
+            "unsupported": 1,
+            "coverage": 0.5,
+            "unsupported_texts": [
+              {
+                "claim": "夜間や休日のシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案することが求められている。",
+                "reason": "文脈では、障害の重要性に応じた機動的な体制を提案することが「望ましい」とされている。これは必須の要求ではなく推奨であるため、「求められている」という表現は文脈から直接は推論できない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.67,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "tense-s5",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.5,
+          "status": "scored",
+          "value": 0.5,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 1,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "予算やスケジュールの関係から、実現する機能を絞らなければならないことがあった。",
+                "reason": "文脈では、予算やスケジュールの関係で機能を絞らなければならないことが「よくある」と一般的に述べられています。しかし、過去に実際にそのようなことがあったという特定の出来事については述べられておらず、「あった」という過去の事実までは直接推論できません。"
+              }
+            ]
+          },
+          "recomputed_value": 0.5,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.5,
+          "status": "scored",
+          "value": 0.5,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 1,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "予算やスケジュールの関係から、実現する機能を絞らなければならないことがあった。",
+                "reason": "文脈では、予算やスケジュールの関係で機能を絞らなければならないことが「よくある」と一般的に述べられています。しかし、過去に実際にそのようなことがあったという特定の出来事については述べられておらず、「あった」という過去の事実までは直接推論できません。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 2,
+            "supported": 1,
+            "unsupported": 1,
+            "coverage": 0.5,
+            "unsupported_texts": [
+              {
+                "claim": "予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくある。",
+                "reason": "文脈には、予算やスケジュールの関係で機能を絞らなければならないことが「ありました」と述べられているだけで、「よくある」という頻度については言及されていない。そのため直接推論できない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.5,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "timing-swap-s6",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.33,
+          "status": "scored",
+          "value": 0.33,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 1,
+            "unsupported": 2,
+            "unsupported_texts": [
+              {
+                "claim": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で収集する。",
+                "reason": "文脈では、資料の収集はサービス・業務企画時点で行い、要件定義を開始する時点では最新化を行うとされています。収集の時点が要件定義開始時というのは文脈と一致しません。"
+              },
+              {
+                "claim": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で最新化を行うべきである。",
+                "reason": "文脈では、サービス・業務企画時点で行うのは資料の収集であり、最新化は要件定義を開始する時点で行うとされています。したがって、この記述は文脈と矛盾します。"
+              }
+            ]
+          },
+          "recomputed_value": 0.33,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.33,
+          "status": "scored",
+          "value": 0.33,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 1,
+            "unsupported": 2,
+            "unsupported_texts": [
+              {
+                "claim": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で収集する。",
+                "reason": "文脈では、資料の収集はサービス・業務企画時点で行い、要件定義を開始する時点では最新化を行うとされています。収集の時点が要件定義開始時というのは文脈と一致しません。"
+              },
+              {
+                "claim": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で最新化を行うべきである。",
+                "reason": "文脈では、サービス・業務企画時点で行うのは資料の収集であり、最新化は要件定義を開始する時点で行うとされています。したがって、この記述は文脈と矛盾します。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 1,
+            "unsupported": 2,
+            "coverage": 0.33,
+            "unsupported_texts": [
+              {
+                "claim": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+                "reason": "文脈では、資料は要件定義を開始する時点で収集し、サービス・業務企画時点では最新化を行うと述べられています。収集の時点がサービス・業務企画時点であるとは述べられていません。"
+              },
+              {
+                "claim": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+                "reason": "文脈では、資料の収集は要件定義の開始時点で行い、最新化はサービス・業務企画時点で行うとされています。最新化を要件定義開始時点で行うという記述は、文脈と食い違っています。"
+              }
+            ]
+          },
+          "recomputed_value": 0.33,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "necessity-s5",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.67,
+          "status": "scored",
+          "value": 0.67,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 2,
+            "supported": 1,
+            "unsupported": 1,
+            "coverage": 0.5,
+            "unsupported_texts": [
+              {
+                "claim": "予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくある。",
+                "reason": "文脈では、予算やスケジュールの関係から実現する機能を絞ることはよくあると述べられている。ただし「絞らなければならない」という義務や必然性までは述べられておらず、「絞ること」がよくあるという事実にとどまるため、この表現は文脈から直接推論できる範囲を超えている。"
+              }
+            ]
+          },
+          "recomputed_value": 0.67,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "quantifier-k8s",
+      "document_id": "k8s-pod-lifecycle",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.75,
+          "status": "scored",
+          "value": 0.75,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "coverage": 0.67,
+            "unsupported_texts": [
+              {
+                "claim": "デフォルトでは、すべての削除は30秒以内に正常に行われます。",
+                "reason": "文脈では「通常の削除」が30秒以内に正常に行われると述べられており、「すべての削除」とは述べていません。「すべて」への一般化は文脈から直接推論できません。"
+              }
+            ]
+          },
+          "recomputed_value": 0.75,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "strength-py",
+      "document_id": "py-tutorial-modules",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.67,
+          "status": "scored",
+          "value": 0.67,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 2,
+            "supported": 1,
+            "unsupported": 1,
+            "coverage": 0.5,
+            "unsupported_texts": [
+              {
+                "claim": "これらのオプションは、自分が何をしているかを理解しているときに限って使うべきである。",
+                "reason": "文脈は「理解したうえでこれらのオプションを使うとよいでしょう」と推奨しているだけで、理解している場合に「限って」使うべきだという限定的・強い義務の表現は含まれていない。そのため、この主張は文脈から直接推論できない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.67,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "qualifier-essay",
+      "document_id": "az-002359",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.8,
+          "status": "scored",
+          "value": 0.8,
+          "warnings": [],
+          "response_claims": {
+            "total": 5,
+            "supported": 4,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "頭のいい人は科学者にはなれない。",
+                "reason": "文脈で科学者になれないとされているのは、頭がよく、かつ自分を頭がいいと思い利口だと思う人である。頭のいい人一般が科学者になれないとは述べられておらず、条件を省略した一般化になっているため、直接推論できない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.8,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.67,
+          "status": "scored",
+          "value": 0.67,
+          "warnings": [],
+          "response_claims": {
+            "total": 5,
+            "supported": 4,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "頭のいい人は科学者にはなれない。",
+                "reason": "文脈で科学者になれないとされているのは、頭がよく、かつ自分を頭がいいと思い利口だと思う人である。頭のいい人一般が科学者になれないとは述べられておらず、条件を省略した一般化になっているため、直接推論できない。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 5,
+            "supported": 3,
+            "unsupported": 2,
+            "coverage": 0.6,
+            "unsupported_texts": [
+              {
+                "claim": "頭がよくて、自分を頭がいいと思い利口だと思う人は、先生にはなれる。",
+                "reason": "文脈には「頭のいい人は先生にはなれても科学者にはなれない」とあり、頭のいい人が先生になれることは分かる。しかし「自分を頭がいいと思い利口だと思う」人という限定は文脈に書かれておらず、直接推論できない。"
+              },
+              {
+                "claim": "頭がよくて、自分を頭がいいと思い利口だと思う人は、科学者にはなれない。",
+                "reason": "文脈は頭のいい人は科学者になれないと述べているが、「自分を頭がいいと思い利口だと思う」という条件は文脈にないため、直接推論できない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.67,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "actor-org",
+      "document_id": "ipa-o-using",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.83,
+          "status": "scored",
+          "value": 0.83,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 5,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "セキュリティリスクが懸念される場合は、OSPOへ相談する必要がある。",
+                "reason": "コンテキストでは、セキュリティリスクが懸念される場合はセキュリティ部門へ相談するとされており、OSPOへ相談するとは書かれていない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.83,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.83,
+          "status": "scored",
+          "value": 0.83,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 5,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "セキュリティリスクが懸念される場合は、OSPOへ相談する必要がある。",
+                "reason": "コンテキストでは、セキュリティリスクが懸念される場合はセキュリティ部門へ相談するとされており、OSPOへ相談するとは書かれていない。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 6,
+            "supported": 5,
+            "unsupported": 1,
+            "coverage": 0.83,
+            "unsupported_texts": [
+              {
+                "claim": "セキュリティリスクが懸念される場合は、セキュリティ部門へ相談する。",
+                "reason": "コンテキストではセキュリティリスクが懸念される場合はOSPOへ相談するとされており、セキュリティ部門への相談とは書かれていない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.83,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "paraphrase-py",
+      "document_id": "py-library-tempfile",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "control-essay",
+      "document_id": "az-002364",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    }
+  ],
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "calls": [
+    {
+      "index": 1,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "23d7126e170376c8ab098ec749c7a71a01f7b29f628939044d035727fb47ed63",
+      "cache_hit": false,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から18時までとする。",
+          "運用・保守業者の運用時間には土日及び祝日、年末年始を含まない。",
+          "情報システムの監視は24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.08,
+      "cost_usd": 0.007218
+    },
+    {
+      "index": 2,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "52db2560bae8e77c4c18c53df9ced55bc1e6e812c8925fb25b253ca42d5aaeca",
+      "cache_hit": false,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から18時までとする。",
+            "reason": "文脈では運用時間は平日の9時から17時までと明記されており、18時までとは記載されていないため、この主張は文脈と矛盾する。",
+            "verdict": 0
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日及び祝日、年末年始を含まない。",
+            "reason": "文脈では運用時間は平日(土日及び祝日、年末年始を除く)とされており、これらの日は運用時間に含まれないことが直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に「ただし、情報システムの監視は24時間365日行うこと」と明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.25,
+      "cost_usd": 0.012408
+    },
+    {
+      "index": 3,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "23d7126e170376c8ab098ec749c7a71a01f7b29f628939044d035727fb47ed63",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から18時までとする。",
+          "運用・保守業者の運用時間には土日及び祝日、年末年始を含まない。",
+          "情報システムの監視は24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 4,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "52db2560bae8e77c4c18c53df9ced55bc1e6e812c8925fb25b253ca42d5aaeca",
+      "cache_hit": true,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から18時までとする。",
+            "reason": "文脈では運用時間は平日の9時から17時までと明記されており、18時までとは記載されていないため、この主張は文脈と矛盾する。",
+            "verdict": 0
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日及び祝日、年末年始を含まない。",
+            "reason": "文脈では運用時間は平日(土日及び祝日、年末年始を除く)とされており、これらの日は運用時間に含まれないことが直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に「ただし、情報システムの監視は24時間365日行うこと」と明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 5,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "e89029325c2a5a45382462b26b24df1b905d464d8ff0a0486c993be207ff8cf5",
+      "cache_hit": false,
+      "raw_file": "c0005.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間の平日には土日が含まれない。",
+          "運用・保守業者の運用時間の平日には祝日が含まれない。",
+          "運用・保守業者の運用時間の平日には年末年始が含まれない。",
+          "情報システムの監視は24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.38,
+      "cost_usd": 0.0036934000000000003
+    },
+    {
+      "index": 6,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "6f20b41c37a0c3c5a40a3cb9ddc27b0a76fa1554c8532a50ddd19ecb4a4673bc",
+      "cache_hit": false,
+      "raw_file": "c0006.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "文脈では運用時間は平日の9時から18時までと明記されており、17時までではない。",
+            "verdict": 0
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には土日が含まれない。",
+            "reason": "文脈では平日から土日及び祝日、年末年始を除くと明記されているため、土日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には祝日が含まれない。",
+            "reason": "文脈で平日は土日及び祝日を除くとされているため、祝日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には年末年始が含まれない。",
+            "reason": "文脈で平日は年末年始を除くとされているため、年末年始は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に、情報システムの監視は24時間365日行うことと明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.88,
+      "cost_usd": 0.013298
+    },
+    {
+      "index": 7,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "5d3ab054b6187085a1d02be4d8f277067161b741ef5cb63a426bae8913a71751",
+      "cache_hit": false,
+      "raw_file": "c0007.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "夜間や休日におけるシステム障害時の連絡体制について、運用時間と同等の体制を維持することは求められていない。",
+          "夜間や休日におけるシステム障害時の連絡体制として、障害の重要性に応じた機動的な体制を提案することが望ましい。"
+        ]
+      },
+      "error": null,
+      "seconds": 3.87,
+      "cost_usd": 0.007416
+    },
+    {
+      "index": 8,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "89844b644f637afbadbad726fa9bd0e10ff2f131e332ccaa0551fc210848c9a0",
+      "cache_hit": false,
+      "raw_file": "c0008.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制について、運用時間と同等の体制を維持することは求められていない。",
+            "reason": "文脈に「運用時間と同等の体制を維持することは求めない」と明記されているため、この主張は直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制として、障害の重要性に応じた機動的な体制を提案することが望ましい。",
+            "reason": "文脈では「障害の重要性に応じた機動的な体制を提案すること」と求められている。「望ましい」という表現は弱いが、提案が要求されているという趣旨は文脈から推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 4.86,
+      "cost_usd": 0.011946
+    },
+    {
+      "index": 9,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "5d3ab054b6187085a1d02be4d8f277067161b741ef5cb63a426bae8913a71751",
+      "cache_hit": true,
+      "raw_file": "c0007.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "夜間や休日におけるシステム障害時の連絡体制について、運用時間と同等の体制を維持することは求められていない。",
+          "夜間や休日におけるシステム障害時の連絡体制として、障害の重要性に応じた機動的な体制を提案することが望ましい。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 10,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "89844b644f637afbadbad726fa9bd0e10ff2f131e332ccaa0551fc210848c9a0",
+      "cache_hit": true,
+      "raw_file": "c0008.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制について、運用時間と同等の体制を維持することは求められていない。",
+            "reason": "文脈に「運用時間と同等の体制を維持することは求めない」と明記されているため、この主張は直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制として、障害の重要性に応じた機動的な体制を提案することが望ましい。",
+            "reason": "文脈では「障害の重要性に応じた機動的な体制を提案すること」と求められている。「望ましい」という表現は弱いが、提案が要求されているという趣旨は文脈から推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 11,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "6082ac7655628a05a5fdef440f29456b7e3c1a99cf3fc99c75051dccccbd4008",
+      "cache_hit": false,
+      "raw_file": "c0011.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "夜間や休日のシステム障害時の連絡体制については、運用時間と同等の体制を維持することは求められていない。",
+          "夜間や休日のシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案することが求められている。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.14,
+      "cost_usd": 0.007358
+    },
+    {
+      "index": 12,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "5b43175146ab7bbe2f32beda92830fb3fccbe98c20728abb474d6a4f602ee906",
+      "cache_hit": false,
+      "raw_file": "c0012.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "夜間や休日のシステム障害時の連絡体制については、運用時間と同等の体制を維持することは求められていない。",
+            "reason": "文脈では、夜間や休日の障害時の連絡体制について運用時間と同等の体制を維持することは求めないと明記されており、この主張と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "夜間や休日のシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案することが求められている。",
+            "reason": "文脈では、障害の重要性に応じた機動的な体制を提案することが「望ましい」とされている。これは必須の要求ではなく推奨であるため、「求められている」という表現は文脈から直接は推論できない。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.24,
+      "cost_usd": 0.012134
+    },
+    {
+      "index": 13,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f029dd9d4835d780b6dc2cdac31fc1959906b270bbcb89a48d9a77cd93ce5a85",
+      "cache_hit": false,
+      "raw_file": "c0013.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+          "予算やスケジュールの関係から、実現する機能を絞らなければならないことがあった。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.06,
+      "cost_usd": 0.00706
+    },
+    {
+      "index": 14,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "7fe9841ed2a3b67e055fedf848630589fbb320649f3d02763486b8b1304aaf18",
+      "cache_hit": false,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません。」と明記されており、直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの関係から、実現する機能を絞らなければならないことがあった。",
+            "reason": "文脈では、予算やスケジュールの関係で機能を絞らなければならないことが「よくある」と一般的に述べられています。しかし、過去に実際にそのようなことがあったという特定の出来事については述べられておらず、「あった」という過去の事実までは直接推論できません。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.26,
+      "cost_usd": 0.011908
+    },
+    {
+      "index": 15,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f029dd9d4835d780b6dc2cdac31fc1959906b270bbcb89a48d9a77cd93ce5a85",
+      "cache_hit": true,
+      "raw_file": "c0013.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+          "予算やスケジュールの関係から、実現する機能を絞らなければならないことがあった。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 16,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "7fe9841ed2a3b67e055fedf848630589fbb320649f3d02763486b8b1304aaf18",
+      "cache_hit": true,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません。」と明記されており、直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの関係から、実現する機能を絞らなければならないことがあった。",
+            "reason": "文脈では、予算やスケジュールの関係で機能を絞らなければならないことが「よくある」と一般的に述べられています。しかし、過去に実際にそのようなことがあったという特定の出来事については述べられておらず、「あった」という過去の事実までは直接推論できません。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 17,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "a87114b183289815eb95eb77fd6d81705fc931df75133a009555a4771da027ce",
+      "cache_hit": false,
+      "raw_file": "c0017.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+          "予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.03,
+      "cost_usd": 0.0030811999999999997
+    },
+    {
+      "index": 18,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "a3bc85c8585c2821e483a7bb5c6c629e9e4277b430ac1c8a69a5cfba4ee46590",
+      "cache_hit": false,
+      "raw_file": "c0018.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません」と明記されており、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈には、予算やスケジュールの関係で機能を絞らなければならないことが「ありました」と述べられているだけで、「よくある」という頻度については言及されていない。そのため直接推論できない。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.48,
+      "cost_usd": 0.01161
+    },
+    {
+      "index": 19,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "e86300ca12be21acd19e393b0f2e24eefa5f826e461316b2c7e9f7d3c7ce6b1a",
+      "cache_hit": false,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で収集する。",
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.05,
+      "cost_usd": 0.007646
+    },
+    {
+      "index": 20,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "bbd62ab0fc07a4da06e04b0e8486ead0173bc19a90e55a31c3a1dd87eb95f1bc",
+      "cache_hit": false,
+      "raw_file": "c0020.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で収集する。",
+            "reason": "文脈では、資料の収集はサービス・業務企画時点で行い、要件定義を開始する時点では最新化を行うとされています。収集の時点が要件定義開始時というのは文脈と一致しません。",
+            "verdict": 0
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で最新化を行うべきである。",
+            "reason": "文脈では、サービス・業務企画時点で行うのは資料の収集であり、最新化は要件定義を開始する時点で行うとされています。したがって、この記述は文脈と矛盾します。",
+            "verdict": 0
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。",
+            "reason": "文脈に、調達後に変更内容が判明した場合は追加のコストがかかる可能性があるため留意するようにと明記されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.44,
+      "cost_usd": 0.013248000000000001
+    },
+    {
+      "index": 21,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "e86300ca12be21acd19e393b0f2e24eefa5f826e461316b2c7e9f7d3c7ce6b1a",
+      "cache_hit": true,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で収集する。",
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 22,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "bbd62ab0fc07a4da06e04b0e8486ead0173bc19a90e55a31c3a1dd87eb95f1bc",
+      "cache_hit": true,
+      "raw_file": "c0020.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で収集する。",
+            "reason": "文脈では、資料の収集はサービス・業務企画時点で行い、要件定義を開始する時点では最新化を行うとされています。収集の時点が要件定義開始時というのは文脈と一致しません。",
+            "verdict": 0
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で最新化を行うべきである。",
+            "reason": "文脈では、サービス・業務企画時点で行うのは資料の収集であり、最新化は要件定義を開始する時点で行うとされています。したがって、この記述は文脈と矛盾します。",
+            "verdict": 0
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。",
+            "reason": "文脈に、調達後に変更内容が判明した場合は追加のコストがかかる可能性があるため留意するようにと明記されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 23,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f25f4cd3ab7e294e5058b747466e44b0bad9c0dcf8fb7019a869db5018041de2",
+      "cache_hit": false,
+      "raw_file": "c0023.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.23,
+      "cost_usd": 0.0035114
+    },
+    {
+      "index": 24,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "393e0d1b86c23c82f2d08f011c3818362dfee5f33d776a6cbfce4787dd226c26",
+      "cache_hit": false,
+      "raw_file": "c0024.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈では、資料は要件定義を開始する時点で収集し、サービス・業務企画時点では最新化を行うと述べられています。収集の時点がサービス・業務企画時点であるとは述べられていません。",
+            "verdict": 0
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈では、資料の収集は要件定義の開始時点で行い、最新化はサービス・業務企画時点で行うとされています。最新化を要件定義開始時点で行うという記述は、文脈と食い違っています。",
+            "verdict": 0
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。",
+            "reason": "文脈に、調達後に変更内容が判明した場合は追加のコストがかかる可能性があると明記されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.42,
+      "cost_usd": 0.013248
+    },
+    {
+      "index": 25,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "89918be91028cfc7a980c612412c2e569448d50c9afb5ee60902f50701936ef8",
+      "cache_hit": false,
+      "raw_file": "c0025.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+          "予算やスケジュールの関係から、実現する機能を絞ることはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.16,
+      "cost_usd": 0.007034
+    },
+    {
+      "index": 26,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "d27f892cc37c2586c3b596f141b2352fbcb6c0377029d11733d083c0d407c319",
+      "cache_hit": false,
+      "raw_file": "c0026.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません」と明記されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの関係から、実現する機能を絞ることはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」と述べられているため、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 4.74,
+      "cost_usd": 0.011413999999999999
+    },
+    {
+      "index": 27,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "89918be91028cfc7a980c612412c2e569448d50c9afb5ee60902f50701936ef8",
+      "cache_hit": true,
+      "raw_file": "c0025.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+          "予算やスケジュールの関係から、実現する機能を絞ることはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 28,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "d27f892cc37c2586c3b596f141b2352fbcb6c0377029d11733d083c0d407c319",
+      "cache_hit": true,
+      "raw_file": "c0026.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません」と明記されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの関係から、実現する機能を絞ることはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」と述べられているため、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 29,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "a87114b183289815eb95eb77fd6d81705fc931df75133a009555a4771da027ce",
+      "cache_hit": true,
+      "raw_file": "c0017.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+          "予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 30,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "94381d4d8180aab3f378e7e5dbf8c3a97fc894a958c4b695b0e6822507b9e4cf",
+      "cache_hit": false,
+      "raw_file": "c0030.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません」と明記されており、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈では、予算やスケジュールの関係から実現する機能を絞ることはよくあると述べられている。ただし「絞らなければならない」という義務や必然性までは述べられておらず、「絞ること」がよくあるという事実にとどまるため、この表現は文脈から直接推論できる範囲を超えている。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 4.98,
+      "cost_usd": 0.012003999999999999
+    },
+    {
+      "index": 31,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "496127f45f6f72520000dfcc67470df2653c67c66905332703cb9eaeae15fd52",
+      "cache_hit": false,
+      "raw_file": "c0031.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "デフォルトでは、通常の削除は30秒以内に正常に行われる。",
+          "kubectl delete コマンドは --grace-period=<seconds> オプションをサポートする。",
+          "--grace-period=<seconds> オプションにより、ユーザーはデフォルト値を上書きして独自の値を指定できる。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.42,
+      "cost_usd": 0.007636
+    },
+    {
+      "index": 32,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "a12c616012ee2ec6db5f40a1020f64279c6e4b78353d0a88cf5fd28675c816bd",
+      "cache_hit": false,
+      "raw_file": "c0032.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "デフォルトでは、通常の削除は30秒以内に正常に行われる。",
+            "reason": "文脈に「デフォルトでは、すべての削除は30秒以内に正常に行われます」と明記されており、この主張は文脈から直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "kubectl delete コマンドは --grace-period=<seconds> オプションをサポートする。",
+            "reason": "文脈に「kubectl delete コマンドは、…--grace-period=<seconds> オプションをサポートします」と明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "--grace-period=<seconds> オプションにより、ユーザーはデフォルト値を上書きして独自の値を指定できる。",
+            "reason": "文脈に、このオプションによりユーザーがデフォルト値を上書きして独自の値を指定できると記載されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.41,
+      "cost_usd": 0.012738000000000001
+    },
+    {
+      "index": 33,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "496127f45f6f72520000dfcc67470df2653c67c66905332703cb9eaeae15fd52",
+      "cache_hit": true,
+      "raw_file": "c0031.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "デフォルトでは、通常の削除は30秒以内に正常に行われる。",
+          "kubectl delete コマンドは --grace-period=<seconds> オプションをサポートする。",
+          "--grace-period=<seconds> オプションにより、ユーザーはデフォルト値を上書きして独自の値を指定できる。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 34,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "a12c616012ee2ec6db5f40a1020f64279c6e4b78353d0a88cf5fd28675c816bd",
+      "cache_hit": true,
+      "raw_file": "c0032.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "デフォルトでは、通常の削除は30秒以内に正常に行われる。",
+            "reason": "文脈に「デフォルトでは、すべての削除は30秒以内に正常に行われます」と明記されており、この主張は文脈から直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "kubectl delete コマンドは --grace-period=<seconds> オプションをサポートする。",
+            "reason": "文脈に「kubectl delete コマンドは、…--grace-period=<seconds> オプションをサポートします」と明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "--grace-period=<seconds> オプションにより、ユーザーはデフォルト値を上書きして独自の値を指定できる。",
+            "reason": "文脈に、このオプションによりユーザーがデフォルト値を上書きして独自の値を指定できると記載されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 35,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "9804b117e18cb07295a1169f55fe31195373181e69b83e568f79955031581076",
+      "cache_hit": false,
+      "raw_file": "c0035.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "デフォルトでは、すべての削除は30秒以内に正常に行われます。",
+          "kubectl delete コマンドは --grace-period=<seconds> オプションをサポートします。",
+          "--grace-period=<seconds> オプションは、ユーザーがデフォルト値を上書きして独自の値を指定できるようにします。"
+        ]
+      },
+      "error": null,
+      "seconds": 3.88,
+      "cost_usd": 0.007644000000000001
+    },
+    {
+      "index": 36,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "7c8de2c4513325e464394b6856d7d91675d363f4132b7a35f3b132845b1e0193",
+      "cache_hit": false,
+      "raw_file": "c0036.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "デフォルトでは、すべての削除は30秒以内に正常に行われます。",
+            "reason": "文脈では「通常の削除」が30秒以内に正常に行われると述べられており、「すべての削除」とは述べていません。「すべて」への一般化は文脈から直接推論できません。",
+            "verdict": 0
+          },
+          {
+            "statement": "kubectl delete コマンドは --grace-period=<seconds> オプションをサポートします。",
+            "reason": "文脈に、kubectl delete コマンドが --grace-period=<seconds> オプションをサポートすると明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "--grace-period=<seconds> オプションは、ユーザーがデフォルト値を上書きして独自の値を指定できるようにします。",
+            "reason": "文脈に、このオプションによりユーザーがデフォルト値を上書きして独自の値を指定できると記載されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.04,
+      "cost_usd": 0.012846
+    },
+    {
+      "index": 37,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "146ffa2cd4b8316513140d9112ceb66bfeb373f8fc52312a93b7843e7d4b64a9",
+      "cache_hit": false,
+      "raw_file": "c0037.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いくつかのプログラムはこれらの除去されるものに依存している可能性がある。",
+          "これらのオプションは理解したうえで使うとよい。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.29,
+      "cost_usd": 0.006916
+    },
+    {
+      "index": 38,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "725d3c09ae7e94d9c6ac996672dc7da52ee5c3496fb77f6a2bb824653315af12",
+      "cache_hit": false,
+      "raw_file": "c0038.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いくつかのプログラムはこれらの除去されるものに依存している可能性がある。",
+            "reason": "文脈には「いくつかのプログラムはこれらの除去されるものに依存している可能性があるため」と明記されており、この主張は文脈から直接読み取れます。",
+            "verdict": 1
+          },
+          {
+            "statement": "これらのオプションは理解したうえで使うとよい。",
+            "reason": "文脈には「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」とあり、理解したうえで使うべきだという趣旨と一致するため、直接推論できます。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 4.9,
+      "cost_usd": 0.011528
+    },
+    {
+      "index": 39,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "146ffa2cd4b8316513140d9112ceb66bfeb373f8fc52312a93b7843e7d4b64a9",
+      "cache_hit": true,
+      "raw_file": "c0037.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いくつかのプログラムはこれらの除去されるものに依存している可能性がある。",
+          "これらのオプションは理解したうえで使うとよい。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 40,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "725d3c09ae7e94d9c6ac996672dc7da52ee5c3496fb77f6a2bb824653315af12",
+      "cache_hit": true,
+      "raw_file": "c0038.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いくつかのプログラムはこれらの除去されるものに依存している可能性がある。",
+            "reason": "文脈には「いくつかのプログラムはこれらの除去されるものに依存している可能性があるため」と明記されており、この主張は文脈から直接読み取れます。",
+            "verdict": 1
+          },
+          {
+            "statement": "これらのオプションは理解したうえで使うとよい。",
+            "reason": "文脈には「自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです」とあり、理解したうえで使うべきだという趣旨と一致するため、直接推論できます。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 41,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "126e96c9285e6b547dfa25bf4e3a232a2bab1f75fb681f7006826af5c19fefff",
+      "cache_hit": false,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いくつかのプログラムはこれらの除去されるものに依存している可能性がある。",
+          "これらのオプションは、自分が何をしているかを理解しているときに限って使うべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.09,
+      "cost_usd": 0.007092
+    },
+    {
+      "index": 42,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "9c5645d82fe8c482d5c5a1786b68d9d1eb4f85473cafe57f615802697b055b9d",
+      "cache_hit": false,
+      "raw_file": "c0042.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いくつかのプログラムはこれらの除去されるものに依存している可能性がある。",
+            "reason": "文脈に「いくつかのプログラムはこれらの除去されるものに依存している可能性があるため」と明記されており、この主張は直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "これらのオプションは、自分が何をしているかを理解しているときに限って使うべきである。",
+            "reason": "文脈は「理解したうえでこれらのオプションを使うとよいでしょう」と推奨しているだけで、理解している場合に「限って」使うべきだという限定的・強い義務の表現は含まれていない。そのため、この主張は文脈から直接推論できない。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.38,
+      "cost_usd": 0.0050582
+    },
+    {
+      "index": 43,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "c61c02ba162dea736d9fbdac44d13ab21da93b37b6cba708e5fe4a5b4d04bd1f",
+      "cache_hit": false,
+      "raw_file": "c0043.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "頭のいい人は先生にはなれる。",
+          "頭のいい人は科学者にはなれない。",
+          "科学者になるには、人間の頭の力の限界を自覚する必要がある。",
+          "科学者になるには、大自然の前に愚かな赤裸の自分を投げ出す必要がある。",
+          "科学者になるには、大自然の直接の教えにのみ傾聴する覚悟が必要である。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.68,
+      "cost_usd": 0.007966
+    },
+    {
+      "index": 44,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "9499e8fb9ef245e4598cfaffc1880b34d53570153827ba2380bcb3d0237a1e89",
+      "cache_hit": false,
+      "raw_file": "c0044.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "頭のいい人は先生にはなれる。",
+            "reason": "文脈には「頭がよくて、そうして、自分を頭がいいと思い利口だと思う人は先生にはなれても科学者にはなれない」とあり、頭のいい人が先生にはなれることが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は科学者にはなれない。",
+            "reason": "文脈で科学者になれないとされているのは、頭がよく、かつ自分を頭がいいと思い利口だと思う人である。頭のいい人一般が科学者になれないとは述べられておらず、条件を省略した一般化になっているため、直接推論できない。",
+            "verdict": 0
+          },
+          {
+            "statement": "科学者になるには、人間の頭の力の限界を自覚する必要がある。",
+            "reason": "文脈に「人間の頭の力の限界を自覚して…覚悟があって、初めて科学者にはなれる」とあり、科学者になるための必要条件として述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "科学者になるには、大自然の前に愚かな赤裸の自分を投げ出す必要がある。",
+            "reason": "文脈に「大自然の前に愚かな赤裸の自分を投げ出し…初めて科学者にはなれる」とあり、科学者になるための条件として述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "科学者になるには、大自然の直接の教えにのみ傾聴する覚悟が必要である。",
+            "reason": "文脈に「ただ大自然の直接の教えにのみ傾聴する覚悟があって、初めて科学者にはなれる」とあり、直接述べられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.28,
+      "cost_usd": 0.015764
+    },
+    {
+      "index": 45,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "c61c02ba162dea736d9fbdac44d13ab21da93b37b6cba708e5fe4a5b4d04bd1f",
+      "cache_hit": true,
+      "raw_file": "c0043.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "頭のいい人は先生にはなれる。",
+          "頭のいい人は科学者にはなれない。",
+          "科学者になるには、人間の頭の力の限界を自覚する必要がある。",
+          "科学者になるには、大自然の前に愚かな赤裸の自分を投げ出す必要がある。",
+          "科学者になるには、大自然の直接の教えにのみ傾聴する覚悟が必要である。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 46,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "9499e8fb9ef245e4598cfaffc1880b34d53570153827ba2380bcb3d0237a1e89",
+      "cache_hit": true,
+      "raw_file": "c0044.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "頭のいい人は先生にはなれる。",
+            "reason": "文脈には「頭がよくて、そうして、自分を頭がいいと思い利口だと思う人は先生にはなれても科学者にはなれない」とあり、頭のいい人が先生にはなれることが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は科学者にはなれない。",
+            "reason": "文脈で科学者になれないとされているのは、頭がよく、かつ自分を頭がいいと思い利口だと思う人である。頭のいい人一般が科学者になれないとは述べられておらず、条件を省略した一般化になっているため、直接推論できない。",
+            "verdict": 0
+          },
+          {
+            "statement": "科学者になるには、人間の頭の力の限界を自覚する必要がある。",
+            "reason": "文脈に「人間の頭の力の限界を自覚して…覚悟があって、初めて科学者にはなれる」とあり、科学者になるための必要条件として述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "科学者になるには、大自然の前に愚かな赤裸の自分を投げ出す必要がある。",
+            "reason": "文脈に「大自然の前に愚かな赤裸の自分を投げ出し…初めて科学者にはなれる」とあり、科学者になるための条件として述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "科学者になるには、大自然の直接の教えにのみ傾聴する覚悟が必要である。",
+            "reason": "文脈に「ただ大自然の直接の教えにのみ傾聴する覚悟があって、初めて科学者にはなれる」とあり、直接述べられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 47,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2571162d461c97aec7460a9e65ed894c6d5c46214aa0c72543a2d53a9776a961",
+      "cache_hit": false,
+      "raw_file": "c0047.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "頭がよくて、自分を頭がいいと思い利口だと思う人は、先生にはなれる。",
+          "頭がよくて、自分を頭がいいと思い利口だと思う人は、科学者にはなれない。",
+          "人間の頭の力の限界を自覚することは、科学者になるために必要である。",
+          "大自然の前に愚かな赤裸の自分を投げ出す覚悟があって、初めて科学者になれる。",
+          "大自然の直接の教えにのみ傾聴する覚悟があって、初めて科学者になれる。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.55,
+      "cost_usd": 0.008530000000000001
+    },
+    {
+      "index": 48,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "be3234a0d7ba8055b8d836215ed18f3645f31fbaedecbad2d69c40b683def164",
+      "cache_hit": false,
+      "raw_file": "c0048.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "頭がよくて、自分を頭がいいと思い利口だと思う人は、先生にはなれる。",
+            "reason": "文脈には「頭のいい人は先生にはなれても科学者にはなれない」とあり、頭のいい人が先生になれることは分かる。しかし「自分を頭がいいと思い利口だと思う」人という限定は文脈に書かれておらず、直接推論できない。",
+            "verdict": 0
+          },
+          {
+            "statement": "頭がよくて、自分を頭がいいと思い利口だと思う人は、科学者にはなれない。",
+            "reason": "文脈は頭のいい人は科学者になれないと述べているが、「自分を頭がいいと思い利口だと思う」という条件は文脈にないため、直接推論できない。",
+            "verdict": 0
+          },
+          {
+            "statement": "人間の頭の力の限界を自覚することは、科学者になるために必要である。",
+            "reason": "文脈に「人間の頭の力の限界を自覚して…覚悟があって、初めて科学者にはなれる」とあり、限界の自覚が科学者になる条件として述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "大自然の前に愚かな赤裸の自分を投げ出す覚悟があって、初めて科学者になれる。",
+            "reason": "文脈に「大自然の前に愚かな赤裸の自分を投げ出し…覚悟があって、初めて科学者にはなれる」とあり、直接一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "大自然の直接の教えにのみ傾聴する覚悟があって、初めて科学者になれる。",
+            "reason": "文脈に「ただ大自然の直接の教えにのみ傾聴する覚悟があって、初めて科学者にはなれる」とあり、直接一致する。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.43,
+      "cost_usd": 0.016024
+    },
+    {
+      "index": 49,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2defd3798d5eda872c7f5aba71a3f131967329d5f96a1d4ec236c960144c18b0",
+      "cache_hit": false,
+      "raw_file": "c0049.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "ソースコード提供義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "同一ライセンスでの頒布義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "著作権表示・ライセンス文書の添付義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "商用ライセンスが必要な可能性がある場合は、確認が必要である。",
+          "セキュリティリスクが懸念される場合は、OSPOへ相談する必要がある。",
+          "社内導入済みOSSリストにないソフトウェアを導入する場合は、確認が必要である。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.68,
+      "cost_usd": 0.009048
+    },
+    {
+      "index": 50,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "20ffcb14762fed16a8bf558102973ed1f8ce15a65b92a2f80f91a3c68763843a",
+      "cache_hit": false,
+      "raw_file": "c0050.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "ソースコード提供義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストには、ソースコード提供義務などの利用形態に応じた確認が必要な条件を含むライセンスの場合、と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "同一ライセンスでの頒布義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストには、同一ライセンスでの頒布義務が利用形態に応じた確認が必要な条件の例として挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "著作権表示・ライセンス文書の添付義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストには、著作権表示・ライセンス文書の添付義務が利用形態に応じた確認が必要な条件の例として挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "商用ライセンスが必要な可能性がある場合は、確認が必要である。",
+            "reason": "コンテキストは、確認や相談が必要なケースの一覧として、商用ライセンスが必要な可能性がある場合を挙げており、確認が必要であると推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "セキュリティリスクが懸念される場合は、OSPOへ相談する必要がある。",
+            "reason": "コンテキストでは、セキュリティリスクが懸念される場合はセキュリティ部門へ相談するとされており、OSPOへ相談するとは書かれていない。",
+            "verdict": 0
+          },
+          {
+            "statement": "社内導入済みOSSリストにないソフトウェアを導入する場合は、確認が必要である。",
+            "reason": "コンテキストは、確認が必要なケースの一覧として、社内導入済みOSSリストにないソフトウェアの導入を挙げており、確認が必要であると推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 7.4,
+      "cost_usd": 0.017197999999999998
+    },
+    {
+      "index": 51,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2defd3798d5eda872c7f5aba71a3f131967329d5f96a1d4ec236c960144c18b0",
+      "cache_hit": true,
+      "raw_file": "c0049.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "ソースコード提供義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "同一ライセンスでの頒布義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "著作権表示・ライセンス文書の添付義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "商用ライセンスが必要な可能性がある場合は、確認が必要である。",
+          "セキュリティリスクが懸念される場合は、OSPOへ相談する必要がある。",
+          "社内導入済みOSSリストにないソフトウェアを導入する場合は、確認が必要である。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 52,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "20ffcb14762fed16a8bf558102973ed1f8ce15a65b92a2f80f91a3c68763843a",
+      "cache_hit": true,
+      "raw_file": "c0050.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "ソースコード提供義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストには、ソースコード提供義務などの利用形態に応じた確認が必要な条件を含むライセンスの場合、と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "同一ライセンスでの頒布義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストには、同一ライセンスでの頒布義務が利用形態に応じた確認が必要な条件の例として挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "著作権表示・ライセンス文書の添付義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストには、著作権表示・ライセンス文書の添付義務が利用形態に応じた確認が必要な条件の例として挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "商用ライセンスが必要な可能性がある場合は、確認が必要である。",
+            "reason": "コンテキストは、確認や相談が必要なケースの一覧として、商用ライセンスが必要な可能性がある場合を挙げており、確認が必要であると推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "セキュリティリスクが懸念される場合は、OSPOへ相談する必要がある。",
+            "reason": "コンテキストでは、セキュリティリスクが懸念される場合はセキュリティ部門へ相談するとされており、OSPOへ相談するとは書かれていない。",
+            "verdict": 0
+          },
+          {
+            "statement": "社内導入済みOSSリストにないソフトウェアを導入する場合は、確認が必要である。",
+            "reason": "コンテキストは、確認が必要なケースの一覧として、社内導入済みOSSリストにないソフトウェアの導入を挙げており、確認が必要であると推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 53,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "b34ecf42a8c048175e707a4deeb83e122d9176218c345ad03ec0e475db09837b",
+      "cache_hit": false,
+      "raw_file": "c0053.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "ソースコード提供義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "同一ライセンスでの頒布義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "著作権表示・ライセンス文書の添付義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+          "商用ライセンスが必要な可能性がある場合は、確認が必要である。",
+          "セキュリティリスクが懸念される場合は、セキュリティ部門へ相談する。",
+          "社内導入済みOSSリストにないソフトウェアを導入する場合は、確認が必要である。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.78,
+      "cost_usd": 0.009088
+    },
+    {
+      "index": 54,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "99fd3f463f7cd85f29564044eaf5eaefc73816691db1ca27feb86aaeab67afea",
+      "cache_hit": false,
+      "raw_file": "c0054.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "ソースコード提供義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストに、ソースコード提供義務などの利用形態に応じた確認が必要な条件を含むライセンスの場合、と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "同一ライセンスでの頒布義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストに、同一ライセンスでの頒布義務を含む、利用形態に応じた確認が必要な条件を持つライセンスの場合、と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "著作権表示・ライセンス文書の添付義務を含むライセンスの場合は、利用形態に応じた確認が必要である。",
+            "reason": "コンテキストに、著作権表示・ライセンス文書の添付義務など、利用形態に応じた確認が必要な条件を含むライセンスの場合、と記載されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "商用ライセンスが必要な可能性がある場合は、確認が必要である。",
+            "reason": "コンテキストは商用ライセンスが必要な可能性がある場合を挙げているが、これらは確認や相談が必要な場面の列挙と解釈でき、確認が必要であることは直接読み取れる。ただし、明示的に「確認」とは書かれていない。リストの文脈から確認対象の条件と推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "セキュリティリスクが懸念される場合は、セキュリティ部門へ相談する。",
+            "reason": "コンテキストではセキュリティリスクが懸念される場合はOSPOへ相談するとされており、セキュリティ部門への相談とは書かれていない。",
+            "verdict": 0
+          },
+          {
+            "statement": "社内導入済みOSSリストにないソフトウェアを導入する場合は、確認が必要である。",
+            "reason": "コンテキストは社内導入済みOSSリストにないソフトウェアの導入を、確認が必要な場面のリストに含めており、確認が必要であると推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 7.59,
+      "cost_usd": 0.017852
+    },
+    {
+      "index": 55,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "722eaa91ffd177f14f63d62dbef9b835e3dbc2e264a7c1dbc363ab7cd7be5f4e",
+      "cache_hit": false,
+      "raw_file": "c0055.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "この関数は一時的な記憶領域として使える file-like object を返す。",
+          "ファイルは mkstemp() と同じルールで安全に作成される。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.0,
+      "cost_usd": 0.006895999999999999
+    },
+    {
+      "index": 56,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "083db537f03360002dd7a39238cf15980a3bf60b5ec3089f79347805236c8c64",
+      "cache_hit": false,
+      "raw_file": "c0056.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "この関数は一時的な記憶領域として使える file-like object を返す。",
+            "reason": "文脈には「一時的な記憶領域として使うことの出来る file-like object を返します」と明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "ファイルは mkstemp() と同じルールで安全に作成される。",
+            "reason": "文脈には「ファイルは mkstemp() と同じルールにより安全に作成されます」と明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 7.22,
+      "cost_usd": 0.011252
+    },
+    {
+      "index": 57,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "722eaa91ffd177f14f63d62dbef9b835e3dbc2e264a7c1dbc363ab7cd7be5f4e",
+      "cache_hit": true,
+      "raw_file": "c0055.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "この関数は一時的な記憶領域として使える file-like object を返す。",
+          "ファイルは mkstemp() と同じルールで安全に作成される。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 58,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "083db537f03360002dd7a39238cf15980a3bf60b5ec3089f79347805236c8c64",
+      "cache_hit": true,
+      "raw_file": "c0056.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "この関数は一時的な記憶領域として使える file-like object を返す。",
+            "reason": "文脈には「一時的な記憶領域として使うことの出来る file-like object を返します」と明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "ファイルは mkstemp() と同じルールで安全に作成される。",
+            "reason": "文脈には「ファイルは mkstemp() と同じルールにより安全に作成されます」と明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 59,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "0bcb2d077208b497e3f68bdf527a4ef0fc96cd94ae5bd3ea6cdb63eeb8427ae5",
+      "cache_hit": false,
+      "raw_file": "c0059.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "一時的な記憶領域として使うことの出来る file-like object を返す。",
+          "ファイルは mkstemp() と同じルールにより安全に作成される。"
+        ]
+      },
+      "error": null,
+      "seconds": 3.88,
+      "cost_usd": 0.006944
+    },
+    {
+      "index": 60,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "1e548ca7b5839a4a07fa5b3099ad5f89ce952d4907fb1a698ef1b3f5ac35cb3e",
+      "cache_hit": false,
+      "raw_file": "c0060.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "一時的な記憶領域として使うことの出来る file-like object を返す。",
+            "reason": "文脈には「一時的な記憶領域として使える file-like object を返します」と明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "ファイルは mkstemp() と同じルールにより安全に作成される。",
+            "reason": "文脈には「ファイルは mkstemp() と同じルールで安全に作成されます」と明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.94,
+      "cost_usd": 0.011204
+    },
+    {
+      "index": 61,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "36d3e99ff144de77e458b837c12be36fb910ea37c8a25ae06423d260b7471e31",
+      "cache_hit": false,
+      "raw_file": "c0061.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "語学の修得は一気呵成にはできない。",
+          "数学の修得は一気呵成にはできない。",
+          "語学や数学の修得には、飽きずに急がずに長く時間をかけることが必要条件の一つである。",
+          "長く時間をかけることだけでは、語学や数学の修得の充分条件ではない。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.03,
+      "cost_usd": 0.007626000000000001
+    },
+    {
+      "index": 62,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "ef30ed1b8ac96ffa777d3bc528ff797240593d6e75a9be567ff8dde161a9d059",
+      "cache_hit": false,
+      "raw_file": "c0062.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "語学の修得は一気呵成にはできない。",
+            "reason": "文脈に「語学も数学もその修得は一気呵成にはできない」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "数学の修得は一気呵成にはできない。",
+            "reason": "文脈に「語学も数学もその修得は一気呵成にはできない」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "語学や数学の修得には、飽きずに急がずに長く時間をかけることが必要条件の一つである。",
+            "reason": "文脈に「飽きずに急がずに長く時間をかける事が、少なくとも「必要条件」の一つである」と述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "長く時間をかけることだけでは、語学や数学の修得の充分条件ではない。",
+            "reason": "文脈に「ただしこれだけでは「充分なる条件」ではない」とあり、時間をかけることだけでは十分ではないことが示されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.52,
+      "cost_usd": 0.013166
+    },
+    {
+      "index": 63,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "36d3e99ff144de77e458b837c12be36fb910ea37c8a25ae06423d260b7471e31",
+      "cache_hit": true,
+      "raw_file": "c0061.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "語学の修得は一気呵成にはできない。",
+          "数学の修得は一気呵成にはできない。",
+          "語学や数学の修得には、飽きずに急がずに長く時間をかけることが必要条件の一つである。",
+          "長く時間をかけることだけでは、語学や数学の修得の充分条件ではない。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 64,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "ef30ed1b8ac96ffa777d3bc528ff797240593d6e75a9be567ff8dde161a9d059",
+      "cache_hit": true,
+      "raw_file": "c0062.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "語学の修得は一気呵成にはできない。",
+            "reason": "文脈に「語学も数学もその修得は一気呵成にはできない」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "数学の修得は一気呵成にはできない。",
+            "reason": "文脈に「語学も数学もその修得は一気呵成にはできない」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "語学や数学の修得には、飽きずに急がずに長く時間をかけることが必要条件の一つである。",
+            "reason": "文脈に「飽きずに急がずに長く時間をかける事が、少なくとも「必要条件」の一つである」と述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "長く時間をかけることだけでは、語学や数学の修得の充分条件ではない。",
+            "reason": "文脈に「ただしこれだけでは「充分なる条件」ではない」とあり、時間をかけることだけでは十分ではないことが示されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 65,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "36d3e99ff144de77e458b837c12be36fb910ea37c8a25ae06423d260b7471e31",
+      "cache_hit": true,
+      "raw_file": "c0061.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "語学の修得は一気呵成にはできない。",
+          "数学の修得は一気呵成にはできない。",
+          "語学や数学の修得には、飽きずに急がずに長く時間をかけることが必要条件の一つである。",
+          "長く時間をかけることだけでは、語学や数学の修得の充分条件ではない。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 66,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "ef30ed1b8ac96ffa777d3bc528ff797240593d6e75a9be567ff8dde161a9d059",
+      "cache_hit": true,
+      "raw_file": "c0062.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "語学の修得は一気呵成にはできない。",
+            "reason": "文脈に「語学も数学もその修得は一気呵成にはできない」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "数学の修得は一気呵成にはできない。",
+            "reason": "文脈に「語学も数学もその修得は一気呵成にはできない」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "語学や数学の修得には、飽きずに急がずに長く時間をかけることが必要条件の一つである。",
+            "reason": "文脈に「飽きずに急がずに長く時間をかける事が、少なくとも「必要条件」の一つである」と述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "長く時間をかけることだけでは、語学や数学の修得の充分条件ではない。",
+            "reason": "文脈に「ただしこれだけでは「充分なる条件」ではない」とあり、時間をかけることだけでは十分ではないことが示されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    }
+  ],
+  "call_summary": {
+    "calls": 66,
+    "cache_hits": 25,
+    "failures": 0,
+    "seconds": 205.9,
+    "cost_usd_list_price": 0.4073,
+    "calls_without_cost": 0
+  },
+  "finished_at": "2026-10-16T23:38:49.364669+00:00"
+}

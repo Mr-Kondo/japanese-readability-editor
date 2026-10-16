@@ -403,5 +403,79 @@ class RagasIntegrationTest(unittest.TestCase):
                 self.assertTrue(Path(folder, "raw", entry["raw_file"]).exists())
 
 
+class StabilityTest(unittest.TestCase):
+    def repeat(self, *cases, **config):
+        base = {"atomicity": "high", "coverage": "high", "discriminate": False, "rubric_sha256": "r", "aspects": ["a"],
+                "metrics": ["factual"], "claude_flags": [], "packages": {}}
+        return {"status": "complete", "config": base | config, "models": ["m"], "cases": list(cases), "call_summary": {}}
+
+    def test_counts_unstable_signals_aspect_flips_and_majority(self):
+        runs = [self.repeat(run_case("f1", condition_scope="fail", actor_target="pass"), run_case("p1", condition_scope="pass", actor_target="pass")),
+                self.repeat(run_case("f1", condition_scope="fail", actor_target="fail"), run_case("p1", condition_scope="pass", actor_target="pass")),
+                self.repeat(run_case("f1", condition_scope="pass", actor_target="pass"), run_case("p1", precision=0.5, condition_scope="pass", actor_target="pass"))]
+        labels = {"labels": {"f1": label("fail", "condition_scope"), "p1": label("pass")}}
+        report = ragas_tool.stability(runs, labels)
+        summary = report["summary"]
+        self.assertEqual(summary["repeats"], 3)
+        self.assertEqual(summary["rubric_signal_unstable_cases"], 1)  # f1: True, True, False
+        self.assertEqual(summary["factual_signal_unstable_cases"], 1)  # p1: False, False, True
+        self.assertEqual(summary["failed_aspects_unstable_cases"], 1)
+        self.assertEqual(summary["aspect_flips"], {"flipped": 2, "aspect_scores": 4, "rate": 0.5})  # f1 の2観点とも値が変わった
+        self.assertEqual(summary["fail"]["rubric_signal"], {"signalled_per_repeat": [1, 1, 0], "signalled_by_majority": 1})
+        self.assertEqual(summary["fail"]["targeted_hits_per_repeat"], [1, 1, 0])
+        self.assertEqual(summary["pass"]["factual_signal"]["signalled_by_majority"], 0)  # 1/3 は多数決で信号なし
+        self.assertEqual(report["status"], "constructed_labels_not_human_confirmed")
+        self.assertIn("人の確認前", ragas_tool.render_stability(report))
+
+    def test_needs_two_repeats_the_same_settings_and_the_same_cases(self):
+        one = self.repeat(run_case("a", condition_scope="pass"))
+        with self.assertRaisesRegex(ValueError, "at least two"):
+            ragas_tool.stability([one])
+        with self.assertRaisesRegex(ValueError, "different config: coverage"):
+            ragas_tool.stability([one, self.repeat(run_case("a", condition_scope="pass"), coverage="low")])
+        with self.assertRaisesRegex(ValueError, "different cases"):
+            ragas_tool.stability([one, self.repeat(run_case("b", condition_scope="pass"))])
+
+    def test_cli_writes_report_and_refuses_overwrite(self):
+        with tempfile.TemporaryDirectory() as folder:
+            files = []
+            for index in range(2):
+                path = Path(folder, f"r{index}.json")
+                path.write_text(json.dumps(self.repeat(run_case("a", condition_scope="pass"))), encoding="utf-8")
+                files.append(str(path))
+            out = Path(folder, "out")
+            args = ["stability", "--repeat", files[0], "--repeat", files[1], "--out-dir", str(out)]
+            code, _, err = run_script(TOOL, *args)
+            self.assertEqual(code, 0, err)
+            self.assertEqual(sorted(p.name for p in out.iterdir()), ["ragas-stability.json", "ragas-stability.md"])
+            self.assertEqual(run_script(TOOL, *args)[0], 2)
+
+
+class DiscriminateAndSubtleLabelsTest(unittest.TestCase):
+    def test_discriminate_adds_one_instruction_and_changes_the_rubric_hash(self):
+        plain, strict = ragas_tool.aspect_template("numbers_order"), ragas_tool.aspect_template("numbers_order", True)
+        self.assertNotIn("他の観点に当たる違い", plain)
+        self.assertIn("他の観点に当たる違い", strict)
+        self.assertEqual(strict.count("他の観点に当たる違い"), 1)
+        self.assertNotEqual(ragas_tool.rubric_sha256(), ragas_tool.rubric_sha256(True))
+        self.assertEqual(ragas_tool.aspect_template("numbers_order"), plain)  # 既定は変えない
+
+    def test_committed_subtle_labels_cover_every_case_and_use_only_tuning_candidates(self):
+        base = REPO_ROOT / "evals/ragas-calibration"
+        cases = json.loads((base / "artificial-cases-subtle.json").read_text(encoding="utf-8"))["cases"]
+        labels = json.loads((base / "artificial-labels-subtle.json").read_text(encoding="utf-8"))["labels"]
+        self.assertEqual({c["id"] for c in cases}, set(labels))
+        manifest = json.loads((REPO_ROOT / "evals/public-documents/manifest.json").read_text(encoding="utf-8"))
+        excerpts = {e["id"]: e for e in manifest["excerpts"] if e["status"] == "candidate"}
+        for c in cases:
+            lab = labels[c["id"]]
+            self.assertEqual(excerpts[lab["source_excerpt"]]["split"], "tuning")  # 最終評価用は校正に使わない
+            self.assertIn(c["original"], excerpts[lab["source_excerpt"]]["text"])
+            self.assertEqual(lab["confirmed_by"], "")  # 人の確認を偽らない
+            self.assertEqual(lab["original_sha256"], __import__("hashlib").sha256(c["original"].encode()).hexdigest())
+            self.assertEqual(c["candidate"] != c["original"], lab["perturbation"] != "control_unchanged")
+            self.assertEqual(lab["expected_preservation"] == "fail", lab["violated_aspect"] is not None)
+
+
 if __name__ == "__main__":
     unittest.main()

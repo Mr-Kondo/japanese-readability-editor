@@ -1,0 +1,2695 @@
+{
+  "schema_version": 1,
+  "status": "complete_with_errors",
+  "config": {
+    "tool_version": 1,
+    "rubric_version": "ragas-ja-rubric-v1",
+    "rubric_sha256": "7f37f4309a2786203f376adfebd3d62e08df4be0d1d448c23480dd4f39dc81d1",
+    "metrics": [
+      "factual",
+      "rubric"
+    ],
+    "profile": "gov-org",
+    "aspects": [
+      "negation_polarity",
+      "condition_scope",
+      "actor_target",
+      "modality_strength",
+      "numbers_order",
+      "ungrounded_specificity",
+      "unnecessary_change"
+    ],
+    "atomicity": "high",
+    "coverage": "high",
+    "ragas_prompts": "Ragas 0.4.3 既定（英語の指示と例。日本語への適合は未検証）",
+    "llm_adapter": "ClaudeCliLLM（JSON指示をプロンプト末尾に付加、ツールなし、逐次実行、同一プロンプトは再利用）",
+    "claude_flags": [
+      "--print",
+      "--safe-mode",
+      "--strict-mcp-config",
+      "--tools",
+      "",
+      "--no-session-persistence",
+      "--model",
+      "sonnet",
+      "--effort",
+      "medium",
+      "--output-format",
+      "json"
+    ],
+    "claude_system": "提供された文章を処理してください。ツールは使用しないでください。",
+    "claude_cli_version": "2.1.292 (Claude Code)",
+    "temperature_and_seed": "CLI から指定できない（不明）",
+    "python": "3.13.16",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "packages": {
+      "ragas": "0.4.3",
+      "langchain-community": "0.3.31",
+      "langchain-core": "1.6.11",
+      "langchain": "1.4.6",
+      "instructor": "1.3.2",
+      "openai": "1.109.1",
+      "pydantic": "2.14.1",
+      "numpy": "2.5.4"
+    }
+  },
+  "started_at": "2026-10-16T23:27:04.570814+00:00",
+  "input": {
+    "path": "/tmp/claude-501/ragas-inputs/subtle-p1.json",
+    "cases": 7,
+    "task_sha256": "0bfe4656073ab8dbfa0cbb1d89e6660c27264326e5dc02dc8e2f72f432fb0387"
+  },
+  "cases": [
+    {
+      "id": "hedge-s3a",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「情報システムの監視は24時間365日行うこと」と例外なしの義務を課している。候補は「原則として24時間365日行うこと」と加えており、例外を許容する余地が生じる。これは否定の反転や禁止と許可の入れ替えそのものではないが、義務が「例外なし」から「原則」へ緩み、例外的に監視しなくてもよい場合を認める方向に働く。否定・禁止の保持の観点では、監視停止を禁じる働きが弱まっているため、原文の働きは保たれていない。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「情報システムの監視は24時間365日行うこと」と例外なく義務づけているが、候補は「原則として24時間365日行うこと」を加えており、例外を許容する余地が生じる。「原則として」の追加により、監視の範囲・条件が無条件の義務から例外ありの義務へ変わっているため、条件・例外の保持という観点で原文と異なる。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「情報システムの監視は24時間365日行うこと」と例外なく義務づけている。候補は「原則として24時間365日行うこと」を加えており、監視の対象範囲・実施の修飾先に例外を許容する条件が追加されている。これにより義務の及ぶ範囲が緩和され、原文の働きが変わっている。運用時間の主体・対象や「平日（土日及び祝日、年末年始を除く）の9時から17時まで」の部分は保たれているが、監視に関する修飾の追加が差異である。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「情報システムの監視は24時間365日行うこと」と例外のない義務を定めている。候補は「原則として24時間365日行うこと」と加えており、例外を許容する余地が生じて義務の強さが弱まっている。「ただし」で運用時間の限定に対する例外として無条件の常時監視を求める原文の働きが変わるため、fail。時制は変わっていない。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "運用時間「平日…の9時から17時まで」は候補でも同じで、数値・時間帯・平日の除外条件は保たれている。一方、監視について原文は「24時間365日行うこと」と頻度・常時性を断定しているが、候補は「原則として24時間365日行うこと」とし、例外を許容する余地を加えている。「24時間365日」という数値自体は変わらないが、頻度・継続性の保証が緩んでおり、頻度の働きが変わっている。したがってこの観点ではfailとする。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「情報システムの監視は24時間365日行うこと」と例外なしの義務を定めているが、候補は「原則として」を追加している。これは原文にない条件・例外の余地を持ち込む具体化であり、義務の強さも弱めている。よって原文にない条件の追加にあたる。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「情報システムの監視は24時間365日行うこと」と例外なく義務づけている。候補は「原文にない「原則として」を追加しており、「行うこと」の義務が例外を許容する弱いものに変わっている。原文は既に明確で変更は不要なのに、意味と義務の強さを変える不要な書換えをしているためfail。"
+        }
+      }
+    },
+    {
+      "id": "timing-s6",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「要件定義を開始する時点で最新化を行いましょう」が、候補では「要件定義を開始する前に最新化を行いましょう」になっている。これは時点の変更で、否定・肯定の反転、否定の追加・削除、禁止と許可の入れ替えには当たらない。「追加のコストがかかる可能性がありますので、留意してください」も両者で同じで、否定や禁止の関係は保たれている。時点のずれは別の観点の問題であり、この観点ではpass。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「要件定義を開始する時点で最新化を行いましょう」と、最新化の時期を開始の「時点」と範囲指定している。候補は「要件定義を開始する前に」に変わっており、時期の範囲が「時点」から「前」へ変更されている。開始時点を含む範囲が、開始より前のみに限定されるため、期限・タイミングの条件が変わっている。「調達後に変更内容が判明した場合は」以降の条件は保たれている。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「要件定義を開始する時点で最新化を行いましょう」に対し、候補は「要件定義を開始する前に最新化を行いましょう」としている。最新化という動作の主体・対象（既存のサービス・業務や情報システムの資料）、資料収集の時点、調達後に変更内容が判明した場合の留意先（追加コスト）は保たれている。変わっているのは最新化の実施時期（「開始する時点」→「開始する前」）で、これは主体・対象・修飾先・宛先の入れ替えや追加・省略ではなく、時期・条件の観点に属する。この観点（主体・対象・修飾先の保持）では意味・働きが保たれている。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "義務・推奨の強さは、原文「最新化を行いましょう」「留意してください」が候補でも同じ表現で保たれており、時制も「収集しますが」「かかる可能性があります」と変わっていない。一方、時点の表現が原文「要件定義を開始する時点で」から候補「要件定義を開始する前に」へ変わっている。これは最新化の実施時期（開始時点か、開始より前か）の違いで、期限・タイミングの観点に当たる。ただし本観点の対象である義務・推奨の強さと時制（過去・現在・予定）そのものは変化しておらず、推奨の強さは同じなので、この観点ではpassとする。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「要件定義を開始する時点で最新化を行いましょう」とあり、最新化の時期は要件定義開始の時点（開始時点）である。候補は「要件定義を開始する前に最新化を行いましょう」としており、時点から「前」へ変わっている。「時点」は開始のタイミングを指し、「前」は開始より先に完了していることを示すため、先後関係・期限の働きが異なる。厳密には開始時点を含むかどうかの差だが、期限の位置づけが変わっているためfailとする。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「要件定義を開始する時点で最新化を行いましょう」が、候補では「要件定義を開始する前に最新化を行いましょう」になっている。「時点で」は開始のタイミングを指し、「前に」は開始より前という別の時期を指すため、条件・時期が変わっている。新たな主体や固有名の追加はないが、時期の限定という原文にない具体化・変更が生じている。他の部分（「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」）は同一である。ただし、この観点は「追加」の有無であり、時期のずれは厳密には変更だが、原文にない条件（開始前という時期指定）を加えたものと判断できる。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「要件定義を開始する時点で最新化を行いましょう」とあり、候補は「要件定義を開始する前に最新化を行いましょう」に変わっている。「時点で」は開始のタイミングちょうど（またはその時点）を指し、「前に」は開始より前を指すため、最新化を行う時期が異なる。原文が明確なのに時期の意味を変える不要な書換えであり、それ以外の文は無変更。したがって、意味や働きを保っていない。"
+        }
+      }
+    },
+    {
+      "id": "hedge-k8s",
+      "document_id": "k8s-pod-lifecycle",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「デフォルトの状態はSuccessです」は、livenessProbe未設定時にSuccessであると断定している。候補の「通常はSuccessとして扱われます」は肯定のまま保たれ、否定の反転や追加・削除、禁止と許可の入れ替えはない。「通常は」で断定がやや弱まっているが、これは否定・禁止の観点ではなく、他の観点で扱うべき違いである。livenessProbeに「失敗すると」kubeletがコンテナを殺す点も変わっていない。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「デフォルトの状態はSuccessです」と、livenessProbeが未設定の場合の既定値を断定している。候補は「通常はSuccessとして扱われます」と変え、「通常は」という緩和表現を加えたため、例外がありうる含みが生じ、無条件の既定値が条件付き・不確定な表現に変わっている。「設定されていない場合」という条件自体は保たれているが、その結果の範囲（常にSuccess）が弱められている。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は動作の主体・対象・修飾先の保持。原文「kubeletはコンテナを殺します」「コンテナはrestart policyに従います」は候補でも同一で、主体と対象は保たれている。変更箇所は「デフォルトの状態はSuccessです」→「通常はSuccessとして扱われます」。主体・対象（livenessProbe未設定のコンテナ、Success）は同じで、入れ替え・追加・省略はない。「通常は」は既定値の意味合いを弱める点があるが、それは主体・対象・修飾先の問題ではなく別観点（条件・既定値の断定性）にあたる。この観点ではpass。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「デフォルトの状態はSuccessです」と、livenessProbe未設定時の既定値を断定的な現在の事実として述べている。候補は「通常はSuccessとして扱われます」となり、「通常は」という留保が加わって、例外があり得るように読める。断定の強さが弱まり、既定値の確定性が変わっている。義務・推奨・可能の強さの変更に当たり、時制は現在のまま保たれている。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は数値・単位・期限・頻度・順序の保持です。原文と候補で「livenessProbeに失敗すると、kubeletはコンテナを殺します、そしてコンテナはrestart policyに従います」という先後関係は同一で保たれています。数値・期限・頻度は両方に登場しません。原文の「デフォルトの状態はSuccessです」は候補で「通常はSuccessとして扱われます」に変わっていますが、これは既定値の表現の変化であり、数値・順序の変更ではありません。「デフォルト」から「通常は」への弱まりは別観点（既定値の保持）の問題で、この観点ではpassです。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「デフォルトの状態はSuccessです」と断定しているのに対し、候補は「通常はSuccessとして扱われます」と変えている。「通常は」は例外がありうるという条件・留保を原文にないものとして加えており、既定値が常にSuccessであるという断定の働きが弱まっている。主体・理由・具体例・固有名の追加はないが、既定値という重要な情報に原文にない限定が入っている。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「デフォルトの状態はSuccessです」と、livenessProbe未設定時の既定値がSuccessであると断定している。候補は「通常はSuccessとして扱われます」と書き換えており、「通常は」が加わったことで断定が弱まり、例外がありうるように読める。既定値という仕様の意味が変わっている。原文は既に明確で、この書換えは読みやすさに必要ない。また「kubeletはコンテナを殺します、そして…」などの箇所は無変更で、変更が必要な箇所でもない。"
+        }
+      }
+    },
+    {
+      "id": "order-py",
+      "document_id": "py-tutorial-modules",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は否定・禁止の保持であり、原文に明示的な否定や禁止表現はなく、候補にも否定の追加・削除や反転はない。ただし原文の「見つからなかった場合は」という条件付きの順序（まず組み込みモジュールを探し、見つからなければ spam.py を探す）が、候補では「組み込みモジュールと、…spam.py を探します」と並列になり、条件関係が失われている。これは否定・肯定の反転ではなく条件・順序の変化であり、他観点（条件の保持）で扱うべき問題である。否定・禁止の観点では原文の働きは保たれている。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「まずその名前の組み込みモジュールを探します」「見つからなかった場合は、spam.py ... を探します」と、組み込みモジュールを先に探し、見つからない場合に限ってファイルを探すという順序・条件関係を示している。候補は「組み込みモジュールと、sys.path にあるディレクトリの spam.py を探します」とし、両者を並列に探すかのように書いており、「まず」と「見つからなかった場合は」という条件が脱落している。そのため、spam.py の探索が組み込みモジュール不在時に限られるという条件が失われ、意味が変わっている。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「まずその名前の組み込みモジュールを探し」、「見つからなかった場合は」spam.py を sys.path のディレクトリから探す、という段階的な手続きで、「モジュール名の一覧は sys.builtin_module_names」は組み込みモジュールの一覧を指します。候補は「組み込みモジュールと、sys.path にあるディレクトリの spam.py を探します」と並列にしており、「その名前の」という組み込みモジュールの修飾が失われ、探索の対象が「spam」という名前に限定されなくなっています。また「見つからなかった場合は」という条件が消え、spam.py の探索が組み込みモジュールの探索と同列の対象になっています。さらに「sys.path にあるディレクトリのリストから」が「ディレクトリの spam.py」となり、探索先の関係もずれています。手続の対象・宛先・修飾先が変わっているため fail です。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "義務・推奨の強さについては、原文も候補も事実を述べる現在形の記述（「探します」「あります」）で、義務や推奨の表現はなく、時制も現在のまま保たれている。ただし原文の「まずその名前の組み込みモジュールを探します」「見つからなかった場合は、…探します」という順序・条件の関係が、候補の「組み込みモジュールと、…spam.py を探します」では並列になっている。これは探索の手順・条件に関する違いで、義務の強さや時制の変化ではないため、この観点ではpassとする。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「まずその名前の組み込みモジュールを探します」「見つからなかった場合は、spam.py ... を探します」と、組み込みモジュールを先に探し、見つからない場合に限り sys.path 上のファイルを探すという先後関係を述べている。候補は「組み込みモジュールと、sys.path にあるディレクトリの spam.py を探します」と並列に記述しており、「まず」と「見つからなかった場合」という順序・条件が失われ、両者を同等に探すように読める。検索順序が変わっているため、この観点ではfail。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「まずその名前の組み込みモジュールを探します」「見つからなかった場合は、spam.py という名前のファイルを…探します」と、組み込みモジュールを先に探し、見つからない場合に限ってファイルを探す条件付きの順序を述べている。候補は「組み込みモジュールと、sys.path にあるディレクトリの spam.py を探します」と並列にしており、「まず」「見つからなかった場合」という条件・順序が失われている。これは原文にない新たな主体や固有名の追加ではなく、条件の欠落である。この観点（原文にない具体化の有無）では、候補に新たな主体、条件、完了状態、理由、具体例、固有名の追加は見られない。「sys.builtin_module_names」も原文どおりである。したがって具体化の追加はなく、この観点ではpass。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「まずその名前の組み込みモジュールを探します」「見つからなかった場合は、spam.py ... を探します」と、組み込みモジュールを先に探し、見つからない場合にだけファイルを探す順序・条件を述べている。候補は「組み込みモジュールと、sys.path にあるディレクトリの spam.py を探します」と並列にしており、「まず」と「見つからなかった場合は」という段階的な条件が失われている。また、「モジュール名の一覧は sys.builtin_module_names にあります」の位置が組み込みモジュールの探索説明から切り離され、何の一覧かも曖昧になった。意味や働きを変える不要な書換えなのでfail。"
+        }
+      }
+    },
+    {
+      "id": "tension-essay",
+      "document_id": "az-047236",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.5,
+          "status": "scored",
+          "value": 0.5,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 2,
+            "unsupported": 2,
+            "unsupported_texts": [
+              {
+                "claim": "植物採集は楽しい遊びごとのようなものであった。",
+                "reason": "文脈は「ただの遊びごとにしたことでなく」と遊びであることを否定している。楽しかったとは述べているが、遊びごとのようなものだったとは言えない。"
+              },
+              {
+                "claim": "植物採集は努力というほどのものではなかった。",
+                "reason": "文脈は「汗水流しての積極的採集で自分の学問のために努力した」と述べており、努力であったことを明示している。この主張は文脈と矛盾する。"
+              }
+            ]
+          },
+          "recomputed_value": 0.5,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.4,
+          "status": "scored",
+          "value": 0.4,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 2,
+            "unsupported": 2,
+            "unsupported_texts": [
+              {
+                "claim": "植物採集は楽しい遊びごとのようなものであった。",
+                "reason": "文脈は「ただの遊びごとにしたことでなく」と遊びであることを否定している。楽しかったとは述べているが、遊びごとのようなものだったとは言えない。"
+              },
+              {
+                "claim": "植物採集は努力というほどのものではなかった。",
+                "reason": "文脈は「汗水流しての積極的採集で自分の学問のために努力した」と述べており、努力であったことを明示している。この主張は文脈と矛盾する。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 5,
+            "supported": 2,
+            "unsupported": 3,
+            "coverage": 0.4,
+            "unsupported_texts": [
+              {
+                "claim": "植物採集はただの遊びごとではなかった。",
+                "reason": "文脈では植物採集は「楽しい遊びごとのようなもの」で、努力というほどのものではなかったと述べられており、この主張は文脈と矛盾する。"
+              },
+              {
+                "claim": "植物採集は汗水流しての積極的な採集であった。",
+                "reason": "文脈では努力というほどのものではなかったとされており、汗水流しての積極的な採集だったとは言えない。"
+              },
+              {
+                "claim": "話者は自分の学問のために努力して植物採集をした。",
+                "reason": "文脈は植物採集が努力というほどのものではなかったと述べており、努力して行ったという主張は文脈と矛盾する。また学問のためという記述もない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.4,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「ただの遊びごとにしたことでなく」「全く汗水流しての積極的採集で自分の学問のために努力した」と、遊びを否定し努力を肯定している。候補は「楽しい遊びごとのようなもので、努力というほどのものではなかった」と、遊びを肯定し努力を否定しており、否定・肯定が完全に反転している。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「ただの遊びごとにしたことでなく、たとえ楽しかったとはいえ、全く汗水流しての積極的採集で自分の学問のために努力した」と、遊びであることを否定し譲歩（「たとえ楽しかったとはいえ」）を付けて努力・学問目的を主張している。候補は「楽しい遊びごとのようなもので、努力というほどのものではなかった」とあり、否定と肯定が反転している。譲歩条件の働きも失われ、「学問のために努力した」という主張が「努力というほどのものではなかった」に変わっているため、論理関係が保たれていない。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「ただの遊びごとにしたことでなく」「全く汗水流しての積極的採集で自分の学問のために努力した」と、採集が遊びではなく学問のための努力だったと述べている。候補は「楽しい遊びごとのようなもので、努力というほどのものではなかった」とあり、採集という行為の性格づけが逆転している。「自分の学問のために」という目的（宛先）も省略され、動作の働きが原文と異なる。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「ただの遊びごとにしたことでなく」「全く汗水流しての積極的採集で自分の学問のために努力したのである」と、遊びではなく努力したという過去の事実を断定している。候補は「楽しい遊びごとのようなもので、努力というほどのものではなかった」と述べ、努力した主張を否定している。時制は過去で共通だが、「努力したのである」という断定の働きが「努力というほどのものではなかった」という否定に反転しており、この観点でも意味・働きが保たれていない。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は数値・単位・期限・頻度・先後関係の保持です。原文と候補のどちらにも具体的な数値、単位、期限、頻度、時間的な順序は出てきません。「ほんの一部の植物採集談」は両方にあり、保たれています。なお、原文は「ただの遊びごとにしたことでなく…汗水流しての積極的採集で自分の学問のために努力した」と述べますが、候補は「楽しい遊びごとのようなもので、努力というほどのものではなかった」とあり、意味が逆になっています。これは論旨・否定の反転で別の観点の問題です。数値・期限・順序という本観点では変更はありません。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「ただの遊びごとにしたことでなく」「全く汗水流しての積極的採集で自分の学問のために努力した」と、遊びではなく学問のための努力だったと述べる。候補は「楽しい遊びごとのようなもので、努力というほどのものではなかった」と正反対の内容になっている。これは「具体化の有無」（主体・条件・理由・具体例・固有名の追加）の観点では、新しい固有名や具体例の追加というより意味の反転である。ただ、原文にある「学問のために」という理由・目的が消え、代わりに「楽しい遊びごとのよう」という原文にない性格づけが加えられており、原文と異なる意味・働きになっているためfailとする。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「ただの遊びごとにしたことでなく」「全く汗水流しての積極的採集で自分の学問のために努力したのである」と、遊びではなく学問のための努力だったと述べている。候補は「楽しい遊びごとのようなもので、努力というほどのものではなかった」と書き、遊びの否定を肯定に、努力の肯定を否定に反転させている。「たとえ楽しかったとはいえ」という譲歩の対比も失われ、原文の論旨が逆になっているため、不要な変更どころか意味の改変であり、この観点では保たれていない。"
+        }
+      }
+    },
+    {
+      "id": "paraphrase-k8s",
+      "document_id": "k8s-pod-lifecycle",
+      "errors": [
+        "factual.recall: JSONDecodeError: Expecting ',' delimiter: line 1 column 63 (char 62)"
+      ],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": null,
+          "status": "error",
+          "value": null,
+          "warnings": [],
+          "error": "JSONDecodeError: Expecting ',' delimiter: line 1 column 63 (char 62)"
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文と候補のどちらにも否定・禁止の表現はなく、追加や削除もない。原文の「Always、OnFailure、またはNeverのいずれかの値を持つ」は候補の「値はAlways、OnFailure、Neverのいずれかです」と同じ意味である。「デフォルト値はAlwaysです」も変わらず保たれている。「Never」は値の名前であり、否定の反転にはあたらない。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「Always、OnFailure、またはNeverのいずれかの値を持つ」は、候補の「値はAlways、OnFailure、Neverのいずれかです」で、選択肢の範囲と「いずれか」の論理関係が保たれている。「デフォルト値はAlwaysです」も同一で、条件・例外・範囲の脱落や追加はない。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「Podのspecには、…restartPolicyフィールドがあります」「Always、OnFailure、またはNeverのいずれかの値を持つ」「デフォルト値はAlwaysです」という関係は、候補でも「Podのspecには、restartPolicyフィールドがあり、値はAlways、OnFailure、Neverのいずれかです」「デフォルト値はAlwaysです」として保たれている。フィールドの所属先(Podのspec)、値の持ち主(restartPolicy)、既定値の対象に入れ替え・追加・省略はない。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「Always、OnFailure、またはNeverのいずれかの値を持つrestartPolicyフィールドがあります」「デフォルト値はAlwaysです」と現在の事実を述べており、義務・推奨・可能の表現は含まれない。候補も「restartPolicyフィールドがあり、値はAlways、OnFailure、Neverのいずれかです」「デフォルト値はAlwaysです」と現在形の記述で、強さも時制も変わっていない。語順の変更のみで、この観点では保たれている。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「Always、OnFailure、またはNeverのいずれかの値」は、候補でも「Always、OnFailure、Neverのいずれかです」と3つの値が保たれている。「デフォルト値はAlwaysです」も両者で同一である。数値・単位・期限・頻度・順序に変更はなく、語順の変更は自然な言い換えの範囲である。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「Always、OnFailure、またはNeverのいずれかの値を持つrestartPolicyフィールドがあります」「デフォルト値はAlwaysです」は、候補の「restartPolicyフィールドがあり、値はAlways、OnFailure、Neverのいずれかです」「デフォルト値はAlwaysです」と同じ関係が保たれている。主体、条件、完了状態、理由、具体例、固有名の追加は見当たらず、語順と構文の変更のみである。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「Always、OnFailure、またはNeverのいずれかの値を持つrestartPolicyフィールドがあります」を、候補は「restartPolicyフィールドがあり、値はAlways、OnFailure、Neverのいずれかです」に組み替えている。フィールド名、3つの値、「デフォルト値はAlwaysです」はそのまま保たれ、意味の追加や欠落はない。長い連体修飾を2つの節に分けており、読みやすさのための自然な再構成である。2文目は無変更で、不要な書換えは見当たらない。"
+        }
+      }
+    },
+    {
+      "id": "paraphrase-essay",
+      "document_id": "az-002359",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文には「人のまだ行かない所」とあり、候補は「まだ誰も行っていない所」としている。どちらも否定形で、未踏の場所という意味が保たれている。「見落とす恐れがある」は両方で同じ肯定的な可能性として残っている。「言わば」→「言ってみれば」、「道ばたあるいは」→「道ばたや」は自然な言い換えで、否定・禁止の反転や追加・削除はない。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「人より先に人のまだ行かない所へ行き着くこともできる代わりに」は、候補で「人より先に、まだ誰も行っていない所へ行き着くこともできる代わりに」となっており、対比（できる代わりに〜恐れがある）と範囲は保たれている。「途中の道ばたあるいはちょっとしたわき道」は「途中の道ばたやちょっとしたわき道」で、「あるいは」と「や」はどちらも並列・選択の関係として同等であり、論理関係は変わっていない。「恐れがある」という可能性の程度、「肝心なもの」という対象も維持されている。条件・例外・範囲の脱落や追加はない。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「人より先に人のまだ行かない所へ行き着くこともできる」は、候補「人より先に、まだ誰も行っていない所へ行き着くこともできる」と主体・到達先が保たれている。「人のまだ行かない所」→「まだ誰も行っていない所」は言い換えの範囲。「途中の道ばたあるいはちょっとしたわき道にある肝心なもの」も候補「道ばたやちょっとしたわき道にある肝心なもの」で、修飾先（「肝心なもの」にかかる場所）と見落とす対象が同じ。「足の早い旅人」「頭のいい人」という比喩の主体・対象も保持されている。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「行き着くこともできる」（可能）と「見落とす恐れがある」（可能性・懸念）は、候補でも「行き着くこともできる」「見落とす恐れがある」としてそのまま保たれている。「言わば」→「言ってみれば」、「人のまだ行かない所」→「まだ誰も行っていない所」は表現の言い換えで、現在形の一般論という時制も変わっていない。「まだ誰も行っていない」は完了的な言い方だが、「まだ行かない」と同様に未踏の状態を示しており、時制や強さの変化とは言えない。義務・推奨・可能の強さも時制も保たれている。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「人より先に人のまだ行かない所へ行き着くこともできる」は、候補で「人より先に、まだ誰も行っていない所へ行き着くこともできる」となり、「先に」という先後関係と「まだ行っていない」という未到達の関係が保たれている。「途中の道ばたあるいはちょっとしたわき道」も「途中の道ばたやちょっとしたわき道」で、場所の並列関係は同じ。「足の早い」「代わりに」の対比構造や、数値・期限・頻度に変更はない。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「人より先に人のまだ行かない所へ行き着くこともできる」は、候補「人より先に、まだ誰も行っていない所へ行き着くこともできる」と意味が対応している。「人のまだ行かない」を「まだ誰も行っていない」と言い換えただけで、新たな主体・条件・理由・具体例・固有名は加わっていない。「言わば」→「言ってみれば」、「道ばたあるいは」→「道ばたや」も自然な言い換えで、追加された具体化はない。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「言わば」は「言ってみれば」に、「人のまだ行かない所」は「まだ誰も行っていない所」に、「道ばたあるいは」は「道ばたや」に変わっている。いずれも意味は同じで、比喩（「足の早い旅人」）、対比（「〜できる代わりに…恐れがある」）、語り口も保たれている。ただし原文は十分に明確で、これらの書換えは必須ではなく、特に「人のまだ行かない所」を「まだ誰も行っていない所」に変えた点は不要な変更に近い。それでも意味や働きは変わらず、自然な言い換えの範囲内なのでpassとする。"
+        }
+      }
+    }
+  ],
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "calls": [
+    {
+      "index": 1,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "c9c45bb2d09412e7507c9b41bdaf43296ee74380249199d6d04a5cc48fd8b46f",
+      "cache_hit": false,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までとする。",
+          "運用・保守業者の運用時間には土日が含まれない。",
+          "運用・保守業者の運用時間には祝日が含まれない。",
+          "運用・保守業者の運用時間には年末年始が含まれない。",
+          "情報システムの監視は原則として24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.94,
+      "cost_usd": 0.007912
+    },
+    {
+      "index": 2,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "9ba48eb6be1a75e7090f372363178c39a10a462d8db1aa7bc7ce62d3ba144454",
+      "cache_hit": false,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までとする。",
+            "reason": "文脈では、運用時間は平日（土日、祝日、年末年始を除く）の9時から17時までと明記されており、この主張はその内容と整合している。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日が含まれない。",
+            "reason": "文脈に、平日から土日を除くと明記されているため、運用時間に土日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には祝日が含まれない。",
+            "reason": "文脈に、平日から祝日を除くと明記されているため、運用時間に祝日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には年末年始が含まれない。",
+            "reason": "文脈に、平日から年末年始を除くと明記されているため、運用時間に年末年始は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は原則として24時間365日行うこと。",
+            "reason": "文脈では、運用時間の制限に対して「ただし、情報システムの監視は24時間365日行うこと」と定められている。「原則として」という語は文脈にないが、監視を24時間365日行うという趣旨は直接読み取れる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.05,
+      "cost_usd": 0.014294
+    },
+    {
+      "index": 3,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "c9c45bb2d09412e7507c9b41bdaf43296ee74380249199d6d04a5cc48fd8b46f",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までとする。",
+          "運用・保守業者の運用時間には土日が含まれない。",
+          "運用・保守業者の運用時間には祝日が含まれない。",
+          "運用・保守業者の運用時間には年末年始が含まれない。",
+          "情報システムの監視は原則として24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 4,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "9ba48eb6be1a75e7090f372363178c39a10a462d8db1aa7bc7ce62d3ba144454",
+      "cache_hit": true,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までとする。",
+            "reason": "文脈では、運用時間は平日（土日、祝日、年末年始を除く）の9時から17時までと明記されており、この主張はその内容と整合している。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日が含まれない。",
+            "reason": "文脈に、平日から土日を除くと明記されているため、運用時間に土日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には祝日が含まれない。",
+            "reason": "文脈に、平日から祝日を除くと明記されているため、運用時間に祝日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には年末年始が含まれない。",
+            "reason": "文脈に、平日から年末年始を除くと明記されているため、運用時間に年末年始は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は原則として24時間365日行うこと。",
+            "reason": "文脈では、運用時間の制限に対して「ただし、情報システムの監視は24時間365日行うこと」と定められている。「原則として」という語は文脈にないが、監視を24時間365日行うという趣旨は直接読み取れる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 5,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "544664483cc12ad18442cd3e6a2ccc45112810819b6ae155b23595c8bf010839",
+      "cache_hit": false,
+      "raw_file": "c0005.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までとする。",
+          "運用・保守業者の運用時間から土日は除かれる。",
+          "運用・保守業者の運用時間から祝日は除かれる。",
+          "運用・保守業者の運用時間から年末年始は除かれる。",
+          "情報システムの監視は24時間行うこと。",
+          "情報システムの監視は365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.41,
+      "cost_usd": 0.008004
+    },
+    {
+      "index": 6,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "be68d794ea8e8f0ea8265592c4043ada9cbe20ca58fd850d781b271719e6458e",
+      "cache_hit": false,
+      "raw_file": "c0006.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までとする。",
+            "reason": "文脈では運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されており、この主張はその内容と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間から土日は除かれる。",
+            "reason": "文脈の括弧書きで、運用時間の平日には土日が含まれないと明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間から祝日は除かれる。",
+            "reason": "文脈の括弧書きで、祝日が除かれると明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間から年末年始は除かれる。",
+            "reason": "文脈の括弧書きで、年末年始が除かれると明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間行うこと。",
+            "reason": "文脈に「情報システムの監視は原則として24時間365日行うこと」とあり、24時間の監視が求められている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は365日行うこと。",
+            "reason": "文脈に「情報システムの監視は原則として24時間365日行うこと」とあり、365日の監視が求められている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.39,
+      "cost_usd": 0.014519999999999998
+    },
+    {
+      "index": 7,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "eb300285869af10ee5b81e7e7837f0cd86a39d0c4f1335fa81fe593e527e8e3c",
+      "cache_hit": false,
+      "raw_file": "c0007.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「情報システムの監視は24時間365日行うこと」と例外なしの義務を課している。候補は「原則として24時間365日行うこと」と加えており、例外を許容する余地が生じる。これは否定の反転や禁止と許可の入れ替えそのものではないが、義務が「例外なし」から「原則」へ緩み、例外的に監視しなくてもよい場合を認める方向に働く。否定・禁止の保持の観点では、監視停止を禁じる働きが弱まっているため、原文の働きは保たれていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.5,
+      "cost_usd": 0.00827
+    },
+    {
+      "index": 8,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "efbd456002c95ec8dc2d89f01b42cc052585f29f46f5d017b0424dd87df4a0ed",
+      "cache_hit": false,
+      "raw_file": "c0008.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「情報システムの監視は24時間365日行うこと」と例外なく義務づけているが、候補は「原則として24時間365日行うこと」を加えており、例外を許容する余地が生じる。「原則として」の追加により、監視の範囲・条件が無条件の義務から例外ありの義務へ変わっているため、条件・例外の保持という観点で原文と異なる。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.51,
+      "cost_usd": 0.007756
+    },
+    {
+      "index": 9,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "80a9bd046491451a08b9a3fda86efdb0f9ad96584b8490a987792a71b69533d8",
+      "cache_hit": false,
+      "raw_file": "c0009.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「情報システムの監視は24時間365日行うこと」と例外なく義務づけている。候補は「原則として24時間365日行うこと」を加えており、監視の対象範囲・実施の修飾先に例外を許容する条件が追加されている。これにより義務の及ぶ範囲が緩和され、原文の働きが変わっている。運用時間の主体・対象や「平日（土日及び祝日、年末年始を除く）の9時から17時まで」の部分は保たれているが、監視に関する修飾の追加が差異である。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.42,
+      "cost_usd": 0.008202000000000001
+    },
+    {
+      "index": 10,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "b553914ec7bfbc25ebcfe4a86680acf0c924c2391ff85de8fda8bc6aa323e876",
+      "cache_hit": false,
+      "raw_file": "c0010.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「情報システムの監視は24時間365日行うこと」と例外のない義務を定めている。候補は「原則として24時間365日行うこと」と加えており、例外を許容する余地が生じて義務の強さが弱まっている。「ただし」で運用時間の限定に対する例外として無条件の常時監視を求める原文の働きが変わるため、fail。時制は変わっていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 4.93,
+      "cost_usd": 0.007858
+    },
+    {
+      "index": 11,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "91e515c335a7c2c543325ab9775fd1c18f0acb8b11ac72365867a44b2ea3c8fa",
+      "cache_hit": false,
+      "raw_file": "c0011.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "運用時間「平日…の9時から17時まで」は候補でも同じで、数値・時間帯・平日の除外条件は保たれている。一方、監視について原文は「24時間365日行うこと」と頻度・常時性を断定しているが、候補は「原則として24時間365日行うこと」とし、例外を許容する余地を加えている。「24時間365日」という数値自体は変わらないが、頻度・継続性の保証が緩んでおり、頻度の働きが変わっている。したがってこの観点ではfailとする。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.65,
+      "cost_usd": 0.00808
+    },
+    {
+      "index": 12,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "66ed8c9e2352d6e0e1260ebea75a9e3e33bc32a328bc5fb1f2d647007f4a44f1",
+      "cache_hit": false,
+      "raw_file": "c0012.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「情報システムの監視は24時間365日行うこと」と例外なしの義務を定めているが、候補は「原則として」を追加している。これは原文にない条件・例外の余地を持ち込む具体化であり、義務の強さも弱めている。よって原文にない条件の追加にあたる。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 4.73,
+      "cost_usd": 0.007372
+    },
+    {
+      "index": 13,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "1674b232b6c6ba24e98a17eeedd0867abc2e7f4deeabcb58ba1ded4563c61630",
+      "cache_hit": false,
+      "raw_file": "c0013.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「情報システムの監視は24時間365日行うこと」と例外なく義務づけている。候補は「原文にない「原則として」を追加しており、「行うこと」の義務が例外を許容する弱いものに変わっている。原文は既に明確で変更は不要なのに、意味と義務の強さを変える不要な書換えをしているためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.22,
+      "cost_usd": 0.007600000000000001
+    },
+    {
+      "index": 14,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "6245a6294ca60de20c5d988ac962494bfb4bd259b0a8e3e5bd91f8a8d9ca5b6f",
+      "cache_hit": false,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務の資料はサービス・業務企画時点で収集する。",
+          "既存の情報システムの資料はサービス・業務企画時点で収集する。",
+          "要件定義を開始する前に、既存のサービス・業務や情報システムの資料を最新化するべきである。",
+          "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。",
+          "調達後に変更内容が判明した場合のコスト増加の可能性に留意するべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.48,
+      "cost_usd": 0.008438
+    },
+    {
+      "index": 15,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "5896cf2c07e3fc130e6465abbc3c0df98cb8ba854495173737f016f671a9b0b0",
+      "cache_hit": false,
+      "raw_file": "c0015.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務の資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」とあり、サービス・業務の資料も企画時点で収集することが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存の情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に、既存の情報システムの資料もサービス・業務企画時点で収集すると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "要件定義を開始する前に、既存のサービス・業務や情報システムの資料を最新化するべきである。",
+            "reason": "文脈では「要件定義を開始する時点で最新化を行いましょう」とあり、開始する「時点」での最新化を推奨している。「前に」とは厳密には異なるが、要件定義の開始時点で最新化を行うという趣旨と実質的に同じであり、推奨されている内容と整合する。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合のコスト増加の可能性に留意するべきである。",
+            "reason": "文脈に、調達後に変更内容が判明した場合に追加のコストがかかる可能性があるため「留意してください」と述べられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.39,
+      "cost_usd": 0.015556
+    },
+    {
+      "index": 16,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "6245a6294ca60de20c5d988ac962494bfb4bd259b0a8e3e5bd91f8a8d9ca5b6f",
+      "cache_hit": true,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務の資料はサービス・業務企画時点で収集する。",
+          "既存の情報システムの資料はサービス・業務企画時点で収集する。",
+          "要件定義を開始する前に、既存のサービス・業務や情報システムの資料を最新化するべきである。",
+          "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。",
+          "調達後に変更内容が判明した場合のコスト増加の可能性に留意するべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 17,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "5896cf2c07e3fc130e6465abbc3c0df98cb8ba854495173737f016f671a9b0b0",
+      "cache_hit": true,
+      "raw_file": "c0015.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務の資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」とあり、サービス・業務の資料も企画時点で収集することが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存の情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に、既存の情報システムの資料もサービス・業務企画時点で収集すると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "要件定義を開始する前に、既存のサービス・業務や情報システムの資料を最新化するべきである。",
+            "reason": "文脈では「要件定義を開始する時点で最新化を行いましょう」とあり、開始する「時点」での最新化を推奨している。「前に」とは厳密には異なるが、要件定義の開始時点で最新化を行うという趣旨と実質的に同じであり、推奨されている内容と整合する。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合のコスト増加の可能性に留意するべきである。",
+            "reason": "文脈に、調達後に変更内容が判明した場合に追加のコストがかかる可能性があるため「留意してください」と述べられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 18,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "52fb38b1964a7018aed4935ec2b7ab4e51499d28fef3c99483a20141706e0de5",
+      "cache_hit": false,
+      "raw_file": "c0018.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。",
+          "調達後に変更内容が判明した場合のコスト増加の可能性に留意すべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.96,
+      "cost_usd": 0.0038868
+    },
+    {
+      "index": 19,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "3177d7ee8cb2204208625e39070432402a2befe5593da1af2ad093d05c29aab6",
+      "cache_hit": false,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈では「要件定義を開始する前に最新化を行いましょう」とあり、要件定義の開始前に最新化することを推奨している。「開始する時点」は「開始する前」と趣旨がほぼ同じで、最新化を行うべきという内容は文脈から推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合のコスト増加の可能性に留意すべきである。",
+            "reason": "文脈に「追加のコストがかかる可能性がありますので、留意してください」とあり、コスト増加の可能性に留意すべきという内容は直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.01,
+      "cost_usd": 0.014358
+    },
+    {
+      "index": 20,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "58b89e19436eb287dd8fc9ff5aba8aadf9f708c6e1c1e23009090ea07b1e2af1",
+      "cache_hit": false,
+      "raw_file": "c0020.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「要件定義を開始する時点で最新化を行いましょう」が、候補では「要件定義を開始する前に最新化を行いましょう」になっている。これは時点の変更で、否定・肯定の反転、否定の追加・削除、禁止と許可の入れ替えには当たらない。「追加のコストがかかる可能性がありますので、留意してください」も両者で同じで、否定や禁止の関係は保たれている。時点のずれは別の観点の問題であり、この観点ではpass。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.92,
+      "cost_usd": 0.008374
+    },
+    {
+      "index": 21,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "e441e663cf2f54cf643af058eca9b79022cdb7b1a5c407711ce241f0e86d266f",
+      "cache_hit": false,
+      "raw_file": "c0021.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「要件定義を開始する時点で最新化を行いましょう」と、最新化の時期を開始の「時点」と範囲指定している。候補は「要件定義を開始する前に」に変わっており、時期の範囲が「時点」から「前」へ変更されている。開始時点を含む範囲が、開始より前のみに限定されるため、期限・タイミングの条件が変わっている。「調達後に変更内容が判明した場合は」以降の条件は保たれている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.56,
+      "cost_usd": 0.00829
+    },
+    {
+      "index": 22,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "19fdfb2fbd5e09c807573f78adaa2c297f2114a6029bc0ab21837dd3708325ed",
+      "cache_hit": false,
+      "raw_file": "c0022.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「要件定義を開始する時点で最新化を行いましょう」に対し、候補は「要件定義を開始する前に最新化を行いましょう」としている。最新化という動作の主体・対象（既存のサービス・業務や情報システムの資料）、資料収集の時点、調達後に変更内容が判明した場合の留意先（追加コスト）は保たれている。変わっているのは最新化の実施時期（「開始する時点」→「開始する前」）で、これは主体・対象・修飾先・宛先の入れ替えや追加・省略ではなく、時期・条件の観点に属する。この観点（主体・対象・修飾先の保持）では意味・働きが保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.71,
+      "cost_usd": 0.00892
+    },
+    {
+      "index": 23,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "996c7ace655e3c81217e63454d9c8d0dea9f53983c70e1788676ffd94e896747",
+      "cache_hit": false,
+      "raw_file": "c0023.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "義務・推奨の強さは、原文「最新化を行いましょう」「留意してください」が候補でも同じ表現で保たれており、時制も「収集しますが」「かかる可能性があります」と変わっていない。一方、時点の表現が原文「要件定義を開始する時点で」から候補「要件定義を開始する前に」へ変わっている。これは最新化の実施時期（開始時点か、開始より前か）の違いで、期限・タイミングの観点に当たる。ただし本観点の対象である義務・推奨の強さと時制（過去・現在・予定）そのものは変化しておらず、推奨の強さは同じなので、この観点ではpassとする。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.76,
+      "cost_usd": 0.009018
+    },
+    {
+      "index": 24,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "b83eff47aec692612b690dfc3f14256f2528234438f8af356424058efc231555",
+      "cache_hit": false,
+      "raw_file": "c0024.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「要件定義を開始する時点で最新化を行いましょう」とあり、最新化の時期は要件定義開始の時点（開始時点）である。候補は「要件定義を開始する前に最新化を行いましょう」としており、時点から「前」へ変わっている。「時点」は開始のタイミングを指し、「前」は開始より先に完了していることを示すため、先後関係・期限の働きが異なる。厳密には開始時点を含むかどうかの差だが、期限の位置づけが変わっているためfailとする。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.07,
+      "cost_usd": 0.008364
+    },
+    {
+      "index": 25,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "811d9d415ae6bc6395a75c0dc6a6d2883bbcc691a28e191ad5403e424dbc4e4c",
+      "cache_hit": false,
+      "raw_file": "c0025.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「要件定義を開始する時点で最新化を行いましょう」が、候補では「要件定義を開始する前に最新化を行いましょう」になっている。「時点で」は開始のタイミングを指し、「前に」は開始より前という別の時期を指すため、条件・時期が変わっている。新たな主体や固有名の追加はないが、時期の限定という原文にない具体化・変更が生じている。他の部分（「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」）は同一である。ただし、この観点は「追加」の有無であり、時期のずれは厳密には変更だが、原文にない条件（開始前という時期指定）を加えたものと判断できる。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.92,
+      "cost_usd": 0.00898
+    },
+    {
+      "index": 26,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "bf8f3a81a1115adbbb10b16cf29c7978ea41bb102b0db2029deb8bcfb2701ddc",
+      "cache_hit": false,
+      "raw_file": "c0026.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「要件定義を開始する時点で最新化を行いましょう」とあり、候補は「要件定義を開始する前に最新化を行いましょう」に変わっている。「時点で」は開始のタイミングちょうど（またはその時点）を指し、「前に」は開始より前を指すため、最新化を行う時期が異なる。原文が明確なのに時期の意味を変える不要な書換えであり、それ以外の文は無変更。したがって、意味や働きを保っていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.93,
+      "cost_usd": 0.008274
+    },
+    {
+      "index": 27,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "5efbdfde98bd9ac692b6099a8d1fbac79d9b0184e0ef0076d04cf1859adabe36",
+      "cache_hit": false,
+      "raw_file": "c0027.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "livenessProbeはコンテナが動いているかを示す。",
+          "livenessProbeに失敗すると、kubeletはコンテナを殺す。",
+          "livenessProbeに失敗した後、コンテナはrestart policyに従う。",
+          "コンテナにlivenessProbeが設定されていない場合、livenessProbeの状態は通常Successとして扱われる。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.59,
+      "cost_usd": 0.008036
+    },
+    {
+      "index": 28,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "5a1e26a8835a77ffb0e3d2bd976be2f83c6d5957e47a565d3877951e470fef09",
+      "cache_hit": false,
+      "raw_file": "c0028.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "livenessProbeはコンテナが動いているかを示す。",
+            "reason": "文脈の冒頭に「コンテナが動いているかを示します」とあり、livenessProbeについての説明として直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "livenessProbeに失敗すると、kubeletはコンテナを殺す。",
+            "reason": "文脈に「livenessProbeに失敗すると、kubeletはコンテナを殺します」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "livenessProbeに失敗した後、コンテナはrestart policyに従う。",
+            "reason": "文脈に「そしてコンテナはrestart policyに従います」と記載されており、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "コンテナにlivenessProbeが設定されていない場合、livenessProbeの状態は通常Successとして扱われる。",
+            "reason": "文脈に「livenessProbeが設定されていない場合、デフォルトの状態はSuccessです」とあり、デフォルトでSuccessとして扱われることと一致する。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.59,
+      "cost_usd": 0.013465999999999999
+    },
+    {
+      "index": 29,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "5efbdfde98bd9ac692b6099a8d1fbac79d9b0184e0ef0076d04cf1859adabe36",
+      "cache_hit": true,
+      "raw_file": "c0027.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "livenessProbeはコンテナが動いているかを示す。",
+          "livenessProbeに失敗すると、kubeletはコンテナを殺す。",
+          "livenessProbeに失敗した後、コンテナはrestart policyに従う。",
+          "コンテナにlivenessProbeが設定されていない場合、livenessProbeの状態は通常Successとして扱われる。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 30,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "5a1e26a8835a77ffb0e3d2bd976be2f83c6d5957e47a565d3877951e470fef09",
+      "cache_hit": true,
+      "raw_file": "c0028.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "livenessProbeはコンテナが動いているかを示す。",
+            "reason": "文脈の冒頭に「コンテナが動いているかを示します」とあり、livenessProbeについての説明として直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "livenessProbeに失敗すると、kubeletはコンテナを殺す。",
+            "reason": "文脈に「livenessProbeに失敗すると、kubeletはコンテナを殺します」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "livenessProbeに失敗した後、コンテナはrestart policyに従う。",
+            "reason": "文脈に「そしてコンテナはrestart policyに従います」と記載されており、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "コンテナにlivenessProbeが設定されていない場合、livenessProbeの状態は通常Successとして扱われる。",
+            "reason": "文脈に「livenessProbeが設定されていない場合、デフォルトの状態はSuccessです」とあり、デフォルトでSuccessとして扱われることと一致する。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 31,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "166b62774908f145ef28ca998886720aae030a59cd574e94f28ae4c82c36ec19",
+      "cache_hit": false,
+      "raw_file": "c0031.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "livenessProbeはコンテナが動いているかを示す。",
+          "livenessProbeに失敗すると、kubeletはコンテナを殺す。",
+          "livenessProbeに失敗してkubeletがコンテナを殺した後、コンテナはrestart policyに従う。",
+          "コンテナにlivenessProbeが設定されていない場合、デフォルトの状態はSuccessである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.29,
+      "cost_usd": 0.00811
+    },
+    {
+      "index": 32,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "ae3218af5de9659945ea465c268080fc5b26b57269b5e73cd0e609ceeff2870d",
+      "cache_hit": false,
+      "raw_file": "c0032.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "livenessProbeはコンテナが動いているかを示す。",
+            "reason": "文脈に「コンテナが動いているかを示します。livenessProbeに失敗すると…」とあり、livenessProbeがコンテナの稼働状態を示すものであることが読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "livenessProbeに失敗すると、kubeletはコンテナを殺す。",
+            "reason": "文脈に「livenessProbeに失敗すると、kubeletはコンテナを殺します」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "livenessProbeに失敗してkubeletがコンテナを殺した後、コンテナはrestart policyに従う。",
+            "reason": "文脈に「kubeletはコンテナを殺します、そしてコンテナはrestart policyに従います」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "コンテナにlivenessProbeが設定されていない場合、デフォルトの状態はSuccessである。",
+            "reason": "文脈に「livenessProbeが設定されていない場合、通常はSuccessとして扱われます」とあり、デフォルトの状態がSuccessであることに相当する。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.42,
+      "cost_usd": 0.01396
+    },
+    {
+      "index": 33,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "8c694c58932601001c6c0da2656ec60c0deee9a4f7afd9ab0fb5d722d7ab2248",
+      "cache_hit": false,
+      "raw_file": "c0033.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「デフォルトの状態はSuccessです」は、livenessProbe未設定時にSuccessであると断定している。候補の「通常はSuccessとして扱われます」は肯定のまま保たれ、否定の反転や追加・削除、禁止と許可の入れ替えはない。「通常は」で断定がやや弱まっているが、これは否定・禁止の観点ではなく、他の観点で扱うべき違いである。livenessProbeに「失敗すると」kubeletがコンテナを殺す点も変わっていない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 8.32,
+      "cost_usd": 0.0085
+    },
+    {
+      "index": 34,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "0ed98657934d7f897ec48e317687bbb067387bf4fd89a9aa71527ab6eadee35c",
+      "cache_hit": false,
+      "raw_file": "c0034.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「デフォルトの状態はSuccessです」と、livenessProbeが未設定の場合の既定値を断定している。候補は「通常はSuccessとして扱われます」と変え、「通常は」という緩和表現を加えたため、例外がありうる含みが生じ、無条件の既定値が条件付き・不確定な表現に変わっている。「設定されていない場合」という条件自体は保たれているが、その結果の範囲（常にSuccess）が弱められている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.57,
+      "cost_usd": 0.008344
+    },
+    {
+      "index": 35,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "2316ef5607086803c3f7763cc4050a2121981a2c7465871ed2fdb633c82647f8",
+      "cache_hit": false,
+      "raw_file": "c0035.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は動作の主体・対象・修飾先の保持。原文「kubeletはコンテナを殺します」「コンテナはrestart policyに従います」は候補でも同一で、主体と対象は保たれている。変更箇所は「デフォルトの状態はSuccessです」→「通常はSuccessとして扱われます」。主体・対象（livenessProbe未設定のコンテナ、Success）は同じで、入れ替え・追加・省略はない。「通常は」は既定値の意味合いを弱める点があるが、それは主体・対象・修飾先の問題ではなく別観点（条件・既定値の断定性）にあたる。この観点ではpass。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.44,
+      "cost_usd": 0.008884
+    },
+    {
+      "index": 36,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "b357c94210a3a8bbfce13858d2aad750e5afc03e76b33dfe50423e2a0b07ee4a",
+      "cache_hit": false,
+      "raw_file": "c0036.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「デフォルトの状態はSuccessです」と、livenessProbe未設定時の既定値を断定的な現在の事実として述べている。候補は「通常はSuccessとして扱われます」となり、「通常は」という留保が加わって、例外があり得るように読める。断定の強さが弱まり、既定値の確定性が変わっている。義務・推奨・可能の強さの変更に当たり、時制は現在のまま保たれている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.24,
+      "cost_usd": 0.008298
+    },
+    {
+      "index": 37,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "a1ec7c0f77081c7330f51fa961705d5e08a7838ed6d0613ac5f37f59471f31f3",
+      "cache_hit": false,
+      "raw_file": "c0037.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は数値・単位・期限・頻度・順序の保持です。原文と候補で「livenessProbeに失敗すると、kubeletはコンテナを殺します、そしてコンテナはrestart policyに従います」という先後関係は同一で保たれています。数値・期限・頻度は両方に登場しません。原文の「デフォルトの状態はSuccessです」は候補で「通常はSuccessとして扱われます」に変わっていますが、これは既定値の表現の変化であり、数値・順序の変更ではありません。「デフォルト」から「通常は」への弱まりは別観点（既定値の保持）の問題で、この観点ではpassです。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.55,
+      "cost_usd": 0.008832
+    },
+    {
+      "index": 38,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9f81de3e05fcc4a8893d495e5be0e9d490e0d504510da645cbeb6892c0b1247f",
+      "cache_hit": false,
+      "raw_file": "c0038.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「デフォルトの状態はSuccessです」と断定しているのに対し、候補は「通常はSuccessとして扱われます」と変えている。「通常は」は例外がありうるという条件・留保を原文にないものとして加えており、既定値が常にSuccessであるという断定の働きが弱まっている。主体・理由・具体例・固有名の追加はないが、既定値という重要な情報に原文にない限定が入っている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.49,
+      "cost_usd": 0.008084000000000001
+    },
+    {
+      "index": 39,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "c775046a6bf785090683e9f10475b6c47759b04c81e7c21ac214e42381a5b17a",
+      "cache_hit": false,
+      "raw_file": "c0039.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「デフォルトの状態はSuccessです」と、livenessProbe未設定時の既定値がSuccessであると断定している。候補は「通常はSuccessとして扱われます」と書き換えており、「通常は」が加わったことで断定が弱まり、例外がありうるように読める。既定値という仕様の意味が変わっている。原文は既に明確で、この書換えは読みやすさに必要ない。また「kubeletはコンテナを殺します、そして…」などの箇所は無変更で、変更が必要な箇所でもない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 7.1,
+      "cost_usd": 0.008522
+    },
+    {
+      "index": 40,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "6658a25da6b301737a91897f490577e3a10de255a32efecde71d5072a8f1c730",
+      "cache_hit": false,
+      "raw_file": "c0040.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "spam という名前のモジュールをインポートするとき、インタープリタは組み込みモジュールの中から spam を探す。",
+          "spam という名前のモジュールをインポートするとき、インタープリタは sys.path にあるディレクトリの spam.py を探す。",
+          "モジュール名の一覧は sys.builtin_module_names にある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.4,
+      "cost_usd": 0.007902000000000001
+    },
+    {
+      "index": 41,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "d2681d7908f765c22ada87c8d049c892b75eeddc81c9f3eaba5602e9b2a3e688",
+      "cache_hit": false,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "spam という名前のモジュールをインポートするとき、インタープリタは組み込みモジュールの中から spam を探す。",
+            "reason": "文脈では、spam モジュールをインポートするとき、インタープリタはまずその名前の組み込みモジュールを探すと述べられているため、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "spam という名前のモジュールをインポートするとき、インタープリタは sys.path にあるディレクトリの spam.py を探す。",
+            "reason": "文脈では、組み込みモジュールが見つからなかった場合に、spam.py というファイルを sys.path にあるディレクトリのリストから探すと述べられている。この主張は、組み込みモジュールが見つからなかった場合という条件が省かれているが、探索の対象と場所は文脈と一致しており、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "モジュール名の一覧は sys.builtin_module_names にある。",
+            "reason": "文脈に「モジュール名の一覧は sys.builtin_module_names にあります」と明記されているため、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.63,
+      "cost_usd": 0.013850000000000001
+    },
+    {
+      "index": 42,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "6658a25da6b301737a91897f490577e3a10de255a32efecde71d5072a8f1c730",
+      "cache_hit": true,
+      "raw_file": "c0040.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "spam という名前のモジュールをインポートするとき、インタープリタは組み込みモジュールの中から spam を探す。",
+          "spam という名前のモジュールをインポートするとき、インタープリタは sys.path にあるディレクトリの spam.py を探す。",
+          "モジュール名の一覧は sys.builtin_module_names にある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 43,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "d2681d7908f765c22ada87c8d049c892b75eeddc81c9f3eaba5602e9b2a3e688",
+      "cache_hit": true,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "spam という名前のモジュールをインポートするとき、インタープリタは組み込みモジュールの中から spam を探す。",
+            "reason": "文脈では、spam モジュールをインポートするとき、インタープリタはまずその名前の組み込みモジュールを探すと述べられているため、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "spam という名前のモジュールをインポートするとき、インタープリタは sys.path にあるディレクトリの spam.py を探す。",
+            "reason": "文脈では、組み込みモジュールが見つからなかった場合に、spam.py というファイルを sys.path にあるディレクトリのリストから探すと述べられている。この主張は、組み込みモジュールが見つからなかった場合という条件が省かれているが、探索の対象と場所は文脈と一致しており、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "モジュール名の一覧は sys.builtin_module_names にある。",
+            "reason": "文脈に「モジュール名の一覧は sys.builtin_module_names にあります」と明記されているため、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 44,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2451a324820466b95da56e8c660d8ad024ed0c8598422b71d82e90e898e5ca2d",
+      "cache_hit": false,
+      "raw_file": "c0044.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "spam という名前のモジュールをインポートするとき、インタープリタはまずその名前の組み込みモジュールを探す。",
+          "組み込みモジュール名の一覧は sys.builtin_module_names にある。",
+          "spam という名前の組み込みモジュールが見つからなかった場合、インタープリタは spam.py という名前のファイルを探す。",
+          "インタープリタは spam.py という名前のファイルを sys.path にあるディレクトリのリストから探す。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.6,
+      "cost_usd": 0.00845
+    },
+    {
+      "index": 45,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "577e256c6bfae8ad06d1d79b83c4a6fba513d98d6a22ef0f263809683834df81",
+      "cache_hit": false,
+      "raw_file": "c0045.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "spam という名前のモジュールをインポートするとき、インタープリタはまずその名前の組み込みモジュールを探す。",
+            "reason": "文脈では、インタープリタは組み込みモジュールと sys.path にあるディレクトリの spam.py を探すとされている。組み込みモジュールが先に探されることは文脈の記述順から読み取れ、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "組み込みモジュール名の一覧は sys.builtin_module_names にある。",
+            "reason": "文脈に「モジュール名の一覧は sys.builtin_module_names にあります」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "spam という名前の組み込みモジュールが見つからなかった場合、インタープリタは spam.py という名前のファイルを探す。",
+            "reason": "文脈は組み込みモジュールと spam.py を探すと述べており、組み込みモジュールが見つからない場合に spam.py を探すという流れは直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "インタープリタは spam.py という名前のファイルを sys.path にあるディレクトリのリストから探す。",
+            "reason": "文脈に、sys.path にあるディレクトリの spam.py を探すと明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.66,
+      "cost_usd": 0.014332
+    },
+    {
+      "index": 46,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "de8e58acb2a8c80e762e7ff742df5915007480f47eee86639eeed2367f02b61f",
+      "cache_hit": false,
+      "raw_file": "c0046.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は否定・禁止の保持であり、原文に明示的な否定や禁止表現はなく、候補にも否定の追加・削除や反転はない。ただし原文の「見つからなかった場合は」という条件付きの順序（まず組み込みモジュールを探し、見つからなければ spam.py を探す）が、候補では「組み込みモジュールと、…spam.py を探します」と並列になり、条件関係が失われている。これは否定・肯定の反転ではなく条件・順序の変化であり、他観点（条件の保持）で扱うべき問題である。否定・禁止の観点では原文の働きは保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.52,
+      "cost_usd": 0.008812
+    },
+    {
+      "index": 47,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "81fb655040c4bebb350eea758def8ad963f7a161d7f4515ce6864a0a6b6fa419",
+      "cache_hit": false,
+      "raw_file": "c0047.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「まずその名前の組み込みモジュールを探します」「見つからなかった場合は、spam.py ... を探します」と、組み込みモジュールを先に探し、見つからない場合に限ってファイルを探すという順序・条件関係を示している。候補は「組み込みモジュールと、sys.path にあるディレクトリの spam.py を探します」とし、両者を並列に探すかのように書いており、「まず」と「見つからなかった場合は」という条件が脱落している。そのため、spam.py の探索が組み込みモジュール不在時に限られるという条件が失われ、意味が変わっている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 7.21,
+      "cost_usd": 0.008788
+    },
+    {
+      "index": 48,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "8394c2b03d6e5c63eb633f74513320de74b37b2c72a92396b5a87494be5d4c05",
+      "cache_hit": false,
+      "raw_file": "c0048.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「まずその名前の組み込みモジュールを探し」、「見つからなかった場合は」spam.py を sys.path のディレクトリから探す、という段階的な手続きで、「モジュール名の一覧は sys.builtin_module_names」は組み込みモジュールの一覧を指します。候補は「組み込みモジュールと、sys.path にあるディレクトリの spam.py を探します」と並列にしており、「その名前の」という組み込みモジュールの修飾が失われ、探索の対象が「spam」という名前に限定されなくなっています。また「見つからなかった場合は」という条件が消え、spam.py の探索が組み込みモジュールの探索と同列の対象になっています。さらに「sys.path にあるディレクトリのリストから」が「ディレクトリの spam.py」となり、探索先の関係もずれています。手続の対象・宛先・修飾先が変わっているため fail です。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.31,
+      "cost_usd": 0.009716
+    },
+    {
+      "index": 49,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "998a1c8c2ea34946a6788f24c1d32016f8712aec649897d663c2f00407bc2f55",
+      "cache_hit": false,
+      "raw_file": "c0049.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "義務・推奨の強さについては、原文も候補も事実を述べる現在形の記述（「探します」「あります」）で、義務や推奨の表現はなく、時制も現在のまま保たれている。ただし原文の「まずその名前の組み込みモジュールを探します」「見つからなかった場合は、…探します」という順序・条件の関係が、候補の「組み込みモジュールと、…spam.py を探します」では並列になっている。これは探索の手順・条件に関する違いで、義務の強さや時制の変化ではないため、この観点ではpassとする。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.64,
+      "cost_usd": 0.00868
+    },
+    {
+      "index": 50,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "3fdb80ba174769ecc28fcc306b42d40104607a858b845acfa053926aa85344f6",
+      "cache_hit": false,
+      "raw_file": "c0050.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「まずその名前の組み込みモジュールを探します」「見つからなかった場合は、spam.py ... を探します」と、組み込みモジュールを先に探し、見つからない場合に限り sys.path 上のファイルを探すという先後関係を述べている。候補は「組み込みモジュールと、sys.path にあるディレクトリの spam.py を探します」と並列に記述しており、「まず」と「見つからなかった場合」という順序・条件が失われ、両者を同等に探すように読める。検索順序が変わっているため、この観点ではfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.89,
+      "cost_usd": 0.008487999999999999
+    },
+    {
+      "index": 51,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "af3abf78f21bdd75659449e1ed46f3b10e5307379cee068889ae9cfbb284d774",
+      "cache_hit": false,
+      "raw_file": "c0051.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「まずその名前の組み込みモジュールを探します」「見つからなかった場合は、spam.py という名前のファイルを…探します」と、組み込みモジュールを先に探し、見つからない場合に限ってファイルを探す条件付きの順序を述べている。候補は「組み込みモジュールと、sys.path にあるディレクトリの spam.py を探します」と並列にしており、「まず」「見つからなかった場合」という条件・順序が失われている。これは原文にない新たな主体や固有名の追加ではなく、条件の欠落である。この観点（原文にない具体化の有無）では、候補に新たな主体、条件、完了状態、理由、具体例、固有名の追加は見られない。「sys.builtin_module_names」も原文どおりである。したがって具体化の追加はなく、この観点ではpass。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.8,
+      "cost_usd": 0.009416
+    },
+    {
+      "index": 52,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "53378acfcab82a18864b0176d93b69dad79cc251762f4c1a6d61728d93dfb020",
+      "cache_hit": false,
+      "raw_file": "c0052.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「まずその名前の組み込みモジュールを探します」「見つからなかった場合は、spam.py ... を探します」と、組み込みモジュールを先に探し、見つからない場合にだけファイルを探す順序・条件を述べている。候補は「組み込みモジュールと、sys.path にあるディレクトリの spam.py を探します」と並列にしており、「まず」と「見つからなかった場合は」という段階的な条件が失われている。また、「モジュール名の一覧は sys.builtin_module_names にあります」の位置が組み込みモジュールの探索説明から切り離され、何の一覧かも曖昧になった。意味や働きを変える不要な書換えなのでfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.49,
+      "cost_usd": 0.009023999999999999
+    },
+    {
+      "index": 53,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "95ee8de3ccb8199df612f3ff8086ac211fb192119ead19152dd678fe16cc079e",
+      "cache_hit": false,
+      "raw_file": "c0053.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "右のことは植物採集談である。",
+          "右のことは植物採集談のほんの一部である。",
+          "植物採集は楽しい遊びごとのようなものであった。",
+          "植物採集は努力というほどのものではなかった。"
+        ]
+      },
+      "error": null,
+      "seconds": 3.93,
+      "cost_usd": 0.007348
+    },
+    {
+      "index": 54,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "503614fd3bd5086a3807dfcb380569684cc48d1685355bb7fa0256303b0eab06",
+      "cache_hit": false,
+      "raw_file": "c0054.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "右のことは植物採集談である。",
+            "reason": "文脈に「右のことはほんの一部の植物採集談である」とあり、右のことが植物採集談であることは直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "右のことは植物採集談のほんの一部である。",
+            "reason": "文脈では「ほんの一部の植物採集談」とあり、右のことは植物採集談全体のうちのほんの一部であると解釈できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "植物採集は楽しい遊びごとのようなものであった。",
+            "reason": "文脈は「ただの遊びごとにしたことでなく」と遊びであることを否定している。楽しかったとは述べているが、遊びごとのようなものだったとは言えない。",
+            "verdict": 0
+          },
+          {
+            "statement": "植物採集は努力というほどのものではなかった。",
+            "reason": "文脈は「汗水流しての積極的採集で自分の学問のために努力した」と述べており、努力であったことを明示している。この主張は文脈と矛盾する。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.29,
+      "cost_usd": 0.013205999999999999
+    },
+    {
+      "index": 55,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "95ee8de3ccb8199df612f3ff8086ac211fb192119ead19152dd678fe16cc079e",
+      "cache_hit": true,
+      "raw_file": "c0053.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "右のことは植物採集談である。",
+          "右のことは植物採集談のほんの一部である。",
+          "植物採集は楽しい遊びごとのようなものであった。",
+          "植物採集は努力というほどのものではなかった。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 56,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "503614fd3bd5086a3807dfcb380569684cc48d1685355bb7fa0256303b0eab06",
+      "cache_hit": true,
+      "raw_file": "c0054.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "右のことは植物採集談である。",
+            "reason": "文脈に「右のことはほんの一部の植物採集談である」とあり、右のことが植物採集談であることは直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "右のことは植物採集談のほんの一部である。",
+            "reason": "文脈では「ほんの一部の植物採集談」とあり、右のことは植物採集談全体のうちのほんの一部であると解釈できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "植物採集は楽しい遊びごとのようなものであった。",
+            "reason": "文脈は「ただの遊びごとにしたことでなく」と遊びであることを否定している。楽しかったとは述べているが、遊びごとのようなものだったとは言えない。",
+            "verdict": 0
+          },
+          {
+            "statement": "植物採集は努力というほどのものではなかった。",
+            "reason": "文脈は「汗水流しての積極的採集で自分の学問のために努力した」と述べており、努力であったことを明示している。この主張は文脈と矛盾する。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 57,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f80e12c3b1bfe27e56c71aea761eca34dc54792cd747f65b3a9f0c49c31d3543",
+      "cache_hit": false,
+      "raw_file": "c0057.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "先に述べたことは植物採集談のほんの一部である。",
+          "植物採集はただの遊びごとではなかった。",
+          "植物採集は楽しかった。",
+          "植物採集は汗水流しての積極的な採集であった。",
+          "話者は自分の学問のために努力して植物採集をした。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.2,
+      "cost_usd": 0.007712
+    },
+    {
+      "index": 58,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "90e56ef82f17fe973b7b27c1dfca52ed8a378d2d59dc7cc10ff460075e682a87",
+      "cache_hit": false,
+      "raw_file": "c0058.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "先に述べたことは植物採集談のほんの一部である。",
+            "reason": "文脈に「右のことはほんの一部の植物採集談である」とあり、先に述べたことが植物採集談のほんの一部であることと一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "植物採集はただの遊びごとではなかった。",
+            "reason": "文脈では植物採集は「楽しい遊びごとのようなもの」で、努力というほどのものではなかったと述べられており、この主張は文脈と矛盾する。",
+            "verdict": 0
+          },
+          {
+            "statement": "植物採集は楽しかった。",
+            "reason": "文脈に「これは楽しい遊びごとのようなもの」とあり、植物採集が楽しいものであったことが読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "植物採集は汗水流しての積極的な採集であった。",
+            "reason": "文脈では努力というほどのものではなかったとされており、汗水流しての積極的な採集だったとは言えない。",
+            "verdict": 0
+          },
+          {
+            "statement": "話者は自分の学問のために努力して植物採集をした。",
+            "reason": "文脈は植物採集が努力というほどのものではなかったと述べており、努力して行ったという主張は文脈と矛盾する。また学問のためという記述もない。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.48,
+      "cost_usd": 0.013986
+    },
+    {
+      "index": 59,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "13d80f9aed54a6454a0fe7a464f4ef93c92f10efd0d3be6111c7c4555569f1cf",
+      "cache_hit": false,
+      "raw_file": "c0059.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「ただの遊びごとにしたことでなく」「全く汗水流しての積極的採集で自分の学問のために努力した」と、遊びを否定し努力を肯定している。候補は「楽しい遊びごとのようなもので、努力というほどのものではなかった」と、遊びを肯定し努力を否定しており、否定・肯定が完全に反転している。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 4.72,
+      "cost_usd": 0.007716
+    },
+    {
+      "index": 60,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "04e33b7ca7456f545eac772614be7de4825f9cf1c88d3814b44bf5e71be1fdbf",
+      "cache_hit": false,
+      "raw_file": "c0060.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「ただの遊びごとにしたことでなく、たとえ楽しかったとはいえ、全く汗水流しての積極的採集で自分の学問のために努力した」と、遊びであることを否定し譲歩（「たとえ楽しかったとはいえ」）を付けて努力・学問目的を主張している。候補は「楽しい遊びごとのようなもので、努力というほどのものではなかった」とあり、否定と肯定が反転している。譲歩条件の働きも失われ、「学問のために努力した」という主張が「努力というほどのものではなかった」に変わっているため、論理関係が保たれていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 4.93,
+      "cost_usd": 0.008638
+    },
+    {
+      "index": 61,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "7da26dc20ba6b49159314913ce35cf985b7bbd38357c76071ec7bac8ecadca0d",
+      "cache_hit": false,
+      "raw_file": "c0061.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「ただの遊びごとにしたことでなく」「全く汗水流しての積極的採集で自分の学問のために努力した」と、採集が遊びではなく学問のための努力だったと述べている。候補は「楽しい遊びごとのようなもので、努力というほどのものではなかった」とあり、採集という行為の性格づけが逆転している。「自分の学問のために」という目的（宛先）も省略され、動作の働きが原文と異なる。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 4.5,
+      "cost_usd": 0.00796
+    },
+    {
+      "index": 62,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "e5f33b76b4db916cc12a2a74ba260c7acfec3e050d2054449b0c892e759c1d1d",
+      "cache_hit": false,
+      "raw_file": "c0062.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「ただの遊びごとにしたことでなく」「全く汗水流しての積極的採集で自分の学問のために努力したのである」と、遊びではなく努力したという過去の事実を断定している。候補は「楽しい遊びごとのようなもので、努力というほどのものではなかった」と述べ、努力した主張を否定している。時制は過去で共通だが、「努力したのである」という断定の働きが「努力というほどのものではなかった」という否定に反転しており、この観点でも意味・働きが保たれていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 4.84,
+      "cost_usd": 0.008356
+    },
+    {
+      "index": 63,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "6d508efc2abb7bdc08aa9cf3273f1fad5fb86580557c2d9eae58b140f6a40c04",
+      "cache_hit": false,
+      "raw_file": "c0063.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は数値・単位・期限・頻度・先後関係の保持です。原文と候補のどちらにも具体的な数値、単位、期限、頻度、時間的な順序は出てきません。「ほんの一部の植物採集談」は両方にあり、保たれています。なお、原文は「ただの遊びごとにしたことでなく…汗水流しての積極的採集で自分の学問のために努力した」と述べますが、候補は「楽しい遊びごとのようなもので、努力というほどのものではなかった」とあり、意味が逆になっています。これは論旨・否定の反転で別の観点の問題です。数値・期限・順序という本観点では変更はありません。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.29,
+      "cost_usd": 0.008628
+    },
+    {
+      "index": 64,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "6340d282f76193b05e90c66487fae90503213cf57e88f20f207854b66ef8e4ce",
+      "cache_hit": false,
+      "raw_file": "c0064.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「ただの遊びごとにしたことでなく」「全く汗水流しての積極的採集で自分の学問のために努力した」と、遊びではなく学問のための努力だったと述べる。候補は「楽しい遊びごとのようなもので、努力というほどのものではなかった」と正反対の内容になっている。これは「具体化の有無」（主体・条件・理由・具体例・固有名の追加）の観点では、新しい固有名や具体例の追加というより意味の反転である。ただ、原文にある「学問のために」という理由・目的が消え、代わりに「楽しい遊びごとのよう」という原文にない性格づけが加えられており、原文と異なる意味・働きになっているためfailとする。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.92,
+      "cost_usd": 0.008796
+    },
+    {
+      "index": 65,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "783ba8107f5e1088a6fbe8fa26eea52bd7ea8f326bdfde4ccdb2048e0f899ca8",
+      "cache_hit": false,
+      "raw_file": "c0065.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「ただの遊びごとにしたことでなく」「全く汗水流しての積極的採集で自分の学問のために努力したのである」と、遊びではなく学問のための努力だったと述べている。候補は「楽しい遊びごとのようなもので、努力というほどのものではなかった」と書き、遊びの否定を肯定に、努力の肯定を否定に反転させている。「たとえ楽しかったとはいえ」という譲歩の対比も失われ、原文の論旨が逆になっているため、不要な変更どころか意味の改変であり、この観点では保たれていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.29,
+      "cost_usd": 0.008444
+    },
+    {
+      "index": 66,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "5e55948cb95696875e3ead50fd25954a6ce83a8d3de308058ea5bee5e22ac6d0",
+      "cache_hit": false,
+      "raw_file": "c0066.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "Podのspecにはf restartPolicyフィールドがある。",
+          "restartPolicyフィールドの値はAlways、OnFailure、Neverのいずれかである。",
+          "restartPolicyフィールドのデフォルト値はAlwaysである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.43,
+      "cost_usd": 0.007478
+    },
+    {
+      "index": 67,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "667e8a925720b6975f38d4bf9115d3bafc2e9d8349c7dfea12a14388c6e8fe26",
+      "cache_hit": false,
+      "raw_file": "c0067.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "Podのspecにはf restartPolicyフィールドがある。",
+            "reason": "文脈には、PodのspecにrestartPolicyフィールドがあると述べられている。主張中の「f」は余分な文字の誤記とみられるが、内容は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "restartPolicyフィールドの値はAlways、OnFailure、Neverのいずれかである。",
+            "reason": "文脈には、restartPolicyフィールドがAlways、OnFailure、Neverのいずれかの値を持つと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "restartPolicyフィールドのデフォルト値はAlwaysである。",
+            "reason": "文脈には、デフォルト値はAlwaysであると明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.46,
+      "cost_usd": 0.012296
+    },
+    {
+      "index": 68,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "5e55948cb95696875e3ead50fd25954a6ce83a8d3de308058ea5bee5e22ac6d0",
+      "cache_hit": true,
+      "raw_file": "c0066.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "Podのspecにはf restartPolicyフィールドがある。",
+          "restartPolicyフィールドの値はAlways、OnFailure、Neverのいずれかである。",
+          "restartPolicyフィールドのデフォルト値はAlwaysである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 69,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "667e8a925720b6975f38d4bf9115d3bafc2e9d8349c7dfea12a14388c6e8fe26",
+      "cache_hit": true,
+      "raw_file": "c0067.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "Podのspecにはf restartPolicyフィールドがある。",
+            "reason": "文脈には、PodのspecにrestartPolicyフィールドがあると述べられている。主張中の「f」は余分な文字の誤記とみられるが、内容は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "restartPolicyフィールドの値はAlways、OnFailure、Neverのいずれかである。",
+            "reason": "文脈には、restartPolicyフィールドがAlways、OnFailure、Neverのいずれかの値を持つと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "restartPolicyフィールドのデフォルト値はAlwaysである。",
+            "reason": "文脈には、デフォルト値はAlwaysであると明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 70,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "4fd41060c5fcd92ea614a339a012c5426cee9d55640bc532a391597639354f5e",
+      "cache_hit": false,
+      "raw_file": "c0070.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": null,
+      "error": "JSONDecodeError: Expecting ',' delimiter: line 1 column 63 (char 62)",
+      "seconds": 4.9,
+      "cost_usd": 0.008582
+    },
+    {
+      "index": 71,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "c6eb3ebd896e6967d71510c97769ce4a424a4f049aea11176a7eb1dc69f40a5e",
+      "cache_hit": false,
+      "raw_file": "c0071.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文と候補のどちらにも否定・禁止の表現はなく、追加や削除もない。原文の「Always、OnFailure、またはNeverのいずれかの値を持つ」は候補の「値はAlways、OnFailure、Neverのいずれかです」と同じ意味である。「デフォルト値はAlwaysです」も変わらず保たれている。「Never」は値の名前であり、否定の反転にはあたらない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.74,
+      "cost_usd": 0.007848
+    },
+    {
+      "index": 72,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "6027a174e9d3246957b51084354ab684ac03810ae967885e4b592d02774faea1",
+      "cache_hit": false,
+      "raw_file": "c0072.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「Always、OnFailure、またはNeverのいずれかの値を持つ」は、候補の「値はAlways、OnFailure、Neverのいずれかです」で、選択肢の範囲と「いずれか」の論理関係が保たれている。「デフォルト値はAlwaysです」も同一で、条件・例外・範囲の脱落や追加はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.64,
+      "cost_usd": 0.007706
+    },
+    {
+      "index": 73,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "a03ec894ae12947568c0bc657e71bc23ad8989ff8c1a2806d421f5f0ffb71b6c",
+      "cache_hit": false,
+      "raw_file": "c0073.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「Podのspecには、…restartPolicyフィールドがあります」「Always、OnFailure、またはNeverのいずれかの値を持つ」「デフォルト値はAlwaysです」という関係は、候補でも「Podのspecには、restartPolicyフィールドがあり、値はAlways、OnFailure、Neverのいずれかです」「デフォルト値はAlwaysです」として保たれている。フィールドの所属先(Podのspec)、値の持ち主(restartPolicy)、既定値の対象に入れ替え・追加・省略はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.17,
+      "cost_usd": 0.008288
+    },
+    {
+      "index": 74,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "babc7907384b87ad4cefb1d4d570e649e7edc8b55565e428d3e898766a546a9b",
+      "cache_hit": false,
+      "raw_file": "c0074.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「Always、OnFailure、またはNeverのいずれかの値を持つrestartPolicyフィールドがあります」「デフォルト値はAlwaysです」と現在の事実を述べており、義務・推奨・可能の表現は含まれない。候補も「restartPolicyフィールドがあり、値はAlways、OnFailure、Neverのいずれかです」「デフォルト値はAlwaysです」と現在形の記述で、強さも時制も変わっていない。語順の変更のみで、この観点では保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.59,
+      "cost_usd": 0.008334000000000001
+    },
+    {
+      "index": 75,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "dc7252ea375ecd861b08553e00edd2e2d48f730a2992de2a4a9254578a4b4c2c",
+      "cache_hit": false,
+      "raw_file": "c0075.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「Always、OnFailure、またはNeverのいずれかの値」は、候補でも「Always、OnFailure、Neverのいずれかです」と3つの値が保たれている。「デフォルト値はAlwaysです」も両者で同一である。数値・単位・期限・頻度・順序に変更はなく、語順の変更は自然な言い換えの範囲である。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.91,
+      "cost_usd": 0.007586000000000001
+    },
+    {
+      "index": 76,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "5071921ad2a4e7458a8684f64984698f2ded06abc39bf9387870a22bfd733b97",
+      "cache_hit": false,
+      "raw_file": "c0076.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「Always、OnFailure、またはNeverのいずれかの値を持つrestartPolicyフィールドがあります」「デフォルト値はAlwaysです」は、候補の「restartPolicyフィールドがあり、値はAlways、OnFailure、Neverのいずれかです」「デフォルト値はAlwaysです」と同じ関係が保たれている。主体、条件、完了状態、理由、具体例、固有名の追加は見当たらず、語順と構文の変更のみである。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.78,
+      "cost_usd": 0.008016
+    },
+    {
+      "index": 77,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "34412436b2458448cb969b541589651ebe272720ceb38365703e005d91fc6ef7",
+      "cache_hit": false,
+      "raw_file": "c0077.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「Always、OnFailure、またはNeverのいずれかの値を持つrestartPolicyフィールドがあります」を、候補は「restartPolicyフィールドがあり、値はAlways、OnFailure、Neverのいずれかです」に組み替えている。フィールド名、3つの値、「デフォルト値はAlwaysです」はそのまま保たれ、意味の追加や欠落はない。長い連体修飾を2つの節に分けており、読みやすさのための自然な再構成である。2文目は無変更で、不要な書換えは見当たらない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.94,
+      "cost_usd": 0.008322
+    },
+    {
+      "index": 78,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "c6bece704637604e1dcb284abfb086a676e6e3bbdde7fe90da642abd6e9a90fb",
+      "cache_hit": false,
+      "raw_file": "c0078.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+          "頭のいい人は、人より先に、まだ誰も行っていない所へ行き着くことができる。",
+          "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+          "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.19,
+      "cost_usd": 0.00821
+    },
+    {
+      "index": 79,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "1483f600fdf6917f9a3939ef0b8048715bcf47c485e65f283b2eec5b504f4368",
+      "cache_hit": false,
+      "raw_file": "c0079.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+            "reason": "文脈では、いわゆる頭のいい人は「言わば足の早い旅人のようなもの」と述べられており、この主張は文脈から直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、人より先に、まだ誰も行っていない所へ行き着くことができる。",
+            "reason": "文脈に「人より先に人のまだ行かない所へ行き着くこともできる」とあり、この主張と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「途中の道ばたあるいはちょっとしたわき道にある肝心なものを見落とす恐れがある」とあり、道ばたの肝心なものを見落とす恐れがあることが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「ちょっとしたわき道にある肝心なものを見落とす恐れがある」とあり、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.8,
+      "cost_usd": 0.014286
+    },
+    {
+      "index": 80,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "c6bece704637604e1dcb284abfb086a676e6e3bbdde7fe90da642abd6e9a90fb",
+      "cache_hit": true,
+      "raw_file": "c0078.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+          "頭のいい人は、人より先に、まだ誰も行っていない所へ行き着くことができる。",
+          "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+          "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 81,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "1483f600fdf6917f9a3939ef0b8048715bcf47c485e65f283b2eec5b504f4368",
+      "cache_hit": true,
+      "raw_file": "c0079.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+            "reason": "文脈では、いわゆる頭のいい人は「言わば足の早い旅人のようなもの」と述べられており、この主張は文脈から直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、人より先に、まだ誰も行っていない所へ行き着くことができる。",
+            "reason": "文脈に「人より先に人のまだ行かない所へ行き着くこともできる」とあり、この主張と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「途中の道ばたあるいはちょっとしたわき道にある肝心なものを見落とす恐れがある」とあり、道ばたの肝心なものを見落とす恐れがあることが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「ちょっとしたわき道にある肝心なものを見落とす恐れがある」とあり、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 82,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "62c903c4e425c7910a2fad2288942dd87c9561a1adc9638de80ecc73fb825986",
+      "cache_hit": false,
+      "raw_file": "c0082.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いわゆる頭のいい人は、言わば足の早い旅人のようなものである。",
+          "頭のいい人は、人より先に行き着くことができる。",
+          "頭のいい人は、人のまだ行かない所へ行き着くことができる。",
+          "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+          "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.76,
+      "cost_usd": 0.008369999999999999
+    },
+    {
+      "index": 83,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "e292cc5325c80d594621801be3050e60ca4872561343ee611e4970f0cea6451f",
+      "cache_hit": false,
+      "raw_file": "c0083.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いわゆる頭のいい人は、言わば足の早い旅人のようなものである。",
+            "reason": "文脈では「いわゆる頭のいい人は、言ってみれば足の早い旅人のようなものである」と述べられており、「言わば」は「言ってみれば」と同じ意味なので、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、人より先に行き着くことができる。",
+            "reason": "文脈に「人より先に、まだ誰も行っていない所へ行き着くこともできる」とあり、人より先に行き着けることが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、人のまだ行かない所へ行き着くことができる。",
+            "reason": "文脈に「まだ誰も行っていない所へ行き着くこともできる」とあり、他の人がまだ行っていない所へ行けることが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「途中の道ばた…にある肝心なものを見落とす恐れがある」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「ちょっとしたわき道にある肝心なものを見落とす恐れがある」と明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.17,
+      "cost_usd": 0.015047999999999999
+    },
+    {
+      "index": 84,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9b7173a259715ff1534be0ff19bc3d778e40d09aece9d76e8f19dbf2ca527b61",
+      "cache_hit": false,
+      "raw_file": "c0084.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文には「人のまだ行かない所」とあり、候補は「まだ誰も行っていない所」としている。どちらも否定形で、未踏の場所という意味が保たれている。「見落とす恐れがある」は両方で同じ肯定的な可能性として残っている。「言わば」→「言ってみれば」、「道ばたあるいは」→「道ばたや」は自然な言い換えで、否定・禁止の反転や追加・削除はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.79,
+      "cost_usd": 0.008238
+    },
+    {
+      "index": 85,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "10b20ba72e83ca6394a24540c857a912ccba15172a93598377ac9e4228e7bf70",
+      "cache_hit": false,
+      "raw_file": "c0085.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「人より先に人のまだ行かない所へ行き着くこともできる代わりに」は、候補で「人より先に、まだ誰も行っていない所へ行き着くこともできる代わりに」となっており、対比（できる代わりに〜恐れがある）と範囲は保たれている。「途中の道ばたあるいはちょっとしたわき道」は「途中の道ばたやちょっとしたわき道」で、「あるいは」と「や」はどちらも並列・選択の関係として同等であり、論理関係は変わっていない。「恐れがある」という可能性の程度、「肝心なもの」という対象も維持されている。条件・例外・範囲の脱落や追加はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.36,
+      "cost_usd": 0.009101999999999999
+    },
+    {
+      "index": 86,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "a58e269b721224d44e608fd7300b7275811520d62135b03327fbb74d07698078",
+      "cache_hit": false,
+      "raw_file": "c0086.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「人より先に人のまだ行かない所へ行き着くこともできる」は、候補「人より先に、まだ誰も行っていない所へ行き着くこともできる」と主体・到達先が保たれている。「人のまだ行かない所」→「まだ誰も行っていない所」は言い換えの範囲。「途中の道ばたあるいはちょっとしたわき道にある肝心なもの」も候補「道ばたやちょっとしたわき道にある肝心なもの」で、修飾先（「肝心なもの」にかかる場所）と見落とす対象が同じ。「足の早い旅人」「頭のいい人」という比喩の主体・対象も保持されている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.92,
+      "cost_usd": 0.008966
+    },
+    {
+      "index": 87,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "a1ec614e0e7ab83990788c7b1a8eb5f4893834aae0fed8e982b40f33eff3d766",
+      "cache_hit": false,
+      "raw_file": "c0087.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「行き着くこともできる」（可能）と「見落とす恐れがある」（可能性・懸念）は、候補でも「行き着くこともできる」「見落とす恐れがある」としてそのまま保たれている。「言わば」→「言ってみれば」、「人のまだ行かない所」→「まだ誰も行っていない所」は表現の言い換えで、現在形の一般論という時制も変わっていない。「まだ誰も行っていない」は完了的な言い方だが、「まだ行かない」と同様に未踏の状態を示しており、時制や強さの変化とは言えない。義務・推奨・可能の強さも時制も保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.35,
+      "cost_usd": 0.00908
+    },
+    {
+      "index": 88,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "ccdf1f981de1be699fa5d17ecd19c3b9f097ba3ef1d77596c04943e1d7ab67f9",
+      "cache_hit": false,
+      "raw_file": "c0088.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「人より先に人のまだ行かない所へ行き着くこともできる」は、候補で「人より先に、まだ誰も行っていない所へ行き着くこともできる」となり、「先に」という先後関係と「まだ行っていない」という未到達の関係が保たれている。「途中の道ばたあるいはちょっとしたわき道」も「途中の道ばたやちょっとしたわき道」で、場所の並列関係は同じ。「足の早い」「代わりに」の対比構造や、数値・期限・頻度に変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.02,
+      "cost_usd": 0.008464000000000001
+    },
+    {
+      "index": 89,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "1a0f2cf76f7a75ba3a3d24016ed8e0ff58465a307a6692730c0af954fd9b5e5c",
+      "cache_hit": false,
+      "raw_file": "c0089.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「人より先に人のまだ行かない所へ行き着くこともできる」は、候補「人より先に、まだ誰も行っていない所へ行き着くこともできる」と意味が対応している。「人のまだ行かない」を「まだ誰も行っていない」と言い換えただけで、新たな主体・条件・理由・具体例・固有名は加わっていない。「言わば」→「言ってみれば」、「道ばたあるいは」→「道ばたや」も自然な言い換えで、追加された具体化はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.83,
+      "cost_usd": 0.008398000000000001
+    },
+    {
+      "index": 90,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "a5f1851f092ba8e730c28ddb61675e72070d2b0d2772a8a3778b454929b92fa1",
+      "cache_hit": false,
+      "raw_file": "c0090.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「言わば」は「言ってみれば」に、「人のまだ行かない所」は「まだ誰も行っていない所」に、「道ばたあるいは」は「道ばたや」に変わっている。いずれも意味は同じで、比喩（「足の早い旅人」）、対比（「〜できる代わりに…恐れがある」）、語り口も保たれている。ただし原文は十分に明確で、これらの書換えは必須ではなく、特に「人のまだ行かない所」を「まだ誰も行っていない所」に変えた点は不要な変更に近い。それでも意味や働きは変わらず、自然な言い換えの範囲内なのでpassとする。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.36,
+      "cost_usd": 0.008986
+    }
+  ],
+  "call_summary": {
+    "calls": 90,
+    "cache_hits": 14,
+    "failures": 1,
+    "seconds": 418.7,
+    "cost_usd_list_price": 0.7052,
+    "calls_without_cost": 0
+  },
+  "finished_at": "2026-10-16T23:34:27.932768+00:00"
+}
