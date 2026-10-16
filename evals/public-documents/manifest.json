@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "groups": {
+    "digital-agency": {
+      "issue": 40,
+      "target_excerpts": 10,
+      "note": "予備評価の出発点であり、統計的十分性の根拠ではない。業務・技術文書として、青空文庫の群と結果を混ぜない。"
+    }
+  },
+  "sources": [
+    {"id": "da-ds-100", "group": "digital-agency", "status": "planned", "title": "DS-100", "url": "https://www.digital.go.jp/resources/standard_guidelines"},
+    {"id": "da-ds-110", "group": "digital-agency", "status": "planned", "title": "DS-110", "url": "https://www.digital.go.jp/resources/standard_guidelines"},
+    {"id": "da-ds-120", "group": "digital-agency", "status": "planned", "title": "DS-120", "url": "https://www.digital.go.jp/resources/standard_guidelines"},
+    {"id": "da-requirements-template", "group": "digital-agency", "status": "planned", "title": "要件定義書標準テンプレート", "url": "https://www.digital.go.jp/resources/standard_guidelines"},
+    {"id": "da-procurement-spec-template", "group": "digital-agency", "status": "planned", "title": "調達仕様書標準テンプレート", "url": "https://www.digital.go.jp/resources/standard_guidelines"}
+  ],
+  "excerpts": []
+}

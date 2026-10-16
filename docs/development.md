@@ -1,6 +1,6 @@
 # 開発
 
-文章の定量・定性評価、自動／手動検証、モードBの匿名二候補比較は[文章評価ツール](human-evaluation.md)を参照してください。確認記録と回帰ケース出力・LLM判定との照合は `tools/feedback_readability.py`、単一候補の理解問題は `tools/comprehension_readability.py`、匿名比較の文書単位の区間推定は `tools/statistics_readability.py` を使います。これらの開発用ツールと画面テンプレートは配布スキルの外に置いています。
+文章の定量・定性評価、自動／手動検証、モードBの匿名二候補比較は[文章評価ツール](human-evaluation.md)を参照してください。確認記録と回帰ケース出力・LLM判定との照合は `tools/feedback_readability.py`、単一候補の理解問題は `tools/comprehension_readability.py`、匿名比較の文書単位の区間推定は `tools/statistics_readability.py` を使います。公開文書を評価データにする計画と、出典・利用条件・分割の台帳を検査する `tools/validate_public_corpus.py` は[公開文書による評価データ整備の計画](public-document-evaluation.md)を参照してください。これらの開発用ツールと画面テンプレートは配布スキルの外に置いています。
 
 このリポジトリを変更する人向けの説明です。
 
