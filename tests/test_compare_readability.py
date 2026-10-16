@@ -96,6 +96,42 @@ class CompareReadabilityTest(unittest.TestCase):
         self.assertEqual(summary["variants"][variant]["fail_rate_all_assignments"], 1 / 3)
         self.assertEqual(summary["variants"][variant]["issues_by_category"], {"condition": 1})
 
+    def test_disagreements_keep_candidate_identity_and_do_not_count_votes_as_documents(self):
+        pairs = comparison.read_pairs(EXAMPLE)[:1]
+        pairs.append({**pairs[0], "id": "repeat"})
+        assignments = [comparison.assignment(pairs, name) for name in ("r1", "r2", "absent")]
+        documents = [answer_file(a) for a in assignments[:2]]
+        variant = assignments[0]["mapping"]["pair-001"]["left"]
+        for index, (assigned, document) in enumerate(zip(assignments, documents)):
+            side = next(s for s in comparison.SIDES if assigned["mapping"]["pair-001"][s] == variant)
+            answer = document["reviews"][0]
+            answer[side]["issues"] = [{"category": "condition", "severity": "critical",
+                "quote": assigned["public"]["cases"][0][side], "reason": "条件を確認する。"}]
+            if index == 0:
+                answer[side]["contract"] = "fail"
+                answer["preference"] = "uncertain"
+            document["reviews"].append({**copy.deepcopy(answer), "id": "pair-002"})
+        summary = comparison.aggregate(assignments, documents)
+        stats = summary["variants"][variant]
+        self.assertEqual(stats["fail_rate_all_assignments"], 2 / 6)
+        self.assertEqual(stats["fail_rate_completed"], 2 / 4)
+        self.assertEqual(stats["missing_reviews"], 2)
+        self.assertEqual(stats["issues_by_severity"], {"critical": 4})
+        self.assertEqual(stats["documents_with_major_or_critical_issues"], 1)
+        self.assertEqual(summary["both_pass_documents"], 1)
+        self.assertEqual(summary["both_pass_rate_all_assignments"], 2 / 6)
+        self.assertEqual(len(summary["disagreements"]), 2)
+        self.assertEqual(summary["disagreements"][0]["contract_counts"], {"fail": 1, "pass": 1})
+        self.assertEqual(summary["disagreements"][0]["votes"][0]["issues"][0]["severity"], "critical")
+
+    def test_unanswered_and_single_reviewer_never_invent_agreement_or_rates(self):
+        assigned = comparison.assignment(comparison.read_pairs(EXAMPLE), "r1")
+        summary = comparison.aggregate([assigned], [])
+        self.assertEqual(summary["disagreements"], [])
+        self.assertTrue(all(s["fail_rate_completed"] is None for s in summary["variants"].values()))
+        self.assertEqual(summary["both_pass_documents"], 0)
+        self.assertEqual(comparison.aggregate([assigned], [answer_file(assigned)])["disagreements"], [])
+
     def test_malformed_answers_cannot_mix_assignments_or_invent_quotes(self):
         assigned = comparison.assignment(comparison.read_pairs(EXAMPLE), "r1")
         for fault in ("reviewer", "hash", "method", "id", "duplicate", "bool", "quote", "category", "reason", "array", "null"):

@@ -18,6 +18,7 @@ RUBRIC = "readability-pair-v1"
 SIDES = ("left", "right")
 CATEGORIES = ("number", "condition", "negation", "actor", "speech_act", "omission", "addition", "style", "readability", "other")
 SEVERITIES = ("minor", "major", "critical")
+CONTENT_FIELDS = ("request", "context", "audience", "original", "candidate")
 
 
 def fingerprint(document: dict) -> str:
@@ -127,6 +128,7 @@ def validate_assigned_case(case, mapping: dict) -> str:
     pair_map = mapping.get(case["id"])
     if not isinstance(pair_map, dict):
         raise ValueError("missing private variant mapping")
+    review.text_field(pair_map, "source_id", True)
     variants = [review.text_field(pair_map, side, True) for side in SIDES]
     if len(set(variants)) != 2 or any(name in ("tie", "uncertain") for name in variants):
         raise ValueError("invalid private variant names")
@@ -146,7 +148,29 @@ def read_assignments(path: Path) -> list:
     for assigned in validated:
         if any(set(names) != variants for names in mapped_variants(assigned)):
             raise ValueError("inconsistent variants in organizer")
+    candidate_index(validated)
     return validated
+
+
+def assigned_candidates(assigned: dict) -> dict:
+    candidates = {}
+    for case in assigned["public"]["cases"]:
+        mapping = assigned["mapping"][case["id"]]
+        for side in SIDES:
+            candidate = {k: review.text_field(case, k) for k in CONTENT_FIELDS if k != "candidate"}
+            candidate.update(candidate=case[side], document_id=case["document_id"])
+            key = (mapping["source_id"], mapping[side])
+            if key in candidates:
+                raise ValueError("duplicate source candidate in organizer")
+            candidates[key] = candidate
+    return candidates
+
+
+def candidate_index(assignments: list) -> dict:
+    indexed = [assigned_candidates(assigned) for assigned in assignments]
+    if any(index != indexed[0] for index in indexed[1:]):
+        raise ValueError("reviewers were assigned different source content")
+    return indexed[0]
 
 
 def mapped_variants(assigned: dict) -> list:
@@ -226,6 +250,7 @@ def mapped_reviews(assigned: dict, answers: list) -> list:
     for answer in answers:
         mapping = assigned["mapping"][answer["id"]]
         rows.append({**answer, "reviewer": assigned["public"]["reviewer"], "document_id": case_documents[answer["id"]],
+                     "source_id": mapping["source_id"],
                      "variants": {mapping[s]: answer[s] for s in SIDES},
                      "selected": mapping.get(answer["preference"], answer["preference"])})
     return rows
@@ -239,7 +264,10 @@ def comparison_summary(assignments: list, rows: list, responding_reviewers: int)
             "assigned_documents": len({c["document_id"] for a in assignments for c in a["public"]["cases"]}),
             "responding_reviewers": responding_reviewers, "expected_reviews": expected, "completed_reviews": len(rows),
             "missing_reviews": expected - len(rows), "both_pass": len(eligible),
+            "both_pass_documents": len({r["document_id"] for r in eligible}),
+            "both_pass_rate_all_assignments": len(eligible) / expected,
             "preference_among_both_pass": dict(Counter(r["selected"] for r in eligible)),
+            "disagreements": contract_disagreements(rows),
             "variants": {name: variant_summary(name, rows, expected) for name in variants}, "qualitative": rows,
             "limits": "割付全件を母数に欠測を記録。選好は両候補合格の票だけ。票は独立文書ではなく、理解率・効果量・因果効果は未測定。"}
 
@@ -248,8 +276,34 @@ def variant_summary(name: str, rows: list, expected: int) -> dict:
     reviews = [r["variants"][name] for r in rows]
     counts = Counter(r["contract"] for r in reviews)
     return {"contract_counts": dict(counts), "fail_rate_all_assignments": counts["fail"] / expected,
+            "fail_rate_completed": counts["fail"] / len(reviews) if reviews else None,
+            "missing_reviews": expected - len(reviews),
             "scores": {d: review.score_summary(reviews, d) for d in review.DIMENSIONS},
-            "issues_by_category": dict(Counter(i["category"] for r in reviews for i in r["issues"]))}
+            "issues_by_category": dict(Counter(i["category"] for r in reviews for i in r["issues"])),
+            **severity_summary(name, rows)}
+
+
+def severity_summary(name: str, rows: list) -> dict:
+    counts = Counter()
+    documents = {severity: set() for severity in SEVERITIES}
+    for row in rows:
+        for issue in row["variants"][name]["issues"]:
+            counts[issue["severity"]] += 1
+            documents[issue["severity"]].add(row["document_id"])
+    return {"issues_by_severity": dict(counts),
+            "documents_with_issues_by_severity": {s: len(docs) for s, docs in documents.items()},
+            "documents_with_major_or_critical_issues": len(documents["major"] | documents["critical"])}
+
+
+def contract_disagreements(rows: list) -> list:
+    candidates = {}
+    for row in rows:
+        for variant, answer in row["variants"].items():
+            key = (row["source_id"], variant)
+            candidates.setdefault(key, []).append({"reviewer": row["reviewer"], "document_id": row["document_id"], **answer})
+    return [{"source_id": source_id, "variant": variant, "votes": votes,
+             "contract_counts": dict(Counter(v["contract"] for v in votes))}
+            for (source_id, variant), votes in candidates.items() if len({v["contract"] for v in votes}) > 1]
 
 
 def automatic_tasks(pairs: list) -> dict:
@@ -277,8 +331,14 @@ def write_summary(folder: Path, summary: dict) -> None:
     lines = ["# 匿名二候補の比較結果", "", summary["limits"], "",
              f"回答 {summary['completed_reviews']} / 割付 {summary['expected_reviews']}、欠測 {summary['missing_reviews']}。",
              f"両候補合格 {summary['both_pass']}。その中の選好：{summary['preference_among_both_pass']}。", ""]
+    lines.extend([f"選好の対象文書 {summary['both_pass_documents']} / {summary['assigned_documents']}。"
+                  f"対象票の全割付中の割合 {summary['both_pass_rate_all_assignments']:.1%}。", "",
+                  "不合格率は全割付中と回答済み内を併記。欠測は合格ではありません。重大度は未裁定の指摘です。", ""])
     for name, statistics in summary["variants"].items():
         lines.extend(["> " + json.dumps({name: statistics}, ensure_ascii=False).replace("<", "&lt;"), ""])
+    lines.extend(["## 意味保持判定の不一致", ""])
+    for disagreement in summary["disagreements"]:
+        lines.extend(["> " + json.dumps(disagreement, ensure_ascii=False).replace("<", "&lt;"), ""])
     lines.extend(["候補別の引用・理由・修正案は summary.json の qualitative に保存しています。", ""])
     (folder / "summary.md").write_text("\n".join(lines), encoding="utf-8")
 

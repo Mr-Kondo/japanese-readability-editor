@@ -159,6 +159,10 @@ python3 tools/compare_readability.py summarize --organizer /tmp/jre-pairs/organi
 
 回答の評価者・配布ハッシュ・基準版の不一致、重複回答・不正な評点を拒否します。一人につき最新の回答ファイル一つを渡してください。入力不正では出力先を作らず、既存の出力先も上書きしません。終了コードは `0=処理完了、2=入力・保存エラー`。不合格を含む正常な集計でも0です。異常時は `comparison failed: ...` を表示します。
 
+集計には、同じ生成候補で意味保持の判定が割れた `disagreements` を理由・引用付きで出します。一人の評価だけでは不一致は発生しませんが、一致の証明にもなりません。`fail_rate_completed` は回答済み内、従来の `fail_rate_all_assignments` は全割付中の不合格割合です。無回答では前者を `null` にし、欠測・未判定を合格とみなしません。
+
+重大度別に指摘件数と該当文書数を分け、反復生成や複数人の指摘を文書数に重複計上しません。指摘は未裁定で、確定した不具合数ではありません。選好には対象票の全割付中の割合と対象文書数も併記します。
+
 同じ二候補JSONから自動検証も実行できます。
 
 ```bash
@@ -167,11 +171,82 @@ python3 tools/compare_readability.py auto --input evals/blind-comparison-example
 
 既存の自動検証を再利用し、各候補を独立に検査します。`tasks.json` の `provenance.variant` で版名、`document_id` で原文を追跡できます。`--judge` を付けると各候補をClaudeへ送信し、単独評価の評点・原文との選好・理由を取得します。版名と生成情報はモデルへ渡しません。人手の二候補間選好とは別の評価で、自動集計から二候補の勝率を出しません。自動検証の終了コードは単独評価と同じ `0/1/2` です。
 
-人手回答とLLM回答は混ぜず、匿名比較の集計は人手専用です。理解問題・裁定画面・信頼区間・スキルへの自動反映は含めません。
+人手回答とLLM回答は混ぜず、匿名比較の集計は人手専用です。確認記録は次の手順で別ファイルに残します。
+
+## 指摘を確認し、回帰ケースにする
+
+不一致一覧と元回答を原文・資料に照らして確認します。多数決だけで正解を決めず、一人で評価した場合も確認の根拠を残してください。
+
+```bash
+python3 tools/feedback_readability.py prepare --organizer /tmp/jre-pairs/organizer.json --out-dir /tmp/jre-confirmation
+```
+
+`decisions.json` は主催者用です。各候補の `input`、ID、ハッシュは変更せず、以下を編集します。
+
+- `status`：`confirmed_problem`（意味保持の問題を確認）／`no_problem`（意味保持を確認）／`unresolved`（未解決）。読みやすさの好みだけで意味保持の不合格にはしません。
+- 確定した判定には `confirmer`（確認者）、`reason`（根拠）、`quote`（候補内の引用）を必須にします。欠落は周辺の文を引用して説明します。
+- `origin`：`artificial`（人工例）／`model_output`（実際のモデル出力）／`unknown`。人工例を実運用の失敗として扱わないでください。
+- 問題を確認した候補には `preserve`（保持要件）、`forbid`（禁止事項）、`rule_ids`（関連規則の識別子）を空でない文字列配列で記入します。唯一の正解文を指定する必要はありません。
+
+元回答と独立して保存し、確認記録から開発用ケースを出力します。
+
+```bash
+python3 tools/feedback_readability.py export --organizer /tmp/jre-pairs/organizer.json --decisions /tmp/jre-confirmation/decisions.json --out-dir /tmp/jre-regression
+```
+
+`regression-cases.json` は既存の `evaluate_readability.py` が読み込む `cases/controls` 形式です。確認済み問題を再生成用ケースと不合格対照例にし、問題なしの候補は合格対照例にします。未解決は出力しません。確認済み問題がゼロならエラーにし、出力先を作りません。入力不一致・重複・項目の欠落・存在しない引用も拒否します。両コマンドとも `0=完了、2=エラー` で、既存の出力先は上書きしません。
+
+この出力はスキルやテストへ自動反映しません。公開前に文章と引用の機密情報を確認し、同じ失敗が繰り返す規則・例だけを人が修正します。開発に使ったケースとは別の未使用文書で旧新版を再比較してください。意味関係の判定は引き続き人手またはモデル評価を要し、JSON出力だけで自動検証になったとは扱いません。
+
+## 人手とLLMの判定を照合する
+
+匿名比較と同じ二候補入力で `compare_readability.py auto --judge` を実行した場合、その出力を使います。照合コマンド自体は外部通信しません。
+
+```bash
+python3 tools/feedback_readability.py calibrate --organizer /tmp/jre-pairs/organizer.json --decisions /tmp/jre-confirmation/decisions.json --tasks /tmp/jre-pair-auto/tasks.json --llm-answers /tmp/jre-pair-auto/llm-answers.json --out-dir /tmp/jre-calibration
+```
+
+`calibration.json` と `calibration.md` に、確認済み人手判定を行、LLM判定を列にした混同行列を保存します。`confirmed_problem` を意味保持の `fail`、`no_problem` を `pass`、`unresolved` を `uncertain` として扱います。候補のID・版だけでなく原文・候補・依頼・文脈・対象読者の一致を検証し、同じIDに別の文章を混ぜません。確認記録は全候補を残し、LLMの途中失敗による未回答は `missing` にします。
+
+意味改変の検出率は、全確認済み不合格を分母とする値とLLM回答済みだけを分母とする値を分けます。LLM合格中の人手不合格は、人手側の判定が確定したLLM合格だけを分母にします。各率に `numerator/denominator/rate` を保存し、分母ゼロなら `null`。人手未解決、LLM判断不能、LLM欠測も別記します。人工例での成績は実運用の誤り頻度・適合率には読み替えず、二候補間の選好と原文との選好も直接比較しません。
+
+## 一つの候補だけを読んで理解問題を解く
+
+比較画面には原文と両候補があるため、理解問題は別の配布物にします。`evals/comprehension-example.json` は操作練習用の人工例です。二候補入力に `questions` を追加し、各設問に `id`、`prompt`、異なる二つ以上の `options`、0始まりの `answer_index`、原文に完全一致する `evidence`、`verified_by`、`verification_reason` を指定します。引用の存在と形式は検証しますが、正解の意味的な正しさは作問者が原文と照合してください。
+
+```bash
+python3 tools/comprehension_readability.py prepare --input evals/comprehension-example.json --readers reader-a reader-b --out-dir /tmp/jre-comprehension
+```
+
+`organizer.json` は正解・原文・版対応を含む主催者用です。回答者には対応する `reader-NNN/review.html` と `tasks.json` だけを渡します。配布物は候補文・対象読者・設問・選択肢だけを含み、原文・版名・正解・根拠を含めません。候補の文体などから版を推測できる可能性は残ります。再生成せず、同じ配布物を保管して再開してください。
+
+各回答者には同じ原稿を一度だけ配るため、入力の `document_id` 重複を拒否します。各回答者内と各文書内の旧新版の割付差を最大1件に抑えます。一人だけでは文書ごとの版間比較はできず、多人数でも対象読者の違いや知識の偏りは別途考慮が必要です。
+
+画面は文章を参照しながら回答する形式です。「分からない」と任意の迷った箇所を記録し、回答JSONを明示保存できます。再読込時は回答者・割付・基準を確認し、未保存入力の置換前に確認します。自動保存・時間計測はありません。注記だけの入力は、回答か「分からない」を選んでから保存してください。
+
+```bash
+python3 tools/comprehension_readability.py summarize --organizer /tmp/jre-comprehension/organizer.json --answers /path/to/reader-a-comprehension.json /path/to/reader-b-comprehension.json --out-dir /tmp/jre-comprehension-summary
+```
+
+`summary.json` と `summary.md` に全体・版別・文書別の割付設問数、回答数、正答数、分からない件数、欠測、回答済み内の正答率と全割付中の正答割合を保存します。「分からない」は回答済みの非正答、欠測は未回答として分けます。未提出者も欠測に含み、一人につき最新の回答ファイル一つを渡します。全体の率は設問・回答を等重みにした記述値で、文書を等重みにした効果推定ではありません。両コマンドとも `0=完了、2=エラー`、出力先は新規フォルダだけです。
+
+## 文書を等重みにして版間差を調べる
+
+匿名比較の主催者ファイルと人手回答から、文書ごとの値を先に作ります。
+
+```bash
+python3 tools/statistics_readability.py --organizer /tmp/jre-pairs/organizer.json --answers /path/to/reader-a-answers.json /path/to/reader-b-answers.json --out-dir /tmp/jre-statistics
+```
+
+`statistics.json` と `statistics.md` の `variants_in_order` は版名の辞書順です。`fail_rate_difference` は、両版とも `pass/fail` が決まった対応回答について「第2版の不合格割合−第1版」を文書内で平均し、さらに文書を等重みにして平均します。負なら第2版の不合格が少ないことを表します。未判定・欠測の偏りは補正しません。
+
+`preference_balance` は、両版合格かつ選好が決まった回答を第2版+1・第1版−1・同等0として同じ順で平均します。判断不能は除き、候補の意味保持の悪化を選好で相殺しません。どちらも対象文書数と文書別の対象票数を残します。反復生成と複数人の票を独立文書として数えません。
+
+文書の両版を組のまま再標本化するpercentile bootstrapを9,999回、乱数種0、95％区間で実行し、設定を保存します。対象が2文書未満、または文書値がすべて同一の場合は、区間を `null` として理由を記録します。後者で幅ゼロの区間を信頼できる証拠として出しません。固定した評価者と文書の抽出に条件付けた近似であり、少数文書では不安定です。評価者集団への一般化、同等性の証明、因果効果や全体の品質改善を主張するものではありません。終了コードは `0=処理完了、2=エラー`、既存フォルダは上書きしません。
 
 ## 限界と改善への接続
 
-平均評点を単一の総合品質点にしません。評点が高くても意味改変は独立した不具合です。反復生成や複数人の票を独立文書と数えず、信頼区間・一致係数・有意差は未実装です。Cの検査対象もJSON内の文字列であり、元ファイルの文字コード・バイト保持までは保証しません。
+平均評点を単一の総合品質点にしません。評点が高くても意味改変は独立した不具合です。反復生成や複数人の票を独立文書と数えません。匿名比較の文書単位の近似区間は別コマンドで提供し、一致係数・有意差検定は行いません。Cの検査対象もJSON内の文字列であり、元ファイルの文字コード・バイト保持までは保証しません。
 
 指摘を人が確認し、繰り返す失敗を回帰ケースに変え、ルール・例を必要な範囲だけ修正します。その後、同条件で旧新版を未使用文書に適用して確認します。このツールはスキルを自動更新せず、理解度・読解時間・改善率を予測しません。
 

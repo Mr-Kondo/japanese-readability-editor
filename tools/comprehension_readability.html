@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; base-uri 'none'; form-action 'none'">
+<title>日本語文章の理解問題</title>
+<style>
+body{font:17px/1.8 system-ui,sans-serif;max-width:850px;margin:auto;padding:24px;background:#f5f6f8;color:#1c2732}
+header,section{background:white;border:1px solid #ccd3dc;border-radius:8px;padding:24px;margin-bottom:24px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}label{display:block;margin-top:10px}
+select,textarea,button{font:inherit;padding:8px;max-width:100%;box-sizing:border-box}textarea{width:100%;min-height:70px}
+button{margin:12px 8px 0 0;cursor:pointer}fieldset{margin-top:24px}:focus-visible{outline:3px solid #bd5000;outline-offset:3px}.error{color:#9e1b1b}
+</style>
+<header><h1>日本語文章の理解問題</h1><p id="reader"></p>
+<p>表示された文章を参照しながら回答してください。答えが分からない場合は「分からない」を選べます。未回答の問題は飛ばせます。</p>
+<button id="export" type="button">回答JSONを保存</button>
+<label>保存した回答から再開 <input id="resume" type="file" accept=".json,application/json"></label>
+<p id="status" role="status" aria-live="polite">自動保存されません。保存先を確認してください。</p></header>
+<main id="cards"></main>
+<script type="application/json" id="tasks">__TASK_DATA__</script>
+<script>
+'use strict';
+const tasks=JSON.parse(document.getElementById('tasks').textContent),forms=[];
+const status=document.getElementById('status');let dirty=false;
+function element(tag,text,parent){const el=document.createElement(tag);if(text)el.textContent=text;if(parent)parent.append(el);return el;}
+function markDirty(){dirty=true;status.className='';status.textContent='変更があります。回答JSONを保存してください。';}
+document.getElementById('reader').textContent='回答者ID：'+tasks.reviewer;
+for(const task of tasks.cases){
+  const card=element('section','',document.getElementById('cards'));element('h2',task.id,card);
+  if(task.audience)element('p','対象読者：'+task.audience,card);element('pre',task.candidate,card);
+  for(const question of task.questions){
+    const fieldset=element('fieldset','',card);element('legend',question.prompt,fieldset);
+    const choice=element('select','',element('label','回答 ',fieldset));
+    for(const [key,text] of [['','未回答'],...question.options.map((s,i)=>[String(i),s]),['unknown','分からない']]){
+      const option=element('option',text,choice);option.value=key;
+    }
+    const note=element('textarea','',element('label','迷った箇所・理由（任意）',fieldset));
+    forms.push({task,question,choice,note});
+  }
+  card.addEventListener('input',markDirty);card.addEventListener('change',markDirty);
+}
+function validateResponse(response){
+  const form=forms.find(f=>f.task.id===response?.id&&f.question.id===response?.question_id);
+  if(!form||typeof response.note!=='string'||!(response.choice==='unknown'||Number.isInteger(response.choice)&&response.choice>=0&&response.choice<form.question.options.length))throw Error('不明な問題、回答、または注記です。');
+  return form;
+}
+function responses(){
+  const entries=[];
+  for(const form of forms){
+    if(!form.choice.value){if(form.note.value.trim())throw Error(form.task.id+'：注記を残す場合は回答か「分からない」を選んでください。');continue;}
+    const response={id:form.task.id,question_id:form.question.id,choice:form.choice.value==='unknown'?'unknown':Number(form.choice.value),note:form.note.value};
+    validateResponse(response);entries.push(response);
+  }return entries;
+}
+document.getElementById('export').addEventListener('click',()=>{
+  try{
+    const entries=responses(),answers={schema_version:1,rubric_version:tasks.rubric_version,task_sha256:tasks.task_sha256,reviewer:tasks.reviewer,method:'human',responses:entries};
+    const url=URL.createObjectURL(new Blob([JSON.stringify(answers,null,2)+'\n'],{type:'application/json'}));
+    const link=element('a','',document.body);link.href=url;link.download='comprehension-answers.json';link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    dirty=false;status.className='';status.textContent=entries.length+'問を出力しました。保存先を確認してください。';
+  }catch(error){status.className='error';status.textContent=error.message;}
+});
+document.getElementById('resume').addEventListener('change',async event=>{
+  try{
+    const file=event.target.files[0];if(!file)return;const answers=JSON.parse(await file.text());
+    if(!answers||['schema_version','rubric_version','task_sha256','reviewer'].some(k=>answers[k]!==tasks[k])||answers.method!=='human'||!Array.isArray(answers.responses))throw Error('回答者・問題・基準が一致しません。');
+    const seen=new Set();for(const response of answers.responses){validateResponse(response);const key=JSON.stringify([response.id,response.question_id]);if(seen.has(key))throw Error('回答が重複しています。');seen.add(key);}
+    if(dirty&&!confirm('未保存の入力を読み込んだ回答で置き換えますか？'))return;
+    for(const form of forms){const response=answers.responses.find(r=>r.id===form.task.id&&r.question_id===form.question.id);form.choice.value=response?String(response.choice):'';form.note.value=response?.note||'';}
+    dirty=false;status.className='';status.textContent=answers.responses.length+'問を読み込みました。';
+  }catch(error){status.className='error';status.textContent='読み込めません：'+error.message;}finally{event.target.value='';}
+});
+window.addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue='';}});
+</script>
+</html>
