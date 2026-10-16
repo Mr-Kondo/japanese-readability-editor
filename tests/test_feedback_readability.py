@@ -111,6 +111,23 @@ class FeedbackReadabilityTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             feedback.calibration(self.assignments, decisions, tasks, answers)
 
+    def test_cli_calibration_uses_saved_tasks_and_preserves_partial_llm_coverage(self):
+        with temporary_directory() as tmp:
+            root = Path(tmp)
+            comparison.review.evaluation.save_json(root / "organizer.json", {"schema_version": 1, "rubric_version": comparison.RUBRIC, "assignments": self.assignments})
+            comparison.review.evaluation.save_json(root / "decisions.json", confirmed_document(self.assignments))
+            tasks = comparison.automatic_tasks(comparison.read_pairs(REPO_ROOT / "evals/blind-comparison-example.json"))
+            comparison.review.evaluation.save_json(root / "tasks.json", tasks)
+            answers = {**{k: tasks[k] for k in ("schema_version", "rubric_version", "task_sha256")},
+                       "method": "llm", "reviewer": "test-judge", "reviews": []}
+            comparison.review.evaluation.save_json(root / "answers.json", answers)
+            args = ["calibrate", "--organizer", str(root / "organizer.json"), "--decisions", str(root / "decisions.json"),
+                    "--tasks", str(root / "tasks.json"), "--llm-answers", str(root / "answers.json"), "--out-dir", str(root / "calibration")]
+            self.assertEqual(feedback.main(args), 0)
+            self.assertEqual(comparison.review.read_json(root / "calibration/calibration.json")["llm_missing"], 6)
+            self.assertTrue((root / "calibration/calibration.md").exists())
+            self.assertEqual(feedback.main(args), 2)
+
     def test_cli_does_not_overwrite_decisions_or_source_answers(self):
         with temporary_directory() as tmp:
             root = Path(tmp)

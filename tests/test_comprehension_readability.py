@@ -95,6 +95,25 @@ class ComprehensionReadabilityTest(unittest.TestCase):
             self.assertIn("\\u003c/script>", html)
             with self.assertRaises(FileExistsError): comprehension.prepare(comprehension.read_source(path), ["r1"], folder)
 
+    def test_private_key_or_reader_content_changes_are_rejected(self):
+        pairs = comprehension.read_source(EXAMPLE)
+        base = comprehension.comparison.assignment(pairs, "organizer")
+        original = [comprehension.reader_assignment(pairs, base, "r1", "left"),
+                    comprehension.reader_assignment(pairs, base, "r2", "right")]
+        with temporary_directory() as tmp:
+            path = Path(tmp) / "organizer.json"
+            for fault in ("candidate", "key", "duplicate_source", "reference"):
+                with self.subTest(fault=fault):
+                    assignments = copy.deepcopy(original)
+                    private = assignments[1]["mapping"]["pair-001"]
+                    if fault == "candidate": private["candidate"] = "別の文章"
+                    elif fault == "key": private["questions"][0]["answer_index"] = 99
+                    elif fault == "duplicate_source": assignments[1]["mapping"]["pair-002"]["source_id"] = private["source_id"]
+                    else:
+                        private["original"] += "追加資料。"
+                    review.evaluation.save_json(path, {"schema_version": 1, "rubric_version": comprehension.RUBRIC, "assignments": assignments})
+                    with self.assertRaises(ValueError): comprehension.read_assignments(path)
+
 
 if __name__ == "__main__":
     unittest.main()

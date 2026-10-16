@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-from collections import Counter
 import json
 from pathlib import Path
 import random
@@ -37,15 +36,19 @@ def read_source(path: Path) -> list:
     pairs = comparison.read_pairs(path)
     raw = review.read_json(path)
     for pair, entry in zip(pairs, raw["cases"]):
-        questions = entry.get("questions")
-        if not isinstance(questions, list) or not questions:
-            raise ValueError("each document requires verified questions")
-        pair["questions"] = [checked_question(q, pair["original"]) for q in questions]
-        if len({q["id"] for q in questions}) != len(questions):
-            raise ValueError("duplicate question id")
+        pair["questions"] = checked_questions(entry.get("questions"), pair["original"])
     if len({p["document_id"] for p in pairs}) != len(pairs):
         raise ValueError("comprehension requires one generation per source document")
     return pairs
+
+
+def checked_questions(questions, original: str) -> list:
+    if not isinstance(questions, list) or not questions:
+        raise ValueError("each document requires verified questions")
+    checked = [checked_question(q, original) for q in questions]
+    if len({q["id"] for q in checked}) != len(checked):
+        raise ValueError("duplicate question id")
+    return checked
 
 
 def reader_assignment(pairs: list, base: dict, reader: str, side: str) -> dict:
@@ -117,11 +120,8 @@ def checked_assigned_case(case, mapping: dict) -> str:
         review.text_field(private, name, True)
     if case["candidate"] != private.get("candidate"):
         raise ValueError("candidate does not match private assignment")
-    questions = private.get("questions")
-    if not isinstance(questions, list) or not questions:
-        raise ValueError("missing answer key")
-    checked = [checked_question(q, private["original"]) for q in questions]
-    if len({q["id"] for q in checked}) != len(checked) or case.get("questions") != [{k: q[k] for k in ("id", "prompt", "options")} for q in checked]:
+    checked = checked_questions(private.get("questions"), private["original"])
+    if case.get("questions") != [{k: q[k] for k in ("id", "prompt", "options")} for q in checked]:
         raise ValueError("public questions do not match answer key")
     return case["id"]
 
@@ -135,7 +135,27 @@ def read_assignments(path: Path) -> list:
     assignments = [checked_assignment(a) for a in entries]
     if len({a["public"]["reviewer"] for a in assignments}) != len(assignments):
         raise ValueError("duplicate reader")
+    validate_shared_references(assignments)
     return assignments
+
+
+def validate_shared_references(assignments: list) -> None:
+    references, candidates = [], {}
+    for assigned in assignments:
+        sources = {}
+        for case in assigned["public"]["cases"]:
+            private = assigned["mapping"][case["id"]]
+            source = private["source_id"]
+            if source in sources:
+                raise ValueError("duplicate comprehension source")
+            sources[source] = {k: private[k] for k in ("original", "questions")} | {"document_id": case["document_id"]}
+            key = (source, private["variant"])
+            if key in candidates and candidates[key] != case["candidate"]:
+                raise ValueError("inconsistent comprehension candidate")
+            candidates[key] = case["candidate"]
+        references.append(sources)
+    if any(reference != references[0] for reference in references[1:]) or len({v for _, v in candidates}) > 2:
+        raise ValueError("inconsistent comprehension references/variants")
 
 
 def checked_responses(document, assigned: dict) -> dict:
@@ -199,12 +219,18 @@ def summarize(assignments: list, documents: list) -> dict:
             raise ValueError("unknown/duplicate reader submission")
         submitted[reader] = checked_responses(document, by_reader[reader])
     rows = [r for reader, assigned in by_reader.items() for r in scored_rows(assigned, submitted.get(reader, {}))]
-    variants = sorted({r["variant"] for r in rows})
-    groups = {(r["document_id"], r["variant"]) for r in rows}
     return {"schema_version": 1, "rubric_version": RUBRIC, **score_summary(rows),
-            "variants": {v: score_summary([r for r in rows if r["variant"] == v]) for v in variants},
-            "documents": [{"document_id": doc, "variant": v, **score_summary([r for r in rows if (r["document_id"], r["variant"]) == (doc, v)])} for doc, v in sorted(groups)],
+            **group_scores(rows),
             "qualitative": rows, "limits": "文章を参照して解く情報読取課題。未知分野の理解・記憶・因果効果を保証せず、未回答を誤答と混同しない。"}
+
+
+def group_scores(rows: list) -> dict:
+    variants, documents = {}, {}
+    for row in rows:
+        variants.setdefault(row["variant"], []).append(row)
+        documents.setdefault((row["document_id"], row["variant"]), []).append(row)
+    return {"variants": {v: score_summary(entries) for v, entries in sorted(variants.items())},
+            "documents": [{"document_id": doc, "variant": v, **score_summary(entries)} for (doc, v), entries in sorted(documents.items())]}
 
 
 def main(argv=None) -> int:

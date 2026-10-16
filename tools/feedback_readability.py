@@ -13,27 +13,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import compare_readability as comparison
 
 review = comparison.review
-CONTENT_FIELDS = ("request", "context", "audience", "original", "candidate")
+CONTENT_FIELDS = comparison.CONTENT_FIELDS
 DECISIONS = ("confirmed_problem", "no_problem", "unresolved")
-
-
-def candidate_index(assignments: list) -> dict:
-    indexed = []
-    for assigned in assignments:
-        candidates = {}
-        for case in assigned["public"]["cases"]:
-            mapping = assigned["mapping"][case["id"]]
-            for side in comparison.SIDES:
-                candidate = {k: review.text_field(case, k) for k in CONTENT_FIELDS if k != "candidate"}
-                candidate.update(candidate=case[side], document_id=case["document_id"])
-                key = (mapping["source_id"], mapping[side])
-                if key in candidates:
-                    raise ValueError("duplicate source candidate in organizer")
-                candidates[key] = candidate
-        indexed.append(candidates)
-    if any(index != indexed[0] for index in indexed[1:]):
-        raise ValueError("reviewers were assigned different source content")
-    return indexed[0]
+candidate_index = comparison.candidate_index
 
 
 def decision_template(assignments: list) -> dict:
@@ -148,19 +130,23 @@ def calibration(assignments: list, decisions: dict, tasks: dict, answers: dict) 
 
 def calibration_summary(rows: list) -> dict:
     matrix = {human: dict(Counter(r["llm"] for r in rows if r["human"] == human)) for human in review.STATUSES}
+    return {"schema_version": 1, "confusion_matrix": matrix, **calibration_rates(rows),
+            "human_unresolved": sum(r["human"] == "uncertain" for r in rows),
+            "llm_uncertain": sum(r["llm"] == "uncertain" for r in rows),
+            "llm_missing": sum(r["llm"] == "missing" for r in rows), "candidates": len(rows), "qualitative": rows,
+            "limits": "確認済み人手判定を参照。未解決は正解扱いしない。人工例の成績は運用時の誤り頻度ではない。選好・因果効果は比較しない。"}
+
+
+def calibration_rates(rows: list) -> dict:
     failures = [r for r in rows if r["human"] == "fail"]
     judged_failures = [r for r in failures if r["llm"] != "missing"]
     resolved_passes = [r for r in rows if r["llm"] == "pass" and r["human"] != "uncertain"]
     detected = sum(r["llm"] == "fail" for r in failures)
     false_passes = sum(r["human"] == "fail" for r in resolved_passes)
-    return {"schema_version": 1, "confusion_matrix": matrix, "reference_failures": len(failures),
+    return {"reference_failures": len(failures),
             "fail_detection_all_confirmed": fraction(detected, len(failures)),
             "fail_detection_judged": fraction(detected, len(judged_failures)),
-            "false_pass_among_resolved_llm_pass": fraction(false_passes, len(resolved_passes)),
-            "human_unresolved": sum(r["human"] == "uncertain" for r in rows),
-            "llm_uncertain": sum(r["llm"] == "uncertain" for r in rows),
-            "llm_missing": sum(r["llm"] == "missing" for r in rows), "candidates": len(rows), "qualitative": rows,
-            "limits": "確認済み人手判定を参照。未解決は正解扱いしない。人工例の成績は運用時の誤り頻度ではない。選好・因果効果は比較しない。"}
+            "false_pass_among_resolved_llm_pass": fraction(false_passes, len(resolved_passes))}
 
 
 def fraction(numerator: int, denominator: int) -> dict:

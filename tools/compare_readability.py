@@ -18,6 +18,7 @@ RUBRIC = "readability-pair-v1"
 SIDES = ("left", "right")
 CATEGORIES = ("number", "condition", "negation", "actor", "speech_act", "omission", "addition", "style", "readability", "other")
 SEVERITIES = ("minor", "major", "critical")
+CONTENT_FIELDS = ("request", "context", "audience", "original", "candidate")
 
 
 def fingerprint(document: dict) -> str:
@@ -147,7 +148,29 @@ def read_assignments(path: Path) -> list:
     for assigned in validated:
         if any(set(names) != variants for names in mapped_variants(assigned)):
             raise ValueError("inconsistent variants in organizer")
+    candidate_index(validated)
     return validated
+
+
+def assigned_candidates(assigned: dict) -> dict:
+    candidates = {}
+    for case in assigned["public"]["cases"]:
+        mapping = assigned["mapping"][case["id"]]
+        for side in SIDES:
+            candidate = {k: review.text_field(case, k) for k in CONTENT_FIELDS if k != "candidate"}
+            candidate.update(candidate=case[side], document_id=case["document_id"])
+            key = (mapping["source_id"], mapping[side])
+            if key in candidates:
+                raise ValueError("duplicate source candidate in organizer")
+            candidates[key] = candidate
+    return candidates
+
+
+def candidate_index(assignments: list) -> dict:
+    indexed = [assigned_candidates(assigned) for assigned in assignments]
+    if any(index != indexed[0] for index in indexed[1:]):
+        raise ValueError("reviewers were assigned different source content")
+    return indexed[0]
 
 
 def mapped_variants(assigned: dict) -> list:
@@ -257,12 +280,19 @@ def variant_summary(name: str, rows: list, expected: int) -> dict:
             "missing_reviews": expected - len(reviews),
             "scores": {d: review.score_summary(reviews, d) for d in review.DIMENSIONS},
             "issues_by_category": dict(Counter(i["category"] for r in reviews for i in r["issues"])),
-            "issues_by_severity": dict(Counter(i["severity"] for r in reviews for i in r["issues"])),
-            "documents_with_issues_by_severity": {
-                severity: len({r["document_id"] for r in rows if any(i["severity"] == severity for i in r["variants"][name]["issues"])})
-                for severity in SEVERITIES},
-            "documents_with_major_or_critical_issues": len({r["document_id"] for r in rows
-                if any(i["severity"] in ("major", "critical") for i in r["variants"][name]["issues"])})}
+            **severity_summary(name, rows)}
+
+
+def severity_summary(name: str, rows: list) -> dict:
+    counts = Counter()
+    documents = {severity: set() for severity in SEVERITIES}
+    for row in rows:
+        for issue in row["variants"][name]["issues"]:
+            counts[issue["severity"]] += 1
+            documents[issue["severity"]].add(row["document_id"])
+    return {"issues_by_severity": dict(counts),
+            "documents_with_issues_by_severity": {s: len(docs) for s, docs in documents.items()},
+            "documents_with_major_or_critical_issues": len(documents["major"] | documents["critical"])}
 
 
 def contract_disagreements(rows: list) -> list:
