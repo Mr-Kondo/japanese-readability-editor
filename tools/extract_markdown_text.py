@@ -81,9 +81,12 @@ def elements(path) -> list:
         return blocks(handle.read().decode("utf-8-sig"))
 
 
+def escape(text: str) -> str:
+    return text.replace("\\", "\\\\").replace("\n", "\\n").replace("\t", "\\t")
+
+
 def render(rows: list) -> str:
-    return "".join(f"{i}\t{kind}\t{text.replace(chr(92), chr(92) * 2).replace(chr(10), '\\n').replace(chr(9), '\\t')}\n"
-                   for i, kind, text in rows)
+    return "".join(f"{i}\t{kind}\t{escape(text)}\n" for i, kind, text in rows)
 
 
 def main(argv=None) -> int:

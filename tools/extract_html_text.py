@@ -158,10 +158,12 @@ class Extractor(HTMLParser):
 
 def decode(raw: bytes) -> str:
     if raw.startswith(b"\xef\xbb\xbf"):
-        return raw[3:].decode("utf-8")
-    found = re.search(rb"charset=[\"']?([\w-]+)", raw[:2048], re.I)
-    name = found.group(1).decode("ascii").lower() if found else "utf-8"
-    return raw.decode({"shift_jis": "cp932", "shift-jis": "cp932", "x-sjis": "cp932"}.get(name, name))
+        text = raw[3:].decode("utf-8")
+    else:
+        found = re.search(rb"charset=[\"']?([\w-]+)", raw[:2048], re.I)
+        name = found.group(1).decode("ascii").lower() if found else "utf-8"
+        text = raw.decode({"shift_jis": "cp932", "shift-jis": "cp932", "x-sjis": "cp932"}.get(name, name))
+    return text.replace("\r\n", "\n").replace("\r", "\n")  # HTML 仕様と同じ改行の正規化
 
 
 def elements(path, root: str | None = None) -> list:
@@ -175,9 +177,12 @@ def elements(path, root: str | None = None) -> list:
     return extractor.rows
 
 
+def escape(text: str) -> str:
+    return text.replace("\\", "\\\\").replace("\n", "\\n").replace("\t", "\\t")
+
+
 def render(rows: list) -> str:
-    return "".join(f"{i}\t{label}\t{text.replace(chr(92), chr(92) * 2).replace(chr(10), '\\n').replace(chr(9), '\\t')}\n"
-                   for i, label, text in rows)
+    return "".join(f"{i}\t{label}\t{escape(text)}\n" for i, label, text in rows)
 
 
 def main(argv=None) -> int:
