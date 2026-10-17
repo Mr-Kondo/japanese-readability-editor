@@ -25,6 +25,7 @@ import hashlib
 import json
 import re
 import sys
+import zlib
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -40,6 +41,7 @@ MAX_FILES, MAX_TOTAL_BYTES = 1000, 100_000_000
 STATUSES = ("confirmed_problem", "no_problem", "unresolved")
 SPLITS = ("tuning", "final")
 SUBMITTER = re.compile(r"[A-Za-z0-9_-]{1,40}")
+SHINGLE, SAMPLE, MIN_SHARED = 20, 8, 2  # 20文字の並びのうち 1/8 を標本にし、2つ以上共有する組を警告する
 DEFAULT_MIN_DOCUMENTS, DEFAULT_MIN_SUBMITTERS = 3, 2
 LIMITS = ("利用者が失敗を報告したものだけの集計で、成功の件数(分母)がない。件数から失敗率・改善率を推定しない。"
           "少数の文書・送付者では偏る。閾値は暫定。LLM の下書きは確認済みの判定ではない。")
@@ -124,6 +126,30 @@ def checked_ticket(document) -> dict:
     return document
 
 
+def sampled_shingles(text: str) -> set:
+    """空白を除いた文章の 20 文字の並びのうち、標本にしたもののハッシュ。同じ原本の重なりを見つける目安。"""
+    compact = "".join(text.split())
+    hashes = (zlib.crc32(compact[i:i + SHINGLE].encode("utf-8")) for i in range(max(len(compact) - SHINGLE + 1, 0)))
+    return {h for h in hashes if h % SAMPLE == 0}
+
+
+def overlaps(findings: list) -> dict:
+    """finding_id -> 原文が重なる別文書の finding_id の一覧。警告だけで、自動でまとめない。"""
+    index, shared = defaultdict(set), Counter()
+    for finding in findings:
+        for h in sampled_shingles(finding["original"]):
+            for other in index[h]:
+                shared[(other, finding["finding_id"])] += 1
+            index[h].add(finding["finding_id"])
+    by_id = {f["finding_id"]: f for f in findings}
+    found = defaultdict(list)
+    for (a, b), count in shared.items():
+        if count >= MIN_SHARED and by_id[a]["document_id"] != by_id[b]["document_id"]:
+            found[a].append(b)
+            found[b].append(a)
+    return {i: sorted(found.get(i, [])) for i in by_id}
+
+
 def intake_files(inbox: Path):
     """(相対パス, 送付者, パス) の一覧。送付者はフォルダ名で、票の自己申告は使わない。"""
     for path in sorted(inbox.rglob("*.json")):
@@ -172,8 +198,11 @@ def intake(inbox: Path, out_dir: Path, reserved: frozenset = frozenset()) -> dic
                          "result": case["result"], "consent": {"ai_processing": consent["ai_processing"], "publish": consent["publish"]},
                          "detector": "user_report", "status": "reported"})
     folder = new_folder(out_dir)
+    by_id = {f["finding_id"]: f for f in findings}
+    for finding_id, others in overlaps(findings).items():
+        by_id[finding_id]["possible_same_source"] = others
     ledger = [{k: f[k] for k in ("finding_id", "source_sha256", "document_id", "submitter", "mode", "origin", "problem_type",
-                                 "severity", "consent", "status")} for f in findings]
+                                 "severity", "consent", "status", "possible_same_source")} for f in findings]
     decisions = [{"finding_id": f["finding_id"], "status": "unresolved", "split": "tuning", "problem_type": f["problem_type"],
                   "source_document": "", "confirmer": "", "reason": "", "quote": "", "preserve": [], "forbid": [], "rule_ids": []} for f in findings]
     save_json(folder / "findings.json", {"schema_version": 1, "note": "非公開の送付文を含む。リポジトリに置かない。", "findings": findings})
@@ -181,7 +210,8 @@ def intake(inbox: Path, out_dir: Path, reserved: frozenset = frozenset()) -> dic
     save_json(folder / "ledger.json", {"schema_version": 1, "content_free": True, "findings_sha256": chain, "entries": ledger})
     save_json(folder / "decisions.json", {"schema_version": 1, "findings_sha256": chain, "decisions": decisions})
     save_json(folder / "rejected.json", {"schema_version": 1, "rejected": rejected})
-    return {"out_dir": str(folder), "accepted": len(findings), "rejected": len(rejected)}
+    return {"out_dir": str(folder), "accepted": len(findings), "rejected": len(rejected),
+            "possible_same_source": sum(bool(f["possible_same_source"]) for f in findings)}
 
 
 def reserved_ids(path) -> frozenset:
@@ -266,9 +296,11 @@ def clusters_of(findings: dict, decisions: dict, min_documents: int, min_submitt
     rows = []
     for (problem_type, rule_id), g in sorted(groups.items()):
         documents, submitters = len(g["documents"]), len(g["submitters"])
+        members = set(g["findings"])
+        flagged = sum(any(o in members for o in findings[i].get("possible_same_source", [])) for i in members)
         rows.append({"cluster_id": "c" + sha256_bytes(f"{problem_type}\t{rule_id}".encode())[:8], "problem_type": problem_type,
                      "rule_id": rule_id, "finding_ids": sorted(g["findings"]), "independent_documents": documents,
-                     "submitters": submitters, "qualifies": documents >= min_documents and submitters >= min_submitters})
+                     "submitters": submitters, "possible_same_source": flagged, "qualifies": documents >= min_documents and submitters >= min_submitters})
     return rows
 
 
@@ -307,8 +339,8 @@ def triage(findings_path: Path, decisions_path: Path, out_dir: Path, min_documen
     lines = ["# 反復失敗の候補", "", LIMITS, "",
              f"確認済み {counts['confirmed_problem']} / 問題なし {counts['no_problem']} / 未解決 {counts['unresolved']}。"
              f"final のため使わない確認済み {summary['held_out_final']}。", "",
-             "| 種類 | 関連規則 | 独立文書 | 送付者 | 規則修正の提案 |", "|---|---|---|---|---|"]
-    lines += [f"| {r['problem_type']} | {r['rule_id']} | {r['independent_documents']} | {r['submitters']} | "
+             "| 種類 | 関連規則 | 独立文書 | 送付者 | 重なりの警告 | 規則修正の提案 |", "|---|---|---|---|---|---|"]
+    lines += [f"| {r['problem_type']} | {r['rule_id']} | {r['independent_documents']} | {r['submitters']} | {r['possible_same_source']} | "
               f"{'できる' if r['qualifies'] else '経過観察'} |" for r in rows]
     (folder / "clusters.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     return {"out_dir": str(folder), "clusters": len(rows), "qualifying": sum(r["qualifies"] for r in rows),

@@ -245,6 +245,56 @@ class ChainAndScopeTest(LoopTestCase):
         self.assertEqual(info["accepted"], 0)
 
 
+class OverlapWarningTest(LoopTestCase):
+    REPORT = ("管理者は申請を受け付けた後に内容を確認し、問題がなければ承認する。承認された申請は、担当者が所定の手順で処理する。"
+              "処理の結果は、申請者に通知する。通知の内容には、処理の日時と担当者の名前を含める。")
+
+    def findings(self, out):
+        return {f["finding_id"]: f for f in json.loads((out / "findings.json").read_text(encoding="utf-8"))["findings"]}
+
+    def test_excerpts_that_share_a_passage_are_flagged_across_submitters(self):
+        first, second = self.REPORT[:70] + "ここは一人目だけの文。", "別の導入の文。" + self.REPORT[20:90]
+        self.send("a", first, first + "必ず", "必ず")
+        self.send("b", second, second + "必ず", "必ず")
+        self.send("c", "全く別の話題として、天気の変化と農作物の生育について述べる文章である。", "全く別の話題として必ず述べる。", "必ず")
+        out, info = self.run_intake()
+        found = self.findings(out)
+        flagged = [f for f in found.values() if f["possible_same_source"]]
+        self.assertEqual(len(flagged), 2)
+        self.assertEqual(info["possible_same_source"], 2)
+        self.assertEqual({f["submitter"] for f in flagged}, {"a", "b"})
+
+    def test_unrelated_texts_are_not_flagged_and_the_ledger_has_no_text(self):
+        self.seed(3)
+        out, info = self.run_intake()
+        self.assertEqual(info["possible_same_source"], 0)
+        ledger = (out / "ledger.json").read_text(encoding="utf-8")
+        self.assertIn("possible_same_source", ledger)
+        self.assertNotIn("承認後", ledger)
+
+    def test_warning_is_counted_in_the_cluster_but_documents_are_not_merged(self):
+        first, second = self.REPORT[:70] + "一人目の末尾。", "二人目の冒頭。" + self.REPORT[10:80]
+        self.send("a", first, first + "必ず", "必ず")
+        self.send("b", second, second + "必ず", "必ず")
+        out, _ = self.run_intake()
+        info = loop.triage(out / "findings.json", self.confirm(out), self.root / "tri", 3, 2)
+        row = json.loads((Path(info["out_dir"]) / "clusters.json").read_text(encoding="utf-8"))["clusters"][0]
+        self.assertEqual((row["independent_documents"], row["possible_same_source"]), (2, 2))
+        self.assertIn("重なりの警告", (Path(info["out_dir"]) / "clusters.md").read_text(encoding="utf-8"))
+
+    def test_a_thousand_findings_are_compared_quickly(self):
+        import random
+        import time
+        rng = random.Random(1)
+        chars = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわ"
+        findings = [{"finding_id": f"f{i}", "document_id": f"d{i}", "original": "".join(rng.choice(chars) for _ in range(400))}
+                    for i in range(1000)]
+        started = time.time()
+        found = loop.overlaps(findings)
+        self.assertLess(time.time() - started, 10)
+        self.assertEqual(sum(bool(v) for v in found.values()), 0)
+
+
 class TriageTest(LoopTestCase):
     def triage(self, out, decisions, **kwargs):
         return loop.triage(out / "findings.json", decisions, self.root / f"triage{self.n}-{len(list(self.root.iterdir()))}",
