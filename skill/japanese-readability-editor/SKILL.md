@@ -194,6 +194,7 @@ python3 scripts/verify_preservation.py --strict before.md after.md
 - [assets/fiction-context-template.md](assets/fiction-context-template.md)。長編用の任意メモ。
 
 - [references/readability-rules.md](references/readability-rules.md)。各段階の詳しい基準。
+- [references/feedback.md](references/feedback.md)。利用者がこの Skill の結果の問題を報告したいと言ったときだけ読む。自分から勧めない。
 - [assets/examples.md](assets/examples.md)。修正前後の例。書き方の感覚が必要なときに読む。
 - [references/kokugo-policy.md](references/kokugo-policy.md)。適用設定、判定区分、用語集との競合、資料の性格。国語の表記を確認するときに読む。
 - [references/kokugo-notation.md](references/kokugo-notation.md)。規則の一覧と出典。指摘の根拠を確かめるときに読む。
