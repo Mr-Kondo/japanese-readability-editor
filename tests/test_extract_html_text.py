@@ -71,6 +71,11 @@ class ExtractHtmlTextTest(unittest.TestCase):
         path.write_bytes('<html><head><meta charset="Shift_JIS"></head><body><p>日本語</p></body></html>'.encode("cp932"))
         self.assertEqual(extract.elements(path)[0][2], "日本語")
 
+    def test_crlf_input_is_normalized_to_lf(self):
+        path = Path(self.folder.name, "crlf.html")
+        path.write_bytes("<body><pre>a\r\n  b\rc</pre></body>".encode("utf-8"))
+        self.assertEqual(extract.elements(path)[0][2], "a\n  b\nc")
+
     def test_cli_escapes_control_characters_one_line_per_element(self):
         code, out, err = run_script(TOOLS_DIR / "extract_html_text.py", str(self.path), "--root", "div[role=main]")
         self.assertEqual(code, 0, err)

@@ -1,0 +1,2660 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "config": {
+    "tool_version": 1,
+    "rubric_version": "ragas-ja-rubric-v1",
+    "rubric_sha256": "7f37f4309a2786203f376adfebd3d62e08df4be0d1d448c23480dd4f39dc81d1",
+    "discriminate": false,
+    "metrics": [
+      "factual"
+    ],
+    "profile": "gov-org",
+    "aspects": [
+      "negation_polarity",
+      "condition_scope",
+      "actor_target",
+      "modality_strength",
+      "numbers_order",
+      "ungrounded_specificity",
+      "unnecessary_change"
+    ],
+    "atomicity": "high",
+    "coverage": "low",
+    "ragas_prompts": "Ragas 0.4.3 既定（英語の指示と例。日本語への適合は未検証）",
+    "llm_adapter": "ClaudeCliLLM（JSON指示をプロンプト末尾に付加、ツールなし、逐次実行、同一プロンプトは再利用）",
+    "claude_flags": [
+      "--print",
+      "--safe-mode",
+      "--strict-mcp-config",
+      "--tools",
+      "",
+      "--no-session-persistence",
+      "--model",
+      "sonnet",
+      "--effort",
+      "medium",
+      "--output-format",
+      "json"
+    ],
+    "claude_system": "提供された文章を処理してください。ツールは使用しないでください。",
+    "claude_cli_version": "2.1.292 (Claude Code)",
+    "temperature_and_seed": "CLI から指定できない（不明）",
+    "python": "3.13.16",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "packages": {
+      "ragas": "0.4.3",
+      "langchain-community": "0.3.31",
+      "langchain-core": "1.6.11",
+      "langchain": "1.4.6",
+      "instructor": "1.3.2",
+      "openai": "1.109.1",
+      "pydantic": "2.14.1",
+      "numpy": "2.5.4"
+    }
+  },
+  "started_at": "2026-10-16T23:35:23.340116+00:00",
+  "input": {
+    "path": "/tmp/claude-501/ragas-inputs/all-p1.json",
+    "cases": 12,
+    "task_sha256": "8af2e0cca1d7c3c6922e66e5247da02099bfec96d8bf75f66eb1fc5588410999"
+  },
+  "cases": [
+    {
+      "id": "control-s3a",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "exception-drop-s3a",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.8,
+          "status": "scored",
+          "value": 0.8,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "coverage": 0.67,
+            "unsupported_texts": [
+              {
+                "claim": "情報システムの監視は24時間365日行うこと。",
+                "reason": "文脈には運用時間が平日の9時から17時までと記載されているだけで、24時間365日の監視については言及がなく、むしろ矛盾する内容である。"
+              }
+            ]
+          },
+          "recomputed_value": 0.8,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "partial-negation-s5",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.5,
+          "status": "scored",
+          "value": 0.5,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 1,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "要件定義で検討する機能を全て実現することはできない。",
+                "reason": "文脈には「必ずしも全てを実現できるわけではありません」とあり、全てを実現できない場合があることを述べているにすぎません。全て実現することが常にできないとは言っておらず、断定的な表現は文脈から直接推論できません。"
+              }
+            ]
+          },
+          "recomputed_value": 0.5,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 1,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "要件定義で検討する機能を全て実現することはできない。",
+                "reason": "文脈には「必ずしも全てを実現できるわけではありません」とあり、全てを実現できない場合があることを述べているにすぎません。全て実現することが常にできないとは言っておらず、断定的な表現は文脈から直接推論できません。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "control-s6",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "paraphrase-s6",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "possibility-s6",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.67,
+          "status": "scored",
+          "value": 0.67,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "調達後に変更内容が判明した場合は、追加のコストがかかる。",
+                "reason": "文脈では「追加のコストがかかる可能性があります」と述べられており、必ずかかるとは断定されていません。そのため、「かかる」と言い切る主張は文脈から直接推論できません。"
+              }
+            ]
+          },
+          "recomputed_value": 0.67,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "調達後に変更内容が判明した場合は、追加のコストがかかる。",
+                "reason": "文脈では「追加のコストがかかる可能性があります」と述べられており、必ずかかるとは断定されていません。そのため、「かかる」と言い切る主張は文脈から直接推論できません。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "flag-dropped-k8s",
+      "document_id": "k8s-pod-lifecycle",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.0,
+          "status": "scored",
+          "value": 0.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 1,
+            "supported": 0,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "強制削除を実行するには --grace-period=0 を指定する必要があります。",
+                "reason": "文脈では、強制削除を実行するために --grace-period=0 に加えて --force フラグも指定する必要があると述べられています。--grace-period=0 を指定することが必要である点は文脈と一致しますが、--force も必要であるという条件が抜けています。そのため、--grace-period=0 を指定するだけで足りるかのような主張は、文脈から直接推論できる内容とは言えません。"
+              }
+            ]
+          },
+          "recomputed_value": 0.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.0,
+          "status": "scored",
+          "value": 0.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 1,
+            "supported": 0,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "強制削除を実行するには --grace-period=0 を指定する必要があります。",
+                "reason": "文脈では、強制削除を実行するために --grace-period=0 に加えて --force フラグも指定する必要があると述べられています。--grace-period=0 を指定することが必要である点は文脈と一致しますが、--force も必要であるという条件が抜けています。そのため、--grace-period=0 を指定するだけで足りるかのような主張は、文脈から直接推論できる内容とは言えません。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 2,
+            "supported": 1,
+            "unsupported": 1,
+            "coverage": 0.5,
+            "unsupported_texts": [
+              {
+                "claim": "強制削除を実行するには --force フラグを追加で指定する必要があります。",
+                "reason": "文脈には --grace-period=0 の指定しか述べられておらず、--force フラグを追加で指定する必要があるという情報は含まれていません。"
+              }
+            ]
+          },
+          "recomputed_value": 0.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "only-py",
+      "document_id": "py-library-tempfile",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.75,
+          "status": "scored",
+          "value": 0.75,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "coverage": 0.67,
+            "unsupported_texts": [
+              {
+                "claim": "作成したユーザのユーザ ID からのみファイルを読み書きできる。",
+                "reason": "文脈では「作成したユーザの権限でファイルを読み書き出来ます」と述べられているだけで、そのユーザ ID からのみ読み書きできるという限定や排他性については述べられていないため、直接推論できない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.75,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "hedge-essay",
+      "document_id": "az-002359",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "strength-up-org",
+      "document_id": "ipa-o-eval",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.86,
+          "status": "scored",
+          "value": 0.86,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 5,
+            "supported": 4,
+            "unsupported": 1,
+            "coverage": 0.8,
+            "unsupported_texts": [
+              {
+                "claim": "完全に停止しているプロジェクトにはセキュリティリスクがあります。",
+                "reason": "文脈ではセキュリティリスクや将来性の観点から避けるよう述べているだけで、停止したプロジェクトに必ずセキュリティリスクがあると断定はしていません。直接推論できるとは言えません。"
+              }
+            ]
+          },
+          "recomputed_value": 0.86,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "paraphrase-org",
+      "document_id": "ipa-o-eval",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "control-org",
+      "document_id": "ipa-o-ospo",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 7,
+            "supported": 7,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 7,
+            "supported": 7,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 7,
+            "supported": 7,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    }
+  ],
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "calls": [
+    {
+      "index": 1,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "e89029325c2a5a45382462b26b24df1b905d464d8ff0a0486c993be207ff8cf5",
+      "cache_hit": false,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間には土日及び祝日、年末年始は含まれない。",
+          "情報システムの監視は24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.57,
+      "cost_usd": 0.0072299999999999994
+    },
+    {
+      "index": 2,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "233005998248a29f89ab13cd9419c61875c58d8fe8f4c92636897401a0b663c6",
+      "cache_hit": false,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "文脈では、運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されている。したがって、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日及び祝日、年末年始は含まれない。",
+            "reason": "文脈では、運用時間の平日から土日及び祝日、年末年始を除くと明記されており、これらの日は運用時間に含まれないことが直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に「ただし、情報システムの監視は24時間365日行うこと」と明記されており、この主張は文脈と一致している。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.41,
+      "cost_usd": 0.012576
+    },
+    {
+      "index": 3,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "e89029325c2a5a45382462b26b24df1b905d464d8ff0a0486c993be207ff8cf5",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間には土日及び祝日、年末年始は含まれない。",
+          "情報システムの監視は24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 4,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "233005998248a29f89ab13cd9419c61875c58d8fe8f4c92636897401a0b663c6",
+      "cache_hit": true,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "文脈では、運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されている。したがって、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日及び祝日、年末年始は含まれない。",
+            "reason": "文脈では、運用時間の平日から土日及び祝日、年末年始を除くと明記されており、これらの日は運用時間に含まれないことが直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に「ただし、情報システムの監視は24時間365日行うこと」と明記されており、この主張は文脈と一致している。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 5,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "e89029325c2a5a45382462b26b24df1b905d464d8ff0a0486c993be207ff8cf5",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間には土日及び祝日、年末年始は含まれない。",
+          "情報システムの監視は24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 6,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "233005998248a29f89ab13cd9419c61875c58d8fe8f4c92636897401a0b663c6",
+      "cache_hit": true,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "文脈では、運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されている。したがって、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日及び祝日、年末年始は含まれない。",
+            "reason": "文脈では、運用時間の平日から土日及び祝日、年末年始を除くと明記されており、これらの日は運用時間に含まれないことが直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に「ただし、情報システムの監視は24時間365日行うこと」と明記されており、この主張は文脈と一致している。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 7,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "026552c563e6dc6c7b1e64a94bb62e9046cfb4531ec2a2862e47db3e7c494468",
+      "cache_hit": false,
+      "raw_file": "c0007.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間には土日が含まれない。",
+          "運用・保守業者の運用時間には祝日が含まれない。",
+          "運用・保守業者の運用時間には年末年始が含まれない。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.82,
+      "cost_usd": 0.007336
+    },
+    {
+      "index": 8,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "b489b7b104db9b581efce7987e7fbee7177ed1f2781f989f43257342c2b70507",
+      "cache_hit": false,
+      "raw_file": "c0008.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "コンテキストに、運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日が含まれない。",
+            "reason": "コンテキストでは運用時間から土日が除かれていると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には祝日が含まれない。",
+            "reason": "コンテキストでは運用時間から祝日が除かれていると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には年末年始が含まれない。",
+            "reason": "コンテキストでは運用時間から年末年始が除かれていると明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.03,
+      "cost_usd": 0.012638
+    },
+    {
+      "index": 9,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "026552c563e6dc6c7b1e64a94bb62e9046cfb4531ec2a2862e47db3e7c494468",
+      "cache_hit": true,
+      "raw_file": "c0007.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間には土日が含まれない。",
+          "運用・保守業者の運用時間には祝日が含まれない。",
+          "運用・保守業者の運用時間には年末年始が含まれない。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 10,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "b489b7b104db9b581efce7987e7fbee7177ed1f2781f989f43257342c2b70507",
+      "cache_hit": true,
+      "raw_file": "c0008.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "コンテキストに、運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日が含まれない。",
+            "reason": "コンテキストでは運用時間から土日が除かれていると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には祝日が含まれない。",
+            "reason": "コンテキストでは運用時間から祝日が除かれていると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には年末年始が含まれない。",
+            "reason": "コンテキストでは運用時間から年末年始が除かれていると明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 11,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "e89029325c2a5a45382462b26b24df1b905d464d8ff0a0486c993be207ff8cf5",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間には土日及び祝日、年末年始は含まれない。",
+          "情報システムの監視は24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 12,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "b887cf29f4b47d862fb6e842ae0ffdaaa9c383cfc259a328b7f7895012929487",
+      "cache_hit": false,
+      "raw_file": "c0012.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "文脈では、運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日及び祝日、年末年始は含まれない。",
+            "reason": "文脈には「土日及び祝日、年末年始を除く」とあり、これらの日は運用時間に含まれないことが直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈には運用時間が平日の9時から17時までと記載されているだけで、24時間365日の監視については言及がなく、むしろ矛盾する内容である。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.11,
+      "cost_usd": 0.012454
+    },
+    {
+      "index": 13,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "b51476bddb398b36a4b5157b824c3709d8a83e95134eabfb419371b140b4f7b1",
+      "cache_hit": false,
+      "raw_file": "c0013.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能を全て実現することはできない。",
+          "予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 3.77,
+      "cost_usd": 0.006967999999999999
+    },
+    {
+      "index": 14,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "c5ead302ede8b1fa49318cd29aa78a3b8ec0c7f6a3e656c9c4cba8152bba0e9f",
+      "cache_hit": false,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能を全て実現することはできない。",
+            "reason": "文脈には「必ずしも全てを実現できるわけではありません」とあり、全てを実現できない場合があることを述べているにすぎません。全て実現することが常にできないとは言っておらず、断定的な表現は文脈から直接推論できません。",
+            "verdict": 0
+          },
+          {
+            "statement": "予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」と明記されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.3,
+      "cost_usd": 0.011598
+    },
+    {
+      "index": 15,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "b51476bddb398b36a4b5157b824c3709d8a83e95134eabfb419371b140b4f7b1",
+      "cache_hit": true,
+      "raw_file": "c0013.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能を全て実現することはできない。",
+          "予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 16,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "c5ead302ede8b1fa49318cd29aa78a3b8ec0c7f6a3e656c9c4cba8152bba0e9f",
+      "cache_hit": true,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能を全て実現することはできない。",
+            "reason": "文脈には「必ずしも全てを実現できるわけではありません」とあり、全てを実現できない場合があることを述べているにすぎません。全て実現することが常にできないとは言っておらず、断定的な表現は文脈から直接推論できません。",
+            "verdict": 0
+          },
+          {
+            "statement": "予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」と明記されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 17,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "a87114b183289815eb95eb77fd6d81705fc931df75133a009555a4771da027ce",
+      "cache_hit": false,
+      "raw_file": "c0017.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+          "予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.19,
+      "cost_usd": 0.007077999999999999
+    },
+    {
+      "index": 18,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "872e51398f91fd3aa27ec2b54ee1cc91e49a7619628b5d3db377dd50b155db7f",
+      "cache_hit": false,
+      "raw_file": "c0018.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+            "reason": "文脈には「要件定義で検討する機能は、全てを実現することはできません」とあり、全てを実現できるわけではないという内容と一致するため、文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」と明記されており、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 4.85,
+      "cost_usd": 0.011554
+    },
+    {
+      "index": 19,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f25f4cd3ab7e294e5058b747466e44b0bad9c0dcf8fb7019a869db5018041de2",
+      "cache_hit": false,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.26,
+      "cost_usd": 0.0076500000000000005
+    },
+    {
+      "index": 20,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "893b12facd8fe562a5d86ba5987671292da06fa9b87b8c63f5f51fee1f206c61",
+      "cache_hit": false,
+      "raw_file": "c0020.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を行うことが推奨されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」と明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.8,
+      "cost_usd": 0.012692
+    },
+    {
+      "index": 21,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f25f4cd3ab7e294e5058b747466e44b0bad9c0dcf8fb7019a869db5018041de2",
+      "cache_hit": true,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 22,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "893b12facd8fe562a5d86ba5987671292da06fa9b87b8c63f5f51fee1f206c61",
+      "cache_hit": true,
+      "raw_file": "c0020.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を行うことが推奨されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」と明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 23,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f25f4cd3ab7e294e5058b747466e44b0bad9c0dcf8fb7019a869db5018041de2",
+      "cache_hit": true,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 24,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "893b12facd8fe562a5d86ba5987671292da06fa9b87b8c63f5f51fee1f206c61",
+      "cache_hit": true,
+      "raw_file": "c0020.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を行うことが推奨されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」と明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 25,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "925d9c446cc192f6a75eaa61177c1e74efefd916eb4efe865792c2b6353b9711",
+      "cache_hit": false,
+      "raw_file": "c0025.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料は、サービス・業務企画の時点で集める。",
+          "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化すべきである。",
+          "調達後に変更内容が判明すると、追加のコストがかかる可能性がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.3,
+      "cost_usd": 0.007618
+    },
+    {
+      "index": 26,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "555c4cddf308e880e09bcb0a655918af55238ab94aff8d516bda2b0206d19a13",
+      "cache_hit": false,
+      "raw_file": "c0026.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は、サービス・業務企画の時点で集める。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化すべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を行うべきという推奨が示されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明すると、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」と記載されているため、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.9,
+      "cost_usd": 0.012946000000000001
+    },
+    {
+      "index": 27,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "925d9c446cc192f6a75eaa61177c1e74efefd916eb4efe865792c2b6353b9711",
+      "cache_hit": true,
+      "raw_file": "c0025.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料は、サービス・業務企画の時点で集める。",
+          "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化すべきである。",
+          "調達後に変更内容が判明すると、追加のコストがかかる可能性がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 28,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "555c4cddf308e880e09bcb0a655918af55238ab94aff8d516bda2b0206d19a13",
+      "cache_hit": true,
+      "raw_file": "c0026.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は、サービス・業務企画の時点で集める。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化すべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を行うべきという推奨が示されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明すると、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」と記載されているため、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 29,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f25f4cd3ab7e294e5058b747466e44b0bad9c0dcf8fb7019a869db5018041de2",
+      "cache_hit": true,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 30,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "60b66740487cd0b764d7ee3922eb2034a591e1710d895dbe38355ae596c188b1",
+      "cache_hit": false,
+      "raw_file": "c0030.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈には「既存のサービス・業務や情報システムの資料は、サービス・業務企画の時点で集めます」と明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈には「要件定義を開始する時点で最新化しましょう」とあり、要件定義開始時点での最新化を推奨しているため、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。",
+            "reason": "文脈には「調達後に変更内容が判明すると、追加のコストがかかる可能性があります」と記載されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.1,
+      "cost_usd": 0.013166
+    },
+    {
+      "index": 31,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "67149218b74c55dbe650d74d12f9ed8fff048abc5f475d1e43ecce5ac201344f",
+      "cache_hit": false,
+      "raw_file": "c0031.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.81,
+      "cost_usd": 0.007576
+    },
+    {
+      "index": 32,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "3fa22d0ff3571964fa589690d2489c208fca882971e83092788253eb4522a979",
+      "cache_hit": false,
+      "raw_file": "c0032.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を行うことが推奨されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる。",
+            "reason": "文脈では「追加のコストがかかる可能性があります」と述べられており、必ずかかるとは断定されていません。そのため、「かかる」と言い切る主張は文脈から直接推論できません。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.17,
+      "cost_usd": 0.012918
+    },
+    {
+      "index": 33,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "67149218b74c55dbe650d74d12f9ed8fff048abc5f475d1e43ecce5ac201344f",
+      "cache_hit": true,
+      "raw_file": "c0031.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 34,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "3fa22d0ff3571964fa589690d2489c208fca882971e83092788253eb4522a979",
+      "cache_hit": true,
+      "raw_file": "c0032.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を行うことが推奨されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる。",
+            "reason": "文脈では「追加のコストがかかる可能性があります」と述べられており、必ずかかるとは断定されていません。そのため、「かかる」と言い切る主張は文脈から直接推論できません。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 35,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f25f4cd3ab7e294e5058b747466e44b0bad9c0dcf8fb7019a869db5018041de2",
+      "cache_hit": true,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 36,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "00bc38344b0501119248c857b773883e55e89daf021c059e3d3a835c4c83ca33",
+      "cache_hit": false,
+      "raw_file": "c0036.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されているため、直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を行うことが推奨されているため、直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかります」とあり、追加コストが発生することが述べられているため、「可能性がある」という表現も含めて直接推論できます。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.87,
+      "cost_usd": 0.013142000000000001
+    },
+    {
+      "index": 37,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "dbc81757b0bc172636d2e8567fc4eab97aa218a06a92b70712fb2bd2797cc0ea",
+      "cache_hit": false,
+      "raw_file": "c0037.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "強制削除を実行するには --grace-period=0 を指定する必要があります。"
+        ]
+      },
+      "error": null,
+      "seconds": 3.77,
+      "cost_usd": 0.006572
+    },
+    {
+      "index": 38,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "63e8de6c8bb87bdd1fbf67bd74beaaec0a22b99c88d818fbfd5a28a4753816fc",
+      "cache_hit": false,
+      "raw_file": "c0038.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "強制削除を実行するには --grace-period=0 を指定する必要があります。",
+            "reason": "文脈では、強制削除を実行するために --grace-period=0 に加えて --force フラグも指定する必要があると述べられています。--grace-period=0 を指定することが必要である点は文脈と一致しますが、--force も必要であるという条件が抜けています。そのため、--grace-period=0 を指定するだけで足りるかのような主張は、文脈から直接推論できる内容とは言えません。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.08,
+      "cost_usd": 0.010984
+    },
+    {
+      "index": 39,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "dbc81757b0bc172636d2e8567fc4eab97aa218a06a92b70712fb2bd2797cc0ea",
+      "cache_hit": true,
+      "raw_file": "c0037.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "強制削除を実行するには --grace-period=0 を指定する必要があります。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 40,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "63e8de6c8bb87bdd1fbf67bd74beaaec0a22b99c88d818fbfd5a28a4753816fc",
+      "cache_hit": true,
+      "raw_file": "c0038.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "強制削除を実行するには --grace-period=0 を指定する必要があります。",
+            "reason": "文脈では、強制削除を実行するために --grace-period=0 に加えて --force フラグも指定する必要があると述べられています。--grace-period=0 を指定することが必要である点は文脈と一致しますが、--force も必要であるという条件が抜けています。そのため、--grace-period=0 を指定するだけで足りるかのような主張は、文脈から直接推論できる内容とは言えません。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 41,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "3d23dc30663de0f8073e50d2c4b5e4dba1957a50ef5cc37a1d2bfd87a91e55a4",
+      "cache_hit": false,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "強制削除を実行するには --grace-period=0 を指定する必要があります。",
+          "強制削除を実行するには --force フラグを追加で指定する必要があります。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.08,
+      "cost_usd": 0.0069
+    },
+    {
+      "index": 42,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "8c83097bb8f84cd117ea2e9c86e1b54f306ce6c09d88930e610ed7190e2caeff",
+      "cache_hit": false,
+      "raw_file": "c0042.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "強制削除を実行するには --grace-period=0 を指定する必要があります。",
+            "reason": "文脈にこの文章がそのまま記載されており、直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "強制削除を実行するには --force フラグを追加で指定する必要があります。",
+            "reason": "文脈には --grace-period=0 の指定しか述べられておらず、--force フラグを追加で指定する必要があるという情報は含まれていません。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 4.91,
+      "cost_usd": 0.010924
+    },
+    {
+      "index": 43,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2fc0c766a3aff010e8b1d0d3c7f66fbc7deeeebc85ac5d989905a5e923b5e5a9",
+      "cache_hit": false,
+      "raw_file": "c0043.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "作成したユーザの権限でファイルを読み書きできる。",
+          "プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、ファイルは誰からも実行不可である。",
+          "このファイルのファイル記述子は子プロセスに継承されない。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.56,
+      "cost_usd": 0.0075580000000000005
+    },
+    {
+      "index": 44,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "2918b570a5679e80cbaa12d3c11cc88400d87d1701a13eae16057db11b015bc7",
+      "cache_hit": false,
+      "raw_file": "c0044.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "作成したユーザの権限でファイルを読み書きできる。",
+            "reason": "文脈では、作成したユーザのユーザ ID からのみファイルを読み書きできると述べられており、作成したユーザがファイルを読み書きできることは直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、ファイルは誰からも実行不可である。",
+            "reason": "文脈に、プラットフォームが実行可能かどうかを示す許可ビットを使用している場合、ファイルは誰からも実行不可であると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "このファイルのファイル記述子は子プロセスに継承されない。",
+            "reason": "文脈に、このファイルのファイル記述子は子プロセスに継承されないと明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.66,
+      "cost_usd": 0.012794
+    },
+    {
+      "index": 45,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2fc0c766a3aff010e8b1d0d3c7f66fbc7deeeebc85ac5d989905a5e923b5e5a9",
+      "cache_hit": true,
+      "raw_file": "c0043.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "作成したユーザの権限でファイルを読み書きできる。",
+          "プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、ファイルは誰からも実行不可である。",
+          "このファイルのファイル記述子は子プロセスに継承されない。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 46,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "2918b570a5679e80cbaa12d3c11cc88400d87d1701a13eae16057db11b015bc7",
+      "cache_hit": true,
+      "raw_file": "c0044.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "作成したユーザの権限でファイルを読み書きできる。",
+            "reason": "文脈では、作成したユーザのユーザ ID からのみファイルを読み書きできると述べられており、作成したユーザがファイルを読み書きできることは直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、ファイルは誰からも実行不可である。",
+            "reason": "文脈に、プラットフォームが実行可能かどうかを示す許可ビットを使用している場合、ファイルは誰からも実行不可であると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "このファイルのファイル記述子は子プロセスに継承されない。",
+            "reason": "文脈に、このファイルのファイル記述子は子プロセスに継承されないと明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 47,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "010bc75b6972da76f2a1d97037d5dd101941a3cddd4285e1c6c2a86012e97f9a",
+      "cache_hit": false,
+      "raw_file": "c0047.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "作成したユーザのユーザ ID からのみファイルを読み書きできる。",
+          "プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、ファイルは誰からも実行不可である。",
+          "このファイルのファイル記述子は子プロセスに継承されない。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.3,
+      "cost_usd": 0.007638000000000001
+    },
+    {
+      "index": 48,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "4f4a2285be99a283275226647ce88dab63ed1d93cab3706136cf64818f9b96fc",
+      "cache_hit": false,
+      "raw_file": "c0048.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "作成したユーザのユーザ ID からのみファイルを読み書きできる。",
+            "reason": "文脈では「作成したユーザの権限でファイルを読み書き出来ます」と述べられているだけで、そのユーザ ID からのみ読み書きできるという限定や排他性については述べられていないため、直接推論できない。",
+            "verdict": 0
+          },
+          {
+            "statement": "プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、ファイルは誰からも実行不可である。",
+            "reason": "文脈に「プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、ファイルは誰からも実行不可です」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "このファイルのファイル記述子は子プロセスに継承されない。",
+            "reason": "文脈に「このファイルのファイル記述子は子プロセスに継承されません」と明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.53,
+      "cost_usd": 0.012952
+    },
+    {
+      "index": 49,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "6d85d625d106c044c2ea84d4afb1b75eb9c2873db79fdc8fa1a803b4e0cd150c",
+      "cache_hit": false,
+      "raw_file": "c0049.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+          "頭のいい人は、人より先に人のまだ行かない所へ行き着くことができる。",
+          "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+          "頭のいい人は、ちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+          "頭の悪い足ののろい人が、ずっとあとからおくれて来る。",
+          "頭の悪い足ののろい人が、わけもなくそのだいじな宝物を拾って行く。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.7,
+      "cost_usd": 0.008774
+    },
+    {
+      "index": 50,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "f83413b2d20cad49ffd7f98da8a701849cee80b84effdf2bacf98cdbdfc11548",
+      "cache_hit": false,
+      "raw_file": "c0050.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+            "reason": "文脈に「いわゆる頭のいい人は、言わば足の早い旅人のようなものである」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、人より先に人のまだ行かない所へ行き着くことができる。",
+            "reason": "文脈に「人より先に人のまだ行かない所へ行き着くこともできる」とあり、直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「途中の道ばた...にある肝心なものを見落とす恐れがある」とあり、直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、ちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「ちょっとしたわき道にある肝心なものを見落とす恐れがある」とあり、直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い足ののろい人が、ずっとあとからおくれて来る。",
+            "reason": "文脈に「頭の悪い人足ののろい人がずっとあとからおくれて来て」とあり、直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い足ののろい人が、わけもなくそのだいじな宝物を拾って行く。",
+            "reason": "文脈に「わけもなくそのだいじな宝物を拾って行く場合がある」とあり、直接読み取れる。ただし「場合がある」という限定付きだが、内容としては文脈から推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.49,
+      "cost_usd": 0.016382
+    },
+    {
+      "index": 51,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "6d85d625d106c044c2ea84d4afb1b75eb9c2873db79fdc8fa1a803b4e0cd150c",
+      "cache_hit": true,
+      "raw_file": "c0049.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+          "頭のいい人は、人より先に人のまだ行かない所へ行き着くことができる。",
+          "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+          "頭のいい人は、ちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+          "頭の悪い足ののろい人が、ずっとあとからおくれて来る。",
+          "頭の悪い足ののろい人が、わけもなくそのだいじな宝物を拾って行く。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 52,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "f83413b2d20cad49ffd7f98da8a701849cee80b84effdf2bacf98cdbdfc11548",
+      "cache_hit": true,
+      "raw_file": "c0050.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+            "reason": "文脈に「いわゆる頭のいい人は、言わば足の早い旅人のようなものである」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、人より先に人のまだ行かない所へ行き着くことができる。",
+            "reason": "文脈に「人より先に人のまだ行かない所へ行き着くこともできる」とあり、直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「途中の道ばた...にある肝心なものを見落とす恐れがある」とあり、直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、ちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「ちょっとしたわき道にある肝心なものを見落とす恐れがある」とあり、直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い足ののろい人が、ずっとあとからおくれて来る。",
+            "reason": "文脈に「頭の悪い人足ののろい人がずっとあとからおくれて来て」とあり、直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い足ののろい人が、わけもなくそのだいじな宝物を拾って行く。",
+            "reason": "文脈に「わけもなくそのだいじな宝物を拾って行く場合がある」とあり、直接読み取れる。ただし「場合がある」という限定付きだが、内容としては文脈から推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 53,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "9c7f545667280c232bad5586cf98a63bd6aa84ef401758b9443ba41861fea6f0",
+      "cache_hit": false,
+      "raw_file": "c0053.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+          "頭のいい人は、人より先に人のまだ行かない所へ行き着くことができる。",
+          "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+          "頭のいい人は、ちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+          "頭の悪い足ののろい人が、ずっとあとからおくれて来て、大事な宝物を拾って行く場合がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.57,
+      "cost_usd": 0.008562
+    },
+    {
+      "index": 54,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "f76f17371dda8b9c8d0e253109adf8899e3dcc676e00e58ac8722f0a1e0380c3",
+      "cache_hit": false,
+      "raw_file": "c0054.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+            "reason": "文脈では、いわゆる頭のいい人は「言わば足の早い旅人のようなもの」と述べられており、この主張は文脈から直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、人より先に人のまだ行かない所へ行き着くことができる。",
+            "reason": "文脈に「人より先に人のまだ行かない所へ行き着くこともできる」とあり、直接裏付けられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「途中の道ばたあるいはちょっとしたわき道にある肝心なものを見落とす恐れがある」とあり、道ばたも含まれているため裏付けられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、ちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「ちょっとしたわき道にある肝心なものを見落とす恐れがある」と明記されており、直接裏付けられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い足ののろい人が、ずっとあとからおくれて来て、大事な宝物を拾って行く場合がある。",
+            "reason": "文脈に「頭の悪い人足ののろい人がずっとあとからおくれて来てわけもなくそのだいじな宝物を拾って行く」とあり、この内容は文脈から推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.3,
+      "cost_usd": 0.015822
+    },
+    {
+      "index": 55,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "8a43219f0aaf7f3cde07a4459c1f16bb15e712d07c9aa95430c0ed860660f6eb",
+      "cache_hit": false,
+      "raw_file": "c0055.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "最近6ヶ月以内に更新があるかを確認する。",
+          "Issueに対する反応があるかを確認する。",
+          "pull requestがマージされているかを確認する。",
+          "完全に停止しているプロジェクトは避けるべきである。",
+          "完全に停止しているプロジェクトにはセキュリティリスクがある。",
+          "完全に停止しているプロジェクトは将来性の観点から避けるべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.61,
+      "cost_usd": 0.007906
+    },
+    {
+      "index": 56,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "19cf828f8c5b9189edfbe5d3f66a5e9e0e9b987e4759f29f8a3b938069be967c",
+      "cache_hit": false,
+      "raw_file": "c0056.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "最近6ヶ月以内に更新があるかを確認する。",
+            "reason": "文脈に、最近6ヶ月以内に更新があるかを確認すると明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "Issueに対する反応があるかを確認する。",
+            "reason": "文脈に、Issueに対する反応があるかを確認すると明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "pull requestがマージされているかを確認する。",
+            "reason": "文脈に、pull requestがマージされているかを確認すると明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトは避けるべきである。",
+            "reason": "文脈に、完全に停止しているプロジェクトは避けることを推奨するとあり、これと整合します。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトにはセキュリティリスクがある。",
+            "reason": "文脈は、セキュリティリスクの観点から避けることを推奨しており、停止したプロジェクトにセキュリティリスクがあることを示唆しています。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトは将来性の観点から避けるべきである。",
+            "reason": "文脈に、将来性の観点から避けることを推奨すると明記されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.97,
+      "cost_usd": 0.0071692
+    },
+    {
+      "index": 57,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "8a43219f0aaf7f3cde07a4459c1f16bb15e712d07c9aa95430c0ed860660f6eb",
+      "cache_hit": true,
+      "raw_file": "c0055.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "最近6ヶ月以内に更新があるかを確認する。",
+          "Issueに対する反応があるかを確認する。",
+          "pull requestがマージされているかを確認する。",
+          "完全に停止しているプロジェクトは避けるべきである。",
+          "完全に停止しているプロジェクトにはセキュリティリスクがある。",
+          "完全に停止しているプロジェクトは将来性の観点から避けるべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 58,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "19cf828f8c5b9189edfbe5d3f66a5e9e0e9b987e4759f29f8a3b938069be967c",
+      "cache_hit": true,
+      "raw_file": "c0056.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "最近6ヶ月以内に更新があるかを確認する。",
+            "reason": "文脈に、最近6ヶ月以内に更新があるかを確認すると明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "Issueに対する反応があるかを確認する。",
+            "reason": "文脈に、Issueに対する反応があるかを確認すると明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "pull requestがマージされているかを確認する。",
+            "reason": "文脈に、pull requestがマージされているかを確認すると明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトは避けるべきである。",
+            "reason": "文脈に、完全に停止しているプロジェクトは避けることを推奨するとあり、これと整合します。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトにはセキュリティリスクがある。",
+            "reason": "文脈は、セキュリティリスクの観点から避けることを推奨しており、停止したプロジェクトにセキュリティリスクがあることを示唆しています。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトは将来性の観点から避けるべきである。",
+            "reason": "文脈に、将来性の観点から避けることを推奨すると明記されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 59,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "7e657c155370f51cab7eb2abc5b080ef6aeaca545fe121f5cef9e99dc94d15e8",
+      "cache_hit": false,
+      "raw_file": "c0059.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "最近6ヶ月以内に更新があるかを確認します。",
+          "Issueに対する反応があるかを確認します。",
+          "pull requestがマージされているかを確認します。",
+          "完全に停止しているプロジェクトは避けることが推奨されます。",
+          "完全に停止しているプロジェクトにはセキュリティリスクがあります。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.16,
+      "cost_usd": 0.00767
+    },
+    {
+      "index": 60,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "71e4ab024051684b5fa9d491b2ffa25ec96e06619788f80ea526c56e4200bdec",
+      "cache_hit": false,
+      "raw_file": "c0060.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "最近6ヶ月以内に更新があるかを確認します。",
+            "reason": "文脈に「最近6ヶ月以内に更新があるか...を確認します」と明記されているため、直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "Issueに対する反応があるかを確認します。",
+            "reason": "文脈に「Issueに対する反応があるか...を確認します」と明記されているため、直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "pull requestがマージされているかを確認します。",
+            "reason": "文脈に「pull requestがマージされているかを確認します」と明記されているため、直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトは避けることが推奨されます。",
+            "reason": "文脈に「完全に停止しているプロジェクトは...避けてください」とあり、避けることを推奨する内容と一致します。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトにはセキュリティリスクがあります。",
+            "reason": "文脈ではセキュリティリスクや将来性の観点から避けるよう述べているだけで、停止したプロジェクトに必ずセキュリティリスクがあると断定はしていません。直接推論できるとは言えません。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.58,
+      "cost_usd": 0.014126
+    },
+    {
+      "index": 61,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "98b3e4a01d33bb8c5514843a1b57e49c540889f7b496e0c92cf3127eb7889e7b",
+      "cache_hit": false,
+      "raw_file": "c0061.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "LICENSEファイルでライセンスの種類を確認できる。",
+          "READMEでライセンスの種類を確認できる。",
+          "ライセンスの種類を確認し、利用方法に合うかどうかを判断するべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.14,
+      "cost_usd": 0.007258
+    },
+    {
+      "index": 62,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "c32162e021f8bd6370ee20144cc900395679936a474b521ff55955555c1c537c",
+      "cache_hit": false,
+      "raw_file": "c0062.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "LICENSEファイルでライセンスの種類を確認できる。",
+            "reason": "文脈に「LICENSEファイルやREADMEでライセンス種別を確認し」とあり、LICENSEファイルでライセンス種別を確認できることが示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "READMEでライセンスの種類を確認できる。",
+            "reason": "文脈に「LICENSEファイルやREADMEでライセンス種別を確認し」とあり、READMEでもライセンス種別を確認できることが示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "ライセンスの種類を確認し、利用方法に合うかどうかを判断するべきである。",
+            "reason": "文脈では、ライセンス種別を確認し、社内利用、配布、SaaS提供といった利用方法に適合するかを判断するよう促されており、この内容と一致する。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.3,
+      "cost_usd": 0.012612
+    },
+    {
+      "index": 63,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "98b3e4a01d33bb8c5514843a1b57e49c540889f7b496e0c92cf3127eb7889e7b",
+      "cache_hit": true,
+      "raw_file": "c0061.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "LICENSEファイルでライセンスの種類を確認できる。",
+          "READMEでライセンスの種類を確認できる。",
+          "ライセンスの種類を確認し、利用方法に合うかどうかを判断するべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 64,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "c32162e021f8bd6370ee20144cc900395679936a474b521ff55955555c1c537c",
+      "cache_hit": true,
+      "raw_file": "c0062.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "LICENSEファイルでライセンスの種類を確認できる。",
+            "reason": "文脈に「LICENSEファイルやREADMEでライセンス種別を確認し」とあり、LICENSEファイルでライセンス種別を確認できることが示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "READMEでライセンスの種類を確認できる。",
+            "reason": "文脈に「LICENSEファイルやREADMEでライセンス種別を確認し」とあり、READMEでもライセンス種別を確認できることが示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "ライセンスの種類を確認し、利用方法に合うかどうかを判断するべきである。",
+            "reason": "文脈では、ライセンス種別を確認し、社内利用、配布、SaaS提供といった利用方法に適合するかを判断するよう促されており、この内容と一致する。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 65,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2e3e09531e2447550c79bf67d51458ddff4e02d5cefa63e03f8148feefe9bdd9",
+      "cache_hit": false,
+      "raw_file": "c0065.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "LICENSEファイルでライセンス種別を確認するべきである。",
+          "READMEでライセンス種別を確認するべきである。",
+          "ライセンス種別があなたの利用方法に適合するかを判断するべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.17,
+      "cost_usd": 0.007218
+    },
+    {
+      "index": 66,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "358b2b794ae717ad2a5ccdc95c83d4c3ae2b078524771d46230c5ef3fb05f622",
+      "cache_hit": false,
+      "raw_file": "c0066.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "LICENSEファイルでライセンス種別を確認するべきである。",
+            "reason": "文脈では、LICENSEファイルやREADMEでライセンスの種類を確認するよう述べられており、LICENSEファイルでの確認が含まれている。",
+            "verdict": 1
+          },
+          {
+            "statement": "READMEでライセンス種別を確認するべきである。",
+            "reason": "文脈では、LICENSEファイルやREADMEでライセンスの種類を確認するよう述べられており、READMEでの確認が含まれている。",
+            "verdict": 1
+          },
+          {
+            "statement": "ライセンス種別があなたの利用方法に適合するかを判断するべきである。",
+            "reason": "文脈では、社内利用、配布、SaaS提供といった利用方法にライセンスが合うかどうかを判断するよう述べられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 4.82,
+      "cost_usd": 0.012378
+    },
+    {
+      "index": 67,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "3263c0e18830f719d4b9849c945c389215f2560cf5f4b72292a4f0b86fb1feaf",
+      "cache_hit": false,
+      "raw_file": "c0067.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "実装すべき項目は組織の規模によって異なる。",
+          "実装すべき項目は組織の事業内容によって異なる。",
+          "実装すべき項目はOSSの利用形態によって異なる。",
+          "実装すべき項目は成熟度によって異なる。",
+          "実装の優先度は組織の規模、事業内容、OSSの利用形態、成熟度によって異なる。",
+          "すべての項目をチェックする必要はない。",
+          "自組織の目的や優先度に応じて、必要な項目から段階的に採用・実装するべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.58,
+      "cost_usd": 0.00839
+    },
+    {
+      "index": 68,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "78d66d76a15ad390d6c576970902a5ae46aa0056e4c1b6092df50aba34820375",
+      "cache_hit": false,
+      "raw_file": "c0068.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "実装すべき項目は組織の規模によって異なる。",
+            "reason": "文脈に「組織の規模、事業内容、OSSの利用形態、成熟度によって、実装すべき項目や優先度は異なります」とあり、組織の規模によって実装すべき項目が異なることが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目は組織の事業内容によって異なる。",
+            "reason": "文脈で、事業内容によって実装すべき項目が異なると明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目はOSSの利用形態によって異なる。",
+            "reason": "文脈で、OSSの利用形態によって実装すべき項目が異なると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目は成熟度によって異なる。",
+            "reason": "文脈で、成熟度によって実装すべき項目が異なると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装の優先度は組織の規模、事業内容、OSSの利用形態、成熟度によって異なる。",
+            "reason": "文脈で、これらの要因によって実装すべき項目だけでなく優先度も異なると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "すべての項目をチェックする必要はない。",
+            "reason": "文脈に「すべての項目をチェックする必要はありません」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "自組織の目的や優先度に応じて、必要な項目から段階的に採用・実装するべきである。",
+            "reason": "文脈に、自組織の目的や優先度に応じて必要な項目から段階的に採用・実装するよう記載されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.34,
+      "cost_usd": 0.015924
+    },
+    {
+      "index": 69,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "3263c0e18830f719d4b9849c945c389215f2560cf5f4b72292a4f0b86fb1feaf",
+      "cache_hit": true,
+      "raw_file": "c0067.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "実装すべき項目は組織の規模によって異なる。",
+          "実装すべき項目は組織の事業内容によって異なる。",
+          "実装すべき項目はOSSの利用形態によって異なる。",
+          "実装すべき項目は成熟度によって異なる。",
+          "実装の優先度は組織の規模、事業内容、OSSの利用形態、成熟度によって異なる。",
+          "すべての項目をチェックする必要はない。",
+          "自組織の目的や優先度に応じて、必要な項目から段階的に採用・実装するべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 70,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "78d66d76a15ad390d6c576970902a5ae46aa0056e4c1b6092df50aba34820375",
+      "cache_hit": true,
+      "raw_file": "c0068.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "実装すべき項目は組織の規模によって異なる。",
+            "reason": "文脈に「組織の規模、事業内容、OSSの利用形態、成熟度によって、実装すべき項目や優先度は異なります」とあり、組織の規模によって実装すべき項目が異なることが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目は組織の事業内容によって異なる。",
+            "reason": "文脈で、事業内容によって実装すべき項目が異なると明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目はOSSの利用形態によって異なる。",
+            "reason": "文脈で、OSSの利用形態によって実装すべき項目が異なると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目は成熟度によって異なる。",
+            "reason": "文脈で、成熟度によって実装すべき項目が異なると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装の優先度は組織の規模、事業内容、OSSの利用形態、成熟度によって異なる。",
+            "reason": "文脈で、これらの要因によって実装すべき項目だけでなく優先度も異なると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "すべての項目をチェックする必要はない。",
+            "reason": "文脈に「すべての項目をチェックする必要はありません」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "自組織の目的や優先度に応じて、必要な項目から段階的に採用・実装するべきである。",
+            "reason": "文脈に、自組織の目的や優先度に応じて必要な項目から段階的に採用・実装するよう記載されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 71,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "3263c0e18830f719d4b9849c945c389215f2560cf5f4b72292a4f0b86fb1feaf",
+      "cache_hit": true,
+      "raw_file": "c0067.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "実装すべき項目は組織の規模によって異なる。",
+          "実装すべき項目は組織の事業内容によって異なる。",
+          "実装すべき項目はOSSの利用形態によって異なる。",
+          "実装すべき項目は成熟度によって異なる。",
+          "実装の優先度は組織の規模、事業内容、OSSの利用形態、成熟度によって異なる。",
+          "すべての項目をチェックする必要はない。",
+          "自組織の目的や優先度に応じて、必要な項目から段階的に採用・実装するべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 72,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "78d66d76a15ad390d6c576970902a5ae46aa0056e4c1b6092df50aba34820375",
+      "cache_hit": true,
+      "raw_file": "c0068.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "実装すべき項目は組織の規模によって異なる。",
+            "reason": "文脈に「組織の規模、事業内容、OSSの利用形態、成熟度によって、実装すべき項目や優先度は異なります」とあり、組織の規模によって実装すべき項目が異なることが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目は組織の事業内容によって異なる。",
+            "reason": "文脈で、事業内容によって実装すべき項目が異なると明示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目はOSSの利用形態によって異なる。",
+            "reason": "文脈で、OSSの利用形態によって実装すべき項目が異なると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目は成熟度によって異なる。",
+            "reason": "文脈で、成熟度によって実装すべき項目が異なると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装の優先度は組織の規模、事業内容、OSSの利用形態、成熟度によって異なる。",
+            "reason": "文脈で、これらの要因によって実装すべき項目だけでなく優先度も異なると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "すべての項目をチェックする必要はない。",
+            "reason": "文脈に「すべての項目をチェックする必要はありません」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "自組織の目的や優先度に応じて、必要な項目から段階的に採用・実装するべきである。",
+            "reason": "文脈に、自組織の目的や優先度に応じて必要な項目から段階的に採用・実装するよう記載されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    }
+  ],
+  "call_summary": {
+    "calls": 72,
+    "cache_hits": 33,
+    "failures": 0,
+    "seconds": 195.9,
+    "cost_usd_list_price": 0.4037,
+    "calls_without_cost": 0
+  },
+  "finished_at": "2026-10-16T23:38:39.302390+00:00"
+}

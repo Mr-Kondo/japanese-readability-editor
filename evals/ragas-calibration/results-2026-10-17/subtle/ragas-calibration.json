@@ -1,0 +1,1002 @@
+{
+  "schema_version": 1,
+  "status": "constructed_labels_not_human_confirmed",
+  "rules": [
+    "factual の信号: 採点できた precision/recall のどちらかが 1.0 未満。閾値なし",
+    "rubric の信号: unnecessary_change を除く保持の観点のどれかが fail",
+    "狙い撃ち: violated_aspect が fail",
+    "unnecessary_change は別集計"
+  ],
+  "caveats": [
+    "ラベルは構成によるもので人の確認前",
+    "人工例の成績は実運用の見逃し率・誤警告率ではない",
+    "13件・出典2文書。率は記述値で、信頼区間や有効性の根拠にしない"
+  ],
+  "labels_basis": "校正用の人工ケース（微妙な欠陥を含む）の期待ラベル。ラベルは構成によるもので、人の確認前。confirmed_by が空のラベルを人手判定済みとして扱わない。",
+  "run_status": "partial_or_with_errors",
+  "run_config": {
+    "tool_version": 1,
+    "rubric_version": "ragas-ja-rubric-v1",
+    "rubric_sha256": "7f37f4309a2786203f376adfebd3d62e08df4be0d1d448c23480dd4f39dc81d1",
+    "metrics": [
+      "factual",
+      "rubric"
+    ],
+    "profile": "gov-org",
+    "aspects": [
+      "negation_polarity",
+      "condition_scope",
+      "actor_target",
+      "modality_strength",
+      "numbers_order",
+      "ungrounded_specificity",
+      "unnecessary_change"
+    ],
+    "atomicity": "high",
+    "coverage": "high",
+    "ragas_prompts": "Ragas 0.4.3 既定（英語の指示と例。日本語への適合は未検証）",
+    "llm_adapter": "ClaudeCliLLM（JSON指示をプロンプト末尾に付加、ツールなし、逐次実行、同一プロンプトは再利用）",
+    "claude_flags": [
+      "--print",
+      "--safe-mode",
+      "--strict-mcp-config",
+      "--tools",
+      "",
+      "--no-session-persistence",
+      "--model",
+      "sonnet",
+      "--effort",
+      "medium",
+      "--output-format",
+      "json"
+    ],
+    "claude_system": "提供された文章を処理してください。ツールは使用しないでください。",
+    "claude_cli_version": "2.1.292 (Claude Code)",
+    "temperature_and_seed": "CLI から指定できない（不明）",
+    "python": "3.13.16",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "packages": {
+      "ragas": "0.4.3",
+      "langchain-community": "0.3.31",
+      "langchain-core": "1.6.11",
+      "langchain": "1.4.6",
+      "instructor": "1.3.2",
+      "openai": "1.109.1",
+      "pydantic": "2.14.1",
+      "numpy": "2.5.4"
+    }
+  },
+  "run_models": [
+    "claude-sonnet-5-5"
+  ],
+  "run_calls": {
+    "calls": 272,
+    "cache_hits": 46,
+    "failures": 1,
+    "seconds": 1263.7,
+    "cost_usd_list_price": 2.1234,
+    "calls_without_cost": 0
+  },
+  "summary": {
+    "fail": {
+      "cases": 15,
+      "factual_signal": {
+        "signalled": 7,
+        "available": 15,
+        "unavailable": 0,
+        "rate": 0.47
+      },
+      "rubric_signal": {
+        "signalled": 15,
+        "available": 15,
+        "unavailable": 0,
+        "rate": 1.0
+      },
+      "unnecessary_change_fail": {
+        "signalled": 15,
+        "available": 15
+      },
+      "uncertain_in_any_aspect": 0,
+      "cases_with_errors": 0,
+      "targeted_aspect_hit": {
+        "signalled": 15,
+        "available": 15,
+        "unavailable": 0,
+        "rate": 1.0
+      },
+      "failed_aspects_per_case": {
+        "values": [
+          6,
+          3,
+          3,
+          3,
+          5,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          4,
+          4,
+          3,
+          1
+        ],
+        "note": "1件の欠陥に対し複数の観点が同時に fail なら、観点が弁別していない"
+      }
+    },
+    "pass": {
+      "cases": 6,
+      "factual_signal": {
+        "signalled": 0,
+        "available": 5,
+        "unavailable": 1,
+        "rate": 0.0
+      },
+      "rubric_signal": {
+        "signalled": 0,
+        "available": 6,
+        "unavailable": 0,
+        "rate": 0.0
+      },
+      "unnecessary_change_fail": {
+        "signalled": 0,
+        "available": 6
+      },
+      "uncertain_in_any_aspect": 0,
+      "cases_with_errors": 1
+    }
+  },
+  "cases": [
+    {
+      "id": "hedge-s3a",
+      "expected": "fail",
+      "perturbation": "qualifier_added",
+      "violated_aspect": "modality_strength",
+      "source_id": "da-requirements-template",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "fail",
+        "condition_scope": "fail",
+        "actor_target": "fail",
+        "modality_strength": "fail",
+        "numbers_order": "fail",
+        "ungrounded_specificity": "fail",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "actor_target",
+        "condition_scope",
+        "modality_strength",
+        "negation_polarity",
+        "numbers_order",
+        "ungrounded_specificity"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [
+        {
+          "aspect": "negation_polarity",
+          "value": "fail",
+          "sentence": "否定・禁止の保持の観点では、監視停止を禁じる働きが弱まっているため、原文の働きは保たれていない"
+        },
+        {
+          "aspect": "modality_strength",
+          "value": "fail",
+          "sentence": "時制は変わっていない"
+        },
+        {
+          "aspect": "numbers_order",
+          "value": "fail",
+          "sentence": "運用時間「平日…の9時から17時まで」は候補でも同じで、数値・時間帯・平日の除外条件は保たれている"
+        }
+      ],
+      "targeted_hit": true
+    },
+    {
+      "id": "timing-s6",
+      "expected": "fail",
+      "perturbation": "timing_shifted",
+      "violated_aspect": "numbers_order",
+      "source_id": "da-ds-120",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "fail",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "fail",
+        "ungrounded_specificity": "fail",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "condition_scope",
+        "numbers_order",
+        "ungrounded_specificity"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [
+        {
+          "aspect": "actor_target",
+          "value": "pass",
+          "sentence": "変わっているのは最新化の実施時期（「開始する時点」→「開始する前」）で、これは主体・対象・修飾先・宛先の入れ替えや追加・省略ではなく、時期・条件の観点に属する"
+        },
+        {
+          "aspect": "modality_strength",
+          "value": "pass",
+          "sentence": "一方、時点の表現が原文「要件定義を開始する時点で」から候補「要件定義を開始する前に」へ変わっている"
+        }
+      ],
+      "targeted_hit": true
+    },
+    {
+      "id": "hedge-k8s",
+      "expected": "fail",
+      "perturbation": "default_hedged",
+      "violated_aspect": "modality_strength",
+      "source_id": "k8s-pod-lifecycle",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "fail",
+        "actor_target": "pass",
+        "modality_strength": "fail",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "fail",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "condition_scope",
+        "modality_strength",
+        "ungrounded_specificity"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [
+        {
+          "aspect": "actor_target",
+          "value": "pass",
+          "sentence": "「通常は」は既定値の意味合いを弱める点があるが、それは主体・対象・修飾先の問題ではなく別観点（条件・既定値の断定性）にあたる"
+        }
+      ],
+      "targeted_hit": true
+    },
+    {
+      "id": "order-py",
+      "expected": "fail",
+      "perturbation": "order_lost",
+      "violated_aspect": "numbers_order",
+      "source_id": "py-tutorial-modules",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "fail",
+        "actor_target": "fail",
+        "modality_strength": "pass",
+        "numbers_order": "fail",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "actor_target",
+        "condition_scope",
+        "numbers_order"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [
+        {
+          "aspect": "negation_polarity",
+          "value": "pass",
+          "sentence": "これは否定・肯定の反転ではなく条件・順序の変化であり、他観点（条件の保持）で扱うべき問題である"
+        }
+      ],
+      "targeted_hit": true
+    },
+    {
+      "id": "tension-essay",
+      "expected": "fail",
+      "perturbation": "contrast_reversed",
+      "violated_aspect": "negation_polarity",
+      "source_id": "az-047236",
+      "errors": [],
+      "precision": 0.5,
+      "recall": 0.4,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [
+        "植物採集は楽しい遊びごとのようなものであった。",
+        "植物採集は努力というほどのものではなかった。"
+      ],
+      "unsupported_reference_claims": [
+        "植物採集はただの遊びごとではなかった。",
+        "植物採集は汗水流しての積極的な採集であった。",
+        "話者は自分の学問のために努力して植物採集をした。"
+      ],
+      "rubric": {
+        "negation_polarity": "fail",
+        "condition_scope": "fail",
+        "actor_target": "fail",
+        "modality_strength": "fail",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "fail",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "actor_target",
+        "condition_scope",
+        "modality_strength",
+        "negation_polarity",
+        "ungrounded_specificity"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [
+        {
+          "aspect": "modality_strength",
+          "value": "fail",
+          "sentence": "時制は過去で共通だが、「努力したのである」という断定の働きが「努力というほどのものではなかった」という否定に反転しており、この観点でも意味・働きが保たれていない"
+        },
+        {
+          "aspect": "numbers_order",
+          "value": "pass",
+          "sentence": "これは論旨・否定の反転で別の観点の問題です"
+        }
+      ],
+      "targeted_hit": true
+    },
+    {
+      "id": "paraphrase-k8s",
+      "expected": "pass",
+      "perturbation": "legitimate_paraphrase",
+      "violated_aspect": null,
+      "source_id": "k8s-pod-lifecycle",
+      "errors": [
+        "factual.recall: JSONDecodeError: Expecting ',' delimiter: line 1 column 63 (char 62)"
+      ],
+      "precision": 1.0,
+      "recall": null,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "error"
+      },
+      "factual_signal": null,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass",
+      "reason_conflicts": [],
+      "targeted_hit": null
+    },
+    {
+      "id": "paraphrase-essay",
+      "expected": "pass",
+      "perturbation": "legitimate_paraphrase",
+      "violated_aspect": null,
+      "source_id": "az-002359",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass",
+      "reason_conflicts": [],
+      "targeted_hit": null
+    },
+    {
+      "id": "necessity-s5",
+      "expected": "fail",
+      "perturbation": "necessity_dropped",
+      "violated_aspect": "modality_strength",
+      "source_id": "da-ds-120",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "fail",
+        "condition_scope": "fail",
+        "actor_target": "pass",
+        "modality_strength": "fail",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "condition_scope",
+        "modality_strength",
+        "negation_polarity"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [
+        {
+          "aspect": "condition_scope",
+          "value": "fail",
+          "sentence": "予算・スケジュールという条件から生じる必然性・義務の含意が失われているため、条件の働きが保たれていません"
+        },
+        {
+          "aspect": "modality_strength",
+          "value": "fail",
+          "sentence": "時制は現在のまま保たれている"
+        }
+      ],
+      "targeted_hit": true
+    },
+    {
+      "id": "quantifier-k8s",
+      "expected": "fail",
+      "perturbation": "quantifier_changed",
+      "violated_aspect": "condition_scope",
+      "source_id": "k8s-pod-lifecycle",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 0.8,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [
+        "デフォルトでは、すべての削除は30秒以内に正常に行われる。"
+      ],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "fail",
+        "actor_target": "fail",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "fail",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "actor_target",
+        "condition_scope",
+        "ungrounded_specificity"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [
+        {
+          "aspect": "negation_polarity",
+          "value": "pass",
+          "sentence": "原文の「すべての削除は30秒以内に正常に行われます」が、候補では「通常の削除は30秒以内に正常に行われます」に変わっている"
+        }
+      ],
+      "targeted_hit": true
+    },
+    {
+      "id": "strength-py",
+      "expected": "fail",
+      "perturbation": "limit_and_strength_weakened",
+      "violated_aspect": "modality_strength",
+      "source_id": "py-tutorial-modules",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "fail",
+        "condition_scope": "fail",
+        "actor_target": "pass",
+        "modality_strength": "fail",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "condition_scope",
+        "modality_strength",
+        "negation_polarity"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [],
+      "targeted_hit": true
+    },
+    {
+      "id": "qualifier-essay",
+      "expected": "fail",
+      "perturbation": "subject_qualifier_dropped",
+      "violated_aspect": "condition_scope",
+      "source_id": "az-002359",
+      "errors": [],
+      "precision": 0.83,
+      "recall": 0.71,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [
+        "頭のいい人は科学者にはなれない。"
+      ],
+      "unsupported_reference_claims": [
+        "頭がよくて、自分を頭がいいと思い利口だと思う人は、先生にはなれる。",
+        "頭がよくて、自分を頭がいいと思い利口だと思う人は、科学者にはなれない。"
+      ],
+      "rubric": {
+        "negation_polarity": "fail",
+        "condition_scope": "fail",
+        "actor_target": "fail",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "actor_target",
+        "condition_scope",
+        "negation_polarity"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [
+        {
+          "aspect": "negation_polarity",
+          "value": "fail",
+          "sentence": "後半の「初めて科学者にはなれるのである」は同一で、「なれない」の否定自体は保たれているが、原文では限定されていた否定の対象が一般化され、頭のいい人は謙虚でも科学者になれないという意味に変わっている"
+        }
+      ],
+      "targeted_hit": true
+    },
+    {
+      "id": "actor-org",
+      "expected": "fail",
+      "perturbation": "actor_swapped",
+      "violated_aspect": "actor_target",
+      "source_id": "ipa-o-using",
+      "errors": [],
+      "precision": 0.87,
+      "recall": 0.87,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [
+        "セキュリティリスクが懸念される場合は、OSPOへ相談する。"
+      ],
+      "unsupported_reference_claims": [
+        "セキュリティリスクが懸念される場合は、セキュリティ部門へ相談する。"
+      ],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "fail",
+        "actor_target": "fail",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "fail",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "actor_target",
+        "condition_scope",
+        "ungrounded_specificity"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [],
+      "targeted_hit": true
+    },
+    {
+      "id": "paraphrase-py",
+      "expected": "pass",
+      "perturbation": "legitimate_paraphrase",
+      "violated_aspect": null,
+      "source_id": "py-library-tempfile",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass",
+      "reason_conflicts": [],
+      "targeted_hit": null
+    },
+    {
+      "id": "control-essay",
+      "expected": "pass",
+      "perturbation": "control_unchanged",
+      "violated_aspect": null,
+      "source_id": "az-002364",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass",
+      "reason_conflicts": [],
+      "targeted_hit": null
+    },
+    {
+      "id": "possibility-s6",
+      "expected": "fail",
+      "perturbation": "possibility_to_certainty",
+      "violated_aspect": "modality_strength",
+      "source_id": "da-ds-120",
+      "errors": [],
+      "precision": 0.75,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [
+        "調達後に変更内容が判明した場合は、追加のコストがかかる。"
+      ],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "fail",
+        "actor_target": "pass",
+        "modality_strength": "fail",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "fail",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "condition_scope",
+        "modality_strength",
+        "ungrounded_specificity"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [],
+      "targeted_hit": true
+    },
+    {
+      "id": "flag-dropped-k8s",
+      "expected": "fail",
+      "perturbation": "required_flag_dropped",
+      "violated_aspect": "condition_scope",
+      "source_id": "k8s-pod-lifecycle",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 0.6,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [
+        "強制削除を実行するには --force フラグを指定する必要があります。",
+        "--force フラグは --grace-period=0 と共に指定する必要があります。"
+      ],
+      "rubric": {
+        "negation_polarity": "fail",
+        "condition_scope": "fail",
+        "actor_target": "fail",
+        "modality_strength": "fail",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "actor_target",
+        "condition_scope",
+        "modality_strength",
+        "negation_polarity"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [
+        {
+          "aspect": "numbers_order",
+          "value": "pass",
+          "sentence": "候補は「--grace-period=0 を指定する必要があります」とだけ述べ、--force が脱落している"
+        },
+        {
+          "aspect": "ungrounded_specificity",
+          "value": "pass",
+          "sentence": "欠落は別観点の問題であり、本観点ではpass"
+        }
+      ],
+      "targeted_hit": true
+    },
+    {
+      "id": "only-py",
+      "expected": "fail",
+      "perturbation": "exclusivity_dropped",
+      "violated_aspect": "condition_scope",
+      "source_id": "py-library-tempfile",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 0.8,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": true,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [
+        "ファイルは、作成したユーザのユーザ ID からのみ読み書きできる。"
+      ],
+      "rubric": {
+        "negation_polarity": "fail",
+        "condition_scope": "fail",
+        "actor_target": "fail",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "fail",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "actor_target",
+        "condition_scope",
+        "negation_polarity",
+        "ungrounded_specificity"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [
+        {
+          "aspect": "numbers_order",
+          "value": "pass",
+          "sentence": "限定表現の欠落は別観点の問題であり、この観点ではpassとします"
+        }
+      ],
+      "targeted_hit": true
+    },
+    {
+      "id": "hedge-essay",
+      "expected": "fail",
+      "perturbation": "hedge_removed",
+      "violated_aspect": "modality_strength",
+      "source_id": "az-002359",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "fail",
+        "actor_target": "pass",
+        "modality_strength": "fail",
+        "numbers_order": "fail",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "condition_scope",
+        "modality_strength",
+        "numbers_order"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [
+        {
+          "aspect": "negation_polarity",
+          "value": "pass",
+          "sentence": "原文の「拾って行く場合がある」が候補では「拾って行く」と断定になり、「場合がある」という可能性・限定が削除されている"
+        },
+        {
+          "aspect": "ungrounded_specificity",
+          "value": "pass",
+          "sentence": "」と言い切っており、「場合がある」という条件・限定が失われている"
+        }
+      ],
+      "targeted_hit": true
+    },
+    {
+      "id": "strength-up-org",
+      "expected": "fail",
+      "perturbation": "recommendation_to_instruction",
+      "violated_aspect": "modality_strength",
+      "source_id": "ipa-o-eval",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "fail",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "fail"
+      },
+      "rubric_signal": true,
+      "failed_aspects": [
+        "modality_strength"
+      ],
+      "unnecessary_change": "fail",
+      "reason_conflicts": [
+        {
+          "aspect": "modality_strength",
+          "value": "fail",
+          "sentence": "時制は現在のまま保たれているが、推奨から指示への強さの変化があるためfail"
+        }
+      ],
+      "targeted_hit": true
+    },
+    {
+      "id": "paraphrase-org",
+      "expected": "pass",
+      "perturbation": "legitimate_paraphrase",
+      "violated_aspect": null,
+      "source_id": "ipa-o-eval",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass",
+      "reason_conflicts": [],
+      "targeted_hit": null
+    },
+    {
+      "id": "control-org",
+      "expected": "pass",
+      "perturbation": "control_unchanged",
+      "violated_aspect": null,
+      "source_id": "ipa-o-ospo",
+      "errors": [],
+      "precision": 1.0,
+      "recall": 1.0,
+      "factual_status": {
+        "precision": "scored",
+        "recall": "scored"
+      },
+      "factual_signal": false,
+      "unsupported_response_claims": [],
+      "unsupported_reference_claims": [],
+      "rubric": {
+        "negation_polarity": "pass",
+        "condition_scope": "pass",
+        "actor_target": "pass",
+        "modality_strength": "pass",
+        "numbers_order": "pass",
+        "ungrounded_specificity": "pass",
+        "unnecessary_change": "pass"
+      },
+      "rubric_signal": false,
+      "failed_aspects": [],
+      "unnecessary_change": "pass",
+      "reason_conflicts": [],
+      "targeted_hit": null
+    }
+  ]
+}

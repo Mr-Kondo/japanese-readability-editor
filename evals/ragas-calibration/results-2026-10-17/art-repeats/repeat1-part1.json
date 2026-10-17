@@ -1,0 +1,2070 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "config": {
+    "tool_version": 1,
+    "rubric_version": "ragas-ja-rubric-v1",
+    "rubric_sha256": "7f37f4309a2786203f376adfebd3d62e08df4be0d1d448c23480dd4f39dc81d1",
+    "discriminate": false,
+    "metrics": [
+      "factual",
+      "rubric"
+    ],
+    "profile": "gov-org",
+    "aspects": [
+      "negation_polarity",
+      "condition_scope",
+      "actor_target",
+      "modality_strength",
+      "numbers_order",
+      "ungrounded_specificity",
+      "unnecessary_change"
+    ],
+    "atomicity": "high",
+    "coverage": "high",
+    "ragas_prompts": "Ragas 0.4.3 既定（英語の指示と例。日本語への適合は未検証）",
+    "llm_adapter": "ClaudeCliLLM（JSON指示をプロンプト末尾に付加、ツールなし、逐次実行、同一プロンプトは再利用）",
+    "claude_flags": [
+      "--print",
+      "--safe-mode",
+      "--strict-mcp-config",
+      "--tools",
+      "",
+      "--no-session-persistence",
+      "--model",
+      "sonnet",
+      "--effort",
+      "medium",
+      "--output-format",
+      "json"
+    ],
+    "claude_system": "提供された文章を処理してください。ツールは使用しないでください。",
+    "claude_cli_version": "2.1.292 (Claude Code)",
+    "temperature_and_seed": "CLI から指定できない（不明）",
+    "python": "3.13.16",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "packages": {
+      "ragas": "0.4.3",
+      "langchain-community": "0.3.31",
+      "langchain-core": "1.6.11",
+      "langchain": "1.4.6",
+      "instructor": "1.3.2",
+      "openai": "1.109.1",
+      "pydantic": "2.14.1",
+      "numpy": "2.5.4"
+    }
+  },
+  "started_at": "2026-10-16T23:29:36.423971+00:00",
+  "input": {
+    "path": "/tmp/claude-501/ragas-inputs/art-p1.json",
+    "cases": 5,
+    "task_sha256": "df6d43e54d97c2a341eac73e4f5dfd86f63516914856d0dc798cc298f4b3db81"
+  },
+  "cases": [
+    {
+      "id": "control-s3a",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一である。「平日（土日及び祝日、年末年始を除く）」の除外条件や「24時間365日行うこと」の義務表現もすべてそのまま保たれ、否定・肯定の反転、否定の追加・削除、禁止と許可の入れ替えは生じていない。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「平日（土日及び祝日、年末年始を除く）の9時から17時までとする」「ただし、情報システムの監視は24時間365日行うこと」と、候補は完全に同一の文章である。運用時間の範囲、除外条件、「ただし」による例外関係、監視の24時間365日という範囲がすべてそのまま保たれている。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一である。「運用・保守業者の運用時間は平日…9時から17時までとする」「情報システムの監視は24時間365日行うこと」という動作の主体、対象、修飾先（「土日及び祝日、年末年始を除く」が「平日」にかかる関係）がすべて原文のまま保たれており、入れ替え・追加・省略はない。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一である。「運用時間は…9時から17時までとする」と「情報システムの監視は24時間365日行うこと」という義務表現、および現在・規定の時制がそのまま保たれている。義務の強さや時制の変更はない。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文と候補は完全に同一の文である。「平日（土日及び祝日、年末年始を除く）の9時から17時まで」という運用時間、および「24時間365日行うこと」という監視の頻度・範囲、さらに「ただし」による先後・対比の関係もそのまま保たれている。数値・単位・期限・頻度・順序のいずれも変更されていない。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一で、「運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時まで」「情報システムの監視は24時間365日行うこと」のいずれも変更がない。主体、条件、完了状態、理由、具体例、固有名の追加は見られず、原文の意味と働きが保たれている。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする。ただし、情報システムの監視は24時間365日行うこと。」と候補は完全に同一で、不要な書換えは一切なく、意味・義務の強さ（「とする」「行うこと」）もそのまま保たれている。原文はすでに明確であり、無変更は適切である。"
+        }
+      }
+    },
+    {
+      "id": "exception-drop-s3a",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.75,
+          "status": "scored",
+          "value": 0.75,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 6,
+            "supported": 4,
+            "unsupported": 2,
+            "coverage": 0.67,
+            "unsupported_texts": [
+              {
+                "claim": "情報システムの監視は24時間行うこと。",
+                "reason": "文脈は運用・保守業者の運用時間についてのみ述べており、情報システムの監視を24時間行うことには触れていない。"
+              },
+              {
+                "claim": "情報システムの監視は365日行うこと。",
+                "reason": "文脈には情報システムの監視を365日行うという記述はなく、むしろ運用時間は平日の日中に限られている。"
+              }
+            ]
+          },
+          "recomputed_value": 0.75,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「ただし、情報システムの監視は24時間365日行うこと。」は、運用時間の限定に対する例外としての義務（肯定の義務規定）である。候補ではこの一文が丸ごと削除されており、「24時間365日行うこと」という義務が消えている。その結果、候補は監視も9時から17時までに限られるかのように読め、24時間監視という要求の働きが失われている。否定・禁止の反転や追加そのものではないが、義務規定の削除により、監視の実施要求が保たれていない。この観点（否定・肯定、禁止と許可の保持）では、残された文の「運用時間は…とする」は原文と同じで反転はないものの、例外規定が消えたことで原文の制約・義務の働きが変わっているためfailとする。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文には「ただし、情報システムの監視は24時間365日行うこと。」という例外・範囲の規定があり、運用時間「9時から17時まで」の限定に対して監視は常時行うという但し書きになっている。候補はこの「ただし」以下の文を完全に脱落させており、監視が24時間365日必要という範囲と義務が失われ、運用時間の制限だけが残るため、条件・例外・範囲が保たれていない。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文には「ただし、情報システムの監視は24時間365日行うこと」とあり、監視という動作の対象（情報システム）と、運用時間の例外として24時間365日実施する義務が示されている。候補はこの一文を完全に省略しており、「監視」の対象・手続の範囲が失われ、運用時間が9時から17時までに限られるかのような意味になっている。主体・対象・修飾先の保持という観点で原文と異なる働きになっているためfail。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「ただし、情報システムの監視は24時間365日行うこと。」という義務（「行うこと」）を含むが、候補ではこの一文が完全に削除されている。そのため、監視を24時間365日行うという義務とその強さが失われ、運用時間が9時から17時までという記述のみが残り、監視も同時間帯に限られるかのような意味になる。「運用時間は…とする」は保たれているが、義務の保持という観点ではfail。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文には「ただし、情報システムの監視は24時間365日行うこと。」とあり、頻度・時間の数値(「24時間365日」)が運用時間「9時から17時まで」の例外として示されている。候補はこの一文を削除しており、「9時から17時まで」だけが残るため、監視の頻度(24時間365日)という数値条件が失われている。運用時間(平日9時から17時)自体は保たれているが、監視の常時実施という頻度の情報が欠落し、原文の働きが変わっている。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は「原文にない具体化の有無」である。原文の「ただし、情報システムの監視は24時間365日行うこと」が候補では削除されている。これは情報の欠落であり、原文にない主体・条件・完了状態・理由・具体例・固有名の追加は見られない。候補の残りの文「運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする」は原文と同一で、新たな具体化はない。削除は別の観点（欠落・義務の保持）の問題であり、この観点ではpassとする。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「ただし、情報システムの監視は24時間365日行うこと。」という文が、候補では丸ごと削除されている。この文は運用時間が平日9時から17時であっても監視は常時行うという例外的な義務を定めており、意味・条件・義務を持つ。原文は明確で書換えの必要もないのに、候補はこの義務を消して意味を変えているため、不要かつ意味を損なう変更である。"
+        }
+      }
+    },
+    {
+      "id": "partial-negation-s5",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.67,
+          "status": "scored",
+          "value": 0.67,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "要件定義で検討する機能の全てを実現することはできない。",
+                "reason": "文脈では「必ずしも全てを実現できるわけではありません」と述べられているが、これは全てを実現できるとは限らないという意味であり、「全てを実現することはできない」と断定しているわけではない。ただし、機能を絞らなければならないことがよくあるという趣旨から、全てを実現できない場合があることは読み取れる。断定的な表現は文脈から直接推論できるとまでは言えない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.67,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "要件定義で検討する機能の全てを実現することはできない。",
+                "reason": "文脈では「必ずしも全てを実現できるわけではありません」と述べられているが、これは全てを実現できるとは限らないという意味であり、「全てを実現することはできない」と断定しているわけではない。ただし、機能を絞らなければならないことがよくあるという趣旨から、全てを実現できない場合があることは読み取れる。断定的な表現は文脈から直接推論できるとまでは言えない。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「必ずしも全てを実現できるわけではありません」と部分否定で、全てが実現できる場合もあり得る（一部は実現できない可能性がある）という意味。候補は「全てを実現することはできません」と全面否定になり、全てを実現することが不可能だと断定している。否定の範囲が部分否定から完全否定に変わり、意味が異なる。「絞らなければならない」の義務表現は保たれているが、前半の否定の働きが変化している。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「必ずしも全てを実現できるわけではありません」で部分否定であり、「全てではないが実現できるものもある」という範囲を示している。候補は「全てを実現することはできません」とし、全体否定または全部実現は不可能という断定に読める。これにより「必ずしも〜ない」という範囲の限定が失われ、実現できる機能の範囲や、全てを実現できる場合がありうるという余地が変わっている。したがって条件・範囲の保持という観点では原文と異なる意味になっている。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「必ずしも全てを実現できるわけではありません」と部分否定で、「全てが実現できるとは限らない（一部は実現できない可能性がある）」という意味。候補は「全てを実現することはできません」と全否定的・断定的になり、「全てを実現できない」と読める。機能の実現可否の対象範囲（全て／一部）が変わっている。主体・対象そのものの入れ替えではないが、否定の作用範囲（修飾先）が変化して意味が異なる。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「必ずしも全てを実現できるわけではありません」で部分否定であり、全てを実現できる場合もあり得る（可能性の残る）ことを示している。候補は「全てを実現することはできません」と全否定的な不可能の断定になり、「できる」の可能の強さが変わっている。「絞らなければならないことはよくあります」の義務表現と現在時制は保たれているが、可能性の度合いが変化しているためfail。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "この観点は数値・単位・期限・頻度・先後関係の保持である。原文の「必ずしも全てを実現できるわけではありません」は部分否定で、全てを実現できる場合もあり得ることを示す。候補の「全てを実現することはできません」は全否定に近く、実現可能な場合を排除する。この変化は「全て」という量の範囲の変更に当たり、数量・範囲の意味が変わっている。一方、「よくあります」という頻度や、「予算やスケジュール」の関係、先後関係は保たれている。ただし、量(全て)の範囲が変わっているため、この観点では原文の働きが保たれていないと判断する。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「必ずしも全てを実現できるわけではありません」と部分否定で、一部は実現できる可能性を残している。候補は「全てを実現することはできません」と全否定に近い断定になり、「必ずしも」が消えている。ただしこの観点は、原文にない主体・条件・完了状態・理由・具体例・固有名の追加の有無である。候補に新たな主体、条件、理由、具体例、固有名は加わっていない。後続文「予算やスケジュールの関係から…」も原文のままである。断定が強まる問題は別観点（意味の強さ）であり、この観点では具体化の追加はないと判断する。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文「必ずしも全てを実現できるわけではありません」は部分否定で、全てを実現できる場合もあるが、できないこともあるという意味です。候補「全てを実現することはできません」は全否定に近く、全てを実現できる可能性を排除しています。意味が変わっており、不要で意味を変える書換えです。後続の「実現する機能を絞らなければならないことはよくあります」は変わっていません。"
+        }
+      }
+    },
+    {
+      "id": "control-s6",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文と候補は完全に同一の文章である。「収集しますが」「最新化を行いましょう」「追加のコストがかかる可能性がありますので、留意してください」のいずれも候補で同じ形で保たれており、否定・肯定の反転や、禁止と許可の入れ替え、否定の追加・削除は生じていない。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一である。「調達後に変更内容が判明した場合は」という条件、「要件定義を開始する時点で」「サービス・業務企画時点で」という時点の範囲、「追加のコストがかかる可能性があります」という可能性の程度がすべてそのまま保たれており、条件・例外・範囲の脱落、追加、変更はない。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一である。「資料はサービス・業務企画時点で収集します」「要件定義を開始する時点で最新化を行いましょう」「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」といった動作の主体、対象、修飾先、条件の関係がすべてそのまま保たれており、入れ替え・追加・省略はない。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文と候補は完全に同一である。「最新化を行いましょう」（推奨）、「可能性がありますので、留意してください」（依頼）、「収集します」（現在形）といった義務・推奨の強さと時制がすべてそのまま保たれている。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文と候補は完全に同一である。「サービス・業務企画時点で収集」と「要件定義を開始する時点で最新化」という先後関係、および「調達後に変更内容が判明した場合」という時点の条件が、候補でも「サービス・業務企画時点で収集」「要件定義を開始する時点で最新化」「調達後に変更内容が判明した場合」としてそのまま保たれている。数値・期限・頻度・順序に変更はない。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一で、「サービス・業務企画時点で収集します」「要件定義を開始する時点で最新化を行いましょう」「追加のコストがかかる可能性があります」など、主体・条件・完了状態・理由・具体例・固有名の追加は一切ない。原文の意味・働きは保たれている。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文と候補は「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集しますが、要件定義を開始する時点で最新化を行いましょう。」以下、全文が完全に同一で、変更が一切ない。原文はすでに明確であり、無変更は適切。不要な書換えは行われていないため、この観点では問題ない。"
+        }
+      }
+    },
+    {
+      "id": "paraphrase-s6",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は否定・禁止表現を含まず、「収集しますが…最新化を行いましょう」「変更内容が判明した場合は…コストがかかる可能性があります。留意してください」という肯定的な勧奨・注意喚起である。候補も「集めますが…最新化しましょう」「判明すると…可能性があります。留意してください」と、肯定の関係と留意の依頼が保たれており、否定の追加・削除や禁止と許可の入れ替わりはない。「判明した場合は」が「判明すると」になっているのは条件の言い換えで、否定・肯定には影響しない。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「調達後に変更内容が判明した場合は」は、候補では「調達後に変更内容が判明すると」となっている。条件の働きは保たれており、「場合」と「と」の言い換えは自然。「サービス・業務企画時点で収集しますが」→「サービス・業務企画の時点で集めますが」、「要件定義を開始する時点で最新化を行いましょう」→「要件定義を開始する時点で最新化しましょう」も、時点の範囲や対比関係が変わっていない。「追加のコストがかかる可能性がありますので、留意してください」を「可能性があります。留意してください。」と分けても、理由関係はやや弱まるが、条件・範囲・例外の論理は脱落も追加もない。したがって、この観点では原文の意味と働きが保たれている。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「資料は…収集します」「要件定義を開始する時点で最新化を行いましょう」は、候補でも「集めます」「最新化しましょう」と、資料が対象で、動作の主体（調達側の職員）も変わらず保たれている。「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」も「調達後に変更内容が判明すると、追加のコストがかかる可能性があります」と、判明の対象（変更内容）とコスト増の係り先が同じ。「留意してください」は文を分けただけで、宛先や対象の入れ替え・追加・省略はない。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「最新化を行いましょう」は勧奨で、候補の「最新化しましょう」も同じ強さの勧奨を保っている。「収集しますが」→「集めますが」も現在・予定の時制と主体が同じ。原文の「留意してください」は依頼・推奨であり、候補でも「留意してください。」と同じ強さで残っている。「判明した場合は」→「判明すると」は条件の言い換えで、「可能性がありますので」→「可能性があります。」も文の分割にとどまり、義務・推奨の強さや時制は変わっていない。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「サービス・業務企画時点で収集します」→「要件定義を開始する時点で最新化」という先後関係を述べており、候補も「サービス・業務企画の時点で集めます」→「要件定義を開始する時点で最新化しましょう」と同じ順序・時点を保っている。「調達後に変更内容が判明した場合」も候補の「調達後に変更内容が判明すると」で時点が保たれている。数値・単位・頻度は原文にない。文の分割による「留意してください」も働きは同じ。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「収集しますが」「最新化を行いましょう」「判明した場合は」「追加のコストがかかる可能性がありますので、留意してください」に対し、候補は「集めますが」「最新化しましょう」「判明すると」「可能性があります。留意してください」と言い換えている。主体・条件・完了状態・理由・具体例・固有名の追加はなく、「判明すると」も原文の「場合は」と同じ条件の範囲である。文を分けたことで因果の「ので」が外れているが、新しい理由や具体化ではない。よってこの観点では意味が保たれている。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「収集しますが」「最新化を行いましょう」「変更内容が判明した場合は…留意してください」に対し、候補は「集めますが」「最新化しましょう」「判明すると…あります。留意してください。」と変えている。意味・主体・条件・義務の強さ（「しましょう」の勧奨、「留意してください」の依頼）は保たれている。ただし「収集」→「集め」への平易化、「最新化を行い」→「最新化し」への簡略化、「の時点」への助詞追加、一文の分割は、原文が既に明確で読みやすいため必ずしも必要ではない。それでも意味や働きは変わらず、自然な言い換えの範囲であり、過度な書換えとは言えない。"
+        }
+      }
+    }
+  ],
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "calls": [
+    {
+      "index": 1,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "544664483cc12ad18442cd3e6a2ccc45112810819b6ae155b23595c8bf010839",
+      "cache_hit": false,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間には土日が含まれない。",
+          "運用・保守業者の運用時間には祝日が含まれない。",
+          "運用・保守業者の運用時間には年末年始が含まれない。",
+          "情報システムの監視は24時間行うこと。",
+          "情報システムの監視は365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.76,
+      "cost_usd": 0.0037727999999999998
+    },
+    {
+      "index": 2,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "ca1391eb610c4476f199696660b93e149b7c64d5f93aae760ef828350518f1fa",
+      "cache_hit": false,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "文脈に、運用・保守業者の運用時間は平日(土日及び祝日、年末年始を除く)の9時から17時までと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日が含まれない。",
+            "reason": "文脈で運用時間から土日が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には祝日が含まれない。",
+            "reason": "文脈で運用時間から祝日が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には年末年始が含まれない。",
+            "reason": "文脈で運用時間から年末年始が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間行うこと。",
+            "reason": "文脈に、情報システムの監視は24時間365日行うことと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は365日行うこと。",
+            "reason": "文脈に、情報システムの監視は24時間365日行うことと明記されており、365日の監視が求められている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.99,
+      "cost_usd": 0.01383
+    },
+    {
+      "index": 3,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "544664483cc12ad18442cd3e6a2ccc45112810819b6ae155b23595c8bf010839",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間には土日が含まれない。",
+          "運用・保守業者の運用時間には祝日が含まれない。",
+          "運用・保守業者の運用時間には年末年始が含まれない。",
+          "情報システムの監視は24時間行うこと。",
+          "情報システムの監視は365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 4,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "ca1391eb610c4476f199696660b93e149b7c64d5f93aae760ef828350518f1fa",
+      "cache_hit": true,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "文脈に、運用・保守業者の運用時間は平日(土日及び祝日、年末年始を除く)の9時から17時までと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日が含まれない。",
+            "reason": "文脈で運用時間から土日が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には祝日が含まれない。",
+            "reason": "文脈で運用時間から祝日が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には年末年始が含まれない。",
+            "reason": "文脈で運用時間から年末年始が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間行うこと。",
+            "reason": "文脈に、情報システムの監視は24時間365日行うことと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は365日行うこと。",
+            "reason": "文脈に、情報システムの監視は24時間365日行うことと明記されており、365日の監視が求められている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 5,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "544664483cc12ad18442cd3e6a2ccc45112810819b6ae155b23595c8bf010839",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間には土日が含まれない。",
+          "運用・保守業者の運用時間には祝日が含まれない。",
+          "運用・保守業者の運用時間には年末年始が含まれない。",
+          "情報システムの監視は24時間行うこと。",
+          "情報システムの監視は365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 6,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "ca1391eb610c4476f199696660b93e149b7c64d5f93aae760ef828350518f1fa",
+      "cache_hit": true,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "文脈に、運用・保守業者の運用時間は平日(土日及び祝日、年末年始を除く)の9時から17時までと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日が含まれない。",
+            "reason": "文脈で運用時間から土日が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には祝日が含まれない。",
+            "reason": "文脈で運用時間から祝日が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には年末年始が含まれない。",
+            "reason": "文脈で運用時間から年末年始が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間行うこと。",
+            "reason": "文脈に、情報システムの監視は24時間365日行うことと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は365日行うこと。",
+            "reason": "文脈に、情報システムの監視は24時間365日行うことと明記されており、365日の監視が求められている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 7,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "194c80152fa3f9819e64880778bf0aba5a1c4f4aae5ad66eaa39593d6c50b12c",
+      "cache_hit": false,
+      "raw_file": "c0007.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一である。「平日（土日及び祝日、年末年始を除く）」の除外条件や「24時間365日行うこと」の義務表現もすべてそのまま保たれ、否定・肯定の反転、否定の追加・削除、禁止と許可の入れ替えは生じていない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.27,
+      "cost_usd": 0.007488
+    },
+    {
+      "index": 8,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "cc67ac1692b95a327a22b628fbb68f317c44db9aad10f45ef3c39bd60c8154d6",
+      "cache_hit": false,
+      "raw_file": "c0008.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「平日（土日及び祝日、年末年始を除く）の9時から17時までとする」「ただし、情報システムの監視は24時間365日行うこと」と、候補は完全に同一の文章である。運用時間の範囲、除外条件、「ただし」による例外関係、監視の24時間365日という範囲がすべてそのまま保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.32,
+      "cost_usd": 0.0037308000000000003
+    },
+    {
+      "index": 9,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "0c003f9b71a05cb6aa06cd4b936cbee1b03428d4ba1af2355b740eceaf3d5561",
+      "cache_hit": false,
+      "raw_file": "c0009.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一である。「運用・保守業者の運用時間は平日…9時から17時までとする」「情報システムの監視は24時間365日行うこと」という動作の主体、対象、修飾先（「土日及び祝日、年末年始を除く」が「平日」にかかる関係）がすべて原文のまま保たれており、入れ替え・追加・省略はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.57,
+      "cost_usd": 0.0037914000000000003
+    },
+    {
+      "index": 10,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "082d7c802314c4521f65712150ba84c496395566e951d96607efacbd6798c699",
+      "cache_hit": false,
+      "raw_file": "c0010.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一である。「運用時間は…9時から17時までとする」と「情報システムの監視は24時間365日行うこと」という義務表現、および現在・規定の時制がそのまま保たれている。義務の強さや時制の変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.33,
+      "cost_usd": 0.0033758
+    },
+    {
+      "index": 11,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "54a05055e8f23faba3efbd03a88390ce973272390077c8078040e1f29c3071c8",
+      "cache_hit": false,
+      "raw_file": "c0011.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文と候補は完全に同一の文である。「平日（土日及び祝日、年末年始を除く）の9時から17時まで」という運用時間、および「24時間365日行うこと」という監視の頻度・範囲、さらに「ただし」による先後・対比の関係もそのまま保たれている。数値・単位・期限・頻度・順序のいずれも変更されていない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.61,
+      "cost_usd": 0.0037674000000000006
+    },
+    {
+      "index": 12,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "1e84c2d5d74331831233a081fa98011bf5595f61a6e186c22752d5c0414e05d4",
+      "cache_hit": false,
+      "raw_file": "c0012.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一で、「運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時まで」「情報システムの監視は24時間365日行うこと」のいずれも変更がない。主体、条件、完了状態、理由、具体例、固有名の追加は見られず、原文の意味と働きが保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.45,
+      "cost_usd": 0.003676
+    },
+    {
+      "index": 13,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "1ef65bbd24c48d991ecbff5e00a44b31a31f1164cd17cbb3d36d0c2cf1fd12d6",
+      "cache_hit": false,
+      "raw_file": "c0013.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする。ただし、情報システムの監視は24時間365日行うこと。」と候補は完全に同一で、不要な書換えは一切なく、意味・義務の強さ（「とする」「行うこと」）もそのまま保たれている。原文はすでに明確であり、無変更は適切である。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.95,
+      "cost_usd": 0.007802
+    },
+    {
+      "index": 14,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "07eeda144984d05edff399e7a39631eda9d6396b563cff57ba88fa8ab719b6ef",
+      "cache_hit": false,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日である。",
+          "運用・保守業者の運用時間は土日を除く。",
+          "運用・保守業者の運用時間は祝日を除く。",
+          "運用・保守業者の運用時間は年末年始を除く。",
+          "運用・保守業者の運用時間は9時から始まる。",
+          "運用・保守業者の運用時間は17時までである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.62,
+      "cost_usd": 0.007878
+    },
+    {
+      "index": 15,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "4615bebdcbd9ac96d9a3ccb44adaced48b79cf171c39f4f3efa455ddfcfee7d3",
+      "cache_hit": false,
+      "raw_file": "c0015.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日である。",
+            "reason": "文脈では運用時間は平日(土日及び祝日、年末年始を除く)の9時から17時までと明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間は土日を除く。",
+            "reason": "文脈で「土日及び祝日、年末年始を除く」と明記されているため、土日が除かれることは直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間は祝日を除く。",
+            "reason": "文脈で平日から土日及び祝日を除くと明記されているため、祝日が除かれることは直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間は年末年始を除く。",
+            "reason": "文脈で年末年始が除外されると明記されているため、この主張は直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間は9時から始まる。",
+            "reason": "文脈で運用時間は9時から17時までとされており、開始が9時であることは直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間は17時までである。",
+            "reason": "文脈で運用時間は9時から17時までとされており、終了が17時であることは直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.0,
+      "cost_usd": 0.014332
+    },
+    {
+      "index": 16,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "07eeda144984d05edff399e7a39631eda9d6396b563cff57ba88fa8ab719b6ef",
+      "cache_hit": true,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日である。",
+          "運用・保守業者の運用時間は土日を除く。",
+          "運用・保守業者の運用時間は祝日を除く。",
+          "運用・保守業者の運用時間は年末年始を除く。",
+          "運用・保守業者の運用時間は9時から始まる。",
+          "運用・保守業者の運用時間は17時までである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 17,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "4615bebdcbd9ac96d9a3ccb44adaced48b79cf171c39f4f3efa455ddfcfee7d3",
+      "cache_hit": true,
+      "raw_file": "c0015.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日である。",
+            "reason": "文脈では運用時間は平日(土日及び祝日、年末年始を除く)の9時から17時までと明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間は土日を除く。",
+            "reason": "文脈で「土日及び祝日、年末年始を除く」と明記されているため、土日が除かれることは直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間は祝日を除く。",
+            "reason": "文脈で平日から土日及び祝日を除くと明記されているため、祝日が除かれることは直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間は年末年始を除く。",
+            "reason": "文脈で年末年始が除外されると明記されているため、この主張は直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間は9時から始まる。",
+            "reason": "文脈で運用時間は9時から17時までとされており、開始が9時であることは直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間は17時までである。",
+            "reason": "文脈で運用時間は9時から17時までとされており、終了が17時であることは直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 18,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "544664483cc12ad18442cd3e6a2ccc45112810819b6ae155b23595c8bf010839",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間には土日が含まれない。",
+          "運用・保守業者の運用時間には祝日が含まれない。",
+          "運用・保守業者の運用時間には年末年始が含まれない。",
+          "情報システムの監視は24時間行うこと。",
+          "情報システムの監視は365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 19,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "a14512d682967965bf2a142673f7a2cb164db720da99b6cf34f234fe68c9a220",
+      "cache_hit": false,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "文脈に、運用・保守業者の運用時間は平日の9時から17時までと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日が含まれない。",
+            "reason": "文脈の括弧書きで、平日から土日が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には祝日が含まれない。",
+            "reason": "文脈の括弧書きで、平日から祝日が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には年末年始が含まれない。",
+            "reason": "文脈の括弧書きで、平日から年末年始が除かれると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間行うこと。",
+            "reason": "文脈は運用・保守業者の運用時間についてのみ述べており、情報システムの監視を24時間行うことには触れていない。",
+            "verdict": 0
+          },
+          {
+            "statement": "情報システムの監視は365日行うこと。",
+            "reason": "文脈には情報システムの監視を365日行うという記述はなく、むしろ運用時間は平日の日中に限られている。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.78,
+      "cost_usd": 0.014181999999999998
+    },
+    {
+      "index": 20,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9a143f441ab6f17e9246e21bf548199f8127733e2110a0046cbb49eb4af29cf1",
+      "cache_hit": false,
+      "raw_file": "c0020.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「ただし、情報システムの監視は24時間365日行うこと。」は、運用時間の限定に対する例外としての義務（肯定の義務規定）である。候補ではこの一文が丸ごと削除されており、「24時間365日行うこと」という義務が消えている。その結果、候補は監視も9時から17時までに限られるかのように読め、24時間監視という要求の働きが失われている。否定・禁止の反転や追加そのものではないが、義務規定の削除により、監視の実施要求が保たれていない。この観点（否定・肯定、禁止と許可の保持）では、残された文の「運用時間は…とする」は原文と同じで反転はないものの、例外規定が消えたことで原文の制約・義務の働きが変わっているためfailとする。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.83,
+      "cost_usd": 0.008952
+    },
+    {
+      "index": 21,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "2b2f8c03463a020615f772d3e12d0ef2f809e05358628fd802fc9a24fd4462ba",
+      "cache_hit": false,
+      "raw_file": "c0021.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文には「ただし、情報システムの監視は24時間365日行うこと。」という例外・範囲の規定があり、運用時間「9時から17時まで」の限定に対して監視は常時行うという但し書きになっている。候補はこの「ただし」以下の文を完全に脱落させており、監視が24時間365日必要という範囲と義務が失われ、運用時間の制限だけが残るため、条件・例外・範囲が保たれていない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.71,
+      "cost_usd": 0.007866
+    },
+    {
+      "index": 22,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "d4db0bec5b9bc31142c553a982b178b8d9c3080af3dcb0da902fcdd4a8130f7e",
+      "cache_hit": false,
+      "raw_file": "c0022.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文には「ただし、情報システムの監視は24時間365日行うこと」とあり、監視という動作の対象（情報システム）と、運用時間の例外として24時間365日実施する義務が示されている。候補はこの一文を完全に省略しており、「監視」の対象・手続の範囲が失われ、運用時間が9時から17時までに限られるかのような意味になっている。主体・対象・修飾先の保持という観点で原文と異なる働きになっているためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.53,
+      "cost_usd": 0.004095
+    },
+    {
+      "index": 23,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "6649c966cf57c7da95c502ddfa36d8f0912fc4ee77a42eedf51cd31ac928ecb6",
+      "cache_hit": false,
+      "raw_file": "c0023.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「ただし、情報システムの監視は24時間365日行うこと。」という義務（「行うこと」）を含むが、候補ではこの一文が完全に削除されている。そのため、監視を24時間365日行うという義務とその強さが失われ、運用時間が9時から17時までという記述のみが残り、監視も同時間帯に限られるかのような意味になる。「運用時間は…とする」は保たれているが、義務の保持という観点ではfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.11,
+      "cost_usd": 0.0040674000000000005
+    },
+    {
+      "index": 24,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "d6fb7596a2383de2ab67982737189db941aa68da50506a2e1e3b82f693c4bc18",
+      "cache_hit": false,
+      "raw_file": "c0024.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文には「ただし、情報システムの監視は24時間365日行うこと。」とあり、頻度・時間の数値(「24時間365日」)が運用時間「9時から17時まで」の例外として示されている。候補はこの一文を削除しており、「9時から17時まで」だけが残るため、監視の頻度(24時間365日)という数値条件が失われている。運用時間(平日9時から17時)自体は保たれているが、監視の常時実施という頻度の情報が欠落し、原文の働きが変わっている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.73,
+      "cost_usd": 0.004269
+    },
+    {
+      "index": 25,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "bec308454b646a339f6963cfd27d3153000e64e450a5c8a40af8a104b45ebf7f",
+      "cache_hit": false,
+      "raw_file": "c0025.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は「原文にない具体化の有無」である。原文の「ただし、情報システムの監視は24時間365日行うこと」が候補では削除されている。これは情報の欠落であり、原文にない主体・条件・完了状態・理由・具体例・固有名の追加は見られない。候補の残りの文「運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする」は原文と同一で、新たな具体化はない。削除は別の観点（欠落・義務の保持）の問題であり、この観点ではpassとする。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.96,
+      "cost_usd": 0.0044736
+    },
+    {
+      "index": 26,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "c7f7c9f17f5285471b344b481a6cb5e63df8e0cad619f71912ecd8c77626926e",
+      "cache_hit": false,
+      "raw_file": "c0026.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「ただし、情報システムの監視は24時間365日行うこと。」という文が、候補では丸ごと削除されている。この文は運用時間が平日9時から17時であっても監視は常時行うという例外的な義務を定めており、意味・条件・義務を持つ。原文は明確で書換えの必要もないのに、候補はこの義務を消して意味を変えているため、不要かつ意味を損なう変更である。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.11,
+      "cost_usd": 0.0039288
+    },
+    {
+      "index": 27,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "cc3c38e008a5e1dccbf4ae85cd7a305ff5ee62209696ab1c8cba9b964e8cb85b",
+      "cache_hit": false,
+      "raw_file": "c0027.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能の全てを実現することはできない。",
+          "予算の関係から、実現する機能を絞らなければならないことがよくある。",
+          "スケジュールの関係から、実現する機能を絞らなければならないことがよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 3.91,
+      "cost_usd": 0.003235
+    },
+    {
+      "index": 28,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "e8b418c512354d7980b301f37c071cebbd2faa65cc5b48672b7d84236462f94b",
+      "cache_hit": false,
+      "raw_file": "c0028.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能の全てを実現することはできない。",
+            "reason": "文脈では「必ずしも全てを実現できるわけではありません」と述べられているが、これは全てを実現できるとは限らないという意味であり、「全てを実現することはできない」と断定しているわけではない。ただし、機能を絞らなければならないことがよくあるという趣旨から、全てを実現できない場合があることは読み取れる。断定的な表現は文脈から直接推論できるとまでは言えない。",
+            "verdict": 0
+          },
+          {
+            "statement": "予算の関係から、実現する機能を絞らなければならないことがよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、予算の関係で機能を絞ることがよくあると直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの関係から、実現する機能を絞らなければならないことがよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、スケジュールの関係で機能を絞ることがよくあると直接読み取れる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.01,
+      "cost_usd": 0.013722
+    },
+    {
+      "index": 29,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "cc3c38e008a5e1dccbf4ae85cd7a305ff5ee62209696ab1c8cba9b964e8cb85b",
+      "cache_hit": true,
+      "raw_file": "c0027.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能の全てを実現することはできない。",
+          "予算の関係から、実現する機能を絞らなければならないことがよくある。",
+          "スケジュールの関係から、実現する機能を絞らなければならないことがよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 30,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "e8b418c512354d7980b301f37c071cebbd2faa65cc5b48672b7d84236462f94b",
+      "cache_hit": true,
+      "raw_file": "c0028.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能の全てを実現することはできない。",
+            "reason": "文脈では「必ずしも全てを実現できるわけではありません」と述べられているが、これは全てを実現できるとは限らないという意味であり、「全てを実現することはできない」と断定しているわけではない。ただし、機能を絞らなければならないことがよくあるという趣旨から、全てを実現できない場合があることは読み取れる。断定的な表現は文脈から直接推論できるとまでは言えない。",
+            "verdict": 0
+          },
+          {
+            "statement": "予算の関係から、実現する機能を絞らなければならないことがよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、予算の関係で機能を絞ることがよくあると直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの関係から、実現する機能を絞らなければならないことがよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、スケジュールの関係で機能を絞ることがよくあると直接読み取れる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 31,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2ad326f588c2f220e8f00328bdce763b4c16506a1499bacf9a8f89dd4a173780",
+      "cache_hit": false,
+      "raw_file": "c0031.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+          "予算の関係から、実現する機能を絞らなければならないことはよくある。",
+          "スケジュールの関係から、実現する機能を絞らなければならないことはよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.8,
+      "cost_usd": 0.0033506000000000005
+    },
+    {
+      "index": 32,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "4b419bd0d1ea95586aa3939eccb43376770fee3b2149e7ac3e8823652243e2cc",
+      "cache_hit": false,
+      "raw_file": "c0032.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+            "reason": "文脈に「要件定義で検討する機能は、全てを実現することはできません」とあり、全てを実現できるわけではないという内容と整合している。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算の関係から、実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、予算が理由の一つとして明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "スケジュールの関係から、実現する機能を絞らなければならないことはよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、スケジュールが理由の一つとして明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.75,
+      "cost_usd": 0.012672
+    },
+    {
+      "index": 33,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "102bac861d7935e3e6aebfea01bd4ea0d16c162334047ce481a3d2d0c4a89160",
+      "cache_hit": false,
+      "raw_file": "c0033.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「必ずしも全てを実現できるわけではありません」と部分否定で、全てが実現できる場合もあり得る（一部は実現できない可能性がある）という意味。候補は「全てを実現することはできません」と全面否定になり、全てを実現することが不可能だと断定している。否定の範囲が部分否定から完全否定に変わり、意味が異なる。「絞らなければならない」の義務表現は保たれているが、前半の否定の働きが変化している。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.74,
+      "cost_usd": 0.004094199999999999
+    },
+    {
+      "index": 34,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "1e3b19061f7f8694ed62663caa89a9e2dc55e3edcd7a06bc77cd9cd45ce5bd6a",
+      "cache_hit": false,
+      "raw_file": "c0034.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「必ずしも全てを実現できるわけではありません」で部分否定であり、「全てではないが実現できるものもある」という範囲を示している。候補は「全てを実現することはできません」とし、全体否定または全部実現は不可能という断定に読める。これにより「必ずしも〜ない」という範囲の限定が失われ、実現できる機能の範囲や、全てを実現できる場合がありうるという余地が変わっている。したがって条件・範囲の保持という観点では原文と異なる意味になっている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.95,
+      "cost_usd": 0.0042608
+    },
+    {
+      "index": 35,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "52fe3fdb585d6685128f64ddb4dec89a3265c3336599dea73f984bc0de43e3be",
+      "cache_hit": false,
+      "raw_file": "c0035.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「必ずしも全てを実現できるわけではありません」と部分否定で、「全てが実現できるとは限らない（一部は実現できない可能性がある）」という意味。候補は「全てを実現することはできません」と全否定的・断定的になり、「全てを実現できない」と読める。機能の実現可否の対象範囲（全て／一部）が変わっている。主体・対象そのものの入れ替えではないが、否定の作用範囲（修飾先）が変化して意味が異なる。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.6,
+      "cost_usd": 0.0041674
+    },
+    {
+      "index": 36,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "22f38dc78b96636c8ff9d8e9d9bef6b3bf0507e236c49634b798729e0a419a1b",
+      "cache_hit": false,
+      "raw_file": "c0036.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「必ずしも全てを実現できるわけではありません」で部分否定であり、全てを実現できる場合もあり得る（可能性の残る）ことを示している。候補は「全てを実現することはできません」と全否定的な不可能の断定になり、「できる」の可能の強さが変わっている。「絞らなければならないことはよくあります」の義務表現と現在時制は保たれているが、可能性の度合いが変化しているためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.44,
+      "cost_usd": 0.003995800000000001
+    },
+    {
+      "index": 37,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "745b363b9d7d0a11fb7ffdb363023fe3d9564ac848ef321f4350f5f59208393c",
+      "cache_hit": false,
+      "raw_file": "c0037.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は数値・単位・期限・頻度・先後関係の保持である。原文の「必ずしも全てを実現できるわけではありません」は部分否定で、全てを実現できる場合もあり得ることを示す。候補の「全てを実現することはできません」は全否定に近く、実現可能な場合を排除する。この変化は「全て」という量の範囲の変更に当たり、数量・範囲の意味が変わっている。一方、「よくあります」という頻度や、「予算やスケジュール」の関係、先後関係は保たれている。ただし、量(全て)の範囲が変わっているため、この観点では原文の働きが保たれていないと判断する。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.87,
+      "cost_usd": 0.004723400000000001
+    },
+    {
+      "index": 38,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "5134aff31a7be4408f954cfa0f05407b20ab7780cc6876156643e2809dcfba8e",
+      "cache_hit": false,
+      "raw_file": "c0038.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「必ずしも全てを実現できるわけではありません」と部分否定で、一部は実現できる可能性を残している。候補は「全てを実現することはできません」と全否定に近い断定になり、「必ずしも」が消えている。ただしこの観点は、原文にない主体・条件・完了状態・理由・具体例・固有名の追加の有無である。候補に新たな主体、条件、理由、具体例、固有名は加わっていない。後続文「予算やスケジュールの関係から…」も原文のままである。断定が強まる問題は別観点（意味の強さ）であり、この観点では具体化の追加はないと判断する。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.71,
+      "cost_usd": 0.004646000000000001
+    },
+    {
+      "index": 39,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "c82bb2946b60bb971f306923981d36d38d39f9a7e3ef8208d57a3c31b2af0d08",
+      "cache_hit": false,
+      "raw_file": "c0039.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「必ずしも全てを実現できるわけではありません」は部分否定で、全てを実現できる場合もあるが、できないこともあるという意味です。候補「全てを実現することはできません」は全否定に近く、全てを実現できる可能性を排除しています。意味が変わっており、不要で意味を変える書換えです。後続の「実現する機能を絞らなければならないことはよくあります」は変わっていません。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 4.68,
+      "cost_usd": 0.0039131999999999995
+    },
+    {
+      "index": 40,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "52fb38b1964a7018aed4935ec2b7ab4e51499d28fef3c99483a20141706e0de5",
+      "cache_hit": false,
+      "raw_file": "c0040.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務の資料はサービス・業務企画時点で収集する。",
+          "既存の情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。",
+          "調達後に変更内容が判明した場合のコスト増加の可能性に留意すべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.62,
+      "cost_usd": 0.0041248
+    },
+    {
+      "index": 41,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "729e51f0322ebfc15d53a38a1ec90ab7dd779573eb041ac032ee1ca8beb65799",
+      "cache_hit": false,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務の資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」とあり、直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存の情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に、既存のサービス・業務や情報システムの資料をサービス・業務企画時点で収集すると述べられており、情報システムの資料も含まれる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を推奨していることが読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合のコスト増加の可能性に留意すべきである。",
+            "reason": "文脈に「追加のコストがかかる可能性がありますので、留意してください」とあり、留意すべきことが直接述べられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.12,
+      "cost_usd": 0.015019999999999999
+    },
+    {
+      "index": 42,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "52fb38b1964a7018aed4935ec2b7ab4e51499d28fef3c99483a20141706e0de5",
+      "cache_hit": true,
+      "raw_file": "c0040.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務の資料はサービス・業務企画時点で収集する。",
+          "既存の情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。",
+          "調達後に変更内容が判明した場合のコスト増加の可能性に留意すべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 43,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "729e51f0322ebfc15d53a38a1ec90ab7dd779573eb041ac032ee1ca8beb65799",
+      "cache_hit": true,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務の資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」とあり、直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存の情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に、既存のサービス・業務や情報システムの資料をサービス・業務企画時点で収集すると述べられており、情報システムの資料も含まれる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を推奨していることが読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合のコスト増加の可能性に留意すべきである。",
+            "reason": "文脈に「追加のコストがかかる可能性がありますので、留意してください」とあり、留意すべきことが直接述べられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 44,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "52fb38b1964a7018aed4935ec2b7ab4e51499d28fef3c99483a20141706e0de5",
+      "cache_hit": true,
+      "raw_file": "c0040.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務の資料はサービス・業務企画時点で収集する。",
+          "既存の情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。",
+          "調達後に変更内容が判明した場合のコスト増加の可能性に留意すべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 45,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "729e51f0322ebfc15d53a38a1ec90ab7dd779573eb041ac032ee1ca8beb65799",
+      "cache_hit": true,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務の資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」とあり、直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存の情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に、既存のサービス・業務や情報システムの資料をサービス・業務企画時点で収集すると述べられており、情報システムの資料も含まれる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を推奨していることが読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合のコスト増加の可能性に留意すべきである。",
+            "reason": "文脈に「追加のコストがかかる可能性がありますので、留意してください」とあり、留意すべきことが直接述べられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 46,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "c9457fcbd6bff6474c2543b1d08ad1cbdb23bb3a9691caa6b7c1d3cbcd97b8a1",
+      "cache_hit": false,
+      "raw_file": "c0046.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文と候補は完全に同一の文章である。「収集しますが」「最新化を行いましょう」「追加のコストがかかる可能性がありますので、留意してください」のいずれも候補で同じ形で保たれており、否定・肯定の反転や、禁止と許可の入れ替え、否定の追加・削除は生じていない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.67,
+      "cost_usd": 0.0036362
+    },
+    {
+      "index": 47,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "f9f3a71e904a3a51f68afd14d624a6c95040dc7b31b624113134d937af295fad",
+      "cache_hit": false,
+      "raw_file": "c0047.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一である。「調達後に変更内容が判明した場合は」という条件、「要件定義を開始する時点で」「サービス・業務企画時点で」という時点の範囲、「追加のコストがかかる可能性があります」という可能性の程度がすべてそのまま保たれており、条件・例外・範囲の脱落、追加、変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.94,
+      "cost_usd": 0.0037848
+    },
+    {
+      "index": 48,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "90d57bffc8ee600000d683f2ca56fb5744f18ff4c0f9a6990824a03fef13238a",
+      "cache_hit": false,
+      "raw_file": "c0048.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一である。「資料はサービス・業務企画時点で収集します」「要件定義を開始する時点で最新化を行いましょう」「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」といった動作の主体、対象、修飾先、条件の関係がすべてそのまま保たれており、入れ替え・追加・省略はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.67,
+      "cost_usd": 0.0038474
+    },
+    {
+      "index": 49,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "51f992dffaf5a92a575cd7144b1628708c2b6dbf43a6343a4fb4fd0f454419cc",
+      "cache_hit": false,
+      "raw_file": "c0049.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文と候補は完全に同一である。「最新化を行いましょう」（推奨）、「可能性がありますので、留意してください」（依頼）、「収集します」（現在形）といった義務・推奨の強さと時制がすべてそのまま保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.55,
+      "cost_usd": 0.0033818
+    },
+    {
+      "index": 50,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "078b4eaf2ddde6f5bb9f95e1dc423046f744eccd739893ceed266a6cd2225578",
+      "cache_hit": false,
+      "raw_file": "c0050.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文と候補は完全に同一である。「サービス・業務企画時点で収集」と「要件定義を開始する時点で最新化」という先後関係、および「調達後に変更内容が判明した場合」という時点の条件が、候補でも「サービス・業務企画時点で収集」「要件定義を開始する時点で最新化」「調達後に変更内容が判明した場合」としてそのまま保たれている。数値・期限・頻度・順序に変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.6,
+      "cost_usd": 0.0040734000000000005
+    },
+    {
+      "index": 51,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9eb239dffc1c4d26b8c53ce8c8f4bde0bc9fc14b19a87c732707263e9752d7e2",
+      "cache_hit": false,
+      "raw_file": "c0051.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一で、「サービス・業務企画時点で収集します」「要件定義を開始する時点で最新化を行いましょう」「追加のコストがかかる可能性があります」など、主体・条件・完了状態・理由・具体例・固有名の追加は一切ない。原文の意味・働きは保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.4,
+      "cost_usd": 0.00364
+    },
+    {
+      "index": 52,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "eca3fa7fa50d5aa8f02ef248a4f734f9121b81a540d566521b9a043345aa2bc2",
+      "cache_hit": false,
+      "raw_file": "c0052.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文と候補は「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集しますが、要件定義を開始する時点で最新化を行いましょう。」以下、全文が完全に同一で、変更が一切ない。原文はすでに明確であり、無変更は適切。不要な書換えは行われていないため、この観点では問題ない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.32,
+      "cost_usd": 0.0037472
+    },
+    {
+      "index": 53,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "1eba2f4f11c1fb639e924335c1818c541d925ce951c4b22af6045d7796c71644",
+      "cache_hit": false,
+      "raw_file": "c0053.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務の資料は、サービス・業務企画の時点で集める。",
+          "既存の情報システムの資料は、サービス・業務企画の時点で集める。",
+          "既存のサービス・業務の資料は、要件定義を開始する時点で最新化すべきである。",
+          "既存の情報システムの資料は、要件定義を開始する時点で最新化すべきである。",
+          "調達後に変更内容が判明すると、追加のコストがかかる可能性がある。",
+          "調達後に変更内容が判明する場合のコスト増加の可能性に留意すべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.25,
+      "cost_usd": 0.004393800000000001
+    },
+    {
+      "index": 54,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "9798d4ae95064ab5e9f0e03aac9603df7f6a351a9d60ad73d4405a0536e0b3ab",
+      "cache_hit": false,
+      "raw_file": "c0054.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務の資料は、サービス・業務企画の時点で集める。",
+            "reason": "文脈に、既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集するとあるため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存の情報システムの資料は、サービス・業務企画の時点で集める。",
+            "reason": "文脈に、既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集するとあるため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務の資料は、要件定義を開始する時点で最新化すべきである。",
+            "reason": "文脈に、要件定義を開始する時点で最新化を行いましょうとあり、サービス・業務の資料も対象に含まれるため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存の情報システムの資料は、要件定義を開始する時点で最新化すべきである。",
+            "reason": "文脈に、要件定義を開始する時点で最新化を行いましょうとあり、情報システムの資料も対象に含まれるため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明すると、追加のコストがかかる可能性がある。",
+            "reason": "文脈に、調達後に変更内容が判明した場合は追加のコストがかかる可能性があると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明する場合のコスト増加の可能性に留意すべきである。",
+            "reason": "文脈に、調達後に変更内容が判明した場合は追加のコストがかかる可能性があるため留意するよう述べられており、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.29,
+      "cost_usd": 0.016194
+    },
+    {
+      "index": 55,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "1eba2f4f11c1fb639e924335c1818c541d925ce951c4b22af6045d7796c71644",
+      "cache_hit": true,
+      "raw_file": "c0053.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務の資料は、サービス・業務企画の時点で集める。",
+          "既存の情報システムの資料は、サービス・業務企画の時点で集める。",
+          "既存のサービス・業務の資料は、要件定義を開始する時点で最新化すべきである。",
+          "既存の情報システムの資料は、要件定義を開始する時点で最新化すべきである。",
+          "調達後に変更内容が判明すると、追加のコストがかかる可能性がある。",
+          "調達後に変更内容が判明する場合のコスト増加の可能性に留意すべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 56,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "9798d4ae95064ab5e9f0e03aac9603df7f6a351a9d60ad73d4405a0536e0b3ab",
+      "cache_hit": true,
+      "raw_file": "c0054.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務の資料は、サービス・業務企画の時点で集める。",
+            "reason": "文脈に、既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集するとあるため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存の情報システムの資料は、サービス・業務企画の時点で集める。",
+            "reason": "文脈に、既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集するとあるため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務の資料は、要件定義を開始する時点で最新化すべきである。",
+            "reason": "文脈に、要件定義を開始する時点で最新化を行いましょうとあり、サービス・業務の資料も対象に含まれるため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存の情報システムの資料は、要件定義を開始する時点で最新化すべきである。",
+            "reason": "文脈に、要件定義を開始する時点で最新化を行いましょうとあり、情報システムの資料も対象に含まれるため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明すると、追加のコストがかかる可能性がある。",
+            "reason": "文脈に、調達後に変更内容が判明した場合は追加のコストがかかる可能性があると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明する場合のコスト増加の可能性に留意すべきである。",
+            "reason": "文脈に、調達後に変更内容が判明した場合は追加のコストがかかる可能性があるため留意するよう述べられており、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 57,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "52fb38b1964a7018aed4935ec2b7ab4e51499d28fef3c99483a20141706e0de5",
+      "cache_hit": true,
+      "raw_file": "c0040.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務の資料はサービス・業務企画時点で収集する。",
+          "既存の情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。",
+          "調達後に変更内容が判明した場合のコスト増加の可能性に留意すべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 58,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "c3d70355ac26f8feb6da0a84c8261407bb5eed0cc0e11fb36d2da52e7b1d59cc",
+      "cache_hit": false,
+      "raw_file": "c0058.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務の資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料は、サービス・業務企画の時点で集めます」とあり、サービス・業務の資料も企画時点で収集することが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存の情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に、既存のサービス・業務や情報システムの資料をサービス・業務企画の時点で集めると述べられているため、情報システムの資料も企画時点で収集することが読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化しましょう」とあり、最新化を行うべきという推奨が述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明すると、追加のコストがかかる可能性があります」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合のコスト増加の可能性に留意すべきである。",
+            "reason": "文脈に追加コストの可能性が述べられ、「留意してください」と促されているため、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.32,
+      "cost_usd": 0.015016000000000002
+    },
+    {
+      "index": 59,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "3e1705b8b046390e729c2082ab96c7d614af43d543f08241b7fd0c66a3b5e15a",
+      "cache_hit": false,
+      "raw_file": "c0059.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は否定・禁止表現を含まず、「収集しますが…最新化を行いましょう」「変更内容が判明した場合は…コストがかかる可能性があります。留意してください」という肯定的な勧奨・注意喚起である。候補も「集めますが…最新化しましょう」「判明すると…可能性があります。留意してください」と、肯定の関係と留意の依頼が保たれており、否定の追加・削除や禁止と許可の入れ替わりはない。「判明した場合は」が「判明すると」になっているのは条件の言い換えで、否定・肯定には影響しない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.2,
+      "cost_usd": 0.0045052
+    },
+    {
+      "index": 60,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "cbc3b38c4ede8d19a9e86aa7297f04d2447f51c1c051277778f0e2a794c881ae",
+      "cache_hit": false,
+      "raw_file": "c0060.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「調達後に変更内容が判明した場合は」は、候補では「調達後に変更内容が判明すると」となっている。条件の働きは保たれており、「場合」と「と」の言い換えは自然。「サービス・業務企画時点で収集しますが」→「サービス・業務企画の時点で集めますが」、「要件定義を開始する時点で最新化を行いましょう」→「要件定義を開始する時点で最新化しましょう」も、時点の範囲や対比関係が変わっていない。「追加のコストがかかる可能性がありますので、留意してください」を「可能性があります。留意してください。」と分けても、理由関係はやや弱まるが、条件・範囲・例外の論理は脱落も追加もない。したがって、この観点では原文の意味と働きが保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.37,
+      "cost_usd": 0.0052358000000000005
+    },
+    {
+      "index": 61,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "271697a8fb115fc30ee7b69cafa6a3eb9176a3238ae0fd24cf6456f73e895407",
+      "cache_hit": false,
+      "raw_file": "c0061.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「資料は…収集します」「要件定義を開始する時点で最新化を行いましょう」は、候補でも「集めます」「最新化しましょう」と、資料が対象で、動作の主体（調達側の職員）も変わらず保たれている。「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」も「調達後に変更内容が判明すると、追加のコストがかかる可能性があります」と、判明の対象（変更内容）とコスト増の係り先が同じ。「留意してください」は文を分けただけで、宛先や対象の入れ替え・追加・省略はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.46,
+      "cost_usd": 0.0046224000000000005
+    },
+    {
+      "index": 62,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "7891cf4f96e27cf7248fe6a1dd93c7c191c6f638bc891f130d1535139aebd346",
+      "cache_hit": false,
+      "raw_file": "c0062.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「最新化を行いましょう」は勧奨で、候補の「最新化しましょう」も同じ強さの勧奨を保っている。「収集しますが」→「集めますが」も現在・予定の時制と主体が同じ。原文の「留意してください」は依頼・推奨であり、候補でも「留意してください。」と同じ強さで残っている。「判明した場合は」→「判明すると」は条件の言い換えで、「可能性がありますので」→「可能性があります。」も文の分割にとどまり、義務・推奨の強さや時制は変わっていない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.31,
+      "cost_usd": 0.0044568
+    },
+    {
+      "index": 63,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9f940dc9a70ca02255a91e3d7e2a8064e7bb75dc10fa13af6903c060e998e038",
+      "cache_hit": false,
+      "raw_file": "c0063.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「サービス・業務企画時点で収集します」→「要件定義を開始する時点で最新化」という先後関係を述べており、候補も「サービス・業務企画の時点で集めます」→「要件定義を開始する時点で最新化しましょう」と同じ順序・時点を保っている。「調達後に変更内容が判明した場合」も候補の「調達後に変更内容が判明すると」で時点が保たれている。数値・単位・頻度は原文にない。文の分割による「留意してください」も働きは同じ。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.14,
+      "cost_usd": 0.0042904
+    },
+    {
+      "index": 64,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "0910d2a753fb4cca049e5794e0a8b3c601f850692949780647acb81e62560122",
+      "cache_hit": false,
+      "raw_file": "c0064.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「収集しますが」「最新化を行いましょう」「判明した場合は」「追加のコストがかかる可能性がありますので、留意してください」に対し、候補は「集めますが」「最新化しましょう」「判明すると」「可能性があります。留意してください」と言い換えている。主体・条件・完了状態・理由・具体例・固有名の追加はなく、「判明すると」も原文の「場合は」と同じ条件の範囲である。文を分けたことで因果の「ので」が外れているが、新しい理由や具体化ではない。よってこの観点では意味が保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.32,
+      "cost_usd": 0.008576
+    },
+    {
+      "index": 65,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "15eb5424fa4d2b29da7453e10cf00bf1f3c17991dd089ec4d51aa3834ac45ec9",
+      "cache_hit": false,
+      "raw_file": "c0065.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「収集しますが」「最新化を行いましょう」「変更内容が判明した場合は…留意してください」に対し、候補は「集めますが」「最新化しましょう」「判明すると…あります。留意してください。」と変えている。意味・主体・条件・義務の強さ（「しましょう」の勧奨、「留意してください」の依頼）は保たれている。ただし「収集」→「集め」への平易化、「最新化を行い」→「最新化し」への簡略化、「の時点」への助詞追加、一文の分割は、原文が既に明確で読みやすいため必ずしも必要ではない。それでも意味や働きは変わらず、自然な言い換えの範囲であり、過度な書換えとは言えない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.8,
+      "cost_usd": 0.009086
+    }
+  ],
+  "call_summary": {
+    "calls": 65,
+    "cache_hits": 16,
+    "failures": 0,
+    "seconds": 264.4,
+    "cost_usd_list_price": 0.3097,
+    "calls_without_cost": 0
+  },
+  "finished_at": "2026-10-16T23:34:17.915746+00:00"
+}

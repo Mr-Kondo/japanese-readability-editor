@@ -1,0 +1,2978 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "config": {
+    "tool_version": 1,
+    "rubric_version": "ragas-ja-rubric-v1",
+    "rubric_sha256": "7f37f4309a2786203f376adfebd3d62e08df4be0d1d448c23480dd4f39dc81d1",
+    "metrics": [
+      "factual",
+      "rubric"
+    ],
+    "profile": "gov-org",
+    "aspects": [
+      "negation_polarity",
+      "condition_scope",
+      "actor_target",
+      "modality_strength",
+      "numbers_order",
+      "ungrounded_specificity",
+      "unnecessary_change"
+    ],
+    "atomicity": "high",
+    "coverage": "high",
+    "ragas_prompts": "Ragas 0.4.3 既定（英語の指示と例。日本語への適合は未検証）",
+    "llm_adapter": "ClaudeCliLLM（JSON指示をプロンプト末尾に付加、ツールなし、逐次実行、同一プロンプトは再利用）",
+    "claude_flags": [
+      "--print",
+      "--safe-mode",
+      "--strict-mcp-config",
+      "--tools",
+      "",
+      "--no-session-persistence",
+      "--model",
+      "sonnet",
+      "--effort",
+      "medium",
+      "--output-format",
+      "json"
+    ],
+    "claude_system": "提供された文章を処理してください。ツールは使用しないでください。",
+    "claude_cli_version": "2.1.292 (Claude Code)",
+    "temperature_and_seed": "CLI から指定できない（不明）",
+    "python": "3.13.16",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "packages": {
+      "ragas": "0.4.3",
+      "langchain-community": "0.3.31",
+      "langchain-core": "1.6.11",
+      "langchain": "1.4.6",
+      "instructor": "1.3.2",
+      "openai": "1.109.1",
+      "pydantic": "2.14.1",
+      "numpy": "2.5.4"
+    }
+  },
+  "started_at": "2026-10-16T23:27:04.570325+00:00",
+  "input": {
+    "path": "/tmp/claude-501/ragas-inputs/subtle-p3.json",
+    "cases": 7,
+    "task_sha256": "a45dfce3eb1d5509d66718e79ce6611f347cefacb864533ed673eb2773881b37"
+  },
+  "cases": [
+    {
+      "id": "possibility-s6",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.75,
+          "status": "scored",
+          "value": 0.75,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 3,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "調達後に変更内容が判明した場合は、追加のコストがかかる。",
+                "reason": "文脈では追加のコストがかかる「可能性がある」と述べられているだけで、必ずかかるとは断定されていない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.75,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 3,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "調達後に変更内容が判明した場合は、追加のコストがかかる。",
+                "reason": "文脈では追加のコストがかかる「可能性がある」と述べられているだけで、必ずかかるとは断定されていない。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「追加のコストがかかる可能性がありますので」と可能性として述べているのに対し、候補は「追加のコストがかかりますので」と断定になっている。これは不確実性（可能性）の削除であり、否定・禁止の反転や追加・削除、禁止と許可の入れ替えには当たらない。「最新化を行いましょう」「留意してください」の働きも保たれており、否定・禁止の観点では問題ない（可能性の削除は別観点の問題）。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「追加のコストがかかる可能性がありますので」と可能性を示す表現で、追加コストの発生は確定ではない。候補は「追加のコストがかかりますので」と断定になっており、条件「調達後に変更内容が判明した場合」に対する帰結が可能性から必然へと変わっている。「場合」の条件自体は保たれているが、帰結の確度（範囲）が変更されているためfail。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「追加のコストがかかる可能性がありますので」が、候補では「追加のコストがかかりますので」となり、可能性の表現が消えて断定になっている。ただし、動作の主体（資料の収集・最新化を行う側）、対象（既存のサービス・業務や情報システムの資料）、修飾先（「調達後に変更内容が判明した場合は」）、宛先（留意する読者）は原文と同じで、入れ替え・追加・省略はない。変化は確度・断定の強さであり、この観点（主体・対象・修飾先の保持）の問題ではない。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「追加のコストがかかる可能性がありますので」と可能性として述べているが、候補は「追加のコストがかかりますので」と断定に変えている。注意喚起の強さ・確実性が変わり、可能性の表現が失われている。「最新化を行いましょう」「留意してください」「収集します」などの推奨の強さや時制は保たれているが、可能性の断定化は原文の働きを変える。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は数値・期限・頻度・先後関係の保持です。原文の「サービス・業務企画時点で収集」→「要件定義を開始する時点で最新化」という先後関係は、候補でも同じ順序で保たれています。数値や単位、期限、頻度の変更もありません。「調達後に変更内容が判明した場合」という時点条件も同一です。なお「追加のコストがかかる可能性があります」が「追加のコストがかかります」に変わり、断定の強さが変わっていますが、これは可能性の表現（確度）の問題であり、数値・期限・順序の観点には当たらないため、この観点ではpassとします。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「追加のコストがかかる可能性がありますので」と可能性として述べているが、候補は「追加のコストがかかりますので」と断定に変わっている。主体・条件・理由・具体例・固有名の新規追加はなく、この観点（原文にない具体化）では、可能性の記述が確定的な事実に具体化されている点が問題となる。原文では不確実だった事態が必ず起こるものとして述べられ、原文にない確定性が加わったため、意味が変わっている。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の「追加のコストがかかる可能性がありますので」が、候補では「追加のコストがかかりますので」に変わり、可能性の留保が消えて断定になっている。原文は「かかる可能性がある」という不確実性を示すが、候補は確実にかかると述べており、意味・主張の強さが変わっている。原文が明確で変更の必要がない箇所への不要な書換えであり、意味も変えているためfail。"
+        }
+      }
+    },
+    {
+      "id": "flag-dropped-k8s",
+      "document_id": "k8s-pod-lifecycle",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.6,
+          "status": "scored",
+          "value": 0.6,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 4,
+            "supported": 2,
+            "unsupported": 2,
+            "coverage": 0.5,
+            "unsupported_texts": [
+              {
+                "claim": "強制削除を実行するには --force フラグを指定する必要があります。",
+                "reason": "文脈では --grace-period=0 についてのみ言及されており、--force フラグについては何も述べられていません。"
+              },
+              {
+                "claim": "--force フラグは --grace-period=0 と共に指定する必要があります。",
+                "reason": "文脈には --force フラグに関する情報がなく、--grace-period=0 と併用する必要があるとは述べられていません。"
+              }
+            ]
+          },
+          "recomputed_value": 0.6,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「--grace-period=0 と共に --force というフラグを追加で指定する必要があります」と、両方の指定を必須としている。候補は「--grace-period=0 を指定する必要があります」のみで、--force の指定要件が欠落している。これにより、必要条件（肯定の要求）が一部消え、--force なしでも足りるという意味に変わる。否定語の有無ではなく、必須要件の削除であり、禁止・許可の働きが変わっている。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「--grace-period=0 と共に --force というフラグを追加で指定する必要があります」とあり、強制削除には両方のフラグが必須という条件（かつ）を示している。候補は「--grace-period=0 を指定する必要があります」のみで、「--force」の指定要件が脱落している。そのため必要条件の範囲が変わり、候補どおりだと --force なしで足りると読める。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「--grace-period=0 と共に --force というフラグを追加で指定する必要があります」と、指定すべき対象として --grace-period=0 と --force の2つを挙げている。候補は「--grace-period=0 を指定する必要があります」とだけ述べ、--force が省略されている。これにより、強制削除の実行に必要な指定対象が変わり、運用者が --force なしで実行してしまう恐れがある。手続の対象の省略に当たるためfail。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「--grace-period=0 と共に --force というフラグを追加で指定する必要があります」と、二つのフラグの指定を必須（「必要があります」）としている。候補は「--grace-period=0 を指定する必要があります」とし、義務の強さ（必要）と現在時制は保たれている。ただし義務の対象から --force が脱落しており、必須とされる要件が減っている。これは義務の対象範囲が変わり、「追加で指定する必要がある」という必須要件が失われているため、この観点では原文と異なる働きになっている。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「--grace-period=0 と共に --force というフラグを追加で指定する必要があります」と、2つのフラグの併用を求めている。候補は「--grace-period=0 を指定する必要があります」とだけ述べ、--force が脱落している。数値の「0」は保たれているが、必要な指定の組み合わせ（頻度・順序ではなく、必須条件の数）が変わり、--force なしでも実行できるように読める。ただしこの観点は数値・期限・順序であり、--force の欠落は主に条件・コマンドの脱落にあたる。数値「0」や順序の変更はなく、この観点では意味が保たれている。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「--grace-period=0 と共に --force というフラグを追加で指定する必要があります」と、--force の追加指定を必須条件としている。候補は「--grace-period=0 を指定する必要があります」のみで --force が消えている。これは新たな具体化の追加ではなく条件の欠落であり、この観点（原文にない主体・条件・完了状態・理由・具体例・固有名の追加）では、候補に原文にない要素は加わっていない。欠落は別観点の問題であり、本観点ではpass。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「--grace-period=0 と共に --force というフラグを追加で指定する必要があります」と、両方のフラグが必要だと述べている。候補は「--grace-period=0 を指定する必要があります」とだけ書き、「--force」の指定が欠落している。これは単なる言い換えではなく、必要なコマンド条件を削除しており、運用者が候補どおりに実行すると強制削除にならない可能性がある。意味・コマンドの保持という点で原文の働きが保たれていないため、不要な変更として fail。"
+        }
+      }
+    },
+    {
+      "id": "only-py",
+      "document_id": "py-library-tempfile",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.8,
+          "status": "scored",
+          "value": 0.8,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 2,
+            "unsupported": 1,
+            "coverage": 0.67,
+            "unsupported_texts": [
+              {
+                "claim": "ファイルは、作成したユーザのユーザ ID からのみ読み書きできる。",
+                "reason": "文脈には「作成したユーザの権限でファイルを読み書き出来ます」とあるが、そのユーザ ID \"からのみ\" 読み書きできるとは述べられていない。他のユーザがアクセスできないという限定は文脈から直接推論できない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.8,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「作成したユーザのユーザ ID からのみファイルを読み書き出来ます」と「のみ」で限定しており、他のユーザからの読み書きを暗に禁止している。候補は「作成したユーザの権限でファイルを読み書き出来ます」となり、「のみ」が消えて限定・排他性が失われている。これにより他ユーザが読み書きできないという暗黙の禁止が保たれず、許可の範囲が広がって読める。「誰からも実行不可です」と「継承されません」の否定は保たれている。ただし「のみ」の削除による制限の喪失は否定・禁止の働きの変化にあたる。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「作成したユーザのユーザ ID からのみファイルを読み書き出来ます」と、「のみ」で作成ユーザのユーザIDからに限定している。候補は「作成したユーザの権限でファイルを読み書き出来ます」とし、「のみ」の排他的限定が脱落している。他のユーザからはアクセスできないという範囲の制限が失われ、また「ユーザ ID」が「権限」に変わり範囲が曖昧になっている。他の2文は保たれているが、この観点では限定条件の脱落でfail。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「作成したユーザのユーザ ID からのみ」ファイルを読み書きできると、アクセス主体を作成ユーザのユーザ ID に限定している。候補は「作成したユーザの権限で」読み書きできるとしており、限定を示す「のみ」が消え、「ユーザ ID」も「権限」に変わっている。原文は作成ユーザ以外のアクセスを排除する意味だが、候補は作成ユーザの権限で操作できるという意味にとどまり、他のユーザが読み書きできないことは読み取れない。アクセス主体の範囲が変わっているため、この観点ではfailとする。他の文（実行不可、ファイル記述子の継承）は保たれている。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「読み書き出来ます」（可能）は候補でも「読み書き出来ます」で保たれており、「実行不可です」「継承されません」も同一で、時制も現在のまま変わっていない。義務・推奨の強さや時制の変更はない。「ユーザ ID からのみ」が「権限で」に変わった点は、限定の意味の変化であり、この観点（義務・推奨の強さと時制）の対象外。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は数値・単位・期限・頻度・先後関係の保持です。原文「作成したユーザのユーザ ID からのみファイルを読み書き出来ます」が候補で「作成したユーザの権限でファイルを読み書き出来ます」に変わっていますが、これは限定（「のみ」）や対象の変更であり、数値・期限・頻度・順序の変更ではありません。「実行不可」の記述や「子プロセスに継承されません」の文も同じ順序で保たれており、数値・単位・期限・頻度・先後関係に変化はありません。限定表現の欠落は別観点の問題であり、この観点ではpassとします。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「作成したユーザのユーザ ID からのみ」読み書きできると、ユーザ ID による限定を述べている。候補は「作成したユーザの権限で」と書き換えており、「ユーザ ID」が「権限」に置き換わり、「のみ」という限定も消えている。「権限」は原文にない概念で、ID での判定という条件が別の内容（権限の範囲）に具体化・変質している。他の文は同一。原文にない主体・条件の追加・変更があるためfail。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「作成したユーザのユーザ ID からのみ」と、ユーザ ID による限定を「のみ」で明示しているが、候補は「作成したユーザの権限でファイルを読み書き出来ます」に書き換えている。「のみ」が失われ、作成者以外は不可という排他性が消えている。また「ユーザ ID」が「権限」に変わり、識別子ベースの制約が一般的な権限の話に変わっている。読みやすさのために必要な変更ではなく、意味が変わる不要な書換えである。残りの2文は無変更で問題ない。"
+        }
+      }
+    },
+    {
+      "id": "hedge-essay",
+      "document_id": "az-002359",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 7,
+            "supported": 7,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 7,
+            "supported": 7,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 9,
+            "supported": 9,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文には否定の反転や禁止・許可の入れ替えはない。原文の「拾って行く場合がある」が候補では「拾って行く」と断定になり、「場合がある」という可能性・限定が削除されている。ただしこれは否定・禁止の保持という観点ではなく、様相・頻度の変化にあたる。「見落とす恐れがある」「まだ行かない所」「わけもなく」などの否定や構造は両者で同じように保たれており、否定・肯定の反転や追加・削除はない。この観点ではpass。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「拾って行く場合がある」で、のろい人が宝物を拾うのは一部の場合に限られるという限定的な働きを持つ。候補は「拾って行く」と言い切りになっており、「場合がある」が脱落している。そのため可能性・偶発性が一般的・断定的な事実に変わり、範囲が拡大している。「恐れがある」の部分は保たれているが、この点は結論を覆さない。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「頭の悪い人足ののろい人がずっとあとからおくれて来てわけもなくそのだいじな宝物を拾って行く場合がある」では、拾う主体は「足ののろい人」、対象は「だいじな宝物」で、「場合がある」により一部の事例として限定されている。候補は「拾って行く。」と言い切り、この限定が落ちている。ただし、動作の主体（足ののろい人）、対象（宝物）、修飾先（「途中の道ばた…にある肝心なもの」を受ける「そのだいじな宝物」）は入れ替わらず保たれている。「場合がある」の省略は断定の強さ（量・頻度）の変化であり、主体・対象・修飾先・宛先の入れ替え・追加・省略には当たらないため、この観点ではpass。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の末尾は「拾って行く場合がある」で、可能性・限定的な頻度を示す表現だが、候補は「拾って行く」と断定的な現在形に変わっている。「場合がある」が落ちたことで、時々起こりうるという可能性の強さが、常にそうなるという一般的事実に変わっている。「恐れがある」「行き着くこともできる」は保たれており時制は現在のままだが、最後の文の可能性の程度が変わっているためfailとする。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "数値・単位・期限・頻度はなく、先後関係は「人より先に」行き着く点と、のろい人が「ずっとあとからおくれて来て」拾う点が候補でも「ずっとあとからおくれて来て」としてそのまま保たれている。違いは末尾「拾って行く場合がある」が「拾って行く」になった点だが、これは頻度（時々／場合がある）に関わる変更とも読める。原文は「場合がある」という限定的な頻度を示すのに対し、候補は断定的で常にそうなるように読める。この観点では頻度の変更として扱うのが妥当で、働きが変わっている。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の末尾は「拾って行く場合がある」で、拾うのが時に起こる可能性だと限定している。候補は「拾って行く。」と言い切っており、「場合がある」という条件・限定が失われている。ただし、これは新たな主体、条件、理由、具体例、固有名の追加ではなく、むしろ限定の脱落（断定化）である。「原文にない具体化の有無」の観点では、具体的な情報の追加はなく、「頭の悪い人足ののろい人」「わけもなく」「だいじな宝物」など他の要素もそのまま保たれているため、この観点では原文の意味・働きが保たれていると判断する。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の末尾は「拾って行く場合がある」で、頭の悪い人が宝物を拾うのは常にではなく起こりうる場合があるという限定的な表現です。候補は「拾って行く」と言い切りに変え、「場合がある」を削除しています。これにより可能性・頻度の限定が失われ、一般的事実の断定に意味が変わっています。原文は意味上も読みやすさ上も明確で、この削除は必要のない変更であり、論旨のニュアンスを変えてしまっています。それ以外の部分は原文と同一で、無変更が適切な箇所です。"
+        }
+      }
+    },
+    {
+      "id": "strength-up-org",
+      "document_id": "ipa-o-eval",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「避けることを推奨します」は推奨表現で、候補「避けてください」は依頼・指示表現。どちらも「完全に停止しているプロジェクトを避ける」という肯定的な行為を求めており、否定・禁止の反転や追加・削除はない。強さの違いはあるが、この観点（否定・禁止の保持）では禁止と許可の入れ替えは起きていない。第1文も同一で保たれている。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「避けることを推奨します」は推奨の強さを示す表現ですが、候補は「避けてください」と依頼・指示の形になっています。ただし、この観点は条件・例外・範囲の保持です。条件・範囲に関しては、「最近6ヶ月以内」「〜か、〜か、〜か」という確認条件や、「完全に停止しているプロジェクト」という対象範囲、「セキュリティリスクや将来性の観点から」という理由の範囲は、原文と候補で同一に保たれています。強さの変化は別観点（推奨や義務の強さ）の問題であり、この観点では条件・例外・範囲の脱落、追加、変更はありません。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "この観点は動作の主体・対象・修飾先の保持です。原文「避けることを推奨します」は、避ける動作の主体が文脈上の読者（開発者）で、それを推奨する書き手の立場の表現です。候補「避けてください」は同じ「完全に停止しているプロジェクト」を対象とし、「セキュリティリスクや将来性の観点から」という修飾先も保たれています。動作の主体は読者のまま、対象や宛先の入れ替え・追加・省略はありません。推奨から依頼への強さの変化は主体・対象・修飾先の観点とは別の問題なので、ここでは判定に含めません。第1文は同一です。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文は「避けることを推奨します」と推奨の強さで述べているが、候補は「避けてください」と直接的な依頼・指示形になっている。「推奨」は助言レベルだが、「〜してください」はより強い要請・指示として働き、推奨の強さが上がっている。時制は現在のまま保たれているが、推奨から指示への強さの変化があるためfail。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "数値・期限・頻度・順序の観点では、原文の「最近6ヶ月以内」は候補でも「最近6ヶ月以内」のまま保たれており、確認項目の並び（更新、Issueへの反応、pull requestのマージ）や文の順序も同じである。変更は「避けることを推奨します」から「避けてください」への表現の強さであり、これは数値・期限・順序とは別の観点なので、この観点ではfailにしない。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「避けることを推奨します」を候補は「避けてください」と言い換えている。これは推奨の強さの変化（他観点）であり、「原文にない主体、条件、完了状態、理由、具体例、固有名」の追加ではない。「セキュリティリスクや将来性の観点から」という理由は原文と同じで、新たな具体化はない。1文目も同一。よってこの観点では原文の意味・働きが保たれている。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "fail",
+          "reason": "原文の1文目は候補で完全に同一で、不要な変更はない。2文目は原文「避けることを推奨します」が候補「避けてください」に変わっている。これは推奨から指示（より強い要請）への変更で、依頼で保つよう求められた「推奨や義務の強さ」が変わっている。原文は明確で、この書換えは意味や読みやすさに必要なものではない。よって不要な変更にあたる。"
+        }
+      }
+    },
+    {
+      "id": "paraphrase-org",
+      "document_id": "ipa-o-eval",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 7,
+            "supported": 7,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 7,
+            "supported": 7,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 6,
+            "supported": 6,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文「適合するかを判断してください」と候補「合うかどうかを判断してください」は、いずれも肯定の依頼（確認して判断せよ）であり、否定・禁止は含まれない。「ライセンス種別」→「ライセンスの種類」も言い換えのみで、否定の追加・削除や禁止と許可の入れ替えはない。「かどうか」の追加は二択の判断を明示するだけで意味は同じ。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「ライセンス種別を確認し」「あなたの利用方法（社内利用、配布、SaaS提供）に適合するかを判断してください」に対し、候補は「ライセンスの種類を確認し」「あなたの利用方法（社内利用、配布、SaaS提供）に合うかどうかを判断してください」となっている。確認手段（LICENSEファイルやREADME）、利用方法の範囲（社内利用、配布、SaaS提供の3つ）、判断の対象（適合するか）はいずれも保たれており、条件・範囲・論理関係の脱落や追加、変更はない。「種別→種類」「適合する→合うかどうか」は自然な言い換えである。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「LICENSEファイルやREADMEでライセンス種別を確認し」は候補で「ライセンスの種類を確認し」となり、確認の対象・場所は同じ。「あなたの利用方法…に適合するかを判断してください」も「あなたの利用方法…に合うかどうかを判断してください」で、判断の主体（あなた）、対象（利用方法）、宛先（ライセンス）の関係が保たれている。主体・対象・修飾先の入れ替え、追加、省略は見られない。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「判断してください」という依頼表現は、候補でも「判断してください」のまま保たれており、義務・推奨の強さは変わらない。「確認し、…適合するかを判断」という現在の行為の指示という時制も同じ。「適合するか」が「合うかどうか」に変わったのは言い換えにすぎず、強さや時制に影響しない。「ライセンス種別」→「ライセンスの種類」も同様に自然な言い換えである。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文と候補には数値・期限・頻度の表現がなく、順序に関わる要素は「確認し、…判断してください」の先後関係のみ。候補も「ライセンスの種類を確認し、…判断してください」で確認→判断の順が保たれている。利用方法の列挙「社内利用、配布、SaaS提供」も同じ3項目・同じ順序。「適合するか」→「合うかどうか」、「種別」→「種類」は自然な言い換えで、この観点では変更なし。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「ライセンス種別を確認し」「適合するかを判断してください」は、候補で「ライセンスの種類を確認し」「合うかどうかを判断してください」と言い換えられているだけである。「社内利用、配布、SaaS提供」の例示も原文どおりで、新たな主体、条件、完了状態、理由、具体例、固有名の追加はない。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文の「ライセンス種別を確認し」「適合するかを判断してください」に対し、候補は「ライセンスの種類を確認し」「合うかどうかを判断してください」と言い換えている。これは同義の語の置換で、確認対象・判断内容・命令の強さ（「してください」）、括弧内の例、太字見出しの記法はすべて保たれている。ただし、原文はすでに明確で言い換えは必須ではなく、「適合する」から「合う」へはやや平易で口語的になり、専門的なニュアンスが少し弱まる。それでも意味や働きは変わらず、変更も小さいため、不要な書換えとして問題視するほどではない。"
+        }
+      }
+    },
+    {
+      "id": "control-org",
+      "document_id": "ipa-o-ospo",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 11,
+            "supported": 11,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 11,
+            "supported": 11,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 11,
+            "supported": 11,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      },
+      "rubric": {
+        "negation_polarity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文と候補は完全に同一である。「すべての項目をチェックする必要はありません」という否定（不要）と、「段階的に採用・実装してください」という肯定の依頼が、候補でもそのまま保たれている。否定・禁止の反転、追加、削除はない。"
+        },
+        "condition_scope": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文と候補は完全に同一である。「組織の規模、事業内容、OSSの利用形態、成熟度によって」という条件、「すべての項目をチェックする必要はありません」という範囲、「必要な項目から段階的に採用・実装してください」という指示の強さと範囲が、候補でもそのまま保たれており、条件・例外・範囲の脱落、追加、変更はない。"
+        },
+        "actor_target": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文と候補は完全に同一である。「実装すべき項目や優先度」「自組織の目的や優先度に応じて、必要な項目から段階的に採用・実装してください」といった、動作の主体（読み手への依頼）、対象（項目）、修飾先、宛先のいずれも変更・追加・省略がなく、そのまま保たれている。"
+        },
+        "modality_strength": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一である。「すべての項目をチェックする必要はありません」（不要）、「段階的に採用・実装してください」（依頼）、「実装すべき項目」（推奨）といった義務・推奨の強さと現在形の時制がそのまま保たれており、変更はない。"
+        },
+        "numbers_order": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文と候補は完全に同一である。「必要な項目から段階的に採用・実装してください」という段階的な順序や、「組織の規模、事業内容、OSSの利用形態、成熟度」といった並びも変更されておらず、数値・単位・期限・頻度・先後関係に変化はない。"
+        },
+        "ungrounded_specificity": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "候補は原文と完全に同一で、「組織の規模、事業内容、OSSの利用形態、成熟度」「すべての項目をチェックする必要はありません」「必要な項目から段階的に採用・実装してください」といった表現がそのまま保たれている。主体、条件、完了状態、理由、具体例、固有名の追加は一切ないため、原文にない具体化はない。"
+        },
+        "unnecessary_change": {
+          "status": "scored",
+          "value": "pass",
+          "reason": "原文は「組織の規模、事業内容、OSSの利用形態、成熟度によって、実装すべき項目や優先度は異なります。」「そのため、すべての項目をチェックする必要はありません。」「自組織の目的や優先度に応じて、必要な項目から段階的に採用・実装してください。」の3文で、候補はこれと完全に同一である。原文はすでに明確で、無変更が適切であり、不要な書換えは一切行われていない。義務の強さ（「必要はありません」「してください」）や条件も保たれている。"
+        }
+      }
+    }
+  ],
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "calls": [
+    {
+      "index": 1,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "38d76f04c8ab97c4dc56d3498f1c4e8a3c5935b99ceff089315032b88a83fe23",
+      "cache_hit": false,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる。",
+          "調達後に変更内容が判明した場合の追加コストに留意すべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 6.5,
+      "cost_usd": 0.008102
+    },
+    {
+      "index": 2,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "db1341ae7a864571bb3600be7562c097d21d445d353a7478525eb4f21d8a78e4",
+      "cache_hit": false,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に、既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集すると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に、要件定義を開始する時点で最新化を行いましょうと書かれており、最新化を行うべきという趣旨に合致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる。",
+            "reason": "文脈では追加のコストがかかる「可能性がある」と述べられているだけで、必ずかかるとは断定されていない。",
+            "verdict": 0
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合の追加コストに留意すべきである。",
+            "reason": "文脈に、調達後に変更内容が判明した場合は追加のコストがかかる可能性があるので留意するよう書かれており、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.06,
+      "cost_usd": 0.013838
+    },
+    {
+      "index": 3,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "38d76f04c8ab97c4dc56d3498f1c4e8a3c5935b99ceff089315032b88a83fe23",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる。",
+          "調達後に変更内容が判明した場合の追加コストに留意すべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 4,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "db1341ae7a864571bb3600be7562c097d21d445d353a7478525eb4f21d8a78e4",
+      "cache_hit": true,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に、既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集すると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に、要件定義を開始する時点で最新化を行いましょうと書かれており、最新化を行うべきという趣旨に合致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる。",
+            "reason": "文脈では追加のコストがかかる「可能性がある」と述べられているだけで、必ずかかるとは断定されていない。",
+            "verdict": 0
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合の追加コストに留意すべきである。",
+            "reason": "文脈に、調達後に変更内容が判明した場合は追加のコストがかかる可能性があるので留意するよう書かれており、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 5,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "52fb38b1964a7018aed4935ec2b7ab4e51499d28fef3c99483a20141706e0de5",
+      "cache_hit": false,
+      "raw_file": "c0005.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。",
+          "調達後に変更内容が判明した場合のコスト増加の可能性に留意すべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.38,
+      "cost_usd": 0.00824
+    },
+    {
+      "index": 6,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "88c4577fc3941b9c312c217759368afd2a0bc8bb788e28ac1f8141db2c006fbd",
+      "cache_hit": false,
+      "raw_file": "c0006.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は、要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を推奨している内容と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかります」とあり、追加コストが発生することが述べられているため、可能性があるという表現も文脈から推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合のコスト増加の可能性に留意すべきである。",
+            "reason": "文脈に「追加のコストがかかりますので、留意してください」とあり、コスト増加について留意するよう促している内容と一致する。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.0,
+      "cost_usd": 0.014116
+    },
+    {
+      "index": 7,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "ccf76c4aa96ca4cda60cfa20f6968605d1dc4b4ec833485fd6c6d256fa812ba3",
+      "cache_hit": false,
+      "raw_file": "c0007.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「追加のコストがかかる可能性がありますので」と可能性として述べているのに対し、候補は「追加のコストがかかりますので」と断定になっている。これは不確実性（可能性）の削除であり、否定・禁止の反転や追加・削除、禁止と許可の入れ替えには当たらない。「最新化を行いましょう」「留意してください」の働きも保たれており、否定・禁止の観点では問題ない（可能性の削除は別観点の問題）。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.11,
+      "cost_usd": 0.008268000000000001
+    },
+    {
+      "index": 8,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "6bfed7d79542705324876ec87968985aae3c56b570bdd59a1ff9246882b942d3",
+      "cache_hit": false,
+      "raw_file": "c0008.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「追加のコストがかかる可能性がありますので」と可能性を示す表現で、追加コストの発生は確定ではない。候補は「追加のコストがかかりますので」と断定になっており、条件「調達後に変更内容が判明した場合」に対する帰結が可能性から必然へと変わっている。「場合」の条件自体は保たれているが、帰結の確度（範囲）が変更されているためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.1,
+      "cost_usd": 0.008094
+    },
+    {
+      "index": 9,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "6fb2cc7c3a86efb46e482ae801f223a303a85c3d98b789af6d1710e2e5b29e82",
+      "cache_hit": false,
+      "raw_file": "c0009.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「追加のコストがかかる可能性がありますので」が、候補では「追加のコストがかかりますので」となり、可能性の表現が消えて断定になっている。ただし、動作の主体（資料の収集・最新化を行う側）、対象（既存のサービス・業務や情報システムの資料）、修飾先（「調達後に変更内容が判明した場合は」）、宛先（留意する読者）は原文と同じで、入れ替え・追加・省略はない。変化は確度・断定の強さであり、この観点（主体・対象・修飾先の保持）の問題ではない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.19,
+      "cost_usd": 0.008564
+    },
+    {
+      "index": 10,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "a8c8ea08316d623d3b84e6426446b7d9b46c0092ba64e3fe2dc843a727f9356d",
+      "cache_hit": false,
+      "raw_file": "c0010.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「追加のコストがかかる可能性がありますので」と可能性として述べているが、候補は「追加のコストがかかりますので」と断定に変えている。注意喚起の強さ・確実性が変わり、可能性の表現が失われている。「最新化を行いましょう」「留意してください」「収集します」などの推奨の強さや時制は保たれているが、可能性の断定化は原文の働きを変える。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.29,
+      "cost_usd": 0.008150000000000001
+    },
+    {
+      "index": 11,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "6134305ddbe34e0c09daf3038d9aeff8f195e6b8c80533a5e6c9915e6792ebe2",
+      "cache_hit": false,
+      "raw_file": "c0011.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は数値・期限・頻度・先後関係の保持です。原文の「サービス・業務企画時点で収集」→「要件定義を開始する時点で最新化」という先後関係は、候補でも同じ順序で保たれています。数値や単位、期限、頻度の変更もありません。「調達後に変更内容が判明した場合」という時点条件も同一です。なお「追加のコストがかかる可能性があります」が「追加のコストがかかります」に変わり、断定の強さが変わっていますが、これは可能性の表現（確度）の問題であり、数値・期限・順序の観点には当たらないため、この観点ではpassとします。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.36,
+      "cost_usd": 0.008706
+    },
+    {
+      "index": 12,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "2816a618597b7dc80e0dcce08f40d2aa5835769f44f614a38c63a499c69b8e4b",
+      "cache_hit": false,
+      "raw_file": "c0012.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「追加のコストがかかる可能性がありますので」と可能性として述べているが、候補は「追加のコストがかかりますので」と断定に変わっている。主体・条件・理由・具体例・固有名の新規追加はなく、この観点（原文にない具体化）では、可能性の記述が確定的な事実に具体化されている点が問題となる。原文では不確実だった事態が必ず起こるものとして述べられ、原文にない確定性が加わったため、意味が変わっている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.41,
+      "cost_usd": 0.00822
+    },
+    {
+      "index": 13,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9497a4f8842d46607415183c29368b42bd52a2e0cf7403702994d222f02eec6b",
+      "cache_hit": false,
+      "raw_file": "c0013.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「追加のコストがかかる可能性がありますので」が、候補では「追加のコストがかかりますので」に変わり、可能性の留保が消えて断定になっている。原文は「かかる可能性がある」という不確実性を示すが、候補は確実にかかると述べており、意味・主張の強さが変わっている。原文が明確で変更の必要がない箇所への不要な書換えであり、意味も変えているためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 4.99,
+      "cost_usd": 0.00807
+    },
+    {
+      "index": 14,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "d90cec88a9671f2e10c1116f773e9d868de6653a7825c0f1e2d4b32d0c56bdf9",
+      "cache_hit": false,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "強制削除を実行するには指定が必要なオプションがある。",
+          "強制削除を実行するには --grace-period=0 を指定する必要がある。",
+          "--grace-period=0 は強制削除を実行するために指定するオプションである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.61,
+      "cost_usd": 0.0073219999999999995
+    },
+    {
+      "index": 15,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "5543a21bcc8a9785397d02e22b04cda8cb61a37d08b432f481149fbdfd472748",
+      "cache_hit": false,
+      "raw_file": "c0015.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "強制削除を実行するには指定が必要なオプションがある。",
+            "reason": "文脈では、強制削除を実行するために --grace-period=0 と --force というフラグを指定する必要があると述べられており、指定が必要なオプションがあることは直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "強制削除を実行するには --grace-period=0 を指定する必要がある。",
+            "reason": "文脈では、強制削除を実行するために --grace-period=0 を --force と共に指定する必要があると明記されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "--grace-period=0 は強制削除を実行するために指定するオプションである。",
+            "reason": "文脈では、--grace-period=0 は強制削除の実行に必要なフラグ(--force と併用)として挙げられているため、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.87,
+      "cost_usd": 0.012369999999999999
+    },
+    {
+      "index": 16,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "d90cec88a9671f2e10c1116f773e9d868de6653a7825c0f1e2d4b32d0c56bdf9",
+      "cache_hit": true,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "強制削除を実行するには指定が必要なオプションがある。",
+          "強制削除を実行するには --grace-period=0 を指定する必要がある。",
+          "--grace-period=0 は強制削除を実行するために指定するオプションである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 17,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "5543a21bcc8a9785397d02e22b04cda8cb61a37d08b432f481149fbdfd472748",
+      "cache_hit": true,
+      "raw_file": "c0015.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "強制削除を実行するには指定が必要なオプションがある。",
+            "reason": "文脈では、強制削除を実行するために --grace-period=0 と --force というフラグを指定する必要があると述べられており、指定が必要なオプションがあることは直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "強制削除を実行するには --grace-period=0 を指定する必要がある。",
+            "reason": "文脈では、強制削除を実行するために --grace-period=0 を --force と共に指定する必要があると明記されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "--grace-period=0 は強制削除を実行するために指定するオプションである。",
+            "reason": "文脈では、--grace-period=0 は強制削除の実行に必要なフラグ(--force と併用)として挙げられているため、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 18,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f353e1ddec7c4dc7c0cdb41296460fea1cfc39724fe8cb6faef7b50540b1db08",
+      "cache_hit": false,
+      "raw_file": "c0018.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "強制削除を実行するには追加のフラグを指定する必要があります。",
+          "強制削除を実行するには --grace-period=0 フラグを指定する必要があります。",
+          "強制削除を実行するには --force フラグを指定する必要があります。",
+          "--force フラグは --grace-period=0 と共に指定する必要があります。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.35,
+      "cost_usd": 0.007662
+    },
+    {
+      "index": 19,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "8cf524733e4cb150e22dc0c6ed63fb8a9585cb40447f16a4058b70365c00b9b5",
+      "cache_hit": false,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "強制削除を実行するには追加のフラグを指定する必要があります。",
+            "reason": "文脈では、強制削除を実行するには --grace-period=0 を指定する必要があると述べられており、これは追加のフラグを指定する必要があるという内容と一致します。",
+            "verdict": 1
+          },
+          {
+            "statement": "強制削除を実行するには --grace-period=0 フラグを指定する必要があります。",
+            "reason": "文脈に、強制削除を実行するには --grace-period=0 を指定する必要があると明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "強制削除を実行するには --force フラグを指定する必要があります。",
+            "reason": "文脈では --grace-period=0 についてのみ言及されており、--force フラグについては何も述べられていません。",
+            "verdict": 0
+          },
+          {
+            "statement": "--force フラグは --grace-period=0 と共に指定する必要があります。",
+            "reason": "文脈には --force フラグに関する情報がなく、--grace-period=0 と併用する必要があるとは述べられていません。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.61,
+      "cost_usd": 0.013090000000000001
+    },
+    {
+      "index": 20,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "41e96c6a9df7425d79bf735ea4077bd3c868748f21803f0de80f1c0e6bee140f",
+      "cache_hit": false,
+      "raw_file": "c0020.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「--grace-period=0 と共に --force というフラグを追加で指定する必要があります」と、両方の指定を必須としている。候補は「--grace-period=0 を指定する必要があります」のみで、--force の指定要件が欠落している。これにより、必要条件（肯定の要求）が一部消え、--force なしでも足りるという意味に変わる。否定語の有無ではなく、必須要件の削除であり、禁止・許可の働きが変わっている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.07,
+      "cost_usd": 0.007792
+    },
+    {
+      "index": 21,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "2f8a4b0a2bdce016873ac6109311ef8b9573744b9ae86c9e8fde17f8b1e13bad",
+      "cache_hit": false,
+      "raw_file": "c0021.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「--grace-period=0 と共に --force というフラグを追加で指定する必要があります」とあり、強制削除には両方のフラグが必須という条件（かつ）を示している。候補は「--grace-period=0 を指定する必要があります」のみで、「--force」の指定要件が脱落している。そのため必要条件の範囲が変わり、候補どおりだと --force なしで足りると読める。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.19,
+      "cost_usd": 0.007614000000000001
+    },
+    {
+      "index": 22,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "e83b8d779343641783647eef30a643416449402ae9a391616c7e3c2072125260",
+      "cache_hit": false,
+      "raw_file": "c0022.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「--grace-period=0 と共に --force というフラグを追加で指定する必要があります」と、指定すべき対象として --grace-period=0 と --force の2つを挙げている。候補は「--grace-period=0 を指定する必要があります」とだけ述べ、--force が省略されている。これにより、強制削除の実行に必要な指定対象が変わり、運用者が --force なしで実行してしまう恐れがある。手続の対象の省略に当たるためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.14,
+      "cost_usd": 0.007726
+    },
+    {
+      "index": 23,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "e1d5345b0c0b2d68c2631c416633a3ed0157d079296a70520d2e5a0356ae400c",
+      "cache_hit": false,
+      "raw_file": "c0023.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「--grace-period=0 と共に --force というフラグを追加で指定する必要があります」と、二つのフラグの指定を必須（「必要があります」）としている。候補は「--grace-period=0 を指定する必要があります」とし、義務の強さ（必要）と現在時制は保たれている。ただし義務の対象から --force が脱落しており、必須とされる要件が減っている。これは義務の対象範囲が変わり、「追加で指定する必要がある」という必須要件が失われているため、この観点では原文と異なる働きになっている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.55,
+      "cost_usd": 0.008150000000000001
+    },
+    {
+      "index": 24,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "824a80fbdc5e41022cbddfcd116441c7d18e702c1e7f659c435e017bcc2adcfa",
+      "cache_hit": false,
+      "raw_file": "c0024.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「--grace-period=0 と共に --force というフラグを追加で指定する必要があります」と、2つのフラグの併用を求めている。候補は「--grace-period=0 を指定する必要があります」とだけ述べ、--force が脱落している。数値の「0」は保たれているが、必要な指定の組み合わせ（頻度・順序ではなく、必須条件の数）が変わり、--force なしでも実行できるように読める。ただしこの観点は数値・期限・順序であり、--force の欠落は主に条件・コマンドの脱落にあたる。数値「0」や順序の変更はなく、この観点では意味が保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.72,
+      "cost_usd": 0.008280000000000001
+    },
+    {
+      "index": 25,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "c158cf1a61b5d6a15f1e938b8b40904138b0c5c4760ec59f35f6839791c11aea",
+      "cache_hit": false,
+      "raw_file": "c0025.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「--grace-period=0 と共に --force というフラグを追加で指定する必要があります」と、--force の追加指定を必須条件としている。候補は「--grace-period=0 を指定する必要があります」のみで --force が消えている。これは新たな具体化の追加ではなく条件の欠落であり、この観点（原文にない主体・条件・完了状態・理由・具体例・固有名の追加）では、候補に原文にない要素は加わっていない。欠落は別観点の問題であり、本観点ではpass。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.23,
+      "cost_usd": 0.007878
+    },
+    {
+      "index": 26,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "96f26c23948e66aa494cf33da57fa2a398728d4de6cb9e6c45a553422aec6a0c",
+      "cache_hit": false,
+      "raw_file": "c0026.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「--grace-period=0 と共に --force というフラグを追加で指定する必要があります」と、両方のフラグが必要だと述べている。候補は「--grace-period=0 を指定する必要があります」とだけ書き、「--force」の指定が欠落している。これは単なる言い換えではなく、必要なコマンド条件を削除しており、運用者が候補どおりに実行すると強制削除にならない可能性がある。意味・コマンドの保持という点で原文の働きが保たれていないため、不要な変更として fail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.25,
+      "cost_usd": 0.007962
+    },
+    {
+      "index": 27,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f4c4bf635c8f8ccd33736614b9577986a33c6c60988a771a6e9a65c04c5faa75",
+      "cache_hit": false,
+      "raw_file": "c0027.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "作成したユーザの権限でファイルを読み出せる。",
+          "作成したユーザの権限でファイルに書き込める。",
+          "プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、そのファイルは誰からも実行できない。",
+          "このファイルのファイル記述子は子プロセスに継承されない。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.67,
+      "cost_usd": 0.007998
+    },
+    {
+      "index": 28,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "7eaa3f0644e8db5271954f0f05b68202280a12654fa39b56ac13111dd77380dc",
+      "cache_hit": false,
+      "raw_file": "c0028.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "作成したユーザの権限でファイルを読み出せる。",
+            "reason": "コンテキストには、作成したユーザのユーザ ID からのみファイルを読み書きできると記載されており、読み出しが可能であることが分かる。",
+            "verdict": 1
+          },
+          {
+            "statement": "作成したユーザの権限でファイルに書き込める。",
+            "reason": "コンテキストには、作成したユーザのユーザ ID からのみファイルを読み書きできると記載されており、書き込みが可能であることが分かる。",
+            "verdict": 1
+          },
+          {
+            "statement": "プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、そのファイルは誰からも実行できない。",
+            "reason": "コンテキストには、プラットフォームが実行可能かどうかを示す許可ビットを使用している場合、ファイルは誰からも実行不可であると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "このファイルのファイル記述子は子プロセスに継承されない。",
+            "reason": "コンテキストに、このファイルのファイル記述子は子プロセスに継承されないと明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.16,
+      "cost_usd": 0.013748
+    },
+    {
+      "index": 29,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f4c4bf635c8f8ccd33736614b9577986a33c6c60988a771a6e9a65c04c5faa75",
+      "cache_hit": true,
+      "raw_file": "c0027.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "作成したユーザの権限でファイルを読み出せる。",
+          "作成したユーザの権限でファイルに書き込める。",
+          "プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、そのファイルは誰からも実行できない。",
+          "このファイルのファイル記述子は子プロセスに継承されない。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 30,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "7eaa3f0644e8db5271954f0f05b68202280a12654fa39b56ac13111dd77380dc",
+      "cache_hit": true,
+      "raw_file": "c0028.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "作成したユーザの権限でファイルを読み出せる。",
+            "reason": "コンテキストには、作成したユーザのユーザ ID からのみファイルを読み書きできると記載されており、読み出しが可能であることが分かる。",
+            "verdict": 1
+          },
+          {
+            "statement": "作成したユーザの権限でファイルに書き込める。",
+            "reason": "コンテキストには、作成したユーザのユーザ ID からのみファイルを読み書きできると記載されており、書き込みが可能であることが分かる。",
+            "verdict": 1
+          },
+          {
+            "statement": "プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、そのファイルは誰からも実行できない。",
+            "reason": "コンテキストには、プラットフォームが実行可能かどうかを示す許可ビットを使用している場合、ファイルは誰からも実行不可であると明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "このファイルのファイル記述子は子プロセスに継承されない。",
+            "reason": "コンテキストに、このファイルのファイル記述子は子プロセスに継承されないと明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 31,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "8650daa099c1c598aea77eabd2e7ca44da0483dc38956c13ffa09e2f92c2efac",
+      "cache_hit": false,
+      "raw_file": "c0031.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "ファイルは、作成したユーザのユーザ ID からのみ読み書きできる。",
+          "プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、そのファイルは誰からも実行できない。",
+          "このファイルのファイル記述子は子プロセスに継承されない。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.35,
+      "cost_usd": 0.007892
+    },
+    {
+      "index": 32,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "91fc343d3414a31a24c49f75d5a496ba0c90afdfccdbb89a5a4ebc66517bf296",
+      "cache_hit": false,
+      "raw_file": "c0032.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "ファイルは、作成したユーザのユーザ ID からのみ読み書きできる。",
+            "reason": "文脈には「作成したユーザの権限でファイルを読み書き出来ます」とあるが、そのユーザ ID \"からのみ\" 読み書きできるとは述べられていない。他のユーザがアクセスできないという限定は文脈から直接推論できない。",
+            "verdict": 0
+          },
+          {
+            "statement": "プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、そのファイルは誰からも実行できない。",
+            "reason": "文脈に「プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、ファイルは誰からも実行不可です」と明記されており、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "このファイルのファイル記述子は子プロセスに継承されない。",
+            "reason": "文脈に「このファイルのファイル記述子は子プロセスに継承されません」と明記されており、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.02,
+      "cost_usd": 0.013388
+    },
+    {
+      "index": 33,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "8f2aded3b3bd6bfef248eb040a0ba7d72365c54ef378adccee989d18a9fd59c9",
+      "cache_hit": false,
+      "raw_file": "c0033.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「作成したユーザのユーザ ID からのみファイルを読み書き出来ます」と「のみ」で限定しており、他のユーザからの読み書きを暗に禁止している。候補は「作成したユーザの権限でファイルを読み書き出来ます」となり、「のみ」が消えて限定・排他性が失われている。これにより他ユーザが読み書きできないという暗黙の禁止が保たれず、許可の範囲が広がって読める。「誰からも実行不可です」と「継承されません」の否定は保たれている。ただし「のみ」の削除による制限の喪失は否定・禁止の働きの変化にあたる。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.35,
+      "cost_usd": 0.008905999999999999
+    },
+    {
+      "index": 34,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "77720ff5ccbcc47302207d47706ee284a899f7087e7788477f1c3bc2cb3717f9",
+      "cache_hit": false,
+      "raw_file": "c0034.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「作成したユーザのユーザ ID からのみファイルを読み書き出来ます」と、「のみ」で作成ユーザのユーザIDからに限定している。候補は「作成したユーザの権限でファイルを読み書き出来ます」とし、「のみ」の排他的限定が脱落している。他のユーザからはアクセスできないという範囲の制限が失われ、また「ユーザ ID」が「権限」に変わり範囲が曖昧になっている。他の2文は保たれているが、この観点では限定条件の脱落でfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 7.53,
+      "cost_usd": 0.008634
+    },
+    {
+      "index": 35,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "b7f9d6ff325889d2f967264dbbdf2f79ab2ae60edf9a98cd58aef420901dadaa",
+      "cache_hit": false,
+      "raw_file": "c0035.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「作成したユーザのユーザ ID からのみ」ファイルを読み書きできると、アクセス主体を作成ユーザのユーザ ID に限定している。候補は「作成したユーザの権限で」読み書きできるとしており、限定を示す「のみ」が消え、「ユーザ ID」も「権限」に変わっている。原文は作成ユーザ以外のアクセスを排除する意味だが、候補は作成ユーザの権限で操作できるという意味にとどまり、他のユーザが読み書きできないことは読み取れない。アクセス主体の範囲が変わっているため、この観点ではfailとする。他の文（実行不可、ファイル記述子の継承）は保たれている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.71,
+      "cost_usd": 0.009078000000000001
+    },
+    {
+      "index": 36,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "a8f8f10175d2812b9d7b15f7851ab7cbe0c3547a279634fa9458c4017be98a7e",
+      "cache_hit": false,
+      "raw_file": "c0036.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「読み書き出来ます」（可能）は候補でも「読み書き出来ます」で保たれており、「実行不可です」「継承されません」も同一で、時制も現在のまま変わっていない。義務・推奨の強さや時制の変更はない。「ユーザ ID からのみ」が「権限で」に変わった点は、限定の意味の変化であり、この観点（義務・推奨の強さと時制）の対象外。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.04,
+      "cost_usd": 0.008282000000000001
+    },
+    {
+      "index": 37,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "52a456e477d4e95c56edfd268bac4b9a4554c866f0d5386c07c83d3d7311e99c",
+      "cache_hit": false,
+      "raw_file": "c0037.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は数値・単位・期限・頻度・先後関係の保持です。原文「作成したユーザのユーザ ID からのみファイルを読み書き出来ます」が候補で「作成したユーザの権限でファイルを読み書き出来ます」に変わっていますが、これは限定（「のみ」）や対象の変更であり、数値・期限・頻度・順序の変更ではありません。「実行不可」の記述や「子プロセスに継承されません」の文も同じ順序で保たれており、数値・単位・期限・頻度・先後関係に変化はありません。限定表現の欠落は別観点の問題であり、この観点ではpassとします。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.54,
+      "cost_usd": 0.008816000000000001
+    },
+    {
+      "index": 38,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "b2ed49c1f9574f09fce554656a2caab59a746dc191697fc0ddada8c4302f51d2",
+      "cache_hit": false,
+      "raw_file": "c0038.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「作成したユーザのユーザ ID からのみ」読み書きできると、ユーザ ID による限定を述べている。候補は「作成したユーザの権限で」と書き換えており、「ユーザ ID」が「権限」に置き換わり、「のみ」という限定も消えている。「権限」は原文にない概念で、ID での判定という条件が別の内容（権限の範囲）に具体化・変質している。他の文は同一。原文にない主体・条件の追加・変更があるためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 7.46,
+      "cost_usd": 0.008306000000000001
+    },
+    {
+      "index": 39,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "69cea7e98ab8796956df55645611ee81a6d0fdd31362a09b2da44f8e6cd7cd33",
+      "cache_hit": false,
+      "raw_file": "c0039.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「作成したユーザのユーザ ID からのみ」と、ユーザ ID による限定を「のみ」で明示しているが、候補は「作成したユーザの権限でファイルを読み書き出来ます」に書き換えている。「のみ」が失われ、作成者以外は不可という排他性が消えている。また「ユーザ ID」が「権限」に変わり、識別子ベースの制約が一般的な権限の話に変わっている。読みやすさのために必要な変更ではなく、意味が変わる不要な書換えである。残りの2文は無変更で問題ない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.59,
+      "cost_usd": 0.008656
+    },
+    {
+      "index": 40,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "0dac775db6cc5c0b6f28849878478a1eac8ec74095843e5b5f4a42561ab750bd",
+      "cache_hit": false,
+      "raw_file": "c0040.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+          "頭のいい人は、人より先に人のまだ行かない所へ行き着くことができる。",
+          "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+          "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+          "頭の悪い人は、足がのろい。",
+          "頭の悪い人は、頭のいい人よりずっとあとからおくれて来る。",
+          "頭の悪い人は、わけもなくそのだいじな宝物を拾って行く。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.69,
+      "cost_usd": 0.009084
+    },
+    {
+      "index": 41,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "bc4fe2829980c518d6da942845c462eda5ef742c17ec013f89b4e69bf844abee",
+      "cache_hit": false,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+            "reason": "文脈に「いわゆる頭のいい人は、言わば足の早い旅人のようなものである」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、人より先に人のまだ行かない所へ行き着くことができる。",
+            "reason": "文脈に「人より先に人のまだ行かない所へ行き着くこともできる」と述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「途中の道ばたあるいはちょっとしたわき道にある肝心なものを見落とす恐れがある」とあり、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「ちょっとしたわき道にある肝心なものを見落とす恐れがある」と述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い人は、足がのろい。",
+            "reason": "文脈は「頭の悪い人足ののろい人」と述べており、頭の悪い人を足ののろい旅人にたとえていると読み取れるため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い人は、頭のいい人よりずっとあとからおくれて来る。",
+            "reason": "文脈に「頭の悪い人足ののろい人がずっとあとからおくれて来て」とあり、頭のいい人より後から来ることが示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い人は、わけもなくそのだいじな宝物を拾って行く。",
+            "reason": "文脈に「わけもなくそのだいじな宝物を拾って行く場合がある」とあるが、これは常にそうするのではなく場合があるという意味である。ただし、文脈から主旨として直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 7.04,
+      "cost_usd": 0.017514
+    },
+    {
+      "index": 42,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "0dac775db6cc5c0b6f28849878478a1eac8ec74095843e5b5f4a42561ab750bd",
+      "cache_hit": true,
+      "raw_file": "c0040.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+          "頭のいい人は、人より先に人のまだ行かない所へ行き着くことができる。",
+          "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+          "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+          "頭の悪い人は、足がのろい。",
+          "頭の悪い人は、頭のいい人よりずっとあとからおくれて来る。",
+          "頭の悪い人は、わけもなくそのだいじな宝物を拾って行く。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 43,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "bc4fe2829980c518d6da942845c462eda5ef742c17ec013f89b4e69bf844abee",
+      "cache_hit": true,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+            "reason": "文脈に「いわゆる頭のいい人は、言わば足の早い旅人のようなものである」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、人より先に人のまだ行かない所へ行き着くことができる。",
+            "reason": "文脈に「人より先に人のまだ行かない所へ行き着くこともできる」と述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「途中の道ばたあるいはちょっとしたわき道にある肝心なものを見落とす恐れがある」とあり、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「ちょっとしたわき道にある肝心なものを見落とす恐れがある」と述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い人は、足がのろい。",
+            "reason": "文脈は「頭の悪い人足ののろい人」と述べており、頭の悪い人を足ののろい旅人にたとえていると読み取れるため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い人は、頭のいい人よりずっとあとからおくれて来る。",
+            "reason": "文脈に「頭の悪い人足ののろい人がずっとあとからおくれて来て」とあり、頭のいい人より後から来ることが示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い人は、わけもなくそのだいじな宝物を拾って行く。",
+            "reason": "文脈に「わけもなくそのだいじな宝物を拾って行く場合がある」とあるが、これは常にそうするのではなく場合があるという意味である。ただし、文脈から主旨として直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 44,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "e4f40c0506b49a586cfc5ad416c2751162d02c4a58cd9e294f7868b175c41d0e",
+      "cache_hit": false,
+      "raw_file": "c0044.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+          "頭のいい人は、人より先に行き着くことができる。",
+          "頭のいい人は、人のまだ行かない所へ行き着くことができる。",
+          "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+          "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+          "頭の悪い人は、足がのろい。",
+          "頭の悪い人は、頭のいい人よりずっとあとからおくれて来ることがある。",
+          "頭の悪い人が、わけもなくだいじな宝物を拾って行く場合がある。",
+          "頭の悪い人が拾うだいじな宝物は、頭のいい人が見落としたものである。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.28,
+      "cost_usd": 0.009678
+    },
+    {
+      "index": 45,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "16018ff01e902820543d2be3e6c8205103d23a3b0d0cf9fb49374c6a494d38ae",
+      "cache_hit": false,
+      "raw_file": "c0045.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+            "reason": "文脈に「いわゆる頭のいい人は、言わば足の早い旅人のようなものである」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、人より先に行き着くことができる。",
+            "reason": "文脈に「人より先に人のまだ行かない所へ行き着くこともできる」とあり、直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、人のまだ行かない所へ行き着くことができる。",
+            "reason": "文脈に「人のまだ行かない所へ行き着くこともできる」と述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「途中の道ばた...にある肝心なものを見落とす恐れがある」と述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「ちょっとしたわき道にある肝心なものを見落とす恐れがある」と述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い人は、足がのろい。",
+            "reason": "文脈に「頭の悪い人足ののろい人」とあり、比喩として頭の悪い人は足ののろい旅人にたとえられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い人は、頭のいい人よりずっとあとからおくれて来ることがある。",
+            "reason": "文脈に「頭の悪い人足ののろい人がずっとあとからおくれて来て」とあり、読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い人が、わけもなくだいじな宝物を拾って行く場合がある。",
+            "reason": "文脈に「わけもなくそのだいじな宝物を拾って行く」とあり、読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭の悪い人が拾うだいじな宝物は、頭のいい人が見落としたものである。",
+            "reason": "文脈で「そのだいじな宝物」は、頭のいい人が見落とす恐れのある道ばたやわき道の肝心なものを指しており、頭のいい人が見落としたものを拾うと読み取れる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 8.07,
+      "cost_usd": 0.019112
+    },
+    {
+      "index": 46,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "4286a4a4730cdc4a7101a6d9d5536a19f519e45fc46a2ce346cbcec3c326aeed",
+      "cache_hit": false,
+      "raw_file": "c0046.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文には否定の反転や禁止・許可の入れ替えはない。原文の「拾って行く場合がある」が候補では「拾って行く」と断定になり、「場合がある」という可能性・限定が削除されている。ただしこれは否定・禁止の保持という観点ではなく、様相・頻度の変化にあたる。「見落とす恐れがある」「まだ行かない所」「わけもなく」などの否定や構造は両者で同じように保たれており、否定・肯定の反転や追加・削除はない。この観点ではpass。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.94,
+      "cost_usd": 0.00893
+    },
+    {
+      "index": 47,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "3c4811c9395c6a56486523acd0b07248d3a34e89014de0fee4e1dde8e25d58a4",
+      "cache_hit": false,
+      "raw_file": "c0047.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「拾って行く場合がある」で、のろい人が宝物を拾うのは一部の場合に限られるという限定的な働きを持つ。候補は「拾って行く」と言い切りになっており、「場合がある」が脱落している。そのため可能性・偶発性が一般的・断定的な事実に変わり、範囲が拡大している。「恐れがある」の部分は保たれているが、この点は結論を覆さない。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 6.93,
+      "cost_usd": 0.008608
+    },
+    {
+      "index": 48,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "1199a6976aa013c6cdd50ac1701a251cbedcd1f811dd6cb45e71a502a0a2850b",
+      "cache_hit": false,
+      "raw_file": "c0048.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「頭の悪い人足ののろい人がずっとあとからおくれて来てわけもなくそのだいじな宝物を拾って行く場合がある」では、拾う主体は「足ののろい人」、対象は「だいじな宝物」で、「場合がある」により一部の事例として限定されている。候補は「拾って行く。」と言い切り、この限定が落ちている。ただし、動作の主体（足ののろい人）、対象（宝物）、修飾先（「途中の道ばた…にある肝心なもの」を受ける「そのだいじな宝物」）は入れ替わらず保たれている。「場合がある」の省略は断定の強さ（量・頻度）の変化であり、主体・対象・修飾先・宛先の入れ替え・追加・省略には当たらないため、この観点ではpass。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.02,
+      "cost_usd": 0.009828
+    },
+    {
+      "index": 49,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "e6f920a9711b2e9a8ba9998d29d0f5f163f85f01abdbb864948282da983f8d18",
+      "cache_hit": false,
+      "raw_file": "c0049.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の末尾は「拾って行く場合がある」で、可能性・限定的な頻度を示す表現だが、候補は「拾って行く」と断定的な現在形に変わっている。「場合がある」が落ちたことで、時々起こりうるという可能性の強さが、常にそうなるという一般的事実に変わっている。「恐れがある」「行き着くこともできる」は保たれており時制は現在のままだが、最後の文の可能性の程度が変わっているためfailとする。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.82,
+      "cost_usd": 0.008866
+    },
+    {
+      "index": 50,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "11aa14034349a00179ac2a278fb37a72971f9c6d003704082ee0b49be6455520",
+      "cache_hit": false,
+      "raw_file": "c0050.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "数値・単位・期限・頻度はなく、先後関係は「人より先に」行き着く点と、のろい人が「ずっとあとからおくれて来て」拾う点が候補でも「ずっとあとからおくれて来て」としてそのまま保たれている。違いは末尾「拾って行く場合がある」が「拾って行く」になった点だが、これは頻度（時々／場合がある）に関わる変更とも読める。原文は「場合がある」という限定的な頻度を示すのに対し、候補は断定的で常にそうなるように読める。この観点では頻度の変更として扱うのが妥当で、働きが変わっている。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.23,
+      "cost_usd": 0.009164
+    },
+    {
+      "index": 51,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "1d50db4484f0808614007b983d05d4719afe8aae605a0c8a7d4403205408f02c",
+      "cache_hit": false,
+      "raw_file": "c0051.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の末尾は「拾って行く場合がある」で、拾うのが時に起こる可能性だと限定している。候補は「拾って行く。」と言い切っており、「場合がある」という条件・限定が失われている。ただし、これは新たな主体、条件、理由、具体例、固有名の追加ではなく、むしろ限定の脱落（断定化）である。「原文にない具体化の有無」の観点では、具体的な情報の追加はなく、「頭の悪い人足ののろい人」「わけもなく」「だいじな宝物」など他の要素もそのまま保たれているため、この観点では原文の意味・働きが保たれていると判断する。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.45,
+      "cost_usd": 0.009234
+    },
+    {
+      "index": 52,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "585f5df931383301f9e0c00dca67f462138ee9b40d6566002b27b1042f7939a0",
+      "cache_hit": false,
+      "raw_file": "c0052.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の末尾は「拾って行く場合がある」で、頭の悪い人が宝物を拾うのは常にではなく起こりうる場合があるという限定的な表現です。候補は「拾って行く」と言い切りに変え、「場合がある」を削除しています。これにより可能性・頻度の限定が失われ、一般的事実の断定に意味が変わっています。原文は意味上も読みやすさ上も明確で、この削除は必要のない変更であり、論旨のニュアンスを変えてしまっています。それ以外の部分は原文と同一で、無変更が適切な箇所です。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.53,
+      "cost_usd": 0.009126
+    },
+    {
+      "index": 53,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "9de19f6b81d8dc12f1178d1dd35019616c30325e327fa66a4bf5b0909e7fd200",
+      "cache_hit": false,
+      "raw_file": "c0053.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "最近6ヶ月以内に更新があるかを確認する。",
+          "Issueに対する反応があるかを確認する。",
+          "pull requestがマージされているかを確認する。",
+          "完全に停止しているプロジェクトは避けるべきである。",
+          "完全に停止しているプロジェクトにはセキュリティリスクがある。",
+          "完全に停止しているプロジェクトは将来性の観点から避けるべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.36,
+      "cost_usd": 0.008142
+    },
+    {
+      "index": 54,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "19cf828f8c5b9189edfbe5d3f66a5e9e0e9b987e4759f29f8a3b938069be967c",
+      "cache_hit": false,
+      "raw_file": "c0054.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "最近6ヶ月以内に更新があるかを確認する。",
+            "reason": "文脈に、最近6ヶ月以内に更新があるかを確認すると明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "Issueに対する反応があるかを確認する。",
+            "reason": "文脈に、Issueに対する反応があるかを確認すると明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "pull requestがマージされているかを確認する。",
+            "reason": "文脈に、pull requestがマージされているかを確認すると明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトは避けるべきである。",
+            "reason": "文脈では、完全に停止しているプロジェクトは避けることを推奨しているため、この主張は文脈から導けます。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトにはセキュリティリスクがある。",
+            "reason": "文脈は、セキュリティリスクの観点から避けることを推奨しており、停止したプロジェクトにセキュリティリスクがあることを前提としています。ただし、リスクがあると直接断定はしていないため、やや解釈を含みます。それでも推奨の理由として挙げられており、文脈から推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトは将来性の観点から避けるべきである。",
+            "reason": "文脈に、セキュリティリスクや将来性の観点から避けることを推奨すると書かれているため、直接導けます。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.36,
+      "cost_usd": 0.014967999999999999
+    },
+    {
+      "index": 55,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "9de19f6b81d8dc12f1178d1dd35019616c30325e327fa66a4bf5b0909e7fd200",
+      "cache_hit": true,
+      "raw_file": "c0053.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "最近6ヶ月以内に更新があるかを確認する。",
+          "Issueに対する反応があるかを確認する。",
+          "pull requestがマージされているかを確認する。",
+          "完全に停止しているプロジェクトは避けるべきである。",
+          "完全に停止しているプロジェクトにはセキュリティリスクがある。",
+          "完全に停止しているプロジェクトは将来性の観点から避けるべきである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 56,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "19cf828f8c5b9189edfbe5d3f66a5e9e0e9b987e4759f29f8a3b938069be967c",
+      "cache_hit": true,
+      "raw_file": "c0054.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "最近6ヶ月以内に更新があるかを確認する。",
+            "reason": "文脈に、最近6ヶ月以内に更新があるかを確認すると明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "Issueに対する反応があるかを確認する。",
+            "reason": "文脈に、Issueに対する反応があるかを確認すると明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "pull requestがマージされているかを確認する。",
+            "reason": "文脈に、pull requestがマージされているかを確認すると明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトは避けるべきである。",
+            "reason": "文脈では、完全に停止しているプロジェクトは避けることを推奨しているため、この主張は文脈から導けます。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトにはセキュリティリスクがある。",
+            "reason": "文脈は、セキュリティリスクの観点から避けることを推奨しており、停止したプロジェクトにセキュリティリスクがあることを前提としています。ただし、リスクがあると直接断定はしていないため、やや解釈を含みます。それでも推奨の理由として挙げられており、文脈から推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトは将来性の観点から避けるべきである。",
+            "reason": "文脈に、セキュリティリスクや将来性の観点から避けることを推奨すると書かれているため、直接導けます。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 57,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2ce8607019f66d946beb2560733a350c6213310f45995d7145176d946692f63e",
+      "cache_hit": false,
+      "raw_file": "c0057.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "最近6ヶ月以内にプロジェクトに更新があるかを確認する。",
+          "最近6ヶ月以内にIssueに対する反応があるかを確認する。",
+          "最近6ヶ月以内にpull requestがマージされているかを確認する。",
+          "完全に停止しているプロジェクトは避けることが推奨される。",
+          "完全に停止しているプロジェクトを避けることが推奨される理由の一つは、セキュリティリスクの観点である。",
+          "完全に停止しているプロジェクトを避けることが推奨される理由の一つは、将来性の観点である。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.88,
+      "cost_usd": 0.008714
+    },
+    {
+      "index": 58,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "45c5237d7986618579cdd4c29886d2fe4701c7d0f6ddf724894e449ff7fd890e",
+      "cache_hit": false,
+      "raw_file": "c0058.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "最近6ヶ月以内にプロジェクトに更新があるかを確認する。",
+            "reason": "文脈に「最近6ヶ月以内に更新があるか...を確認します」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "最近6ヶ月以内にIssueに対する反応があるかを確認する。",
+            "reason": "文脈に「Issueに対する反応があるか」を確認すると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "最近6ヶ月以内にpull requestがマージされているかを確認する。",
+            "reason": "文脈に「pull requestがマージされているか」を確認すると述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトは避けることが推奨される。",
+            "reason": "文脈に「完全に停止しているプロジェクトは...避けてください」とあり、推奨として読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトを避けることが推奨される理由の一つは、セキュリティリスクの観点である。",
+            "reason": "文脈に「セキュリティリスクや将来性の観点から避けてください」とあり、セキュリティリスクが理由の一つとして挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "完全に停止しているプロジェクトを避けることが推奨される理由の一つは、将来性の観点である。",
+            "reason": "文脈に「セキュリティリスクや将来性の観点から避けてください」とあり、将来性が理由の一つとして挙げられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.94,
+      "cost_usd": 0.015444
+    },
+    {
+      "index": 59,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "c3045c6743f247f2f5fe3ff3604d1cb99105271f611fe772835a9c94d0923073",
+      "cache_hit": false,
+      "raw_file": "c0059.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「避けることを推奨します」は推奨表現で、候補「避けてください」は依頼・指示表現。どちらも「完全に停止しているプロジェクトを避ける」という肯定的な行為を求めており、否定・禁止の反転や追加・削除はない。強さの違いはあるが、この観点（否定・禁止の保持）では禁止と許可の入れ替えは起きていない。第1文も同一で保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.81,
+      "cost_usd": 0.008098000000000001
+    },
+    {
+      "index": 60,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "d44a8cba7d645c7ed20a34242bae6a7cd6277d0aee26c728b326db71716ea1f8",
+      "cache_hit": false,
+      "raw_file": "c0060.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「避けることを推奨します」は推奨の強さを示す表現ですが、候補は「避けてください」と依頼・指示の形になっています。ただし、この観点は条件・例外・範囲の保持です。条件・範囲に関しては、「最近6ヶ月以内」「〜か、〜か、〜か」という確認条件や、「完全に停止しているプロジェクト」という対象範囲、「セキュリティリスクや将来性の観点から」という理由の範囲は、原文と候補で同一に保たれています。強さの変化は別観点（推奨や義務の強さ）の問題であり、この観点では条件・例外・範囲の脱落、追加、変更はありません。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 7.28,
+      "cost_usd": 0.008994
+    },
+    {
+      "index": 61,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "48044fd7d0081332e31b142ff3130906294e9183caa37091cdd4ed949d77fdad",
+      "cache_hit": false,
+      "raw_file": "c0061.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "この観点は動作の主体・対象・修飾先の保持です。原文「避けることを推奨します」は、避ける動作の主体が文脈上の読者（開発者）で、それを推奨する書き手の立場の表現です。候補「避けてください」は同じ「完全に停止しているプロジェクト」を対象とし、「セキュリティリスクや将来性の観点から」という修飾先も保たれています。動作の主体は読者のまま、対象や宛先の入れ替え・追加・省略はありません。推奨から依頼への強さの変化は主体・対象・修飾先の観点とは別の問題なので、ここでは判定に含めません。第1文は同一です。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 8.22,
+      "cost_usd": 0.008856
+    },
+    {
+      "index": 62,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "2421af2c9a597934a7781c950356d6fc9837f3c5de246da72131c31b84d8b7d4",
+      "cache_hit": false,
+      "raw_file": "c0062.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「避けることを推奨します」と推奨の強さで述べているが、候補は「避けてください」と直接的な依頼・指示形になっている。「推奨」は助言レベルだが、「〜してください」はより強い要請・指示として働き、推奨の強さが上がっている。時制は現在のまま保たれているが、推奨から指示への強さの変化があるためfail。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.28,
+      "cost_usd": 0.008044
+    },
+    {
+      "index": 63,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "7e5e296b4c5c30364c75d0289678d3ac52d769f1a80a5c392f84c81167e5767f",
+      "cache_hit": false,
+      "raw_file": "c0063.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "数値・期限・頻度・順序の観点では、原文の「最近6ヶ月以内」は候補でも「最近6ヶ月以内」のまま保たれており、確認項目の並び（更新、Issueへの反応、pull requestのマージ）や文の順序も同じである。変更は「避けることを推奨します」から「避けてください」への表現の強さであり、これは数値・期限・順序とは別の観点なので、この観点ではfailにしない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.98,
+      "cost_usd": 0.008068
+    },
+    {
+      "index": 64,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "4567af31856654564b1168a1d59f02d69760cd4688af121ebfbf20c878ff980d",
+      "cache_hit": false,
+      "raw_file": "c0064.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「避けることを推奨します」を候補は「避けてください」と言い換えている。これは推奨の強さの変化（他観点）であり、「原文にない主体、条件、完了状態、理由、具体例、固有名」の追加ではない。「セキュリティリスクや将来性の観点から」という理由は原文と同じで、新たな具体化はない。1文目も同一。よってこの観点では原文の意味・働きが保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.59,
+      "cost_usd": 0.008046000000000001
+    },
+    {
+      "index": 65,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "1dabd7b8711bf9108c3cce07baec332e614d917bb78a533642f7c5c12ac36451",
+      "cache_hit": false,
+      "raw_file": "c0065.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の1文目は候補で完全に同一で、不要な変更はない。2文目は原文「避けることを推奨します」が候補「避けてください」に変わっている。これは推奨から指示（より強い要請）への変更で、依頼で保つよう求められた「推奨や義務の強さ」が変わっている。原文は明確で、この書換えは意味や読みやすさに必要なものではない。よって不要な変更にあたる。",
+        "value": "fail"
+      },
+      "error": null,
+      "seconds": 5.1,
+      "cost_usd": 0.008066
+    },
+    {
+      "index": 66,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f8200b6bed8c63d1f53fef5682c4102d0e143d0e193f6b25a4f271f44445bd50",
+      "cache_hit": false,
+      "raw_file": "c0066.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "LICENSEファイルでライセンスの種類を確認できる。",
+          "READMEでライセンスの種類を確認できる。",
+          "LICENSEファイルやREADMEでライセンスの種類を確認すべきである。",
+          "ライセンスが自分の利用方法に合うかどうかを判断すべきである。",
+          "利用方法には社内利用が含まれる。",
+          "利用方法には配布が含まれる。",
+          "利用方法にはSaaS提供が含まれる。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.46,
+      "cost_usd": 0.008284
+    },
+    {
+      "index": 67,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "a3e0c87459a58281660749b6782f99cda7b4296153b146b5ca542ac7e4e8f268",
+      "cache_hit": false,
+      "raw_file": "c0067.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "LICENSEファイルでライセンスの種類を確認できる。",
+            "reason": "文脈では、LICENSEファイルでライセンス種別を確認するよう述べられており、確認できることが前提となっている。",
+            "verdict": 1
+          },
+          {
+            "statement": "READMEでライセンスの種類を確認できる。",
+            "reason": "文脈では、READMEでもライセンス種別を確認するよう述べられており、確認できることが前提となっている。",
+            "verdict": 1
+          },
+          {
+            "statement": "LICENSEファイルやREADMEでライセンスの種類を確認すべきである。",
+            "reason": "文脈で、LICENSEファイルやREADMEでライセンス種別を確認するよう直接指示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "ライセンスが自分の利用方法に合うかどうかを判断すべきである。",
+            "reason": "文脈で、あなたの利用方法に適合するかを判断するよう述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "利用方法には社内利用が含まれる。",
+            "reason": "文脈で、利用方法の例として社内利用が挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "利用方法には配布が含まれる。",
+            "reason": "文脈で、利用方法の例として配布が挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "利用方法にはSaaS提供が含まれる。",
+            "reason": "文脈で、利用方法の例としてSaaS提供が挙げられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.98,
+      "cost_usd": 0.014717999999999998
+    },
+    {
+      "index": 68,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f8200b6bed8c63d1f53fef5682c4102d0e143d0e193f6b25a4f271f44445bd50",
+      "cache_hit": true,
+      "raw_file": "c0066.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "LICENSEファイルでライセンスの種類を確認できる。",
+          "READMEでライセンスの種類を確認できる。",
+          "LICENSEファイルやREADMEでライセンスの種類を確認すべきである。",
+          "ライセンスが自分の利用方法に合うかどうかを判断すべきである。",
+          "利用方法には社内利用が含まれる。",
+          "利用方法には配布が含まれる。",
+          "利用方法にはSaaS提供が含まれる。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 69,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "a3e0c87459a58281660749b6782f99cda7b4296153b146b5ca542ac7e4e8f268",
+      "cache_hit": true,
+      "raw_file": "c0067.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "LICENSEファイルでライセンスの種類を確認できる。",
+            "reason": "文脈では、LICENSEファイルでライセンス種別を確認するよう述べられており、確認できることが前提となっている。",
+            "verdict": 1
+          },
+          {
+            "statement": "READMEでライセンスの種類を確認できる。",
+            "reason": "文脈では、READMEでもライセンス種別を確認するよう述べられており、確認できることが前提となっている。",
+            "verdict": 1
+          },
+          {
+            "statement": "LICENSEファイルやREADMEでライセンスの種類を確認すべきである。",
+            "reason": "文脈で、LICENSEファイルやREADMEでライセンス種別を確認するよう直接指示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "ライセンスが自分の利用方法に合うかどうかを判断すべきである。",
+            "reason": "文脈で、あなたの利用方法に適合するかを判断するよう述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "利用方法には社内利用が含まれる。",
+            "reason": "文脈で、利用方法の例として社内利用が挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "利用方法には配布が含まれる。",
+            "reason": "文脈で、利用方法の例として配布が挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "利用方法にはSaaS提供が含まれる。",
+            "reason": "文脈で、利用方法の例としてSaaS提供が挙げられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 70,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "ba2a69f768264074f843ef632067d2f62e8f657868d952a8a8371dc002b08a17",
+      "cache_hit": false,
+      "raw_file": "c0070.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "LICENSEファイルでライセンス種別を確認すべきである。",
+          "READMEでライセンス種別を確認すべきである。",
+          "ライセンス種別が自分の利用方法に適合するかを判断すべきである。",
+          "利用方法の例として社内利用がある。",
+          "利用方法の例として配布がある。",
+          "利用方法の例としてSaaS提供がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.62,
+      "cost_usd": 0.00796
+    },
+    {
+      "index": 71,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "47bc7c8a9637b53753349684ea79b32ac9978657d5c6db1dfad936d72c7b40a4",
+      "cache_hit": false,
+      "raw_file": "c0071.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "LICENSEファイルでライセンス種別を確認すべきである。",
+            "reason": "文脈ではLICENSEファイルやREADMEでライセンスの種類を確認するよう述べており、LICENSEファイルでの確認が含まれている。",
+            "verdict": 1
+          },
+          {
+            "statement": "READMEでライセンス種別を確認すべきである。",
+            "reason": "文脈ではLICENSEファイルやREADMEでライセンスの種類を確認するよう述べており、READMEでの確認が含まれている。",
+            "verdict": 1
+          },
+          {
+            "statement": "ライセンス種別が自分の利用方法に適合するかを判断すべきである。",
+            "reason": "文脈ではライセンスの種類が自分の利用方法に合うかどうかを判断するよう述べている。",
+            "verdict": 1
+          },
+          {
+            "statement": "利用方法の例として社内利用がある。",
+            "reason": "文脈では利用方法の例として社内利用が挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "利用方法の例として配布がある。",
+            "reason": "文脈では利用方法の例として配布が挙げられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "利用方法の例としてSaaS提供がある。",
+            "reason": "文脈では利用方法の例としてSaaS提供が挙げられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.87,
+      "cost_usd": 0.01424
+    },
+    {
+      "index": 72,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "1857a2c22c11457e7d386df065c7107d257024e9588612a8f58065ca743db7e4",
+      "cache_hit": false,
+      "raw_file": "c0072.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文「適合するかを判断してください」と候補「合うかどうかを判断してください」は、いずれも肯定の依頼（確認して判断せよ）であり、否定・禁止は含まれない。「ライセンス種別」→「ライセンスの種類」も言い換えのみで、否定の追加・削除や禁止と許可の入れ替えはない。「かどうか」の追加は二択の判断を明示するだけで意味は同じ。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.83,
+      "cost_usd": 0.008034
+    },
+    {
+      "index": 73,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9bf9413fd634822b454786c25f02599f1ac104e0d1d8f4e32b4dd3964f79c078",
+      "cache_hit": false,
+      "raw_file": "c0073.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「ライセンス種別を確認し」「あなたの利用方法（社内利用、配布、SaaS提供）に適合するかを判断してください」に対し、候補は「ライセンスの種類を確認し」「あなたの利用方法（社内利用、配布、SaaS提供）に合うかどうかを判断してください」となっている。確認手段（LICENSEファイルやREADME）、利用方法の範囲（社内利用、配布、SaaS提供の3つ）、判断の対象（適合するか）はいずれも保たれており、条件・範囲・論理関係の脱落や追加、変更はない。「種別→種類」「適合する→合うかどうか」は自然な言い換えである。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.84,
+      "cost_usd": 0.008966
+    },
+    {
+      "index": 74,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "8bcc3b776dbe84966467de47b00a16743e83ca5c701fa12c2e34ce216bd67dd9",
+      "cache_hit": false,
+      "raw_file": "c0074.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「LICENSEファイルやREADMEでライセンス種別を確認し」は候補で「ライセンスの種類を確認し」となり、確認の対象・場所は同じ。「あなたの利用方法…に適合するかを判断してください」も「あなたの利用方法…に合うかどうかを判断してください」で、判断の主体（あなた）、対象（利用方法）、宛先（ライセンス）の関係が保たれている。主体・対象・修飾先の入れ替え、追加、省略は見られない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.8,
+      "cost_usd": 0.008252
+    },
+    {
+      "index": 75,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9c5f8ddd175f0acdabb4e5f2de56d6412a099f8a3d87046dec4ebc7c1b415269",
+      "cache_hit": false,
+      "raw_file": "c0075.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「判断してください」という依頼表現は、候補でも「判断してください」のまま保たれており、義務・推奨の強さは変わらない。「確認し、…適合するかを判断」という現在の行為の指示という時制も同じ。「適合するか」が「合うかどうか」に変わったのは言い換えにすぎず、強さや時制に影響しない。「ライセンス種別」→「ライセンスの種類」も同様に自然な言い換えである。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.13,
+      "cost_usd": 0.008232
+    },
+    {
+      "index": 76,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "cf4d65cfe537d2ba535bd350be9ae3ed64d232fa615aa9ad4eb67214f0a42dc5",
+      "cache_hit": false,
+      "raw_file": "c0076.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文と候補には数値・期限・頻度の表現がなく、順序に関わる要素は「確認し、…判断してください」の先後関係のみ。候補も「ライセンスの種類を確認し、…判断してください」で確認→判断の順が保たれている。利用方法の列挙「社内利用、配布、SaaS提供」も同じ3項目・同じ順序。「適合するか」→「合うかどうか」、「種別」→「種類」は自然な言い換えで、この観点では変更なし。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.97,
+      "cost_usd": 0.00814
+    },
+    {
+      "index": 77,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "7cf376115b9f841edd80a32d72dd5239b9e9076e72de6d80b0118937ab17d13a",
+      "cache_hit": false,
+      "raw_file": "c0077.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「ライセンス種別を確認し」「適合するかを判断してください」は、候補で「ライセンスの種類を確認し」「合うかどうかを判断してください」と言い換えられているだけである。「社内利用、配布、SaaS提供」の例示も原文どおりで、新たな主体、条件、完了状態、理由、具体例、固有名の追加はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.73,
+      "cost_usd": 0.007730000000000001
+    },
+    {
+      "index": 78,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "b65e12301c4dcdbee5665e3495e98c02655e75ae67f2084dd9e47971d94b00bd",
+      "cache_hit": false,
+      "raw_file": "c0078.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文の「ライセンス種別を確認し」「適合するかを判断してください」に対し、候補は「ライセンスの種類を確認し」「合うかどうかを判断してください」と言い換えている。これは同義の語の置換で、確認対象・判断内容・命令の強さ（「してください」）、括弧内の例、太字見出しの記法はすべて保たれている。ただし、原文はすでに明確で言い換えは必須ではなく、「適合する」から「合う」へはやや平易で口語的になり、専門的なニュアンスが少し弱まる。それでも意味や働きは変わらず、変更も小さいため、不要な書換えとして問題視するほどではない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 5.89,
+      "cost_usd": 0.008812
+    },
+    {
+      "index": 79,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f018cbba383ed760923ac336363ca87842b24499a6d0f12ce0313e81a9ac3e10",
+      "cache_hit": false,
+      "raw_file": "c0079.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "実装すべき項目は組織の規模によって異なる。",
+          "実装すべき項目は組織の事業内容によって異なる。",
+          "実装すべき項目はOSSの利用形態によって異なる。",
+          "実装すべき項目は成熟度によって異なる。",
+          "実装すべき項目の優先度は組織の規模によって異なる。",
+          "実装すべき項目の優先度は組織の事業内容によって異なる。",
+          "実装すべき項目の優先度はOSSの利用形態によって異なる。",
+          "実装すべき項目の優先度は成熟度によって異なる。",
+          "すべての項目をチェックする必要はない。",
+          "自組織の目的や優先度に応じて項目を選ぶべきである。",
+          "必要な項目から段階的に採用・実装することが推奨される。"
+        ]
+      },
+      "error": null,
+      "seconds": 5.12,
+      "cost_usd": 0.009416
+    },
+    {
+      "index": 80,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "dc649bec40a405c6b83c8f9420388a900d7bfc0bc49cf7bf960b50048f9bd17e",
+      "cache_hit": false,
+      "raw_file": "c0080.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "実装すべき項目は組織の規模によって異なる。",
+            "reason": "文脈に「組織の規模、事業内容、OSSの利用形態、成熟度によって、実装すべき項目や優先度は異なります」と明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目は組織の事業内容によって異なる。",
+            "reason": "文脈で、事業内容によって実装すべき項目が異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目はOSSの利用形態によって異なる。",
+            "reason": "文脈で、OSSの利用形態によって実装すべき項目が異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目は成熟度によって異なる。",
+            "reason": "文脈で、成熟度によって実装すべき項目が異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目の優先度は組織の規模によって異なる。",
+            "reason": "文脈で、組織の規模によって項目だけでなく優先度も異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目の優先度は組織の事業内容によって異なる。",
+            "reason": "文脈で、事業内容によって優先度も異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目の優先度はOSSの利用形態によって異なる。",
+            "reason": "文脈で、OSSの利用形態によって優先度も異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目の優先度は成熟度によって異なる。",
+            "reason": "文脈で、成熟度によって優先度も異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "すべての項目をチェックする必要はない。",
+            "reason": "文脈に「すべての項目をチェックする必要はありません」と明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "自組織の目的や優先度に応じて項目を選ぶべきである。",
+            "reason": "文脈で、自組織の目的や優先度に応じて必要な項目から採用・実装するよう述べられており、これと整合します。",
+            "verdict": 1
+          },
+          {
+            "statement": "必要な項目から段階的に採用・実装することが推奨される。",
+            "reason": "文脈に「必要な項目から段階的に採用・実装してください」と記載されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 7.2,
+      "cost_usd": 0.018226
+    },
+    {
+      "index": 81,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f018cbba383ed760923ac336363ca87842b24499a6d0f12ce0313e81a9ac3e10",
+      "cache_hit": true,
+      "raw_file": "c0079.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "実装すべき項目は組織の規模によって異なる。",
+          "実装すべき項目は組織の事業内容によって異なる。",
+          "実装すべき項目はOSSの利用形態によって異なる。",
+          "実装すべき項目は成熟度によって異なる。",
+          "実装すべき項目の優先度は組織の規模によって異なる。",
+          "実装すべき項目の優先度は組織の事業内容によって異なる。",
+          "実装すべき項目の優先度はOSSの利用形態によって異なる。",
+          "実装すべき項目の優先度は成熟度によって異なる。",
+          "すべての項目をチェックする必要はない。",
+          "自組織の目的や優先度に応じて項目を選ぶべきである。",
+          "必要な項目から段階的に採用・実装することが推奨される。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 82,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "dc649bec40a405c6b83c8f9420388a900d7bfc0bc49cf7bf960b50048f9bd17e",
+      "cache_hit": true,
+      "raw_file": "c0080.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "実装すべき項目は組織の規模によって異なる。",
+            "reason": "文脈に「組織の規模、事業内容、OSSの利用形態、成熟度によって、実装すべき項目や優先度は異なります」と明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目は組織の事業内容によって異なる。",
+            "reason": "文脈で、事業内容によって実装すべき項目が異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目はOSSの利用形態によって異なる。",
+            "reason": "文脈で、OSSの利用形態によって実装すべき項目が異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目は成熟度によって異なる。",
+            "reason": "文脈で、成熟度によって実装すべき項目が異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目の優先度は組織の規模によって異なる。",
+            "reason": "文脈で、組織の規模によって項目だけでなく優先度も異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目の優先度は組織の事業内容によって異なる。",
+            "reason": "文脈で、事業内容によって優先度も異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目の優先度はOSSの利用形態によって異なる。",
+            "reason": "文脈で、OSSの利用形態によって優先度も異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目の優先度は成熟度によって異なる。",
+            "reason": "文脈で、成熟度によって優先度も異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "すべての項目をチェックする必要はない。",
+            "reason": "文脈に「すべての項目をチェックする必要はありません」と明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "自組織の目的や優先度に応じて項目を選ぶべきである。",
+            "reason": "文脈で、自組織の目的や優先度に応じて必要な項目から採用・実装するよう述べられており、これと整合します。",
+            "verdict": 1
+          },
+          {
+            "statement": "必要な項目から段階的に採用・実装することが推奨される。",
+            "reason": "文脈に「必要な項目から段階的に採用・実装してください」と記載されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 83,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f018cbba383ed760923ac336363ca87842b24499a6d0f12ce0313e81a9ac3e10",
+      "cache_hit": true,
+      "raw_file": "c0079.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "実装すべき項目は組織の規模によって異なる。",
+          "実装すべき項目は組織の事業内容によって異なる。",
+          "実装すべき項目はOSSの利用形態によって異なる。",
+          "実装すべき項目は成熟度によって異なる。",
+          "実装すべき項目の優先度は組織の規模によって異なる。",
+          "実装すべき項目の優先度は組織の事業内容によって異なる。",
+          "実装すべき項目の優先度はOSSの利用形態によって異なる。",
+          "実装すべき項目の優先度は成熟度によって異なる。",
+          "すべての項目をチェックする必要はない。",
+          "自組織の目的や優先度に応じて項目を選ぶべきである。",
+          "必要な項目から段階的に採用・実装することが推奨される。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 84,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "dc649bec40a405c6b83c8f9420388a900d7bfc0bc49cf7bf960b50048f9bd17e",
+      "cache_hit": true,
+      "raw_file": "c0080.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "実装すべき項目は組織の規模によって異なる。",
+            "reason": "文脈に「組織の規模、事業内容、OSSの利用形態、成熟度によって、実装すべき項目や優先度は異なります」と明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目は組織の事業内容によって異なる。",
+            "reason": "文脈で、事業内容によって実装すべき項目が異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目はOSSの利用形態によって異なる。",
+            "reason": "文脈で、OSSの利用形態によって実装すべき項目が異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目は成熟度によって異なる。",
+            "reason": "文脈で、成熟度によって実装すべき項目が異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目の優先度は組織の規模によって異なる。",
+            "reason": "文脈で、組織の規模によって項目だけでなく優先度も異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目の優先度は組織の事業内容によって異なる。",
+            "reason": "文脈で、事業内容によって優先度も異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目の優先度はOSSの利用形態によって異なる。",
+            "reason": "文脈で、OSSの利用形態によって優先度も異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "実装すべき項目の優先度は成熟度によって異なる。",
+            "reason": "文脈で、成熟度によって優先度も異なると述べられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "すべての項目をチェックする必要はない。",
+            "reason": "文脈に「すべての項目をチェックする必要はありません」と明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "自組織の目的や優先度に応じて項目を選ぶべきである。",
+            "reason": "文脈で、自組織の目的や優先度に応じて必要な項目から採用・実装するよう述べられており、これと整合します。",
+            "verdict": 1
+          },
+          {
+            "statement": "必要な項目から段階的に採用・実装することが推奨される。",
+            "reason": "文脈に「必要な項目から段階的に採用・実装してください」と記載されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 85,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "24c61dba03af427cdeaa2002670da0e7cbb6a3ec4f9131fec29e71f2f5f28bc6",
+      "cache_hit": false,
+      "raw_file": "c0085.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文と候補は完全に同一である。「すべての項目をチェックする必要はありません」という否定（不要）と、「段階的に採用・実装してください」という肯定の依頼が、候補でもそのまま保たれている。否定・禁止の反転、追加、削除はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.44,
+      "cost_usd": 0.0076820000000000005
+    },
+    {
+      "index": 86,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9a53e4da5a463ea0b91793f0b60cf89449071ae24428cc59bbf4559fc1cb0083",
+      "cache_hit": false,
+      "raw_file": "c0086.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文と候補は完全に同一である。「組織の規模、事業内容、OSSの利用形態、成熟度によって」という条件、「すべての項目をチェックする必要はありません」という範囲、「必要な項目から段階的に採用・実装してください」という指示の強さと範囲が、候補でもそのまま保たれており、条件・例外・範囲の脱落、追加、変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.35,
+      "cost_usd": 0.008118
+    },
+    {
+      "index": 87,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "9057ab5359e66ed39004af9bf375a8e580bb4c3c8c738d5ffc4978efe33b1f05",
+      "cache_hit": false,
+      "raw_file": "c0087.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文と候補は完全に同一である。「実装すべき項目や優先度」「自組織の目的や優先度に応じて、必要な項目から段階的に採用・実装してください」といった、動作の主体（読み手への依頼）、対象（項目）、修飾先、宛先のいずれも変更・追加・省略がなく、そのまま保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.51,
+      "cost_usd": 0.007894
+    },
+    {
+      "index": 88,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "f4fe154d11625648e506e4c7c7cfbb596ffc7b5978c3a82f5919fc5ab0e97cad",
+      "cache_hit": false,
+      "raw_file": "c0088.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一である。「すべての項目をチェックする必要はありません」（不要）、「段階的に採用・実装してください」（依頼）、「実装すべき項目」（推奨）といった義務・推奨の強さと現在形の時制がそのまま保たれており、変更はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.41,
+      "cost_usd": 0.007862000000000001
+    },
+    {
+      "index": 89,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "316d6c7f363add94fa78a3f0c977e2591ee2b525eb0a6d3ff6f9b654d2a1a9f1",
+      "cache_hit": false,
+      "raw_file": "c0089.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文と候補は完全に同一である。「必要な項目から段階的に採用・実装してください」という段階的な順序や、「組織の規模、事業内容、OSSの利用形態、成熟度」といった並びも変更されておらず、数値・単位・期限・頻度・先後関係に変化はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.34,
+      "cost_usd": 0.00768
+    },
+    {
+      "index": 90,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "a16ba7397894efb8f801f48aa0417306c74f087f3e8833f8fd22997d53d61aa3",
+      "cache_hit": false,
+      "raw_file": "c0090.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "候補は原文と完全に同一で、「組織の規模、事業内容、OSSの利用形態、成熟度」「すべての項目をチェックする必要はありません」「必要な項目から段階的に採用・実装してください」といった表現がそのまま保たれている。主体、条件、完了状態、理由、具体例、固有名の追加は一切ないため、原文にない具体化はない。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 6.64,
+      "cost_usd": 0.007984
+    },
+    {
+      "index": 91,
+      "kind": "DiscreteResponseModel",
+      "prompt_sha256": "b673d51860d2133994fc46b6537145c584666b3d9e097b567a2611304f835b3f",
+      "cache_hit": false,
+      "raw_file": "c0091.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "reason": "原文は「組織の規模、事業内容、OSSの利用形態、成熟度によって、実装すべき項目や優先度は異なります。」「そのため、すべての項目をチェックする必要はありません。」「自組織の目的や優先度に応じて、必要な項目から段階的に採用・実装してください。」の3文で、候補はこれと完全に同一である。原文はすでに明確で、無変更が適切であり、不要な書換えは一切行われていない。義務の強さ（「必要はありません」「してください」）や条件も保たれている。",
+        "value": "pass"
+      },
+      "error": null,
+      "seconds": 4.74,
+      "cost_usd": 0.008576
+    }
+  ],
+  "call_summary": {
+    "calls": 91,
+    "cache_hits": 16,
+    "failures": 0,
+    "seconds": 424.1,
+    "cost_usd_list_price": 0.7133,
+    "calls_without_cost": 0
+  },
+  "finished_at": "2026-10-16T23:34:33.702852+00:00"
+}

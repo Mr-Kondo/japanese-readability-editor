@@ -1,0 +1,341 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "hedge-s3a",
+      "document_id": "da-requirements-template",
+      "mode": "B",
+      "request": "意味・主体・条件・期限・義務の強さを保って、読みやすく推敲してください。",
+      "audience": "政府情報システムの調達・管理に関わる職員",
+      "context": "",
+      "original": "運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする。ただし、情報システムの監視は24時間365日行うこと。",
+      "candidate": "運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までとする。ただし、情報システムの監視は原則として24時間365日行うこと。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "necessity-s5",
+      "document_id": "da-ds-120",
+      "mode": "B",
+      "request": "意味・主体・条件・期限・義務の強さを保って、読みやすく推敲してください。",
+      "audience": "政府情報システムの調達・管理に関わる職員",
+      "context": "",
+      "original": "要件定義で検討する機能は、必ずしも全てを実現できるわけではありません。予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります。",
+      "candidate": "要件定義で検討する機能は、必ずしも全てを実現できるわけではありません。予算やスケジュールの関係から、実現する機能を絞ることはよくあります。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "possibility-s6",
+      "document_id": "da-ds-120",
+      "mode": "B",
+      "request": "意味・主体・条件・期限・義務の強さを保って、読みやすく推敲してください。",
+      "audience": "政府情報システムの調達・管理に関わる職員",
+      "context": "",
+      "original": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集しますが、要件定義を開始する時点で最新化を行いましょう。調達後に変更内容が判明した場合は、追加のコストがかかる可能性がありますので、留意してください。",
+      "candidate": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集しますが、要件定義を開始する時点で最新化を行いましょう。調達後に変更内容が判明した場合は、追加のコストがかかりますので、留意してください。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "timing-s6",
+      "document_id": "da-ds-120",
+      "mode": "B",
+      "request": "意味・主体・条件・期限・義務の強さを保って、読みやすく推敲してください。",
+      "audience": "政府情報システムの調達・管理に関わる職員",
+      "context": "",
+      "original": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集しますが、要件定義を開始する時点で最新化を行いましょう。調達後に変更内容が判明した場合は、追加のコストがかかる可能性がありますので、留意してください。",
+      "candidate": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集しますが、要件定義を開始する前に最新化を行いましょう。調達後に変更内容が判明した場合は、追加のコストがかかる可能性がありますので、留意してください。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "quantifier-k8s",
+      "document_id": "k8s-pod-lifecycle",
+      "mode": "B",
+      "request": "意味・条件・数値・コマンド・フィールド名・既定値・警告を保って、読みやすく推敲してください。",
+      "audience": "Kubernetesクラスターを運用する運用担当者",
+      "context": "",
+      "original": "デフォルトでは、すべての削除は30秒以内に正常に行われます。kubectl delete コマンドは、ユーザーがデフォルト値を上書きして独自の値を指定できるようにする --grace-period=<seconds> オプションをサポートします。",
+      "candidate": "デフォルトでは、通常の削除は30秒以内に正常に行われます。kubectl delete コマンドは、ユーザーがデフォルト値を上書きして独自の値を指定できるようにする --grace-period=<seconds> オプションをサポートします。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "flag-dropped-k8s",
+      "document_id": "k8s-pod-lifecycle",
+      "mode": "B",
+      "request": "意味・条件・数値・コマンド・フィールド名・既定値・警告を保って、読みやすく推敲してください。",
+      "audience": "Kubernetesクラスターを運用する運用担当者",
+      "context": "",
+      "original": "強制削除を実行するために --grace-period=0 と共に --force というフラグを追加で指定する必要があります。",
+      "candidate": "強制削除を実行するには --grace-period=0 を指定する必要があります。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "hedge-k8s",
+      "document_id": "k8s-pod-lifecycle",
+      "mode": "B",
+      "request": "意味・条件・数値・コマンド・フィールド名・既定値・警告を保って、読みやすく推敲してください。",
+      "audience": "Kubernetesクラスターを運用する運用担当者",
+      "context": "",
+      "original": "コンテナが動いているかを示します。 livenessProbeに失敗すると、kubeletはコンテナを殺します、そしてコンテナはrestart policyに従います。コンテナにlivenessProbeが設定されていない場合、デフォルトの状態はSuccessです。",
+      "candidate": "コンテナが動いているかを示します。 livenessProbeに失敗すると、kubeletはコンテナを殺します、そしてコンテナはrestart policyに従います。コンテナにlivenessProbeが設定されていない場合、通常はSuccessとして扱われます。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "strength-py",
+      "document_id": "py-tutorial-modules",
+      "mode": "B",
+      "request": "意味・条件・数値・コード・識別子・義務の強さを保って、読みやすく推敲してください。",
+      "audience": "Pythonの標準ライブラリを使う開発者",
+      "context": "",
+      "original": "いくつかのプログラムはこれらの除去されるものに依存している可能性があるため、自分が何をしているかを理解しているときに限ってこれらのオプションを使うべきです。",
+      "candidate": "いくつかのプログラムはこれらの除去されるものに依存している可能性があるため、理解したうえでこれらのオプションを使うとよいでしょう。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "only-py",
+      "document_id": "py-library-tempfile",
+      "mode": "B",
+      "request": "意味・条件・数値・コード・識別子・義務の強さを保って、読みやすく推敲してください。",
+      "audience": "Pythonの標準ライブラリを使う開発者",
+      "context": "",
+      "original": "作成したユーザのユーザ ID からのみファイルを読み書き出来ます。プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、ファイルは誰からも実行不可です。このファイルのファイル記述子は子プロセスに継承されません。",
+      "candidate": "作成したユーザの権限でファイルを読み書き出来ます。プラットフォームがファイルが実行可能かどうかを示す許可ビットを使用している場合、ファイルは誰からも実行不可です。このファイルのファイル記述子は子プロセスに継承されません。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "order-py",
+      "document_id": "py-tutorial-modules",
+      "mode": "B",
+      "request": "意味・条件・数値・コード・識別子・義務の強さを保って、読みやすく推敲してください。",
+      "audience": "Pythonの標準ライブラリを使う開発者",
+      "context": "",
+      "original": "spam という名前のモジュールをインポートするとき、インタープリタはまずその名前の組み込みモジュールを探します。モジュール名の一覧は sys.builtin_module_names にあります。見つからなかった場合は、 spam.py という名前のファイルを sys.path にあるディレクトリのリストから探します。",
+      "candidate": "spam という名前のモジュールをインポートするとき、インタープリタは組み込みモジュールと、sys.path にあるディレクトリの spam.py を探します。モジュール名の一覧は sys.builtin_module_names にあります。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "qualifier-essay",
+      "document_id": "az-002359",
+      "mode": "B",
+      "request": "論旨・対比・否定・比喩・語り口を保って、読みやすく推敲してください。現代語化や内容の更新はしないでください。",
+      "audience": "科学と学問に関心のある一般の読者",
+      "context": "",
+      "original": "頭がよくて、そうして、自分を頭がいいと思い利口だと思う人は先生にはなれても科学者にはなれない。人間の頭の力の限界を自覚して大自然の前に愚かな赤裸の自分を投げ出し、そうしてただ大自然の直接の教えにのみ傾聴する覚悟があって、初めて科学者にはなれるのである。",
+      "candidate": "頭のいい人は先生にはなれても科学者にはなれない。人間の頭の力の限界を自覚して大自然の前に愚かな赤裸の自分を投げ出し、そうしてただ大自然の直接の教えにのみ傾聴する覚悟があって、初めて科学者にはなれるのである。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "hedge-essay",
+      "document_id": "az-002359",
+      "mode": "B",
+      "request": "論旨・対比・否定・比喩・語り口を保って、読みやすく推敲してください。現代語化や内容の更新はしないでください。",
+      "audience": "科学と学問に関心のある一般の読者",
+      "context": "",
+      "original": "いわゆる頭のいい人は、言わば足の早い旅人のようなものである。人より先に人のまだ行かない所へ行き着くこともできる代わりに、途中の道ばたあるいはちょっとしたわき道にある肝心なものを見落とす恐れがある。頭の悪い人足ののろい人がずっとあとからおくれて来てわけもなくそのだいじな宝物を拾って行く場合がある。",
+      "candidate": "いわゆる頭のいい人は、言わば足の早い旅人のようなものである。人より先に人のまだ行かない所へ行き着くこともできる代わりに、途中の道ばたあるいはちょっとしたわき道にある肝心なものを見落とす恐れがある。頭の悪い人足ののろい人がずっとあとからおくれて来てわけもなくそのだいじな宝物を拾って行く。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "tension-essay",
+      "document_id": "az-047236",
+      "mode": "B",
+      "request": "論旨・対比・否定・比喩・語り口を保って、読みやすく推敲してください。現代語化や内容の更新はしないでください。",
+      "audience": "科学と学問に関心のある一般の読者",
+      "context": "",
+      "original": "右のことはほんの一部の植物採集談であるが、これはただの遊びごとにしたことでなく、たとえ楽しかったとはいえ、全く汗水流しての積極的採集で自分の学問のために努力したのである。",
+      "candidate": "右のことはほんの一部の植物採集談であるが、これは楽しい遊びごとのようなもので、努力というほどのものではなかった。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "actor-org",
+      "document_id": "ipa-o-using",
+      "mode": "B",
+      "request": "役割・担当・推奨や義務の強さ・条件・専門用語・Markdown の記法を保って、読みやすく推敲してください。",
+      "audience": "自社のOSS管理を整える開発者・OSPO担当者",
+      "context": "",
+      "original": "- **ソースコード提供義務や同一ライセンスでの頒布義務、著作権表示・ライセンス文書の添付義務など、利用形態に応じた確認が必要な条件**を含むライセンスの場合\n- **商用ライセンスが必要**な可能性がある場合\n- **セキュリティリスクが懸念**される場合（セキュリティ部門へ相談）\n- **社内導入済みOSSリストにないソフトウェア**の導入",
+      "candidate": "- **ソースコード提供義務や同一ライセンスでの頒布義務、著作権表示・ライセンス文書の添付義務など、利用形態に応じた確認が必要な条件**を含むライセンスの場合\n- **商用ライセンスが必要**な可能性がある場合\n- **セキュリティリスクが懸念**される場合（OSPOへ相談）\n- **社内導入済みOSSリストにないソフトウェア**の導入",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "strength-up-org",
+      "document_id": "ipa-o-eval",
+      "mode": "B",
+      "request": "役割・担当・推奨や義務の強さ・条件・専門用語・Markdown の記法を保って、読みやすく推敲してください。",
+      "audience": "自社のOSS管理を整える開発者・OSPO担当者",
+      "context": "",
+      "original": "最近6ヶ月以内に更新があるか、Issueに対する反応があるか、pull requestがマージされているかを確認します。\n完全に停止しているプロジェクトは、セキュリティリスクや将来性の観点から避けることを推奨します。",
+      "candidate": "最近6ヶ月以内に更新があるか、Issueに対する反応があるか、pull requestがマージされているかを確認します。\n完全に停止しているプロジェクトは、セキュリティリスクや将来性の観点から避けてください。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "paraphrase-k8s",
+      "document_id": "k8s-pod-lifecycle",
+      "mode": "B",
+      "request": "意味・条件・数値・コマンド・フィールド名・既定値・警告を保って、読みやすく推敲してください。",
+      "audience": "Kubernetesクラスターを運用する運用担当者",
+      "context": "",
+      "original": "Podのspecには、Always、OnFailure、またはNeverのいずれかの値を持つrestartPolicyフィールドがあります。デフォルト値はAlwaysです。",
+      "candidate": "Podのspecには、restartPolicyフィールドがあり、値はAlways、OnFailure、Neverのいずれかです。デフォルト値はAlwaysです。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "paraphrase-py",
+      "document_id": "py-library-tempfile",
+      "mode": "B",
+      "request": "意味・条件・数値・コード・識別子・義務の強さを保って、読みやすく推敲してください。",
+      "audience": "Pythonの標準ライブラリを使う開発者",
+      "context": "",
+      "original": "一時的な記憶領域として使うことの出来る file-like object を返します。ファイルは mkstemp() と同じルールにより安全に作成されます。",
+      "candidate": "一時的な記憶領域として使える file-like object を返します。ファイルは mkstemp() と同じルールで安全に作成されます。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "paraphrase-org",
+      "document_id": "ipa-o-eval",
+      "mode": "B",
+      "request": "役割・担当・推奨や義務の強さ・条件・専門用語・Markdown の記法を保って、読みやすく推敲してください。",
+      "audience": "自社のOSS管理を整える開発者・OSPO担当者",
+      "context": "",
+      "original": "**ライセンスの確認**\nLICENSEファイルやREADMEでライセンス種別を確認し、あなたの利用方法（社内利用、配布、SaaS提供）に適合するかを判断してください。",
+      "candidate": "**ライセンスの確認**\nLICENSEファイルやREADMEでライセンスの種類を確認し、あなたの利用方法（社内利用、配布、SaaS提供）に合うかどうかを判断してください。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "paraphrase-essay",
+      "document_id": "az-002359",
+      "mode": "B",
+      "request": "論旨・対比・否定・比喩・語り口を保って、読みやすく推敲してください。現代語化や内容の更新はしないでください。",
+      "audience": "科学と学問に関心のある一般の読者",
+      "context": "",
+      "original": "いわゆる頭のいい人は、言わば足の早い旅人のようなものである。人より先に人のまだ行かない所へ行き着くこともできる代わりに、途中の道ばたあるいはちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+      "candidate": "いわゆる頭のいい人は、言ってみれば足の早い旅人のようなものである。人より先に、まだ誰も行っていない所へ行き着くこともできる代わりに、途中の道ばたやちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "control-essay",
+      "document_id": "az-002364",
+      "mode": "B",
+      "request": "論旨・対比・否定・比喩・語り口を保って、読みやすく推敲してください。現代語化や内容の更新はしないでください。",
+      "audience": "科学と学問に関心のある一般の読者",
+      "context": "",
+      "original": "それで語学も数学もその修得は一気呵成《いっきかせい》にはできない。平たくいえば、飽きずに急がずに長く時間をかける事が、少なくとも「必要条件」の一つである。\nただしこれだけでは「充分なる条件」ではない。",
+      "candidate": "それで語学も数学もその修得は一気呵成《いっきかせい》にはできない。平たくいえば、飽きずに急がずに長く時間をかける事が、少なくとも「必要条件」の一つである。\nただしこれだけでは「充分なる条件」ではない。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    },
+    {
+      "id": "control-org",
+      "document_id": "ipa-o-ospo",
+      "mode": "B",
+      "request": "役割・担当・推奨や義務の強さ・条件・専門用語・Markdown の記法を保って、読みやすく推敲してください。",
+      "audience": "自社のOSS管理を整える開発者・OSPO担当者",
+      "context": "",
+      "original": "組織の規模、事業内容、OSSの利用形態、成熟度によって、実装すべき項目や優先度は異なります。\nそのため、すべての項目をチェックする必要はありません。\n自組織の目的や優先度に応じて、必要な項目から段階的に採用・実装してください。",
+      "candidate": "組織の規模、事業内容、OSSの利用形態、成熟度によって、実装すべき項目や優先度は異なります。\nそのため、すべての項目をチェックする必要はありません。\n自組織の目的や優先度に応じて、必要な項目から段階的に採用・実装してください。",
+      "provenance": {
+        "generator": "assistant（手作業で構成）",
+        "label_basis": "constructed",
+        "skill_version": "なし（スキル未適用）",
+        "model": "なし"
+      }
+    }
+  ]
+}

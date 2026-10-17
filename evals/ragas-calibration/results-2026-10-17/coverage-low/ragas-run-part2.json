@@ -1,0 +1,2429 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "config": {
+    "tool_version": 1,
+    "rubric_version": "ragas-ja-rubric-v1",
+    "rubric_sha256": "7f37f4309a2786203f376adfebd3d62e08df4be0d1d448c23480dd4f39dc81d1",
+    "discriminate": false,
+    "metrics": [
+      "factual"
+    ],
+    "profile": "gov-org",
+    "aspects": [
+      "negation_polarity",
+      "condition_scope",
+      "actor_target",
+      "modality_strength",
+      "numbers_order",
+      "ungrounded_specificity",
+      "unnecessary_change"
+    ],
+    "atomicity": "high",
+    "coverage": "low",
+    "ragas_prompts": "Ragas 0.4.3 既定（英語の指示と例。日本語への適合は未検証）",
+    "llm_adapter": "ClaudeCliLLM（JSON指示をプロンプト末尾に付加、ツールなし、逐次実行、同一プロンプトは再利用）",
+    "claude_flags": [
+      "--print",
+      "--safe-mode",
+      "--strict-mcp-config",
+      "--tools",
+      "",
+      "--no-session-persistence",
+      "--model",
+      "sonnet",
+      "--effort",
+      "medium",
+      "--output-format",
+      "json"
+    ],
+    "claude_system": "提供された文章を処理してください。ツールは使用しないでください。",
+    "claude_cli_version": "2.1.292 (Claude Code)",
+    "temperature_and_seed": "CLI から指定できない（不明）",
+    "python": "3.13.16",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "packages": {
+      "ragas": "0.4.3",
+      "langchain-community": "0.3.31",
+      "langchain-core": "1.6.11",
+      "langchain": "1.4.6",
+      "instructor": "1.3.2",
+      "openai": "1.109.1",
+      "pydantic": "2.14.1",
+      "numpy": "2.5.4"
+    }
+  },
+  "started_at": "2026-10-16T23:35:23.340075+00:00",
+  "input": {
+    "path": "/tmp/claude-501/ragas-inputs/all-p2.json",
+    "cases": 11,
+    "task_sha256": "d05cc561ae6e67176f6853c779fa1795f30f19964567c74663e5a7c55eb925af"
+  },
+  "cases": [
+    {
+      "id": "paraphrase-s3a",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "negation-flip-s3b",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.5,
+          "status": "scored",
+          "value": 0.5,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 1,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することが求められている。",
+                "reason": "文脈では、運用時間と同等の体制を維持することは求めないと明記されており、この主張は文脈と矛盾する。"
+              }
+            ]
+          },
+          "recomputed_value": 0.5,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.5,
+          "status": "scored",
+          "value": 0.5,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 1,
+            "unsupported": 1,
+            "unsupported_texts": [
+              {
+                "claim": "夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することが求められている。",
+                "reason": "文脈では、運用時間と同等の体制を維持することは求めないと明記されており、この主張は文脈と矛盾する。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 2,
+            "supported": 1,
+            "unsupported": 1,
+            "coverage": 0.5,
+            "unsupported_texts": [
+              {
+                "claim": "夜間や休日のシステム障害時の連絡体制については、運用時間と同等の体制を維持することは求めない。",
+                "reason": "コンテキストでは、夜間や休日の連絡体制について運用時間と同等の体制を維持することを求めているため、この主張は文脈の内容と矛盾する。"
+              }
+            ]
+          },
+          "recomputed_value": 0.5,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "paraphrase-s5",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 2,
+            "supported": 2,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "ungrounded-s6",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.5,
+          "status": "scored",
+          "value": 0.5,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 2,
+            "unsupported": 2,
+            "unsupported_texts": [
+              {
+                "claim": "調達後に変更内容が判明した場合は、追加の契約変更が必ず発生する。",
+                "reason": "文脈には追加コストがかかる可能性があるとしか書かれておらず、契約変更については言及がない。また「必ず」発生するとも述べられていないため、推論できない。"
+              },
+              {
+                "claim": "調達後に変更内容が判明した場合は、追加のコストが必ず発生する。",
+                "reason": "文脈では追加のコストがかかる「可能性がある」と述べられているだけで、「必ず」発生するとは述べられていないため、推論できない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.5,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 2,
+            "unsupported": 2,
+            "unsupported_texts": [
+              {
+                "claim": "調達後に変更内容が判明した場合は、追加の契約変更が必ず発生する。",
+                "reason": "文脈には追加コストがかかる可能性があるとしか書かれておらず、契約変更については言及がない。また「必ず」発生するとも述べられていないため、推論できない。"
+              },
+              {
+                "claim": "調達後に変更内容が判明した場合は、追加のコストが必ず発生する。",
+                "reason": "文脈では追加のコストがかかる「可能性がある」と述べられているだけで、「必ず」発生するとは述べられていないため、推論できない。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "hedge-s3a",
+      "document_id": "da-requirements-template",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "timing-s6",
+      "document_id": "da-ds-120",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "hedge-k8s",
+      "document_id": "k8s-pod-lifecycle",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "order-py",
+      "document_id": "py-tutorial-modules",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.6,
+          "status": "scored",
+          "value": 0.6,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 4,
+            "supported": 2,
+            "unsupported": 2,
+            "coverage": 0.5,
+            "unsupported_texts": [
+              {
+                "claim": "spam という名前のモジュールをインポートするとき、インタープリタはまずその名前の組み込みモジュールを探します。",
+                "reason": "文脈では、インタープリタは組み込みモジュールと sys.path にあるディレクトリの spam.py を探すとあるが、組み込みモジュールを「まず」探すという順序は明示されていない。"
+              },
+              {
+                "claim": "組み込みモジュールが見つからなかった場合、インタープリタは spam.py という名前のファイルを探します。",
+                "reason": "文脈には組み込みモジュールと spam.py を探すとあるだけで、組み込みモジュールが見つからなかった場合に spam.py を探すという条件や順序は述べられていない。"
+              }
+            ]
+          },
+          "recomputed_value": 0.6,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "tension-essay",
+      "document_id": "az-047236",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 0.5,
+          "status": "scored",
+          "value": 0.5,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 2,
+            "unsupported": 2,
+            "unsupported_texts": [
+              {
+                "claim": "植物採集は楽しい遊びごとのようなものであった。",
+                "reason": "文脈は「ただの遊びごとにしたことでなく」と遊びであることを否定している。楽しかったことは認めているが、遊びごとのようなものだったとは言えない。"
+              },
+              {
+                "claim": "植物採集は努力というほどのものではなかった。",
+                "reason": "文脈は「汗水流しての積極的採集で自分の学問のために努力した」と述べており、努力であったことを明言している。この主張は矛盾する。"
+              }
+            ]
+          },
+          "recomputed_value": 0.5,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 0.4,
+          "status": "scored",
+          "value": 0.4,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 2,
+            "unsupported": 2,
+            "unsupported_texts": [
+              {
+                "claim": "植物採集は楽しい遊びごとのようなものであった。",
+                "reason": "文脈は「ただの遊びごとにしたことでなく」と遊びであることを否定している。楽しかったことは認めているが、遊びごとのようなものだったとは言えない。"
+              },
+              {
+                "claim": "植物採集は努力というほどのものではなかった。",
+                "reason": "文脈は「汗水流しての積極的採集で自分の学問のために努力した」と述べており、努力であったことを明言している。この主張は矛盾する。"
+              }
+            ]
+          },
+          "reference_claims": {
+            "total": 5,
+            "supported": 2,
+            "unsupported": 3,
+            "coverage": 0.4,
+            "unsupported_texts": [
+              {
+                "claim": "植物採集はただの遊びごとではなかった。",
+                "reason": "文脈では植物採集は「楽しい遊びごとのようなもので、努力というほどのものではなかった」とされており、ただの遊びごとではなかったという主張は文脈と矛盾する。"
+              },
+              {
+                "claim": "植物採集は汗水流しての積極的採集であった。",
+                "reason": "文脈では努力というほどのものではなかったとされており、汗水流しての積極的な採集であったという記述はなく、矛盾する。"
+              },
+              {
+                "claim": "植物採集は自分の学問のための努力であった。",
+                "reason": "文脈では「努力というほどのものではなかった」と述べられており、学問のための努力であったという主張は文脈と矛盾する。"
+              }
+            ]
+          },
+          "recomputed_value": 0.4,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "paraphrase-k8s",
+      "document_id": "k8s-pod-lifecycle",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 3,
+            "supported": 3,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 5,
+            "supported": 5,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    },
+    {
+      "id": "paraphrase-essay",
+      "document_id": "az-002359",
+      "errors": [],
+      "factual": {
+        "precision": {
+          "mode": "precision",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        },
+        "recall": {
+          "mode": "recall",
+          "ragas_value": 1.0,
+          "status": "scored",
+          "value": 1.0,
+          "warnings": [],
+          "response_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "unsupported_texts": []
+          },
+          "reference_claims": {
+            "total": 4,
+            "supported": 4,
+            "unsupported": 0,
+            "coverage": 1.0,
+            "unsupported_texts": []
+          },
+          "recomputed_value": 1.0,
+          "consistent": true
+        }
+      }
+    }
+  ],
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "calls": [
+    {
+      "index": 1,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "76ec40aa902635b1eccc56735c696069b48f167b59f0904e9df799a5267d3abe",
+      "cache_hit": false,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間には土日が含まれない。",
+          "運用・保守業者の運用時間には祝日が含まれない。",
+          "運用・保守業者の運用時間には年末年始が含まれない。",
+          "情報システムの監視は24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.68,
+      "cost_usd": 0.00762
+    },
+    {
+      "index": 2,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "80c3392fb6ba2efb62603e497a0ae0c9067fd3bb0bb35762f364a90b472e3a8c",
+      "cache_hit": false,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "文脈には、運用・保守業者の運用時間は平日(土日及び祝日、年末年始を除く)の9時から17時までと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日が含まれない。",
+            "reason": "文脈で運用時間は土日を除くと明記されているため、土日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には祝日が含まれない。",
+            "reason": "文脈で運用時間は祝日を除くと明記されているため、祝日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には年末年始が含まれない。",
+            "reason": "文脈で運用時間は年末年始を除くと明記されているため、年末年始は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に、ただし情報システムの監視は24時間365日行うことと明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.73,
+      "cost_usd": 0.013564
+    },
+    {
+      "index": 3,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "76ec40aa902635b1eccc56735c696069b48f167b59f0904e9df799a5267d3abe",
+      "cache_hit": true,
+      "raw_file": "c0001.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間には土日が含まれない。",
+          "運用・保守業者の運用時間には祝日が含まれない。",
+          "運用・保守業者の運用時間には年末年始が含まれない。",
+          "情報システムの監視は24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 4,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "80c3392fb6ba2efb62603e497a0ae0c9067fd3bb0bb35762f364a90b472e3a8c",
+      "cache_hit": true,
+      "raw_file": "c0002.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "文脈には、運用・保守業者の運用時間は平日(土日及び祝日、年末年始を除く)の9時から17時までと明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日が含まれない。",
+            "reason": "文脈で運用時間は土日を除くと明記されているため、土日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には祝日が含まれない。",
+            "reason": "文脈で運用時間は祝日を除くと明記されているため、祝日は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には年末年始が含まれない。",
+            "reason": "文脈で運用時間は年末年始を除くと明記されているため、年末年始は含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に、ただし情報システムの監視は24時間365日行うことと明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 5,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "e89029325c2a5a45382462b26b24df1b905d464d8ff0a0486c993be207ff8cf5",
+      "cache_hit": false,
+      "raw_file": "c0005.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間の平日には土日及び祝日、年末年始は含まれない。",
+          "情報システムの監視は24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 3.99,
+      "cost_usd": 0.0032554
+    },
+    {
+      "index": 6,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "4799786263ad76f59467aebfa7bab3a696931a1da68a7df9f8cddbce95843350",
+      "cache_hit": false,
+      "raw_file": "c0006.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "文脈では、運用・保守業者の運用時間は土日及び祝日、年末年始を除く平日の9時から17時までと明記されている。したがって、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には土日及び祝日、年末年始は含まれない。",
+            "reason": "文脈では、運用時間は土日及び祝日、年末年始を除く平日とされており、これらの日は運用時間の対象に含まれないことが示されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈に「ただし、情報システムの監視は24時間365日行うこと」と明記されており、この主張は直接裏付けられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.3,
+      "cost_usd": 0.012568
+    },
+    {
+      "index": 7,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "357285a72b143e9fb5f310fbd7ec353519cc2913d713ce1bb684b1a3c1d5c7c4",
+      "cache_hit": false,
+      "raw_file": "c0007.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することが求められている。",
+          "夜間や休日におけるシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案することが求められている。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.34,
+      "cost_usd": 0.00736
+    },
+    {
+      "index": 8,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "5a69f7ced7b0e98bd1409e0c52015b4eee030350ead1105729652feee37a148d",
+      "cache_hit": false,
+      "raw_file": "c0008.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することが求められている。",
+            "reason": "文脈では、運用時間と同等の体制を維持することは求めないと明記されており、この主張は文脈と矛盾する。",
+            "verdict": 0
+          },
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案することが求められている。",
+            "reason": "文脈に、障害の重要性に応じた機動的な体制を提案することと明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 4.84,
+      "cost_usd": 0.011702
+    },
+    {
+      "index": 9,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "357285a72b143e9fb5f310fbd7ec353519cc2913d713ce1bb684b1a3c1d5c7c4",
+      "cache_hit": true,
+      "raw_file": "c0007.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することが求められている。",
+          "夜間や休日におけるシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案することが求められている。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 10,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "5a69f7ced7b0e98bd1409e0c52015b4eee030350ead1105729652feee37a148d",
+      "cache_hit": true,
+      "raw_file": "c0008.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制については、運用時間と同等の体制を維持することが求められている。",
+            "reason": "文脈では、運用時間と同等の体制を維持することは求めないと明記されており、この主張は文脈と矛盾する。",
+            "verdict": 0
+          },
+          {
+            "statement": "夜間や休日におけるシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案することが求められている。",
+            "reason": "文脈に、障害の重要性に応じた機動的な体制を提案することと明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 11,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "6082ac7655628a05a5fdef440f29456b7e3c1a99cf3fc99c75051dccccbd4008",
+      "cache_hit": false,
+      "raw_file": "c0011.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "夜間や休日のシステム障害時の連絡体制については、運用時間と同等の体制を維持することは求めない。",
+          "夜間や休日のシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案すること。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.33,
+      "cost_usd": 0.0032936
+    },
+    {
+      "index": 12,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "9555d48e4808b8c0f901f0a826cea48b936206677a728aecc1230832a0d4dca2",
+      "cache_hit": false,
+      "raw_file": "c0012.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "夜間や休日のシステム障害時の連絡体制については、運用時間と同等の体制を維持することは求めない。",
+            "reason": "コンテキストでは、夜間や休日の連絡体制について運用時間と同等の体制を維持することを求めているため、この主張は文脈の内容と矛盾する。",
+            "verdict": 0
+          },
+          {
+            "statement": "夜間や休日のシステム障害時の連絡体制について、障害の重要性に応じた機動的な体制を提案すること。",
+            "reason": "コンテキストには、障害の重要性に応じた機動的な体制を提案することと明記されているため、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 4.96,
+      "cost_usd": 0.011854
+    },
+    {
+      "index": 13,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2f81b22f350473067227794bbdf6b06ad5558a301163501af5d8435f7354b53f",
+      "cache_hit": false,
+      "raw_file": "c0013.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能を全て実現できるとは限らない。",
+          "予算やスケジュールの都合で、実現する機能を絞らなければならない場面はよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 3.95,
+      "cost_usd": 0.0070279999999999995
+    },
+    {
+      "index": 14,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "8952c96ad600810affea7ea99c535724fa4219b4ec495efdc8044121cbd51a38",
+      "cache_hit": false,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能を全て実現できるとは限らない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません」と明記されており、この主張と同じ内容である。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの都合で、実現する機能を絞らなければならない場面はよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、この主張と一致している。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 4.88,
+      "cost_usd": 0.011340000000000001
+    },
+    {
+      "index": 15,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "2f81b22f350473067227794bbdf6b06ad5558a301163501af5d8435f7354b53f",
+      "cache_hit": true,
+      "raw_file": "c0013.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能を全て実現できるとは限らない。",
+          "予算やスケジュールの都合で、実現する機能を絞らなければならない場面はよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 16,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "8952c96ad600810affea7ea99c535724fa4219b4ec495efdc8044121cbd51a38",
+      "cache_hit": true,
+      "raw_file": "c0014.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能を全て実現できるとは限らない。",
+            "reason": "文脈に「要件定義で検討する機能は、必ずしも全てを実現できるわけではありません」と明記されており、この主張と同じ内容である。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの都合で、実現する機能を絞らなければならない場面はよくある。",
+            "reason": "文脈に「予算やスケジュールの関係から、実現する機能を絞らなければならないことはよくあります」とあり、この主張と一致している。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 17,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "a87114b183289815eb95eb77fd6d81705fc931df75133a009555a4771da027ce",
+      "cache_hit": false,
+      "raw_file": "c0017.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+          "予算やスケジュールの関係から、実現する機能を絞らなければならないことがよくある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.05,
+      "cost_usd": 0.0030692
+    },
+    {
+      "index": 18,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "bddef92aae5c7f6365e3d09dfc9cb20052499e37a1b85f05daa4c15899599f3f",
+      "cache_hit": false,
+      "raw_file": "c0018.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "要件定義で検討する機能は、必ずしも全てを実現できるわけではない。",
+            "reason": "文脈に「要件定義で検討する機能を全て実現できるとは限りません」と明記されており、この主張と一致します。",
+            "verdict": 1
+          },
+          {
+            "statement": "予算やスケジュールの関係から、実現する機能を絞らなければならないことがよくある。",
+            "reason": "文脈に「予算やスケジュールの都合で、実現する機能を絞らなければならない場面はよくあります」と述べられており、この主張は直接推論できます。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.97,
+      "cost_usd": 0.011415999999999999
+    },
+    {
+      "index": 19,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "163d086ec91ac8b773e356cbe42230c5b273fc75e63829b2737fd11c8d9bdb70",
+      "cache_hit": false,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加の契約変更が必ず発生する。",
+          "調達後に変更内容が判明した場合は、追加のコストが必ず発生する。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.52,
+      "cost_usd": 0.007963999999999999
+    },
+    {
+      "index": 20,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "e63ecc95b55f486dbc255e52951957ee2be448c3c246cd0e240db92089bd32ce",
+      "cache_hit": false,
+      "raw_file": "c0020.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を行うことが推奨されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加の契約変更が必ず発生する。",
+            "reason": "文脈には追加コストがかかる可能性があるとしか書かれておらず、契約変更については言及がない。また「必ず」発生するとも述べられていないため、推論できない。",
+            "verdict": 0
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストが必ず発生する。",
+            "reason": "文脈では追加のコストがかかる「可能性がある」と述べられているだけで、「必ず」発生するとは述べられていないため、推論できない。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.36,
+      "cost_usd": 0.014054
+    },
+    {
+      "index": 21,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "163d086ec91ac8b773e356cbe42230c5b273fc75e63829b2737fd11c8d9bdb70",
+      "cache_hit": true,
+      "raw_file": "c0019.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加の契約変更が必ず発生する。",
+          "調達後に変更内容が判明した場合は、追加のコストが必ず発生する。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 22,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "e63ecc95b55f486dbc255e52951957ee2be448c3c246cd0e240db92089bd32ce",
+      "cache_hit": true,
+      "raw_file": "c0020.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を行うことが推奨されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加の契約変更が必ず発生する。",
+            "reason": "文脈には追加コストがかかる可能性があるとしか書かれておらず、契約変更については言及がない。また「必ず」発生するとも述べられていないため、推論できない。",
+            "verdict": 0
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストが必ず発生する。",
+            "reason": "文脈では追加のコストがかかる「可能性がある」と述べられているだけで、「必ず」発生するとは述べられていないため、推論できない。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 23,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f25f4cd3ab7e294e5058b747466e44b0bad9c0dcf8fb7019a869db5018041de2",
+      "cache_hit": false,
+      "raw_file": "c0023.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.14,
+      "cost_usd": 0.0035174
+    },
+    {
+      "index": 24,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "b107b3c1037ac7862de6438598b218958c64322fb6fc15f6f4c71f066312bc56",
+      "cache_hit": false,
+      "raw_file": "c0024.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する時点で最新化を行いましょう」とあり、最新化を行うことが推奨されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。",
+            "reason": "文脈では、調達後に変更内容が判明した場合は追加の契約変更とコストが必ず発生するとされており、「可能性がある」という表現は、必ず発生するという内容に含まれるため、推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.47,
+      "cost_usd": 0.013186
+    },
+    {
+      "index": 25,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "c0762a2b1070f9265c1d85edb9521053c9d5f67dc741b4a64e809c42a894c4d7",
+      "cache_hit": false,
+      "raw_file": "c0025.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までとする。",
+          "運用・保守業者の運用時間には土日及び祝日、年末年始を含まない。",
+          "情報システムの監視は原則として24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 3.92,
+      "cost_usd": 0.0072840000000000005
+    },
+    {
+      "index": 26,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "8fa7e882254e54f61a99b3eb1c0e6a1a93aeeb5f0378c218acc5f7819aea9d98",
+      "cache_hit": false,
+      "raw_file": "c0026.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までとする。",
+            "reason": "文脈では、運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日及び祝日、年末年始を含まない。",
+            "reason": "文脈では、運用時間である平日から土日及び祝日、年末年始が除かれると明記されているため、これらは運用時間に含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は原則として24時間365日行うこと。",
+            "reason": "文脈では、情報システムの監視は24時間365日行うこととされている。ただし「原則として」という限定は文脈になく、例外を認める記述もない。しかし、「ただし」は運用時間の例外として監視を常時行うことを求めており、24時間365日の監視という内容自体は文脈と整合しているため、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.02,
+      "cost_usd": 0.013216
+    },
+    {
+      "index": 27,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "c0762a2b1070f9265c1d85edb9521053c9d5f67dc741b4a64e809c42a894c4d7",
+      "cache_hit": true,
+      "raw_file": "c0025.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までとする。",
+          "運用・保守業者の運用時間には土日及び祝日、年末年始を含まない。",
+          "情報システムの監視は原則として24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 28,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "8fa7e882254e54f61a99b3eb1c0e6a1a93aeeb5f0378c218acc5f7819aea9d98",
+      "cache_hit": true,
+      "raw_file": "c0026.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までとする。",
+            "reason": "文脈では、運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されており、この主張は文脈から直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間には土日及び祝日、年末年始を含まない。",
+            "reason": "文脈では、運用時間である平日から土日及び祝日、年末年始が除かれると明記されているため、これらは運用時間に含まれない。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は原則として24時間365日行うこと。",
+            "reason": "文脈では、情報システムの監視は24時間365日行うこととされている。ただし「原則として」という限定は文脈になく、例外を認める記述もない。しかし、「ただし」は運用時間の例外として監視を常時行うことを求めており、24時間365日の監視という内容自体は文脈と整合しているため、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 29,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "e89029325c2a5a45382462b26b24df1b905d464d8ff0a0486c993be207ff8cf5",
+      "cache_hit": true,
+      "raw_file": "c0005.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "運用・保守業者の運用時間は平日の9時から17時までである。",
+          "運用・保守業者の運用時間の平日には土日及び祝日、年末年始は含まれない。",
+          "情報システムの監視は24時間365日行うこと。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 30,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "f41a9f455669d25d35e0e1d586a31983c2a230c3d10e61adefbebf21bdd2438c",
+      "cache_hit": false,
+      "raw_file": "c0030.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "運用・保守業者の運用時間は平日の9時から17時までである。",
+            "reason": "文脈には、運用・保守業者の運用時間は平日（土日及び祝日、年末年始を除く）の9時から17時までと明記されているため、この主張は直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "運用・保守業者の運用時間の平日には土日及び祝日、年末年始は含まれない。",
+            "reason": "文脈では平日が「土日及び祝日、年末年始を除く」と括弧書きで示されており、これらが運用時間の平日に含まれないことが読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "情報システムの監視は24時間365日行うこと。",
+            "reason": "文脈には、情報システムの監視は原則として24時間365日行うことと記載されている。「原則として」という留保はあるものの、監視を24時間365日行うという要求は文脈から直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.63,
+      "cost_usd": 0.012808
+    },
+    {
+      "index": 31,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "40595d7de6128b6cb020c070b1bf74582ff8ead5a569920b2e35a0a5292182a4",
+      "cache_hit": false,
+      "raw_file": "c0031.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "要件定義を開始する前に既存のサービス・業務や情報システムの資料の最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.15,
+      "cost_usd": 0.007636
+    },
+    {
+      "index": 32,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "861556c85fb6e69e0240e7be373c3ac2d778e2132a2644afe3d5ffa7081186b7",
+      "cache_hit": false,
+      "raw_file": "c0032.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "要件定義を開始する前に既存のサービス・業務や情報システムの資料の最新化を行うべきである。",
+            "reason": "文脈では「要件定義を開始する時点で最新化を行いましょう」と述べられており、開始時点での最新化を推奨している。「開始する前に」とは厳密には異なるが、要件定義の開始時点で最新化を行うべきという趣旨は文脈から直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」と明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.36,
+      "cost_usd": 0.013258
+    },
+    {
+      "index": 33,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "40595d7de6128b6cb020c070b1bf74582ff8ead5a569920b2e35a0a5292182a4",
+      "cache_hit": true,
+      "raw_file": "c0031.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "要件定義を開始する前に既存のサービス・業務や情報システムの資料の最新化を行うべきである。",
+          "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 34,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "861556c85fb6e69e0240e7be373c3ac2d778e2132a2644afe3d5ffa7081186b7",
+      "cache_hit": true,
+      "raw_file": "c0032.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "要件定義を開始する前に既存のサービス・業務や情報システムの資料の最新化を行うべきである。",
+            "reason": "文脈では「要件定義を開始する時点で最新化を行いましょう」と述べられており、開始時点での最新化を推奨している。「開始する前に」とは厳密には異なるが、要件定義の開始時点で最新化を行うべきという趣旨は文脈から直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合は、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」と明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 35,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "f25f4cd3ab7e294e5058b747466e44b0bad9c0dcf8fb7019a869db5018041de2",
+      "cache_hit": true,
+      "raw_file": "c0023.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+          "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+          "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 36,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "8fea50ab5d6f737a69c30dccbccb682a26b8ee239994c937c72649e99492fdc7",
+      "cache_hit": false,
+      "raw_file": "c0036.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集する。",
+            "reason": "文脈に「既存のサービス・業務や情報システムの資料はサービス・業務企画時点で収集します」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "既存のサービス・業務や情報システムの資料は要件定義を開始する時点で最新化を行うべきである。",
+            "reason": "文脈に「要件定義を開始する前に最新化を行いましょう」とあり、要件定義の開始前に最新化を行うことが推奨されている。「開始する時点」は「開始する前」とほぼ同じ趣旨であり、文脈から推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "調達後に変更内容が判明した場合、追加のコストがかかる可能性がある。",
+            "reason": "文脈に「調達後に変更内容が判明した場合は、追加のコストがかかる可能性があります」と明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.38,
+      "cost_usd": 0.013138
+    },
+    {
+      "index": 37,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "5088896457d323d8d95efd47267e26136c02b0bae7e0b254107aaf18a05f7841",
+      "cache_hit": false,
+      "raw_file": "c0037.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "livenessProbeはコンテナが動いているかを示す。",
+          "livenessProbeに失敗すると、kubeletはコンテナを殺す。",
+          "livenessProbeに失敗したコンテナはrestart policyに従う。",
+          "コンテナにlivenessProbeが設定されていない場合、通常はSuccessとして扱われる。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.41,
+      "cost_usd": 0.007698
+    },
+    {
+      "index": 38,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "1a5aa749e667e0a03ab32eab892fdea991bd0d842ffa6ee1f422a0110811946b",
+      "cache_hit": false,
+      "raw_file": "c0038.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "livenessProbeはコンテナが動いているかを示す。",
+            "reason": "コンテキストの冒頭に「コンテナが動いているかを示します。」とあり、livenessProbeについての説明として直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "livenessProbeに失敗すると、kubeletはコンテナを殺す。",
+            "reason": "コンテキストに「livenessProbeに失敗すると、kubeletはコンテナを殺します」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "livenessProbeに失敗したコンテナはrestart policyに従う。",
+            "reason": "コンテキストに「そしてコンテナはrestart policyに従います」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "コンテナにlivenessProbeが設定されていない場合、通常はSuccessとして扱われる。",
+            "reason": "コンテキストに「livenessProbeが設定されていない場合、デフォルトの状態はSuccessです」とあり、デフォルトでSuccessとして扱われることと一致する。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.54,
+      "cost_usd": 0.013506
+    },
+    {
+      "index": 39,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "5088896457d323d8d95efd47267e26136c02b0bae7e0b254107aaf18a05f7841",
+      "cache_hit": true,
+      "raw_file": "c0037.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "livenessProbeはコンテナが動いているかを示す。",
+          "livenessProbeに失敗すると、kubeletはコンテナを殺す。",
+          "livenessProbeに失敗したコンテナはrestart policyに従う。",
+          "コンテナにlivenessProbeが設定されていない場合、通常はSuccessとして扱われる。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 40,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "1a5aa749e667e0a03ab32eab892fdea991bd0d842ffa6ee1f422a0110811946b",
+      "cache_hit": true,
+      "raw_file": "c0038.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "livenessProbeはコンテナが動いているかを示す。",
+            "reason": "コンテキストの冒頭に「コンテナが動いているかを示します。」とあり、livenessProbeについての説明として直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "livenessProbeに失敗すると、kubeletはコンテナを殺す。",
+            "reason": "コンテキストに「livenessProbeに失敗すると、kubeletはコンテナを殺します」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "livenessProbeに失敗したコンテナはrestart policyに従う。",
+            "reason": "コンテキストに「そしてコンテナはrestart policyに従います」と明記されている。",
+            "verdict": 1
+          },
+          {
+            "statement": "コンテナにlivenessProbeが設定されていない場合、通常はSuccessとして扱われる。",
+            "reason": "コンテキストに「livenessProbeが設定されていない場合、デフォルトの状態はSuccessです」とあり、デフォルトでSuccessとして扱われることと一致する。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 41,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "57ba116c8c896fb53c02e4016a5c77e5259b3c13928eb537602a3c2bffcdc3a2",
+      "cache_hit": false,
+      "raw_file": "c0041.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "livenessProbeはコンテナが動いているかを示す。",
+          "livenessProbeに失敗すると、kubeletはコンテナを殺す。",
+          "livenessProbeに失敗したコンテナはrestart policyに従う。",
+          "コンテナにlivenessProbeが設定されていない場合、デフォルトの状態はSuccessである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.17,
+      "cost_usd": 0.007724
+    },
+    {
+      "index": 42,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "516a171487390466f1a8eef65c44dcaba81422d315090bae2eadb4c11597c308",
+      "cache_hit": false,
+      "raw_file": "c0042.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "livenessProbeはコンテナが動いているかを示す。",
+            "reason": "コンテキストの冒頭に「コンテナが動いているかを示します。」とあり、livenessProbeについての説明として述べられているため、この主張は直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "livenessProbeに失敗すると、kubeletはコンテナを殺す。",
+            "reason": "コンテキストに「livenessProbeに失敗すると、kubeletはコンテナを殺します」と明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "livenessProbeに失敗したコンテナはrestart policyに従う。",
+            "reason": "コンテキストに「そしてコンテナはrestart policyに従います」と明記されています。",
+            "verdict": 1
+          },
+          {
+            "statement": "コンテナにlivenessProbeが設定されていない場合、デフォルトの状態はSuccessである。",
+            "reason": "コンテキストに「livenessProbeが設定されていない場合、通常はSuccessとして扱われます」とあり、デフォルトの状態がSuccessであるという主張と一致します。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.25,
+      "cost_usd": 0.013611999999999999
+    },
+    {
+      "index": 43,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "99c0d7303e89c37eaf100e5158a670d30c67e09f9f9b79ac9b4017517ac05c07",
+      "cache_hit": false,
+      "raw_file": "c0043.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "spam という名前のモジュールをインポートするとき、インタープリタは組み込みモジュールを探します。",
+          "spam という名前のモジュールをインポートするとき、インタープリタは sys.path にあるディレクトリの spam.py を探します。",
+          "組み込みモジュール名の一覧は sys.builtin_module_names にあります。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.46,
+      "cost_usd": 0.007646
+    },
+    {
+      "index": 44,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "efa24a833918e550fcfcbbd2cd5ff39915b1bcbf07923817e03cb325a5c2ba53",
+      "cache_hit": false,
+      "raw_file": "c0044.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "spam という名前のモジュールをインポートするとき、インタープリタは組み込みモジュールを探します。",
+            "reason": "コンテキストには、spam というモジュールをインポートするとき、インタープリタはまずその名前の組み込みモジュールを探すと書かれているため、この主張は文脈から直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "spam という名前のモジュールをインポートするとき、インタープリタは sys.path にあるディレクトリの spam.py を探します。",
+            "reason": "コンテキストには、組み込みモジュールが見つからなかった場合に、spam.py という名前のファイルを sys.path にあるディレクトリのリストから探すと書かれているため、この主張は文脈から直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "組み込みモジュール名の一覧は sys.builtin_module_names にあります。",
+            "reason": "コンテキストに「モジュール名の一覧は sys.builtin_module_names にあります」と明記されているため、この主張は文脈から直接推論できます。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.45,
+      "cost_usd": 0.013422
+    },
+    {
+      "index": 45,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "99c0d7303e89c37eaf100e5158a670d30c67e09f9f9b79ac9b4017517ac05c07",
+      "cache_hit": true,
+      "raw_file": "c0043.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "spam という名前のモジュールをインポートするとき、インタープリタは組み込みモジュールを探します。",
+          "spam という名前のモジュールをインポートするとき、インタープリタは sys.path にあるディレクトリの spam.py を探します。",
+          "組み込みモジュール名の一覧は sys.builtin_module_names にあります。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 46,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "efa24a833918e550fcfcbbd2cd5ff39915b1bcbf07923817e03cb325a5c2ba53",
+      "cache_hit": true,
+      "raw_file": "c0044.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "spam という名前のモジュールをインポートするとき、インタープリタは組み込みモジュールを探します。",
+            "reason": "コンテキストには、spam というモジュールをインポートするとき、インタープリタはまずその名前の組み込みモジュールを探すと書かれているため、この主張は文脈から直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "spam という名前のモジュールをインポートするとき、インタープリタは sys.path にあるディレクトリの spam.py を探します。",
+            "reason": "コンテキストには、組み込みモジュールが見つからなかった場合に、spam.py という名前のファイルを sys.path にあるディレクトリのリストから探すと書かれているため、この主張は文脈から直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "組み込みモジュール名の一覧は sys.builtin_module_names にあります。",
+            "reason": "コンテキストに「モジュール名の一覧は sys.builtin_module_names にあります」と明記されているため、この主張は文脈から直接推論できます。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 47,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "3ed38befda6779d4945919213934b8529f0fd587237e43f95a422e029e610913",
+      "cache_hit": false,
+      "raw_file": "c0047.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "spam という名前のモジュールをインポートするとき、インタープリタはまずその名前の組み込みモジュールを探します。",
+          "組み込みモジュール名の一覧は sys.builtin_module_names にあります。",
+          "組み込みモジュールが見つからなかった場合、インタープリタは spam.py という名前のファイルを探します。",
+          "インタープリタは spam.py を sys.path にあるディレクトリのリストから探します。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.95,
+      "cost_usd": 0.008082
+    },
+    {
+      "index": 48,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "e35b77115fbb29ddd3fb794f36d3dde4b978d59195bdc48de5b09f2f01787857",
+      "cache_hit": false,
+      "raw_file": "c0048.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "spam という名前のモジュールをインポートするとき、インタープリタはまずその名前の組み込みモジュールを探します。",
+            "reason": "文脈では、インタープリタは組み込みモジュールと sys.path にあるディレクトリの spam.py を探すとあるが、組み込みモジュールを「まず」探すという順序は明示されていない。",
+            "verdict": 0
+          },
+          {
+            "statement": "組み込みモジュール名の一覧は sys.builtin_module_names にあります。",
+            "reason": "文脈に、モジュール名の一覧は sys.builtin_module_names にあると述べられており、これは組み込みモジュール名の一覧と解釈できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "組み込みモジュールが見つからなかった場合、インタープリタは spam.py という名前のファイルを探します。",
+            "reason": "文脈には組み込みモジュールと spam.py を探すとあるだけで、組み込みモジュールが見つからなかった場合に spam.py を探すという条件や順序は述べられていない。",
+            "verdict": 0
+          },
+          {
+            "statement": "インタープリタは spam.py を sys.path にあるディレクトリのリストから探します。",
+            "reason": "文脈に、インタープリタは sys.path にあるディレクトリの spam.py を探すと明記されている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.27,
+      "cost_usd": 0.014365999999999999
+    },
+    {
+      "index": 49,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "4fb041ee72064dff2ac7ab288f96d46269d5be6e74e5263ae021e2fc2945428e",
+      "cache_hit": false,
+      "raw_file": "c0049.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "右のことは植物採集談である。",
+          "右のことは植物採集談のほんの一部である。",
+          "植物採集は楽しい遊びごとのようなものであった。",
+          "植物採集は努力というほどのものではなかった。"
+        ]
+      },
+      "error": null,
+      "seconds": 3.78,
+      "cost_usd": 0.007124
+    },
+    {
+      "index": 50,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "503614fd3bd5086a3807dfcb380569684cc48d1685355bb7fa0256303b0eab06",
+      "cache_hit": false,
+      "raw_file": "c0050.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "右のことは植物採集談である。",
+            "reason": "文脈に「右のことはほんの一部の植物採集談である」とあり、右のことが植物採集談であることは直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "右のことは植物採集談のほんの一部である。",
+            "reason": "文脈では「ほんの一部の植物採集談」とあり、右のことは植物採集談全体のごく一部にあたるという意味で、この主張と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "植物採集は楽しい遊びごとのようなものであった。",
+            "reason": "文脈は「ただの遊びごとにしたことでなく」と遊びであることを否定している。楽しかったことは認めているが、遊びごとのようなものだったとは言えない。",
+            "verdict": 0
+          },
+          {
+            "statement": "植物採集は努力というほどのものではなかった。",
+            "reason": "文脈は「汗水流しての積極的採集で自分の学問のために努力した」と述べており、努力であったことを明言している。この主張は矛盾する。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.51,
+      "cost_usd": 0.006257800000000001
+    },
+    {
+      "index": 51,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "4fb041ee72064dff2ac7ab288f96d46269d5be6e74e5263ae021e2fc2945428e",
+      "cache_hit": true,
+      "raw_file": "c0049.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "右のことは植物採集談である。",
+          "右のことは植物採集談のほんの一部である。",
+          "植物採集は楽しい遊びごとのようなものであった。",
+          "植物採集は努力というほどのものではなかった。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 52,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "503614fd3bd5086a3807dfcb380569684cc48d1685355bb7fa0256303b0eab06",
+      "cache_hit": true,
+      "raw_file": "c0050.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "右のことは植物採集談である。",
+            "reason": "文脈に「右のことはほんの一部の植物採集談である」とあり、右のことが植物採集談であることは直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "右のことは植物採集談のほんの一部である。",
+            "reason": "文脈では「ほんの一部の植物採集談」とあり、右のことは植物採集談全体のごく一部にあたるという意味で、この主張と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "植物採集は楽しい遊びごとのようなものであった。",
+            "reason": "文脈は「ただの遊びごとにしたことでなく」と遊びであることを否定している。楽しかったことは認めているが、遊びごとのようなものだったとは言えない。",
+            "verdict": 0
+          },
+          {
+            "statement": "植物採集は努力というほどのものではなかった。",
+            "reason": "文脈は「汗水流しての積極的採集で自分の学問のために努力した」と述べており、努力であったことを明言している。この主張は矛盾する。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 53,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "106b477d9aaff90d571e2bd398a4d8ad01378d06804eef66476483397a311be2",
+      "cache_hit": false,
+      "raw_file": "c0053.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "右のことは植物採集談の一部である。",
+          "植物採集はただの遊びごとではなかった。",
+          "植物採集は楽しかった。",
+          "植物採集は汗水流しての積極的採集であった。",
+          "植物採集は自分の学問のための努力であった。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.19,
+      "cost_usd": 0.007372
+    },
+    {
+      "index": 54,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "ddb3a78483d21503e39dc488534b6cd9e18b89ca110e38936de2d3ec82e77036",
+      "cache_hit": false,
+      "raw_file": "c0054.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "右のことは植物採集談の一部である。",
+            "reason": "文脈に「右のことはほんの一部の植物採集談である」とあり、右のことが植物採集談の一部であると直接読み取れる。",
+            "verdict": 1
+          },
+          {
+            "statement": "植物採集はただの遊びごとではなかった。",
+            "reason": "文脈では植物採集は「楽しい遊びごとのようなもので、努力というほどのものではなかった」とされており、ただの遊びごとではなかったという主張は文脈と矛盾する。",
+            "verdict": 0
+          },
+          {
+            "statement": "植物採集は楽しかった。",
+            "reason": "文脈に「これは楽しい遊びごとのようなもの」とあり、植物採集が楽しいものであったと推測できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "植物採集は汗水流しての積極的採集であった。",
+            "reason": "文脈では努力というほどのものではなかったとされており、汗水流しての積極的な採集であったという記述はなく、矛盾する。",
+            "verdict": 0
+          },
+          {
+            "statement": "植物採集は自分の学問のための努力であった。",
+            "reason": "文脈では「努力というほどのものではなかった」と述べられており、学問のための努力であったという主張は文脈と矛盾する。",
+            "verdict": 0
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.32,
+      "cost_usd": 0.013838
+    },
+    {
+      "index": 55,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "b0c81a61bb93eb12141a0f2a465309070804ef02ef77d865e35d0b97954f0f9f",
+      "cache_hit": false,
+      "raw_file": "c0055.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "Podのspecにはが restartPolicyフィールドがある。",
+          "restartPolicyフィールドの値はAlways、OnFailure、Neverのいずれかである。",
+          "restartPolicyフィールドのデフォルト値はAlwaysである。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.35,
+      "cost_usd": 0.007274
+    },
+    {
+      "index": 56,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "127d1f5000d3ecd479ee926c974325e9e5edd0448c077ee8b3a68bf2b7217363",
+      "cache_hit": false,
+      "raw_file": "c0056.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "Podのspecにはが restartPolicyフィールドがある。",
+            "reason": "コンテキストに「Podのspecには、Always、OnFailure、またはNeverのいずれかの値を持つrestartPolicyフィールドがあります」と明記されており、PodのspecにrestartPolicyフィールドがあることは直接読み取れます。",
+            "verdict": 1
+          },
+          {
+            "statement": "restartPolicyフィールドの値はAlways、OnFailure、Neverのいずれかである。",
+            "reason": "コンテキストには、restartPolicyフィールドがAlways、OnFailure、またはNeverのいずれかの値を持つと記載されており、この主張と一致します。",
+            "verdict": 1
+          },
+          {
+            "statement": "restartPolicyフィールドのデフォルト値はAlwaysである。",
+            "reason": "コンテキストに「デフォルト値はAlwaysです」と明記されているため、この主張は直接推論できます。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.55,
+      "cost_usd": 0.012657999999999999
+    },
+    {
+      "index": 57,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "b0c81a61bb93eb12141a0f2a465309070804ef02ef77d865e35d0b97954f0f9f",
+      "cache_hit": true,
+      "raw_file": "c0055.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "Podのspecにはが restartPolicyフィールドがある。",
+          "restartPolicyフィールドの値はAlways、OnFailure、Neverのいずれかである。",
+          "restartPolicyフィールドのデフォルト値はAlwaysである。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 58,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "127d1f5000d3ecd479ee926c974325e9e5edd0448c077ee8b3a68bf2b7217363",
+      "cache_hit": true,
+      "raw_file": "c0056.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "Podのspecにはが restartPolicyフィールドがある。",
+            "reason": "コンテキストに「Podのspecには、Always、OnFailure、またはNeverのいずれかの値を持つrestartPolicyフィールドがあります」と明記されており、PodのspecにrestartPolicyフィールドがあることは直接読み取れます。",
+            "verdict": 1
+          },
+          {
+            "statement": "restartPolicyフィールドの値はAlways、OnFailure、Neverのいずれかである。",
+            "reason": "コンテキストには、restartPolicyフィールドがAlways、OnFailure、またはNeverのいずれかの値を持つと記載されており、この主張と一致します。",
+            "verdict": 1
+          },
+          {
+            "statement": "restartPolicyフィールドのデフォルト値はAlwaysである。",
+            "reason": "コンテキストに「デフォルト値はAlwaysです」と明記されているため、この主張は直接推論できます。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 59,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "a5684ade0df6b2b69833bd1c7880d23dae9f57e94937e42173894fd2ce6a12cc",
+      "cache_hit": false,
+      "raw_file": "c0059.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "Podのspecにはrestartポリシーフィールドがあります。",
+          "restartPolicyフィールドはAlwaysという値を持つことができます。",
+          "restartPolicyフィールドはOnFailureという値を持つことができます。",
+          "restartPolicyフィールドはNeverという値を持つことができます。",
+          "restartPolicyフィールドのデフォルト値はAlwaysです。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.37,
+      "cost_usd": 0.007716
+    },
+    {
+      "index": 60,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "1832b1c7b1a673ae773a978a1be297b354b5def972434962bd3df4656289f015",
+      "cache_hit": false,
+      "raw_file": "c0060.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "Podのspecにはrestartポリシーフィールドがあります。",
+            "reason": "コンテキストには、Podのspecにrestartポリシーに相当するrestartPolicyフィールドがあると明記されているため、この主張は文脈から直接推論できます。",
+            "verdict": 1
+          },
+          {
+            "statement": "restartPolicyフィールドはAlwaysという値を持つことができます。",
+            "reason": "コンテキストでは、restartPolicyの値はAlways、OnFailure、Neverのいずれかであると述べられており、Alwaysが含まれています。",
+            "verdict": 1
+          },
+          {
+            "statement": "restartPolicyフィールドはOnFailureという値を持つことができます。",
+            "reason": "コンテキストでは、restartPolicyの取りうる値の一つとしてOnFailureが挙げられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "restartPolicyフィールドはNeverという値を持つことができます。",
+            "reason": "コンテキストでは、restartPolicyの取りうる値の一つとしてNeverが挙げられています。",
+            "verdict": 1
+          },
+          {
+            "statement": "restartPolicyフィールドのデフォルト値はAlwaysです。",
+            "reason": "コンテキストに「デフォルト値はAlwaysです」と明記されています。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 6.04,
+      "cost_usd": 0.014096000000000001
+    },
+    {
+      "index": 61,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "94de5712250991cad57a509e99fbe7770c7be33bb186b3a54f6ba0c36af80ddc",
+      "cache_hit": false,
+      "raw_file": "c0061.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+          "頭のいい人は、人より先にまだ誰も行っていない所へ行き着くことができる。",
+          "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+          "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.21,
+      "cost_usd": 0.007968
+    },
+    {
+      "index": 62,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "1597e29c25e2b1e41559098fa46ff8ec859040c86e07187ecb8261c2aa5c0ee4",
+      "cache_hit": false,
+      "raw_file": "c0062.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+            "reason": "文脈に「いわゆる頭のいい人は、言わば足の早い旅人のようなものである」と明記されており、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、人より先にまだ誰も行っていない所へ行き着くことができる。",
+            "reason": "文脈に「人より先に人のまだ行かない所へ行き着くこともできる」とあり、この内容と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「途中の道ばたあるいはちょっとしたわき道にある肝心なものを見落とす恐れがある」とあり、道ばたの見落としが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「道ばたあるいはちょっとしたわき道にある肝心なものを見落とす恐れがある」とあり、わき道の見落としも述べられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.92,
+      "cost_usd": 0.014086000000000001
+    },
+    {
+      "index": 63,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "94de5712250991cad57a509e99fbe7770c7be33bb186b3a54f6ba0c36af80ddc",
+      "cache_hit": true,
+      "raw_file": "c0061.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+          "頭のいい人は、人より先にまだ誰も行っていない所へ行き着くことができる。",
+          "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+          "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。"
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 64,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "1597e29c25e2b1e41559098fa46ff8ec859040c86e07187ecb8261c2aa5c0ee4",
+      "cache_hit": true,
+      "raw_file": "c0062.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+            "reason": "文脈に「いわゆる頭のいい人は、言わば足の早い旅人のようなものである」と明記されており、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、人より先にまだ誰も行っていない所へ行き着くことができる。",
+            "reason": "文脈に「人より先に人のまだ行かない所へ行き着くこともできる」とあり、この内容と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「途中の道ばたあるいはちょっとしたわき道にある肝心なものを見落とす恐れがある」とあり、道ばたの見落としが述べられている。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中のちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「道ばたあるいはちょっとしたわき道にある肝心なものを見落とす恐れがある」とあり、わき道の見落としも述べられている。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 0.0,
+      "cost_usd": null
+    },
+    {
+      "index": 65,
+      "kind": "ClaimDecompositionOutput",
+      "prompt_sha256": "62504b2e30c23be3e34320bbbd99e488d2b0ebad3212e7687a06505fa041adaa",
+      "cache_hit": false,
+      "raw_file": "c0065.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "claims": [
+          "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+          "頭のいい人は、人より先に人のまだ行かない所へ行き着くことができる。",
+          "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+          "頭のいい人は、ちょっとしたわき道にある肝心なものを見落とす恐れがある。"
+        ]
+      },
+      "error": null,
+      "seconds": 4.23,
+      "cost_usd": 0.007924
+    },
+    {
+      "index": 66,
+      "kind": "NLIStatementOutput",
+      "prompt_sha256": "69cbbd885dd54e53d78ae9921cff8c56ad6926f601e2f05fe23b320dc75c48a0",
+      "cache_hit": false,
+      "raw_file": "c0066.json",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "parsed": {
+        "statements": [
+          {
+            "statement": "いわゆる頭のいい人は、足の早い旅人のようなものである。",
+            "reason": "文脈に「いわゆる頭のいい人は、言ってみれば足の早い旅人のようなものである」と明記されているため、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、人より先に人のまだ行かない所へ行き着くことができる。",
+            "reason": "文脈に「人より先に、まだ誰も行っていない所へ行き着くこともできる」とあり、この内容と一致する。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、途中の道ばたにある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「途中の道ばたや...にある肝心なものを見落とす恐れがある」と述べられており、直接推論できる。",
+            "verdict": 1
+          },
+          {
+            "statement": "頭のいい人は、ちょっとしたわき道にある肝心なものを見落とす恐れがある。",
+            "reason": "文脈に「ちょっとしたわき道にある肝心なものを見落とす恐れがある」と述べられており、直接推論できる。",
+            "verdict": 1
+          }
+        ]
+      },
+      "error": null,
+      "seconds": 5.97,
+      "cost_usd": 0.013857999999999999
+    }
+  ],
+  "call_summary": {
+    "calls": 66,
+    "cache_hits": 24,
+    "failures": 0,
+    "seconds": 209.9,
+    "cost_usd_list_price": 0.4164,
+    "calls_without_cost": 0
+  },
+  "finished_at": "2026-10-16T23:38:53.287527+00:00"
+}

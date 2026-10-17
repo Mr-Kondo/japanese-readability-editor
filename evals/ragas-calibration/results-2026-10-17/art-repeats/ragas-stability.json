@@ -1,0 +1,902 @@
+{
+  "schema_version": 1,
+  "status": "constructed_labels_not_human_confirmed",
+  "caveats": [
+    "繰り返しは同じ設定・同じモデルの独立な呼出しだが、温度とシードは CLI から指定できない（不明）",
+    "ラベルは構成によるもので人の確認前。件数が少なく、率は記述値"
+  ],
+  "config": {
+    "tool_version": 1,
+    "rubric_version": "ragas-ja-rubric-v1",
+    "rubric_sha256": "7f37f4309a2786203f376adfebd3d62e08df4be0d1d448c23480dd4f39dc81d1",
+    "metrics": [
+      "factual",
+      "rubric"
+    ],
+    "profile": "gov-org",
+    "aspects": [
+      "negation_polarity",
+      "condition_scope",
+      "actor_target",
+      "modality_strength",
+      "numbers_order",
+      "ungrounded_specificity",
+      "unnecessary_change"
+    ],
+    "atomicity": "high",
+    "coverage": "high",
+    "ragas_prompts": "Ragas 0.4.3 既定（英語の指示と例。日本語への適合は未検証）",
+    "llm_adapter": "ClaudeCliLLM（JSON指示をプロンプト末尾に付加、ツールなし、逐次実行、同一プロンプトは再利用）",
+    "claude_flags": [
+      "--print",
+      "--safe-mode",
+      "--strict-mcp-config",
+      "--tools",
+      "",
+      "--no-session-persistence",
+      "--model",
+      "sonnet",
+      "--effort",
+      "medium",
+      "--output-format",
+      "json"
+    ],
+    "claude_system": "提供された文章を処理してください。ツールは使用しないでください。",
+    "claude_cli_version": "2.1.301 (Claude Code)",
+    "temperature_and_seed": "CLI から指定できない（不明）",
+    "python": "3.13.16",
+    "platform": "Linux-6.18.44-fc-v139-x86_64-with-glibc2.39",
+    "packages": {
+      "ragas": "0.4.3",
+      "langchain-community": "0.3.31",
+      "langchain-core": "1.6.11",
+      "langchain": "1.4.6",
+      "instructor": "1.3.2",
+      "openai": "1.109.1",
+      "pydantic": "2.14.1",
+      "numpy": "2.5.4"
+    }
+  },
+  "summary": {
+    "repeats": 3,
+    "cases": 13,
+    "factual_signal_unstable_cases": 2,
+    "rubric_signal_unstable_cases": 0,
+    "failed_aspects_unstable_cases": 7,
+    "aspect_flips": {
+      "flipped": 7,
+      "aspect_scores": 91,
+      "rate": 0.077
+    },
+    "max_precision_range": 0.34,
+    "max_recall_range": 0.25,
+    "fail": {
+      "cases": 8,
+      "factual_signal": {
+        "signalled_per_repeat": [
+          8,
+          8,
+          7
+        ],
+        "signalled_by_majority": 8
+      },
+      "rubric_signal": {
+        "signalled_per_repeat": [
+          8,
+          8,
+          8
+        ],
+        "signalled_by_majority": 8
+      },
+      "targeted_hits_per_repeat": [
+        8,
+        8,
+        8
+      ],
+      "targeted_cases": 8
+    },
+    "pass": {
+      "cases": 5,
+      "factual_signal": {
+        "signalled_per_repeat": [
+          1,
+          0,
+          0
+        ],
+        "signalled_by_majority": 0
+      },
+      "rubric_signal": {
+        "signalled_per_repeat": [
+          0,
+          0,
+          0
+        ],
+        "signalled_by_majority": 0
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "control-s3a",
+      "factual_signal": {
+        "values": [
+          false,
+          false,
+          false
+        ],
+        "stable": true,
+        "majority": false
+      },
+      "rubric_signal": {
+        "values": [
+          false,
+          false,
+          false
+        ],
+        "stable": true,
+        "majority": false
+      },
+      "precision": {
+        "values": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "range": 0.0
+      },
+      "recall": {
+        "values": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "range": 0.0
+      },
+      "failed_aspects": [
+        [],
+        [],
+        []
+      ],
+      "failed_aspects_stable": true,
+      "flipped_aspects": [],
+      "expected": "pass",
+      "violated_aspect": null,
+      "targeted_hits": null
+    },
+    {
+      "id": "paraphrase-s3a",
+      "factual_signal": {
+        "values": [
+          false,
+          false,
+          false
+        ],
+        "stable": true,
+        "majority": false
+      },
+      "rubric_signal": {
+        "values": [
+          false,
+          false,
+          false
+        ],
+        "stable": true,
+        "majority": false
+      },
+      "precision": {
+        "values": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "range": 0.0
+      },
+      "recall": {
+        "values": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "range": 0.0
+      },
+      "failed_aspects": [
+        [],
+        [],
+        []
+      ],
+      "failed_aspects_stable": true,
+      "flipped_aspects": [],
+      "expected": "pass",
+      "violated_aspect": null,
+      "targeted_hits": null
+    },
+    {
+      "id": "number-s3a",
+      "factual_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "rubric_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "precision": {
+        "values": [
+          0.83,
+          0.86,
+          0.83
+        ],
+        "range": 0.03
+      },
+      "recall": {
+        "values": [
+          0.83,
+          0.86,
+          0.83
+        ],
+        "range": 0.03
+      },
+      "failed_aspects": [
+        [
+          "condition_scope",
+          "numbers_order",
+          "ungrounded_specificity"
+        ],
+        [
+          "actor_target",
+          "condition_scope",
+          "numbers_order",
+          "ungrounded_specificity"
+        ],
+        [
+          "condition_scope",
+          "numbers_order",
+          "ungrounded_specificity"
+        ]
+      ],
+      "failed_aspects_stable": false,
+      "flipped_aspects": [
+        "actor_target"
+      ],
+      "expected": "fail",
+      "violated_aspect": "numbers_order",
+      "targeted_hits": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "exception-drop-s3a",
+      "factual_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "rubric_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "precision": {
+        "values": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "range": 0.0
+      },
+      "recall": {
+        "values": [
+          0.67,
+          0.75,
+          0.78
+        ],
+        "range": 0.11
+      },
+      "failed_aspects": [
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "negation_polarity",
+          "numbers_order"
+        ],
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "negation_polarity",
+          "numbers_order"
+        ],
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "negation_polarity",
+          "numbers_order"
+        ]
+      ],
+      "failed_aspects_stable": true,
+      "flipped_aspects": [],
+      "expected": "fail",
+      "violated_aspect": "condition_scope",
+      "targeted_hits": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "negation-flip-s3b",
+      "factual_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "rubric_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "precision": {
+        "values": [
+          0.67,
+          0.5,
+          0.33
+        ],
+        "range": 0.34
+      },
+      "recall": {
+        "values": [
+          0.67,
+          0.5,
+          0.5
+        ],
+        "range": 0.17
+      },
+      "failed_aspects": [
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "negation_polarity",
+          "numbers_order",
+          "ungrounded_specificity"
+        ],
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "negation_polarity",
+          "numbers_order"
+        ],
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "negation_polarity",
+          "numbers_order",
+          "ungrounded_specificity"
+        ]
+      ],
+      "failed_aspects_stable": false,
+      "flipped_aspects": [
+        "ungrounded_specificity"
+      ],
+      "expected": "fail",
+      "violated_aspect": "negation_polarity",
+      "targeted_hits": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "strength-s3b",
+      "factual_signal": {
+        "values": [
+          true,
+          true,
+          false
+        ],
+        "stable": false,
+        "majority": true
+      },
+      "rubric_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "precision": {
+        "values": [
+          0.67,
+          1.0,
+          1.0
+        ],
+        "range": 0.33
+      },
+      "recall": {
+        "values": [
+          1.0,
+          0.75,
+          1.0
+        ],
+        "range": 0.25
+      },
+      "failed_aspects": [
+        [
+          "condition_scope",
+          "modality_strength",
+          "negation_polarity"
+        ],
+        [
+          "condition_scope",
+          "modality_strength"
+        ],
+        [
+          "condition_scope",
+          "modality_strength",
+          "negation_polarity"
+        ]
+      ],
+      "failed_aspects_stable": false,
+      "flipped_aspects": [
+        "negation_polarity"
+      ],
+      "expected": "fail",
+      "violated_aspect": "modality_strength",
+      "targeted_hits": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "partial-negation-s5",
+      "factual_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "rubric_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "precision": {
+        "values": [
+          0.67,
+          0.67,
+          0.67
+        ],
+        "range": 0.0
+      },
+      "recall": {
+        "values": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "range": 0.0
+      },
+      "failed_aspects": [
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "negation_polarity"
+        ],
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "negation_polarity",
+          "numbers_order"
+        ],
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "negation_polarity"
+        ]
+      ],
+      "failed_aspects_stable": false,
+      "flipped_aspects": [
+        "numbers_order"
+      ],
+      "expected": "fail",
+      "violated_aspect": "negation_polarity",
+      "targeted_hits": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "paraphrase-s5",
+      "factual_signal": {
+        "values": [
+          false,
+          false,
+          false
+        ],
+        "stable": true,
+        "majority": false
+      },
+      "rubric_signal": {
+        "values": [
+          false,
+          false,
+          false
+        ],
+        "stable": true,
+        "majority": false
+      },
+      "precision": {
+        "values": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "range": 0.0
+      },
+      "recall": {
+        "values": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "range": 0.0
+      },
+      "failed_aspects": [
+        [],
+        [],
+        []
+      ],
+      "failed_aspects_stable": true,
+      "flipped_aspects": [],
+      "expected": "pass",
+      "violated_aspect": null,
+      "targeted_hits": null
+    },
+    {
+      "id": "tense-s5",
+      "factual_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "rubric_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "precision": {
+        "values": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "range": 0.0
+      },
+      "recall": {
+        "values": [
+          0.8,
+          0.6,
+          0.8
+        ],
+        "range": 0.2
+      },
+      "failed_aspects": [
+        [
+          "condition_scope",
+          "modality_strength",
+          "numbers_order",
+          "ungrounded_specificity"
+        ],
+        [
+          "condition_scope",
+          "modality_strength",
+          "numbers_order",
+          "ungrounded_specificity"
+        ],
+        [
+          "condition_scope",
+          "modality_strength",
+          "numbers_order"
+        ]
+      ],
+      "failed_aspects_stable": false,
+      "flipped_aspects": [
+        "ungrounded_specificity"
+      ],
+      "expected": "fail",
+      "violated_aspect": "modality_strength",
+      "targeted_hits": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "control-s6",
+      "factual_signal": {
+        "values": [
+          false,
+          false,
+          false
+        ],
+        "stable": true,
+        "majority": false
+      },
+      "rubric_signal": {
+        "values": [
+          false,
+          false,
+          false
+        ],
+        "stable": true,
+        "majority": false
+      },
+      "precision": {
+        "values": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "range": 0.0
+      },
+      "recall": {
+        "values": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "range": 0.0
+      },
+      "failed_aspects": [
+        [],
+        [],
+        []
+      ],
+      "failed_aspects_stable": true,
+      "flipped_aspects": [],
+      "expected": "pass",
+      "violated_aspect": null,
+      "targeted_hits": null
+    },
+    {
+      "id": "ungrounded-s6",
+      "factual_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "rubric_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "precision": {
+        "values": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "range": 0.0
+      },
+      "recall": {
+        "values": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "range": 0.0
+      },
+      "failed_aspects": [
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "numbers_order",
+          "ungrounded_specificity"
+        ],
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "numbers_order",
+          "ungrounded_specificity"
+        ],
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "ungrounded_specificity"
+        ]
+      ],
+      "failed_aspects_stable": false,
+      "flipped_aspects": [
+        "numbers_order"
+      ],
+      "expected": "fail",
+      "violated_aspect": "ungrounded_specificity",
+      "targeted_hits": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "timing-swap-s6",
+      "factual_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "rubric_signal": {
+        "values": [
+          true,
+          true,
+          true
+        ],
+        "stable": true,
+        "majority": true
+      },
+      "precision": {
+        "values": [
+          0.5,
+          0.5,
+          0.4
+        ],
+        "range": 0.1
+      },
+      "recall": {
+        "values": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "range": 0.0
+      },
+      "failed_aspects": [
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "numbers_order"
+        ],
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "numbers_order"
+        ],
+        [
+          "actor_target",
+          "condition_scope",
+          "modality_strength",
+          "numbers_order",
+          "ungrounded_specificity"
+        ]
+      ],
+      "failed_aspects_stable": false,
+      "flipped_aspects": [
+        "ungrounded_specificity"
+      ],
+      "expected": "fail",
+      "violated_aspect": "numbers_order",
+      "targeted_hits": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "id": "paraphrase-s6",
+      "factual_signal": {
+        "values": [
+          true,
+          false,
+          false
+        ],
+        "stable": false,
+        "majority": false
+      },
+      "rubric_signal": {
+        "values": [
+          false,
+          false,
+          false
+        ],
+        "stable": true,
+        "majority": false
+      },
+      "precision": {
+        "values": [
+          0.75,
+          1.0,
+          1.0
+        ],
+        "range": 0.25
+      },
+      "recall": {
+        "values": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "range": 0.0
+      },
+      "failed_aspects": [
+        [],
+        [],
+        []
+      ],
+      "failed_aspects_stable": true,
+      "flipped_aspects": [],
+      "expected": "pass",
+      "violated_aspect": null,
+      "targeted_hits": null
+    }
+  ]
+}
