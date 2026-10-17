@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "kind": "jre-feedback",
+  "consent": {
+    "version": 1,
+    "storage": true,
+    "ai_processing": false,
+    "publish": false
+  },
+  "context": {
+    "mode": "B",
+    "origin": "artificial",
+    "skill_version": "",
+    "model": ""
+  },
+  "case": {
+    "original": "管理者の承認後、30分以内に実行できます。\n",
+    "result": "管理者が承認すれば、必ず30分以内に実行されます。\n",
+    "problem_type": "strength_changed",
+    "quote": "必ず",
+    "quote_in": "result",
+    "severity": "major",
+    "comment": "原文は「実行できます」で、実行の可否を述べている。結果は「必ず…実行されます」と断定になり、条件を満たしても実行されない場合を否定している。",
+    "request": "条件と数値を保って読みやすくしてください。"
+  }
+}

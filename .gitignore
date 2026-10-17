@@ -15,3 +15,5 @@ __pycache__/
 
 # Ragas 用の任意の仮想環境（docs/ragas-evaluation.md）
 /.venv-ragas/
+# 利用者から送付された非公開のフィードバック(docs/feedback.md)。リポジトリに置かない
+/feedback-inbox/

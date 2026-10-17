@@ -19,6 +19,7 @@ japanese-readability-editor/
 │   ├── scripts/measure.py
 │   ├── scripts/verify_preservation.py
 │   ├── scripts/compare_rewrite.py
+│   ├── scripts/make_feedback.py            # 問題報告の票を出す
 │   ├── scripts/check_kokugo.py
 │   ├── scripts/kokugo_engine.py
 │   ├── scripts/validate_kokugo_rules.py
@@ -56,6 +57,7 @@ japanese-readability-editor/
 | `scripts/measure.py` | 段落・文の長さなどの計測、修正候補の位置の表示、`--extras` の指摘(読み取り専用) |
 | `scripts/verify_preservation.py` | 空白以外の文字列が同一かの検査。`--strict` は、改行以外の全文字が同一で改行が減っていないことまで検査する(読み取り専用) |
 | `scripts/compare_rewrite.py` | 書き換えの前後の比較。意味が変わったかもしれない箇所を挙げる(読み取り専用。SudachiPy が入っていれば使う) |
+| `scripts/make_feedback.py` | 結果の問題を報告する票(JSON)を標準出力に出す(読み取り専用、通信なし)。[利用者のフィードバック](feedback.md) |
 | `references/kokugo-*.md` | 国語の表記・用法の適用方針、規則の一覧、公用文の運用、出典。Agent が必要なときだけ読む。詳細は [国語の表記・用法の検査](kokugo.md) |
 | `data/*.json` | 国語の規則、資料の記録、常用漢字表、異字同訓。`scripts/check_kokugo.py` と `scripts/validate_kokugo_rules.py` が読む |
 | `scripts/check_kokugo.py` | 国語の表記・用法の規則で文章を検査する。区分、位置、理由、候補、出典 ID を出す(読み取り専用、ネットワークなし) |
@@ -70,6 +72,7 @@ japanese-readability-editor/
 | `tools/validate_skill.py` | Skill の構造と互換性を検証する |
 | `tools/update_kokugo_sources.py` | 公式資料を取得して SHA-256 を照合する(`verify`)。PDF から常用漢字表と異字同訓のデータを作る(`extract-*`)。Skill の外にあり、配布物には入らない |
 | `tools/render_kokugo_docs.py` | `references/kokugo-notation.md`(規則の一覧)と `references/kokugo-sources.md`(出典)を、規則データから生成する。`--check` で最新かを確かめる。この2つの文書は手で書き換えない |
+| `tools/feedback_loop.py` | 利用者から送付された票の受領・検証(`intake`)、独立文書数での集約と回帰ケース化(`triage`)、改良案の下書き(`propose`、既定は送信しない)、修正前後の比較(`verify`)。`skill/` は書き換えない。[利用者のフィードバック](feedback.md) |
 | `tools/check_all.py` | 検証とテストをまとめて実行する。内容は「[検証](#検証)」 |
 | `.claude-plugin/` | Claude Code のプラグインとして入れるための定義。`skill/` を指すだけで、Skill は複製しない |
 | `.github/workflows/` | CI(検証、テスト、パッケージ生成)と、タグを push したときの Release |
