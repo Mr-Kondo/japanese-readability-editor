@@ -128,6 +128,19 @@ class ReferencesStayConsistentTest(unittest.TestCase):
     def test_examples_show_changes_of_strength_and_weight(self):
         self.assertIn("## 20. 言い切りの強さと比重を変えない", read("assets/examples.md"))
 
+    def test_sentence_kinds_are_noted_before_a_rewrite_and_compared_after_it(self):
+        # nanaism/yomiyasu v1.1.2 の「文の種類を保つ」を参考にした手順(#55)。例えと皮肉・反語を含め、控えは出力しない。
+        rules = read("references/readability-rules.md")
+        for phrase in ("例え・比喩、皮肉・冗談・反語", "直す前に、直す箇所の各文の働きを控える", "直したあとで、各文の働きが変わっていないかを、控えと読み比べる",
+                       "決めきれない文は、一つに決めず、候補のまま扱う", "控えは作業のためのもので、出力しない",
+                       "例え(「まるで〜のようだ」)を「〜だ」と言い切らない", "反語(「〜だろうか。いや、〜ない」)をただの疑問や否定に"):
+            self.assertIn(phrase, rules)
+        self.assertIn("B では直す前に各文の働きを控え、直した後で読み比べる", read("SKILL.md"))
+        self.assertIn("伝聞を断定に、例えを言い切りに変えない", read("SKILL.md"))
+        examples = read("assets/examples.md")
+        self.assertIn("## 26. 文の働きを変えない(伝聞・例え・反語・仮定)", examples)
+        self.assertIn("本当にこれで足りるだろうか。いや、足りない。", examples)
+
 
 if __name__ == "__main__":
     unittest.main()
