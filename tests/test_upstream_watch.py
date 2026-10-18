@@ -4,6 +4,7 @@ import io
 import json
 import subprocess
 import unittest
+import urllib.error
 from pathlib import Path
 
 from helpers import REPO_ROOT, TOOLS_DIR, load_module, temporary_directory
@@ -197,6 +198,72 @@ class ApiTest(unittest.TestCase):
             watch.GhApi(run=self.runner((0, "<html>", ""))).get("x")
 
 
+class PublicGistTest(unittest.TestCase):
+    """Actions の GITHUB_TOKEN は Gist を読めないので、Gist は認証なしで取得する。"""
+
+    class Response:
+        def __init__(self, body):
+            self.body = body
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+        def read(self):
+            return self.body
+
+    def opener(self, *outcomes):
+        queue, requests = list(outcomes), []
+
+        def open_url(request, timeout=None):
+            requests.append(request)
+            outcome = queue.pop(0)
+            if isinstance(outcome, Exception):
+                raise outcome
+            return PublicGistTest.Response(outcome)
+        open_url.requests = requests
+        return open_url
+
+    def http_error(self, code, body=b"", headers=None):
+        import email.message
+        message = email.message.Message()
+        for key, value in (headers or {}).items():
+            message[key] = value
+        return urllib.error.HTTPError("https://api.github.com/gists/x", code, "x", message, io.BytesIO(body))
+
+    def test_gists_are_fetched_without_gh_and_other_paths_still_use_gh(self):
+        def run(command, **kwargs):
+            raise AssertionError("gh を呼んではいけない")
+        open_url = self.opener(b'{"history": []}')
+        api = watch.GhApi(run=run, open_url=open_url)
+        self.assertEqual(api.get("gists/abc"), {"history": []})
+        request, = open_url.requests
+        self.assertEqual(request.full_url, "https://api.github.com/gists/abc")
+        self.assertIsNone(request.get_header("Authorization"))
+        called = []
+        watch.GhApi(run=lambda command, **kw: called.append(command) or subprocess.CompletedProcess(command, 0, "[]", ""),
+                    open_url=self.opener()).get("repos/o/r")
+        self.assertTrue(called)
+
+    def test_errors_are_reported_and_server_errors_are_retried(self):
+        sleeps = []
+        api = watch.GhApi(open_url=self.opener(self.http_error(503), urllib.error.URLError("down"), b"[]"), sleep=sleeps.append)
+        self.assertEqual(api.get("gists/abc"), [])
+        self.assertEqual(len(sleeps), 2)
+        with self.assertRaises(watch.ApiError) as caught:
+            watch.GhApi(open_url=self.opener(self.http_error(404))).get("gists/abc")
+        self.assertEqual(caught.exception.status, 404)
+        with self.assertRaises(watch.ApiError) as caught:
+            watch.GhApi(open_url=self.opener(self.http_error(403, b"API rate limit exceeded"))).get("gists/abc")
+        self.assertTrue(caught.exception.rate_limited)
+        with self.assertRaises(watch.ApiError):
+            watch.GhApi(open_url=self.opener(b"<html>")).get("gists/abc")
+        with self.assertRaises(watch.ApiError):
+            watch.GhApi(open_url=self.opener(*[urllib.error.URLError("down")] * 3), sleep=lambda _: None).get("gists/abc")
+
+
 class CleanTest(unittest.TestCase):
     def test_control_and_bidirectional_characters_backticks_and_pipes_are_neutralized(self):
         text = watch.clean("a\nb\x1b[31m`c`|d‮e⁦")
@@ -254,6 +321,18 @@ class NotifyTest(unittest.TestCase):
         actions = watch.run_notify(self.report(), self.registry(), gh, execute=True)
         self.assertEqual([a["action"] for a in actions], ["skip"])
         self.assertEqual(gh.created, [])
+
+    def test_the_title_names_a_release_only_when_a_release_is_the_reason(self):
+        result = watch.check_source(entry(), FakeApi(repo_routes(files=["skills/x/SKILL.md"], releases=[release("v2", "2026-10-10T00:00:00Z")], extra={
+            f"repos/{REPO}/compare/{A}...v2": {"ahead_by": 1, "files": []}})))
+        self.assertIn("v2", watch.issue_text(result, entry())[0])
+        quiet = entry(watch={"enabled": True, "paths": ["skills/**"], "releases": False})
+        result = watch.check_source(quiet, FakeApi(repo_routes(files=["skills/x/SKILL.md"], releases=[release("v2", "2026-10-10T00:00:00Z")], extra={
+            f"repos/{REPO}/compare/{A}...v2": {"ahead_by": 1, "files": []}})))
+        self.assertEqual(result["reasons"], ["relevant_files"])
+        title = watch.issue_text(result, quiet)[0]
+        self.assertNotIn("v2", title)
+        self.assertIn(B[:7], title)
 
     def test_another_sources_issue_does_not_block(self):
         gh = self.FakeGh(bodies=["<!-- upstream-watch:other:0123456789ab -->"])
