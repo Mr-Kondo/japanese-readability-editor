@@ -4,6 +4,7 @@
 
 - [Codex、Claude Code などにインストールする](#必要なもの)
 - [ChatGPT Work、Claude Cowork、Gemini Apps にアップロードする](#アップロード型の環境に入れる)
+- [gh skill（GitHub CLI）で入れる](#github-cligh-skill-で入れる)
 - [動作を確認する](#動作を確認する)
 - [OpenCode と Hermes Agent の配置先・重複を確認する](#opencode-と-hermes-agent-に入れる)
 - [削除する](#削除する)
@@ -69,6 +70,10 @@ claude plugin update japanese-readability-editor@japanese-readability-editor
 `claude plugin update` だけでは、更新されません。手元に取得したマーケットプレースが古いままなので、「already at the latest version」と表示されます。更新した後は、Claude Code を再起動します。
 
 プラグインの版は、コミットの短いハッシュで表示されます。`claude plugin list` の `Version` で確かめられます。
+
+### gh skill で入れた場合
+
+`gh skill update` は、このリポジトリの Skill を見つけられません。[GitHub CLI（gh skill）で入れる](#github-cligh-skill-で入れる)のコマンドに `--force` を付けて、入れ直します。
 
 ### 退避した版へ戻す
 
@@ -217,6 +222,24 @@ Release に添付されるのは、ZIP、SHA-256、Gemini Apps 向けの指示�
 | ChatGPT Work | `dist/japanese-readability-editor.zip` | [ChatGPT Work](environments.md#chatgpt-work) |
 | Claude Cowork | `dist/japanese-readability-editor.zip` | [Claude Cowork](environments.md#claude-cowork) |
 | Gemini Apps | `dist/gemini-apps/japanese-readability-editor/`、または `dist/gemini-apps-instructions.md` の貼り付け | [Gemini Apps](environments.md#gemini-apps) |
+
+## GitHub CLI（gh skill）で入れる
+
+`gh skill`（GitHub CLI のプレビュー機能。予告なく変わる）で入れられます。確かめたのは、gh 2.102.0、macOS、2026-10-18 です。
+
+```bash
+gh skill install Mr-Kondo/japanese-readability-editor skill/japanese-readability-editor/SKILL.md --dir <入れ先の skills ディレクトリ>
+```
+
+- **SKILL.md のパスを指定します。** リポジトリ名だけを指定すると、`no skills found` になります。gh が探す場所は `skills/*/SKILL.md` などで、このリポジトリの `skill/`（単数）は含まれないためです。
+- 最新のタグ付きリリースの版が入ります（確認したときは v0.13.0）。版を固定するときは、`--pin <タグ>` を付けます。
+- 入った内容は、`SKILL.md`、`scripts/`（8 本）、`references/`、`assets/`、`data/` です。
+- gh は `SKILL.md` の frontmatter に、`metadata:`（`github-repo`、`github-ref`、`github-path`、`github-tree-sha`）を足します。このリポジトリの `tools/validate_skill.py` は、frontmatter の複数行の値を認めないので、gh で入れたものには使えません（エラーになります）。
+- `--agent` と `--scope` で入れ先を選ぶ形は、`gh skill install --help` にありますが、確かめていません。確かめたのは `--dir` だけです。
+- **`gh skill update` は使えません。** このリポジトリの Skill を見つけられず、「no skills found」と出して飛ばしたうえで、「All skills are up to date.」と表示します。更新するときは、上のコマンドに `--force` を付けて、入れ直します。
+- `npx skills add` は、確かめていません。
+
+名前だけで入れられるようにするには、`skill/` を `skills/` に改名する必要があります。改名は、公開の URL、プラグインの定義、配布物に響くので、別の Issue（#66、決定待ち）で扱います。
 
 ## 動作を確認する
 
