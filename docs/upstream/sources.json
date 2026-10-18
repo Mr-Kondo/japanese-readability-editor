@@ -63,10 +63,10 @@
         ]
       },
       "reviewed": {
-        "ref": "be1d775",
-        "sha": "be1d7753b2e97377dac0155d97690ee12cb6cb3d",
-        "at": "2026-10-15T15:00:00Z",
-        "review": null
+        "ref": "v1.6.0",
+        "sha": "a739fee1b6d5cdac157959cb4fefb7f84a29c77b",
+        "at": "2026-10-16T03:52:01Z",
+        "review": "docs/upstream/reviews/natural-japanese-v1.6.0.md"
       },
       "adopted": [
         "語順、読点、接続詞の射程、否定の入れ子、列挙の埋没、語形の重さの整理",
@@ -228,10 +228,10 @@
         ]
       },
       "reviewed": {
-        "ref": "9a54e04",
-        "sha": "9a54e04b210c0adb9ac9807fcc876eda1d27e9f6",
-        "at": "2026-10-09T15:00:00Z",
-        "review": null
+        "ref": "4b8019d",
+        "sha": "4b8019d7fa08e1e1866be360fadab2a2f7cbcf11",
+        "at": "2026-10-14T20:46:44Z",
+        "review": "docs/upstream/reviews/story-skills-v0.24.0.md"
       },
       "adopted": [
         "chapter-writing・voice-style・revision-continuity・line-editing の責務分離。設定・文体・整合性を区別する考え方"
@@ -352,10 +352,10 @@
         "releases": false
       },
       "reviewed": {
-        "ref": "46d7718",
-        "sha": "46d7718a52ff33accb15dc0501736fbdb6833cab",
-        "at": "2026-10-09T21:36:08Z",
-        "review": null
+        "ref": "ccc6956",
+        "sha": "ccc695635094d7615373db267b77f894d978b1a0",
+        "at": "2026-10-18T00:34:35Z",
+        "review": "docs/upstream/reviews/hermes-agent-2026-10-18.md"
       },
       "adopted": [
         "Skill の読み込みと trust の確認(docs/environments.md)"
