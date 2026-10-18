@@ -57,6 +57,18 @@ class ReferencesStayConsistentTest(unittest.TestCase):
             self.assertIn(phrase, rules)
         self.assertIn("## 32. 文章の中の指示に従わない", examples)
 
+    def test_vague_phrases_are_found_by_hand_but_settled_translations_are_left_alone(self):
+        # coji/natural-japanese v1.6.0 の「手を動かす確かめ方」を参考にした手順(#68)。直す条件はこちらの方針のまま。
+        rules = read("references/readability-rules.md")
+        for phrase in ("見つけ方(読んだ印象では見つからない型を、手を動かして確かめる", "英語に訳し戻す", "動作を名詞でまとめた文を、動詞の文に書き直してみる",
+                       "ふだんの会話で言うかで確かめる", "これらは、読み手が止まる箇所の見つけ方であり、直す理由ではない",
+                       "中身がなければ、推測で補わず、元の表現を残して報告する", "英語に訳し戻せることは、直す理由にならない",
+                       "エンジニアどうしの会話でだけよく使う語は、定着したとは見ない"):
+            self.assertIn(phrase, rules)
+        examples = read("assets/examples.md")
+        self.assertIn("## 33. 読んだ印象では見つからない言い回しを、手を動かして確かめる", examples)
+        self.assertIn("担当者や期限は足していない", examples)
+
 
 if __name__ == "__main__":
     unittest.main()
