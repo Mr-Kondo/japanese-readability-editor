@@ -37,14 +37,16 @@ SudachiPy と辞書(sudachidict-core など)が入っていれば、形態素解
 from __future__ import annotations
 
 import argparse
+import heapq
 import json
+import math
 import re
 import sys
 import unicodedata
 from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, FrozenSet, List, Optional, Sequence, Tuple
+from typing import Dict, FrozenSet, Iterator, List, Optional, Sequence, Tuple
 
 sys.dont_write_bytecode = True  # measure を読み込むときに、skill の中へ __pycache__ を作らない
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -52,6 +54,7 @@ import measure  # noqa: E402
 
 UNMATCHED_THRESHOLD = 0.5  # 対応先との重なりがこれ未満なら、対応する文がないとみなす
 MAX_WINDOW = 2  # 分割・統合として、連続する何文までを1つの対応先とみなすか
+SEED_UNITS = 3  # best_match が、最初に窓を調べるときに使う、出る文が最も少ない単位の数
 DEFAULT_MAX_SHOWN = 20
 
 # --- 抜き出す語 -------------------------------------------------------------
@@ -328,19 +331,62 @@ class Match:
     end: int  # 対応先の最後の文の次の位置
 
 
-def best_match(sentence: Sentence, others: Sequence[Sentence]) -> Optional[Match]:
-    """sentence の単位が、others の連続する1〜MAX_WINDOW 文に最も多く含まれる位置を返す。"""
+def unit_index(sentences: Sequence[Sentence]) -> Dict[str, List[int]]:
+    """単位から、その単位を含む文の位置(昇順)を引く索引。best_match の探索範囲を絞るために、相手側ごとに1回だけ作る。"""
+    index: Dict[str, List[int]] = {}
+    for position, sentence in enumerate(sentences):
+        for unit in sentence.units:
+            index.setdefault(unit, []).append(position)
+    return index
+
+
+def window_starts(postings: Sequence[Sequence[int]]) -> Iterator[int]:
+    """postings(昇順の文の位置の一覧)のどれかの文を含みうる窓の開始位置を、昇順に、重複なく返す。"""
+    last = -1
+    for spot in heapq.merge(*postings):
+        yield from range(max(last + 1, spot - MAX_WINDOW + 1), spot + 1)
+        last = max(last, spot)
+
+
+def best_match(sentence: Sentence, others: Sequence[Sentence],
+               index: Optional[Dict[str, List[int]]] = None) -> Optional[Match]:
+    """sentence の単位が、others の連続する1〜MAX_WINDOW 文に最も多く含まれる位置を返す。
+
+    被覆率が同じ窓が複数あるときは、開始位置、終了位置の小さいものを選ぶ。すべての窓を順に調べる素朴な実装と同じ答えで、
+    素朴な実装は文数の2乗に比例して遅いので、調べる窓を減らす。減らし方は次のとおり。
+      1. 相手側に1つも無い単位は、どの窓にも含まれない。被覆率の上限は (相手側にある単位の数) / (単位の数)。
+      2. 最も少ない文にしか出ない単位を含む窓を調べ、よい下限を得る(種)。
+      3. 下限以上の被覆率の窓は、単位を need 個以上含む。単位の数 - need + 1 個の単位を選べば、その窓は選んだ
+         どれかを含む。少ない文にしか出ない単位から選び、それを含む窓だけ調べる。
+      4. 上限に達した窓が見つかったら、それ以降は同点にしかならないので、そこで止める。
+    """
     if not sentence.units or not others:
         return None
-    best: Optional[Match] = None
-    for start in range(len(others)):
-        window: FrozenSet[str] = frozenset()
-        for end in range(start + 1, min(start + MAX_WINDOW, len(others)) + 1):
-            window = window | others[end - 1].units
-            coverage = len(sentence.units & window) / len(sentence.units)
-            if best is None or coverage > best.coverage + 1e-9:
-                best = Match(coverage, start, end)
-    return best
+    index = unit_index(others) if index is None else index
+    wanted = sentence.units
+    ranked = sorted((len(index.get(unit, ())), unit) for unit in wanted)
+    present = [unit for count, unit in ranked if count]
+    if not present:
+        return Match(0.0, 0, 1)  # 重なる窓がない。素朴な実装が最初に選ぶ窓
+    ceiling = len(present) / len(wanted)
+
+    def scan(postings: Sequence[Sequence[int]]) -> Match:
+        best: Optional[Match] = None
+        for start in window_starts(postings):
+            window: FrozenSet[str] = frozenset()
+            for end in range(start + 1, min(start + MAX_WINDOW, len(others)) + 1):
+                window = window | others[end - 1].units
+                coverage = len(wanted & window) / len(wanted)
+                if best is None or coverage > best.coverage + 1e-9:
+                    best = Match(coverage, start, end)
+                    if coverage >= ceiling - 1e-9:
+                        return best
+        return best
+
+    seed = scan([index[unit] for unit in present[:SEED_UNITS]])
+    need = math.ceil((seed.coverage - 1e-9) * len(wanted))
+    probes = [unit for _, unit in ranked][:len(wanted) - need + 1]
+    return scan([index.get(unit, ()) for unit in probes])
 
 
 def take_surplus(items: List[Item], surplus: Counter) -> List[Item]:
@@ -389,8 +435,9 @@ def compare_sentences(before: Document, after: Document) -> Tuple[Dict[str, List
                for kind in MARKER_KINDS}
     for side, own, others in (("after", after.sentences, before.sentences), ("before", before.sentences, after.sentences)):
         direction = "added" if side == "after" else "removed"
+        index = unit_index(others)
         for sentence in own:
-            match = best_match(sentence, others)
+            match = best_match(sentence, others, index)
             if sentence.judgeable and (match is None or match.coverage < UNMATCHED_THRESHOLD):
                 unmatched[side].append(Item(sentence.line, sentence.text))
                 continue  # 対応先が分からない文では、表現の増減を比べない
