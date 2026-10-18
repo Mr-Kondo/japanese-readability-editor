@@ -126,15 +126,20 @@ class ReferencesStayConsistentTest(unittest.TestCase):
         self.assertIn("失敗率が下がるとは限らない", examples)
 
     def test_leftover_words_of_the_writer_are_removed_only_when_they_carry_nothing_for_the_reader(self):
-        # nanaism/yomiyasu の slop-catalog 6 章を参考にした 3 項目(#56)。残す用法と、仮置きを埋めないことを固定する。
+        # nanaism/yomiyasu の slop-catalog 6 章を参考にした 3 項目(#56)。評価で、申し出や方針の宣言まで削ると欠落とみなされたので、
+        # 削るのは中身のない挨拶や同意の定型だけにし、迷うときは報告する。仮置きは埋めない。
         rules = read("references/readability-rules.md")
-        for phrase in ("### 読者向けでない言葉の名残", "指示の名残", "仮置きの残り", "チャット応答の名残",
+        for phrase in ("### 読者向けでない言葉の名残", "チャット応答の名残", "指示の名残", "仮置きの残り",
+                       "削るのは、中身のないものだけにして、迷うときは削らず、報告する",
+                       "削らない: 申し出(「必要なら次に〜します」", "削らず、利用者に確かめる箇所として報告する",
                        "この手順書では、退職の手続きは扱いません", "推測で埋めず、消さず、利用者に確かめる箇所として報告する",
-                       "会話や引用の中の伏せ字", "チャットの返信そのものを推敲する場合", "小説(モード D)と、コピーライティングには当てない"):
+                       "会話や引用の中の伏せ字", "チャットの返信そのものを推敲する場合", "本文だけを求められたときは、削らず、元の表現を残す",
+                       "小説(モード D)と、コピーライティングには当てない"):
             self.assertIn(phrase, rules)
-        self.assertIn("仮置きは、埋めず、利用者に確かめる箇所として報告する", read("SKILL.md"))
+        self.assertIn("中身のない挨拶や同意の定型だけを削る", read("SKILL.md"))
+        self.assertIn("申し出と方針の宣言は、迷うときは削らず", read("SKILL.md"))
         examples = read("assets/examples.md")
-        self.assertIn("## 27. 読者向けでない言葉の名残を直す(範囲の宣言は残す)", examples)
+        self.assertIn("## 27. 読者向けでない言葉の名残を直す(迷うときは削らず報告する)", examples)
         self.assertIn("「〇〇」は仮置きで、期限を推測した「月末」で埋めてはいけない", examples)
 
     def test_examples_show_changes_of_strength_and_weight(self):
