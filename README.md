@@ -196,6 +196,7 @@ D のモデル挙動・評価の実施範囲は [評価ケース](evals/README.m
 | [docs/kokugo.md](docs/kokugo.md) | 国語の表記・用法の検査。適用設定、区分、終了コード、JSON の形式、用語集、規則の更新、限界 |
 | [docs/design.md](docs/design.md) | 設計の考え方と、参考にした記事とプロジェクト |
 | [docs/feedback.md](docs/feedback.md) | 結果の問題を報告する手順と、メンテナーが改良に使う手順。同意、送付、保管、効果の根拠と限界 |
+| [docs/upstream-watch.md](docs/upstream-watch.md) | 参考にしたリポジトリの更新を、定期的に確認して解析・Issue・改良へつなぐ仕組み。登録簿、自動化の段階、信頼できない入力の扱い、他のプロジェクトでの使い方 |
 | [docs/development.md](docs/development.md) | ディレクトリ構成、パッケージ生成、検証、テスト |
 
 実測の記録は、次の4つです。

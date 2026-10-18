@@ -29,6 +29,8 @@
 
 ## 参考にしたプロジェクト
 
+参考にしたリポジトリの更新は、登録簿(`docs/upstream/sources.json`)に基づいて週に1回確認します。確認した記録は `docs/upstream/reviews/` にあります。手順と限界は、[参考にしたリポジトリの更新確認](upstream-watch.md)にあります。
+
 [coji/natural-japanese](https://github.com/coji/natural-japanese)(MIT)を参考に、次の点を取り入れました。文章は転載せず、原則として再構成しています。
 
 - 語順、読点、接続詞の射程、否定の入れ子、列挙の埋没、語形の重さの整理

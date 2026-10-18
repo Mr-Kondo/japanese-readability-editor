@@ -1,0 +1,367 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "yomiyasu",
+      "kind": "repo",
+      "role": "rule-source",
+      "license": {
+        "spdx": "MIT",
+        "checked": "2026-10-18"
+      },
+      "watch": {
+        "enabled": true,
+        "paths": [
+          "skills/yomiyasu/SKILL.md",
+          "skills/yomiyasu/references/**",
+          "skills/yomiyasu/scripts/**",
+          "CHANGELOG.md"
+        ]
+      },
+      "reviewed": {
+        "ref": "84e1f5b",
+        "sha": "84e1f5b15e497538fcfe19ab7e9c6f6d138f19ff",
+        "at": "2026-10-17T11:56:31Z",
+        "review": "docs/upstream/reviews/yomiyasu-2.0.1.md"
+      },
+      "adopted": [
+        "書き換えで保つものとしての比重・言い切りの強さ・文の働き",
+        "太字が表示されない書き方の検出と直し方",
+        "書き換えの前後を機械で比べる考え方(compare_rewrite.py は独自に実装)",
+        "定着した慣用句を残す目安と、比喩の含みを残すこと",
+        "結論や警告を伝える見出しを薄めないこと",
+        "内容のない定型の結び"
+      ],
+      "not_adopted": [
+        {
+          "item": "lint の点数・検査の記録とハッシュ照合・実行フック",
+          "reason": "配布スクリプトは読み取り専用で、環境依存を持ち込まない。点数はこちらも出さない"
+        },
+        {
+          "item": "検査スクリプト群の実装",
+          "reason": "複製しない。必要な考え方だけを独自に実装する"
+        },
+        {
+          "item": "見出しの項目名化(v1.1.0)",
+          "reason": "結論や警告を伝える見出しを薄めない方針と逆の向き。ヘルプ・マニュアルに限った評価をしてから(#57)"
+        }
+      ],
+      "repo": "nanaism/yomiyasu"
+    },
+    {
+      "id": "natural-japanese",
+      "kind": "repo",
+      "role": "rule-source",
+      "license": {
+        "spdx": "MIT",
+        "checked": "2026-10-18"
+      },
+      "watch": {
+        "enabled": true,
+        "paths": [
+          "skills/**"
+        ]
+      },
+      "reviewed": {
+        "ref": "be1d775",
+        "sha": "be1d7753b2e97377dac0155d97690ee12cb6cb3d",
+        "at": "2026-10-15T15:00:00Z",
+        "review": null
+      },
+      "adopted": [
+        "語順、読点、接続詞の射程、否定の入れ子、列挙の埋没、語形の重さの整理",
+        "実文書での閾値の校正結果と、指摘は起点であり命令ではないという運用",
+        "見出しと各段落の先頭文だけを読んで論旨を確かめる手順",
+        "SudachiPy を任意の依存として使い、PEP 723 で uv run から入れる方法",
+        "中間ファイルを利用者のプロジェクトに残さない運用",
+        "--extras の指摘のうち、連続漢字、「の」の連鎖、二重否定",
+        "Claude Code プラグインとしての配布、CI、Release"
+      ],
+      "not_adopted": [
+        {
+          "item": "AI臭さのスコア、文体の型、サブエージェントによる推敲",
+          "reason": "標準ライブラリだけで動くことと、環境に依存しない単一の SKILL.md を優先する"
+        },
+        {
+          "item": "自然度スコア、追加の収束ループ、並列レビュー",
+          "reason": "2026-10-16 の確認で導入しないと決めた"
+        }
+      ],
+      "repo": "coji/natural-japanese"
+    },
+    {
+      "id": "japanese-tech-writing-gist",
+      "kind": "gist",
+      "role": "rule-source",
+      "license": {
+        "spdx": "Unlicense",
+        "checked": "2026-10-18"
+      },
+      "watch": {
+        "enabled": true,
+        "paths": []
+      },
+      "reviewed": {
+        "ref": "8f2d576",
+        "sha": "8f2d57610a73efc97d743c9b0b0ecb1002e09fa4",
+        "at": "2026-10-15T15:00:00Z",
+        "review": null
+      },
+      "adopted": [
+        "推量や可能性を、根拠なく断定へ変えないこと",
+        "太字を、論理の要所に限ること",
+        "翻訳調の比喩を見分ける二段階の判定",
+        "説明の中で、読者を「あなた」と呼ばないこと"
+      ],
+      "not_adopted": [],
+      "gist": "fd287c3133457c4fd8f5601d34aa817d"
+    },
+    {
+      "id": "humanizer",
+      "kind": "repo",
+      "role": "reference",
+      "license": {
+        "spdx": "MIT",
+        "checked": "2026-10-18"
+      },
+      "watch": {
+        "enabled": true,
+        "paths": [
+          "SKILL.md",
+          "CHANGELOG.md"
+        ]
+      },
+      "reviewed": {
+        "ref": "225a6f3",
+        "sha": "225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8",
+        "at": "2026-10-15T15:00:00Z",
+        "review": null
+      },
+      "adopted": [
+        "語の数より、文章の中での働きを見る点(不要な対比、反復する結び、誇張、装飾の類型化)",
+        "改稿後に情報の追加・欠落を再確認する点"
+      ],
+      "not_adopted": [
+        {
+          "item": "声に応じた反応の追加を認める部分、ダッシュの一律制限、個別の変換例",
+          "reason": "意味保持の方針にそのまま移せない。英語向けの実装"
+        }
+      ],
+      "repo": "blader/humanizer"
+    },
+    {
+      "id": "japanese-humanizer",
+      "kind": "repo",
+      "role": "reference",
+      "license": {
+        "spdx": "MIT",
+        "checked": "2026-10-18"
+      },
+      "watch": {
+        "enabled": true,
+        "paths": [
+          "plugins/japanese-humanizer/skills/**"
+        ]
+      },
+      "reviewed": {
+        "ref": "09bb6c6",
+        "sha": "09bb6c69a2f671f6c3223fab093fd023c61d5c84",
+        "at": "2026-10-15T15:00:00Z",
+        "review": null
+      },
+      "adopted": [
+        "表層修正・文脈判断・高次判断の優先度を区別する考え方",
+        "対象や保証に触る具体化を、単純な語句整理と区別する考え方"
+      ],
+      "not_adopted": [
+        {
+          "item": "優先度のスコア、全出力形式",
+          "reason": "導入しない。指示の存在は効果の証拠ではない"
+        }
+      ],
+      "repo": "geonwoo-jeong/japanese-humanizer"
+    },
+    {
+      "id": "textlint-preset-ja-technical-writing",
+      "kind": "repo",
+      "role": "reference",
+      "license": {
+        "spdx": "MIT",
+        "checked": "2026-10-18"
+      },
+      "watch": {
+        "enabled": true,
+        "paths": [
+          "lib/**",
+          "package.json"
+        ]
+      },
+      "reviewed": {
+        "ref": "5e73caa",
+        "sha": "5e73caaf8700db90408bb133b0d792aaea4337d6",
+        "at": "2026-10-15T15:00:00Z",
+        "review": null
+      },
+      "adopted": [
+        "検出結果を修正命令にしない設計(指摘は起点であり命令ではない)"
+      ],
+      "not_adopted": [
+        {
+          "item": "リンターの導入",
+          "reason": "対象・因果・保証の同一性は、このリンターだけでは確認できない。依存を追加しない"
+        }
+      ],
+      "repo": "textlint-ja/textlint-rule-preset-ja-technical-writing"
+    },
+    {
+      "id": "story-skills",
+      "kind": "repo",
+      "role": "fiction-source",
+      "license": {
+        "spdx": "MIT",
+        "checked": "2026-10-18"
+      },
+      "watch": {
+        "enabled": true,
+        "paths": [
+          "skills/**"
+        ]
+      },
+      "reviewed": {
+        "ref": "9a54e04",
+        "sha": "9a54e04b210c0adb9ac9807fcc876eda1d27e9f6",
+        "at": "2026-10-09T15:00:00Z",
+        "review": null
+      },
+      "adopted": [
+        "chapter-writing・voice-style・revision-continuity・line-editing の責務分離。設定・文体・整合性を区別する考え方"
+      ],
+      "not_adopted": [
+        {
+          "item": "24技能・CLI・出版・定期執筆・整合性コンパイラ",
+          "reason": "取り込まない"
+        }
+      ],
+      "repo": "danjdewhurst/story-skills"
+    },
+    {
+      "id": "novel-writing",
+      "kind": "repo",
+      "role": "fiction-source",
+      "license": {
+        "spdx": "MIT",
+        "checked": "2026-10-18"
+      },
+      "watch": {
+        "enabled": true,
+        "paths": [
+          "novel-writing/**"
+        ]
+      },
+      "reviewed": {
+        "ref": "8387296",
+        "sha": "838729695148008d42c01bd7c3c0c1a5c15de830",
+        "at": "2026-10-09T15:00:00Z",
+        "review": null
+      },
+      "adopted": [
+        "planning、drafting/continuing、reviewing の分岐。人物の知識・推論・誤認、因果診断、用途別参照"
+      ],
+      "not_adopted": [
+        {
+          "item": "人物初登場で属性を足す、全場面の変化などの一律要求",
+          "reason": "採らない"
+        }
+      ],
+      "repo": "wgwtest/novel-writing"
+    },
+    {
+      "id": "alt-code-agent",
+      "kind": "repo",
+      "role": "fiction-source",
+      "license": {
+        "spdx": "none",
+        "checked": "2026-10-18"
+      },
+      "watch": {
+        "enabled": false,
+        "paths": [
+          "skills/fiction-writing-prose/**"
+        ]
+      },
+      "reviewed": {
+        "ref": "8693ecd",
+        "sha": "8693ecd0e1e320f7063be13e6c2ec8dffac82f6b",
+        "at": "2026-10-09T15:00:00Z",
+        "review": null
+      },
+      "adopted": [
+        "語彙・構文・知覚・リズム、視点・語りの距離、場面と要約の役割(着想のみ。文章は取り入れない)"
+      ],
+      "not_adopted": [
+        {
+          "item": "文章・実装",
+          "reason": "ライセンスが設定されていないため取り入れない。更新確認もしない"
+        }
+      ],
+      "repo": "alt-code-ai/agent"
+    },
+    {
+      "id": "opencode",
+      "kind": "repo",
+      "role": "host-docs",
+      "license": {
+        "spdx": "MIT",
+        "checked": "2026-10-18"
+      },
+      "watch": {
+        "enabled": true,
+        "paths": [
+          "packages/core/src/skill.ts",
+          "packages/core/src/skill/**"
+        ],
+        "releases": false
+      },
+      "reviewed": {
+        "ref": "055d95b",
+        "sha": "055d95bb7e278c94baf06235a52cac79dd13ba67",
+        "at": "2026-10-09T22:29:16Z",
+        "review": null
+      },
+      "adopted": [
+        "Skill の発見場所の確認(docs/environments.md)"
+      ],
+      "not_adopted": [],
+      "repo": "anomalyco/opencode"
+    },
+    {
+      "id": "hermes-agent",
+      "kind": "repo",
+      "role": "host-docs",
+      "license": {
+        "spdx": "MIT",
+        "checked": "2026-10-18"
+      },
+      "watch": {
+        "enabled": true,
+        "paths": [
+          "agent/skill_*.py",
+          "hermes_cli/skills_*.py",
+          "tools/skill_*.py"
+        ],
+        "releases": false
+      },
+      "reviewed": {
+        "ref": "46d7718",
+        "sha": "46d7718a52ff33accb15dc0501736fbdb6833cab",
+        "at": "2026-10-09T21:36:08Z",
+        "review": null
+      },
+      "adopted": [
+        "Skill の読み込みと trust の確認(docs/environments.md)"
+      ],
+      "not_adopted": [],
+      "repo": "NousResearch/hermes-agent"
+    }
+  ]
+}

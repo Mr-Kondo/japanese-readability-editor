@@ -1,0 +1,46 @@
+name: Upstream watch
+
+# 参考にしたリポジトリの更新を週に1回調べ、更新があれば追跡 Issue(ラベル upstream)を、参考先ごとに1件作る。
+# 決定的な処理だけを行う(LLM も、リポジトリの外の秘密鍵も使わない)。解析と改良は docs/upstream-watch.md の手順で行う。
+on:
+  schedule:
+    - cron: "17 0 * * 1" # 毎週月曜 00:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+# 同時に2つ走ると、追跡 Issue が重複して立つことがある。
+concurrency:
+  group: upstream-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    # CI と同じ版に固定する(ci.yml の注)。
+    runs-on: ubuntu-26.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.x"
+
+      # 取得に失敗した参考先があっても報告は書く。更新のあった参考先の Issue は作り、そのあとでジョブを失敗にする。
+      - name: Check the upstream repositories
+        id: check
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python tools/upstream_watch.py check --json upstream-report.json
+
+      - name: Open tracking issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python tools/upstream_watch.py notify --report upstream-report.json --repo "$GITHUB_REPOSITORY" --execute
+
+      - name: Fail when a source could not be checked
+        if: steps.check.outcome == 'failure'
+        run: exit 1
