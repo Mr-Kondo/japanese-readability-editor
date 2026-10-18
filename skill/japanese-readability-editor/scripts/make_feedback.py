@@ -108,7 +108,19 @@ def build(args: argparse.Namespace) -> dict:
     }
 
 
+def use_utf8_output() -> None:
+    """標準出力と標準エラーを UTF-8 にする。cp932 の Windows で、日本語や絵文字を含む出力が文字化け・異常終了しないようにする。"""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)  # IDLE や閉じた標準出力には無い、または失敗する。そのときは何もしない
+        if reconfigure is not None:
+            try:
+                reconfigure(encoding="utf-8", errors="backslashreplace")
+            except (ValueError, OSError):
+                pass
+
+
 def main(argv: Optional[List[str]] = None) -> int:
+    use_utf8_output()
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--original", required=True, help="スキルに渡す前の文章のファイル")
     parser.add_argument("--result", required=True, help="スキルが返した文章のファイル")

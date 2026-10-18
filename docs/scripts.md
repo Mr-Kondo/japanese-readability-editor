@@ -23,6 +23,14 @@ python3 scripts/check_kokugo.py README.md --profile official --json
 python3 scripts/validate_kokugo_rules.py
 ```
 
+### 出力の文字コード
+
+どのスクリプトも、標準出力と標準エラーを UTF-8 で書きます。Windows の日本語環境(標準出力が cp932)で、絵文字などを含む文書を処理しても、`UnicodeEncodeError` で止まりません。Agent の実行ツールなど、パイプで受ける使い方では、UTF-8 のまま読めます。
+
+- cp932 のコンソールへ直接出すと、文字化けすることがあります。その場合は、コンソールを UTF-8 にする(`chcp 65001`)か、`--json` を使ってください。
+- 標準入力は、これまでどおり UTF-8 として読みます。
+- 確かめたのは、macOS で `PYTHONUTF8=0` と `PYTHONIOENCODING=cp932` を渡して近づけた条件です。実機の Windows の端末では確かめていません。
+
 ## measure.py
 
 `measure.py` は、次の指標を出します。
