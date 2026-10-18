@@ -125,6 +125,18 @@ class ReferencesStayConsistentTest(unittest.TestCase):
         self.assertIn("## 19. 文体を変えない", examples)
         self.assertIn("失敗率が下がるとは限らない", examples)
 
+    def test_leftover_words_of_the_writer_are_removed_only_when_they_carry_nothing_for_the_reader(self):
+        # nanaism/yomiyasu の slop-catalog 6 章を参考にした 3 項目(#56)。残す用法と、仮置きを埋めないことを固定する。
+        rules = read("references/readability-rules.md")
+        for phrase in ("### 読者向けでない言葉の名残", "指示の名残", "仮置きの残り", "チャット応答の名残",
+                       "この手順書では、退職の手続きは扱いません", "推測で埋めず、消さず、利用者に確かめる箇所として報告する",
+                       "会話や引用の中の伏せ字", "チャットの返信そのものを推敲する場合", "小説(モード D)と、コピーライティングには当てない"):
+            self.assertIn(phrase, rules)
+        self.assertIn("仮置きは、埋めず、利用者に確かめる箇所として報告する", read("SKILL.md"))
+        examples = read("assets/examples.md")
+        self.assertIn("## 27. 読者向けでない言葉の名残を直す(範囲の宣言は残す)", examples)
+        self.assertIn("「〇〇」は仮置きで、期限を推測した「月末」で埋めてはいけない", examples)
+
     def test_examples_show_changes_of_strength_and_weight(self):
         self.assertIn("## 20. 言い切りの強さと比重を変えない", read("assets/examples.md"))
 
