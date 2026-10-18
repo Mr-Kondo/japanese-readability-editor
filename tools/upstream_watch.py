@@ -28,7 +28,9 @@ import re
 import subprocess
 import sys
 import time
+import urllib.error
 import urllib.parse
+import urllib.request
 from pathlib import Path
 
 sys.dont_write_bytecode = True
@@ -144,10 +146,36 @@ def find_source(registry: dict, source_id: str) -> dict:
 class GhApi:
     """`gh api` を呼ぶ。5xx と通信の失敗は少し待って再試行し、API の上限と 404 は再試行しない。"""
 
-    def __init__(self, run=subprocess.run, sleep=time.sleep, retries: int = 2):
-        self.run, self.sleep, self.retries = run, sleep, retries
+    def __init__(self, run=subprocess.run, sleep=time.sleep, retries: int = 2, open_url=urllib.request.urlopen):
+        self.run, self.sleep, self.retries, self.open_url = run, sleep, retries, open_url
+
+    def get_public(self, path: str):
+        """認証なしで取得する。Actions の GITHUB_TOKEN は Gist を読めない(HTTP 403)ので、公開の Gist はこちらで読む。"""
+        request = urllib.request.Request(f"https://api.github.com/{path}", headers={
+            "Accept": "application/vnd.github+json", "User-Agent": "japanese-readability-editor-upstream-watch"})
+        status = None
+        for attempt in range(self.retries + 1):
+            try:
+                with self.open_url(request, timeout=30) as response:
+                    return json.loads(response.read().decode("utf-8"))
+            except urllib.error.HTTPError as exc:
+                status = exc.code
+                body = exc.read().decode("utf-8", "replace") if hasattr(exc, "read") else ""
+                if status in (403, 429) and ("rate limit" in body.lower() or exc.headers.get("X-RateLimit-Remaining") == "0"):
+                    raise ApiError(status, "API の上限に達した", rate_limited=True) from exc
+                if status < 500:
+                    raise ApiError(status, f"{clean(path)}: HTTP {status}") from exc
+            except ValueError as exc:
+                raise ApiError(None, f"JSON ではない応答: {clean(path)}") from exc
+            except OSError:
+                status = None  # 通信の失敗。再試行する
+            if attempt < self.retries:
+                self.sleep(2 * (attempt + 1))
+        raise ApiError(status, f"{clean(path)}: 取得に失敗した")
 
     def get(self, path: str):
+        if path.startswith("gists/"):
+            return self.get_public(path)
         command = ["gh", "api", "-H", "Accept: application/vnd.github+json", path]
         for attempt in range(self.retries + 1):
             try:
@@ -371,7 +399,7 @@ def marker(source_id: str, head_sha: str | None = None) -> str:
 
 def issue_text(result: dict, source: dict) -> tuple:
     reviewed, head = source["reviewed"], result["head"]
-    new_tag = (result.get("new_releases") or [{}])[0].get("tag") or head["sha"][:7]
+    new_tag = ((result.get("new_releases") or [{}])[0].get("tag") if "new_release" in result["reasons"] else None) or head["sha"][:7]
     title = f"上流の更新: {source['id']}（{clean(reviewed['ref'], 60)} → {clean(new_tag, 60)}）"
     rows = [("参考先", f"`{clean(result['repo'], 80)}`（{clean(source['license']['spdx'], 40)}、役割: {source['role']}）"),
             ("確認済みの基準", f"`{clean(reviewed['ref'], 60)}`（{reviewed['at'][:10]}）"),
