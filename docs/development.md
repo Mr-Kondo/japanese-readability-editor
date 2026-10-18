@@ -38,11 +38,12 @@ japanese-readability-editor/
 │   ├── validate_skill.py
 │   ├── update_kokugo_sources.py           # 公式資料の照合・抽出(ネットワークを使う唯一のコード)
 │   ├── render_kokugo_docs.py              # 規則データから、規則の一覧と出典の文書を生成
+│   ├── upstream_watch.py                  # 参考にしたリポジトリの更新確認(gh を使う)
 │   └── check_all.py                       # 検証とテストをまとめて実行
 ├── tests/
 ├── docs/                                  # 詳しい説明と実測の記録
 ├── .claude-plugin/                        # Claude Code プラグインの定義(正本を指すだけ)
-├── .github/workflows/                     # CI と Release
+├── .github/workflows/                     # CI、Release、参考先の更新確認(週1回)
 ├── LICENSE                                # MIT
 └── dist/                                  # 生成物。Git には含めない
 ```
@@ -73,9 +74,10 @@ japanese-readability-editor/
 | `tools/update_kokugo_sources.py` | 公式資料を取得して SHA-256 を照合する(`verify`)。PDF から常用漢字表と異字同訓のデータを作る(`extract-*`)。Skill の外にあり、配布物には入らない |
 | `tools/render_kokugo_docs.py` | `references/kokugo-notation.md`(規則の一覧)と `references/kokugo-sources.md`(出典)を、規則データから生成する。`--check` で最新かを確かめる。この2つの文書は手で書き換えない |
 | `tools/feedback_loop.py` | 利用者から送付された票の受領・検証(`intake`)、独立文書数での集約と回帰ケース化(`triage`)、改良案の下書き(`propose`、既定は送信しない)、修正前後の比較(`verify`)。`skill/` は書き換えない。[利用者のフィードバック](feedback.md) |
+| `tools/upstream_watch.py` | 参考にしたリポジトリの更新を調べ(`check`)、追跡 Issue を作り(`notify`)、解析を終えた基準を進める(`mark-reviewed`)、参考先を登録する(`add`)。登録簿は `docs/upstream/sources.json`。Skill の外にあり、配布物には入らない。[参考にしたリポジトリの更新確認](upstream-watch.md) |
 | `tools/check_all.py` | 検証とテストをまとめて実行する。内容は「[検証](#検証)」 |
 | `.claude-plugin/` | Claude Code のプラグインとして入れるための定義。`skill/` を指すだけで、Skill は複製しない |
-| `.github/workflows/` | CI(検証、テスト、パッケージ生成)と、タグを push したときの Release |
+| `.github/workflows/` | CI(検証、テスト、パッケージ生成)、タグを push したときの Release、週に1回の参考先の更新確認(`upstream-watch.yml`。追跡 Issue を作るだけで、リポジトリは書き換えない) |
 
 ## パッケージ生成
 
@@ -152,6 +154,7 @@ python3 -m unittest discover -s tests -v
 - `check_kokugo.py` と `kokugo_engine.py`(一次資料の例示・許容・適用範囲から決めた期待値、適用設定ごとの区分、`needs_context`、用語集、保護対象、再現性、JSON の形式、終了コード、入力が変わらないこと、ネットワークなしで動くこと)
 - `validate_kokugo_rules.py` と規則データ(不正なデータの検出、出典の記録、文書との整合)
 - `tools/update_kokugo_sources.py`(取得は差し替える。通信しない)と `tools/check_all.py`
+- `tools/upstream_watch.py`(gh の応答を差し替える。通信しない)と、登録簿 `docs/upstream/sources.json` の整合(確認の記録の実在、ライセンスの条件)、`upstream-watch.yml` の権限
 - モード C の厳密な確認と、モード B の意味保存の回帰(`test_kokugo_modes.py`)
 - `assets/kokugo-cases.md` の例と、実際の検査結果の一致(`test_kokugo_cases.py`)
 - `validate_skill.py`、`install.py`、`uninstall.py`、`package.py`
