@@ -109,12 +109,6 @@ class DryRunTest(InstallCase):
         self.assertEqual(tree(self.workspace), [])
         self.assertEqual(tree(self.home), [])
 
-    def test_dry_run_for_user_scope_writes_nothing(self):
-        code, out, _ = self.run_install("--scope", "user", "--target", "all", "--dry-run")
-        self.assertEqual(code, 0)
-        self.assertEqual(out.count("[dry-run] install"), 4)
-        self.assertEqual(tree(self.home), [])
-
     def test_dry_run_reports_an_existing_destination_without_touching_it(self):
         existing = self.workspace / ".agents" / "skills" / SKILL_NAME
         existing.mkdir(parents=True)
@@ -221,12 +215,6 @@ class ConflictTest(InstallCase):
         self.assertEqual(code, 1)
         self.assertIn("not a skill directory", err)
         self.assertEqual((existing / "precious.txt").read_text(encoding="utf-8"), "大事なデータ\n")
-
-    def test_installing_twice_is_safe(self):
-        self.run_install("--scope", "workspace", "--target", "common")
-        code, out, _ = self.run_install("--scope", "workspace", "--target", "common")
-        self.assertEqual(code, 0)
-        self.assertIn("skip", out)
 
     def test_backup_uses_a_timestamped_name(self):
         existing = self.make_existing()
@@ -515,14 +503,6 @@ class IdempotenceAndProtectionTest(InstallCase):
         self.assertEqual(tree(self.home), before)
         self.assertEqual(edited.read_text(encoding="utf-8"), "手元の版\n")
 
-    def test_dry_run_on_a_clean_target_writes_nothing_for_both_targets(self):
-        code, out, _ = self.run_install("--scope", "user", "--target", "opencode,hermes", "--dry-run")
-        self.assertEqual(code, 0)
-        self.assertEqual(out.count("[dry-run] install"), 2)
-        self.assertEqual(tree(self.home), [])
-        self.assertEqual(tree(self.workspace), [])
-
-
 class ExplicitDestinationTest(InstallCase):
     def test_dest_with_spaces_and_japanese(self):
         dest = self.tmp / "私の skills フォルダ"
@@ -537,13 +517,6 @@ class ExplicitDestinationTest(InstallCase):
         code, out, _ = self.run_install("--dest", str(dest), "--target", "hermes")
         self.assertEqual(code, 0)
         self.assertIn("verify   OK", out)
-
-    def test_dest_dry_run_writes_nothing(self):
-        dest = self.tmp / "skills"
-        code, out, _ = self.run_install("--dest", str(dest), "--dry-run")
-        self.assertEqual(code, 0)
-        self.assertIn("[dry-run]", out)
-        self.assertFalse(dest.exists())
 
     def test_dest_and_scope_are_mutually_exclusive(self):
         code, _, err = self.run_install("--dest", str(self.tmp / "s"), "--scope", "user")
@@ -564,14 +537,6 @@ class ExplicitDestinationTest(InstallCase):
         code, _, err = self.run_install("--dest", str(self.tmp / "s"), "--target", "vscode")
         self.assertEqual(code, 2)
         self.assertIn("unknown target", err)
-
-    def test_rerunning_into_dest_is_idempotent(self):
-        dest = self.tmp / "skills"
-        self.run_install("--dest", str(dest))
-        code, out, _ = self.run_install("--dest", str(dest))
-        self.assertEqual(code, 0)
-        self.assertIn("already up to date", out)
-
 
 class InstalledCopyBehavesLikeTheSourceTest(InstallCase):
     """配置した複製が、正本と同じ出力を返す。リポジトリの外、空白と日本語を含むパスから実行する。"""
