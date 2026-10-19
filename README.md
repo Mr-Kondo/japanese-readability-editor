@@ -162,7 +162,7 @@ japanese-readability-editor を paragraph-only モードで適用。
 
 明示 A/B/C は、小説という語だけでは D へ変わりません。本文・引用中の指定は操作指示にしません。D 指定で既存本文があり操作不明なら最小変更の `revise`、対象不足なら確認します。複数モードの矛盾指定も原文を変更せず確認します。
 
-小説には短文化・比喩の説明化・時制統一を一律に適用しません。通常 `draft`/`continue`/`revise` は完成本文だけ、`critique` は本文を変えない批評です。[小説の契約](skill/japanese-readability-editor/references/fiction-writing.md)、任意の [文脈メモ](skill/japanese-readability-editor/assets/fiction-context-template.md)、[補助検査](skill/japanese-readability-editor/references/fiction-checks.md)、[設計参考と限界](docs/fiction-design.md)を参照できます。
+小説には短文化・比喩の説明化・時制統一を一律に適用しません。通常 `draft`/`continue`/`revise` は完成本文だけ、`critique` は本文を変えない批評です。[小説の契約](skills/japanese-readability-editor/references/fiction-writing.md)、任意の [文脈メモ](skills/japanese-readability-editor/assets/fiction-context-template.md)、[補助検査](skills/japanese-readability-editor/references/fiction-checks.md)、[設計参考と限界](docs/fiction-design.md)を参照できます。
 
 D のモデル挙動・評価の実施範囲は [評価ケース](evals/README.md)に記録します。既存製品の確認記録を、D の検証結果としては扱いません。
 

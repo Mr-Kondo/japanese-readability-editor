@@ -29,7 +29,7 @@ from typing import List, Optional, Sequence, Tuple
 sys.dont_write_bytecode = True
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SKILL_DIR = REPO_ROOT / "skill" / "japanese-readability-editor"
+SKILL_DIR = REPO_ROOT / "skills" / "japanese-readability-editor"
 RAN_RE = re.compile(r"^Ran (\d+) tests? in ([0-9.]+)s", re.M)
 RESULT_RE = re.compile(r"^(OK|FAILED)(?: \((.*)\))?$", re.M)
 
@@ -77,7 +77,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="規則データの検証、Skill の検証、テストをまとめて実行する(ネットワークなし)。")
     parser.add_argument("--skip-tests", action="store_true", help="テストを実行しない(検証だけ)")
     parser.add_argument("--verbose", action="store_true", help="各段階の出力をすべて表示する")
-    parser.add_argument("--skill-dir", type=Path, default=None, help="検証する Skill のディレクトリ(既定は skill/japanese-readability-editor)")
+    parser.add_argument("--skill-dir", type=Path, default=None, help="検証する Skill のディレクトリ(既定は skills/japanese-readability-editor)")
     parser.add_argument("--data-dir", type=Path, default=None, help="検証する規則データのディレクトリ(既定は Skill の data/)")
     args = parser.parse_args(argv)
 

@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from skill_env import file_digests
 
 ROOT = Path(__file__).resolve().parent.parent
-SKILL = ROOT / "skill" / "japanese-readability-editor"
+SKILL = ROOT / "skills" / "japanese-readability-editor"
 FILES = ("SKILL.md", "references/readability-rules.md", "assets/examples.md")
 REPEATS = 3
 FLAGS = ["--print", "--safe-mode", "--strict-mcp-config", "--tools", "",

@@ -6,7 +6,7 @@ Skill に同梱したスクリプトを、直接使う方法です。Agent は�
 
 Python 3.10 以上が必要です。どのスクリプトも標準ライブラリだけで動き、ネットワーク通信とファイルの書き込みをしません。国語の表記の検査(`check_kokugo.py`)も、ネットワークなしで動きます。公式資料を取り直す処理は、Skill の外の `tools/update_kokugo_sources.py` に分けています([国語の表記・用法の検査](kokugo.md#規則を更新する))。`compare_rewrite.py` は、SudachiPy が入っていれば使います。Windows では、`python3` ではなく `python` で実行する場合があります([Python のコマンド名](installation.md#python-のコマンド名))。
 
-次のコマンドは、Skill のディレクトリで実行する場合の例です。ディレクトリは、`skill/japanese-readability-editor/` か、配置先の `japanese-readability-editor/` です。
+次のコマンドは、Skill のディレクトリで実行する場合の例です。ディレクトリは、`skills/japanese-readability-editor/` か、配置先の `japanese-readability-editor/` です。
 
 ```bash
 python3 scripts/measure.py README.md
@@ -112,7 +112,7 @@ uv run scripts/compare_rewrite.py before.md after.md
 
 ## check_fiction.py
 
-小説向けに文字数、括弧の対応、任意の作品設定で指定した文字列を検査します。読み取り専用で標準ライブラリだけを使います。通常出力と JSON、候補と実行失敗を区別した終了コードがあります。[CLI・設定・JSON の仕様と限界](../skill/japanese-readability-editor/references/fiction-checks.md)を参照してください。
+小説向けに文字数、括弧の対応、任意の作品設定で指定した文字列を検査します。読み取り専用で標準ライブラリだけを使います。通常出力と JSON、候補と実行失敗を区別した終了コードがあります。[CLI・設定・JSON の仕様と限界](../skills/japanese-readability-editor/references/fiction-checks.md)を参照してください。
 
 D では `measure.py` の長さの警告は改稿命令ではありません。`compare_rewrite.py` は標準 revise の照合補助として人が候補を読んで使います。draft/continue に原文完全保持は要求しません。C の保証範囲は上のとおりで既定の空白除去比較だけでは不十分です。
 

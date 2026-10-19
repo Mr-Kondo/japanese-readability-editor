@@ -7,7 +7,7 @@
 - カレントディレクトリと Git ルート: /Volumes/SSD/Programming/japanese-readability-editor
 - 開始ブランチ: feat/opencode-hermes-support。実装前に feat/japanese-novel-mode を作成した。
 - 適用指示: ユーザー提示の AGENTS.md と /Users/masatomiwada/.codex/RTK.md。祖先ディレクトリに追加の AGENTS.md は見つからなかった。シェル実行は rtk 経由。
-- 正本: skill/japanese-readability-editor。インストール済みコピーを編集していない。
+- 正本: skills/japanese-readability-editor。インストール済みコピーを編集していない。
 - 開始時に18ファイルの未コミット変更があった。変更前の全ファイルを一時スナップショットへ記録し、今回の差分を照合した。ファイル削除0件。既存変更を消していない。
 - README.md、docs/development.md、docs/usage.md、tools/package.py は既存変更と重なるため、開始時内容へのD関連追加だけを確認した。ほかの既存変更ファイルは開始時のバイト列と一致した。
 - 既存 measure.py、compare_rewrite.py、verify_preservation.py、check_kokugo.py は開始時とバイト一致。文化庁の規則データ、既存CLI・既定値、OpenCode/Hermes対応を維持した。
@@ -19,14 +19,14 @@
 
 | ファイル | 目的 |
 |---|---|
-| [SKILL.md](../skill/japanese-readability-editor/SKILL.md) | D別名・5操作・ルーティング・参照入口。192行に抑制 |
-| [readability-rules.md](../skill/japanese-readability-editor/references/readability-rules.md) | 一般文書の助言とDの契約を分岐、複数モード矛盾を区別 |
-| [kokugo-policy.md](../skill/japanese-readability-editor/references/kokugo-policy.md) | Dでの適用範囲、口語・創作表現の保持 |
-| [fiction-writing.md](../skill/japanese-readability-editor/references/fiction-writing.md)（新規） | 操作契約、確認順序、保持・創作範囲、設定・文体・機械検査の限界 |
-| [fiction-checks.md](../skill/japanese-readability-editor/references/fiction-checks.md)（新規） | CLI・字数・設定・JSONスキーマ・終了コード |
-| [fiction-examples.md](../skill/japanese-readability-editor/assets/fiction-examples.md)（新規） | 自作の修正例・保持例・誤った改稿例 |
-| [fiction-context-template.md](../skill/japanese-readability-editor/assets/fiction-context-template.md)（新規） | 任意の作品・文体・場面・継続メモ |
-| [check_fiction.py](../skill/japanese-readability-editor/scripts/check_fiction.py)（新規） | 読み取り専用の字数・括弧・指定文字列検査、標準ライブラリのみ |
+| [SKILL.md](../skills/japanese-readability-editor/SKILL.md) | D別名・5操作・ルーティング・参照入口。192行に抑制 |
+| [readability-rules.md](../skills/japanese-readability-editor/references/readability-rules.md) | 一般文書の助言とDの契約を分岐、複数モード矛盾を区別 |
+| [kokugo-policy.md](../skills/japanese-readability-editor/references/kokugo-policy.md) | Dでの適用範囲、口語・創作表現の保持 |
+| [fiction-writing.md](../skills/japanese-readability-editor/references/fiction-writing.md)（新規） | 操作契約、確認順序、保持・創作範囲、設定・文体・機械検査の限界 |
+| [fiction-checks.md](../skills/japanese-readability-editor/references/fiction-checks.md)（新規） | CLI・字数・設定・JSONスキーマ・終了コード |
+| [fiction-examples.md](../skills/japanese-readability-editor/assets/fiction-examples.md)（新規） | 自作の修正例・保持例・誤った改稿例 |
+| [fiction-context-template.md](../skills/japanese-readability-editor/assets/fiction-context-template.md)（新規） | 任意の作品・文体・場面・継続メモ |
+| [check_fiction.py](../skills/japanese-readability-editor/scripts/check_fiction.py)（新規） | 読み取り専用の字数・括弧・指定文字列検査、標準ライブラリのみ |
 | [test_check_fiction.py](../tests/test_check_fiction.py)（新規） | 補助検査42テスト、入力保持・失敗・Unicodeを含む |
 | [fiction-mode-c.json](../tests/fixtures/fiction-mode-c.json)（新規） | 自作Cフィクスチャ13件、改行挿入成功と空白・句読点等の変更失敗 |
 | [test_fiction_integration.py](../tests/test_fiction_integration.py)（新規） | Cの生バイト保持と配布の6テスト |

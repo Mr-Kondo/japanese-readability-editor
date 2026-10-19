@@ -19,7 +19,7 @@ from typing import List, Optional
 
 sys.dont_write_bytecode = True
 
-SKILL_DIR = Path(__file__).resolve().parent.parent / "skill" / "japanese-readability-editor"
+SKILL_DIR = Path(__file__).resolve().parent.parent / "skills" / "japanese-readability-editor"
 SOURCES_JSON = SKILL_DIR / "data" / "kokugo-sources.json"
 RULES_JSON = SKILL_DIR / "data" / "kokugo-rules.json"
 SOURCES_MD = SKILL_DIR / "references" / "kokugo-sources.md"

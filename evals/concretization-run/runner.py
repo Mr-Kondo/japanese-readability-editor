@@ -33,6 +33,7 @@ def prepare():
     suite["controls"] = controls + suite.pop("additional_controls")
     snapshots = {"baseline": {}, "candidate": {}}
     for name in evaluation.FILES:
+        # 過去の実行の再現用。BASE のコミットは、改名(#66)の前の配置(skill/)で、今のツリーでは動かない
         relative = "skill/japanese-readability-editor/" + name
         snapshots["baseline"][name] = subprocess.check_output(["git", "show", BASE + ":" + relative], cwd=ROOT).decode()
         snapshots["candidate"][name] = (ROOT / relative).read_text()

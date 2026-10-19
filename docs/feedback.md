@@ -1,6 +1,6 @@
 # 利用者のフィードバックを改良に使う
 
-この Skill の結果に問題を見つけた利用者が、その事例を報告し、メンテナーが規則・例の改良に使うための手順です。通信による自動収集はしません。利用者が自分で内容を確かめ、ファイルとして送ります。判定の確定と `skill/` への反映は、メンテナーが人手で行います。
+この Skill の結果に問題を見つけた利用者が、その事例を報告し、メンテナーが規則・例の改良に使うための手順です。通信による自動収集はしません。利用者が自分で内容を確かめ、ファイルとして送ります。判定の確定と `skills/` への反映は、メンテナーが人手で行います。
 
 - 利用者向け: [報告する](#報告する利用者向け)
 - メンテナー向け: [受け取って改良につなぐ](#受け取って改良につなぐメンテナー向け)
@@ -100,10 +100,10 @@ python3 tools/feedback_loop.py propose ... --out-dir work/propose --execute
 
 `triage` は、確認済みで `tuning` の指摘を、失敗の種類と関連規則ごとに、**独立文書数**と**送付者数**で数えます。独立文書は、原文の空白を除いたハッシュで数えます。同じ原本の複数の票、同じ人の再送は重ねません。閾値は、独立3文書以上かつ2人以上の送付者です(暫定。`--min-documents` と `--min-submitters` で変える)。満たすと「規則修正の提案ができる」とし、満たさなければ「経過観察」です。確認済みの指摘は、閾値に満たなくても `regression-cases.json`(既存の `evaluate_readability.py` の形式。モード A/B)に入ります。
 
-`propose` は `skill/` を書き換えません。下書きは `proposals/` に、LLM の下書きである旨を付けて出ます。非公開の送付文に基づくため、公開しません。PR や Issue には、匿名化した人工例に置き換えて書きます。
+`propose` は `skills/` を書き換えません。下書きは `proposals/` に、LLM の下書きである旨を付けて出ます。非公開の送付文に基づくため、公開しません。PR や Issue には、匿名化した人工例に置き換えて書きます。
 
 ```bash
-# 5. 規則を直したあと、修正前後を同条件で評価し、失敗の種類別に並べる(evaluate_readability.py は、実行時の skill/ の内容で動く。修正前は元のコミットで実行する)
+# 5. 規則を直したあと、修正前後を同条件で評価し、失敗の種類別に並べる(evaluate_readability.py は、実行時の skills/ の内容で動く。修正前は元のコミットで実行する)
 python3 tools/evaluate_readability.py --suite work/triage/regression-cases.json --out-dir work/before --execute   # 修正前のスキルで
 python3 tools/evaluate_readability.py --suite work/triage/regression-cases.json --out-dir work/after  --execute   # 修正後のスキルで
 python3 tools/feedback_loop.py verify --cases work/triage/regression-cases.json --before work/before/run.json --after work/after/run.json --out-dir work/verify
@@ -123,7 +123,7 @@ python3 tools/feedback_loop.py verify --cases work/triage/regression-cases.json 
 |---|---|---|
 | 利用者の評価・報告は、一部に偏り、無作為ではない | 実務の記事は、評価する利用者は無作為の標本ではなく、評価が極端に良いか悪いものに偏ると指摘する([解説](https://barkingiguana.com/writing/building-a-feedback-loop-from-users-to-model-improvement/))。失敗の事例を含めた方が、改良した Skill が選ばれたという報告もある([arXiv:2608.02636](https://arxiv.org/abs/2608.02636)) | 失敗率・改善率を出さない。`no_problem` の確認済みケースを対照に入れる |
 | 検証での改善が、別の評価では出ないことがある | 同論文は、検証・テスト・頑健性の評価で、選ばれる改良が一致しないことがあるとする | 調整用(`tuning`)と最終評価用(`final`)を分け、`final` を調整に使わない |
-| スキルの変更は人が承認する | 提案を差分で出し、人が承認してから反映する運用の例がある([Speakeasy](https://www.speakeasy.com/docs/ai-control-plane/distribute/skills/improving-skills-with-agent-feedback.md)) | `skill/` を自動で書き換えない。提案は下書きとして出す |
+| スキルの変更は人が承認する | 提案を差分で出し、人が承認してから反映する運用の例がある([Speakeasy](https://www.speakeasy.com/docs/ai-control-plane/distribute/skills/improving-skills-with-agent-feedback.md)) | `skills/` を自動で書き換えない。提案は下書きとして出す |
 | 同系統モデルの判定・下書きは盲点を共有する | 判定者が自分や同じ系統の出力を好む傾向が報告されている([arXiv:2502.01534](https://arxiv.org/abs/2502.01534)) | LLM の下書きと判定は補助。確認は人が行い、新規の規則より既存規則の統合・明確化を優先させる |
 
 ### 外部の意見と反映

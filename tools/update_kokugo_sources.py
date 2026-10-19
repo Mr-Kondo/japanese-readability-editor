@@ -5,7 +5,7 @@
     python3 tools/update_kokugo_sources.py extract-joyo PDF [--out PATH]
     python3 tools/update_kokugo_sources.py extract-ijidokun PDF [--out PATH]
 
-日常の検査(skill/japanese-readability-editor/scripts/check_kokugo.py)は、ネットワークを使わない。
+日常の検査(skills/japanese-readability-editor/scripts/check_kokugo.py)は、ネットワークを使わない。
 規則を更新するときにだけ、このツールで公式資料を取り直す。このツールは skill の外にあるので、
 配布物(ZIP)には入らない。
 
@@ -41,7 +41,7 @@ from typing import Callable, Dict, List, Optional, Sequence, Tuple
 sys.dont_write_bytecode = True
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-DATA_DIR = REPO_ROOT / "skill" / "japanese-readability-editor" / "data"
+DATA_DIR = REPO_ROOT / "skills" / "japanese-readability-editor" / "data"
 SOURCES_FILE = DATA_DIR / "kokugo-sources.json"
 JOYO_FILE = DATA_DIR / "joyo-kanji.json"
 IJIDOKUN_FILE = DATA_DIR / "ijidokun.json"

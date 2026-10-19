@@ -12,7 +12,7 @@
 検証する内容:
   - 構造: SKILL.md の名前、frontmatter、ディレクトリ名、SKILL.md が参照するファイル、scripts/ の安全性(validate_skill.py)
   - メタデータ: 対象の環境(opencode、hermes)の公式仕様の制約(名前の形式と長さ、description の長さ、ディレクトリ名との一致)
-  - 内容: 正本(--source。既定はこのリポジトリの skill/)との差(欠けたファイル、余分なファイル、内容の違い)
+  - 内容: 正本(--source。既定はこのリポジトリの skills/)との差(欠けたファイル、余分なファイル、内容の違い)
   - 実行: カレントディレクトリが Skill でもリポジトリでもない、空白と日本語を含む一時ディレクトリから、同梱のスクリプトを
           すべて実行する(--no-run で省く)。実行する Python は、この検証を動かしている Python である
   - 依存: Python 3.10 以上か。SudachiPy は任意。入っていなくても動き、どちらで動いたかを tokenizer で示す。インストールはしない
@@ -303,7 +303,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("path", nargs="?", type=Path, default=None,
                         help="検証する Skill のディレクトリ(japanese-readability-editor/)。--scope か --dest を使うときは省く")
     add_location_arguments(parser)
-    parser.add_argument("--source", type=Path, default=None, help="比べる正本。既定はこのリポジトリの skill/japanese-readability-editor(あれば)")
+    parser.add_argument("--source", type=Path, default=None, help="比べる正本。既定はこのリポジトリの skills/japanese-readability-editor(あれば)")
     parser.add_argument("--no-source", action="store_true", help="正本との比較を省く(リポジトリがない環境で、配置済みの Skill だけを検証する)")
     parser.add_argument("--strict-source", action="store_true", help="正本との差を、警告ではなく誤りとして扱う")
     parser.add_argument("--no-run", action="store_true", help="スクリプトを実行しない(構造・メタデータ・内容・重複だけを検証する)")

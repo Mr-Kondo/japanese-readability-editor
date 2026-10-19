@@ -16,7 +16,7 @@ sys.dont_write_bytecode = True  # skill 本体のディレクトリに __pycache
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILL_NAME = "japanese-readability-editor"
-SKILL_DIR = REPO_ROOT / "skill" / SKILL_NAME
+SKILL_DIR = REPO_ROOT / "skills" / SKILL_NAME
 SCRIPTS_DIR = SKILL_DIR / "scripts"
 TOOLS_DIR = REPO_ROOT / "tools"
 FIXTURES = Path(__file__).resolve().parent / "fixtures"

@@ -9,7 +9,7 @@
 ```text
 japanese-readability-editor/
 ├── README.md
-├── skill/japanese-readability-editor/     # 正本。配布するのはここだけ
+├── skills/japanese-readability-editor/     # 正本。配布するのはここだけ
 │   ├── SKILL.md
 │   ├── references/readability-rules.md
 │   ├── references/kokugo-policy.md        # 国語の表記・用法の適用方針
@@ -73,10 +73,10 @@ japanese-readability-editor/
 | `tools/validate_skill.py` | Skill の構造と互換性を検証する |
 | `tools/update_kokugo_sources.py` | 公式資料を取得して SHA-256 を照合する(`verify`)。PDF から常用漢字表と異字同訓のデータを作る(`extract-*`)。Skill の外にあり、配布物には入らない |
 | `tools/render_kokugo_docs.py` | `references/kokugo-notation.md`(規則の一覧)と `references/kokugo-sources.md`(出典)を、規則データから生成する。`--check` で最新かを確かめる。この2つの文書は手で書き換えない |
-| `tools/feedback_loop.py` | 利用者から送付された票の受領・検証(`intake`)、独立文書数での集約と回帰ケース化(`triage`)、改良案の下書き(`propose`、既定は送信しない)、修正前後の比較(`verify`)。`skill/` は書き換えない。[利用者のフィードバック](feedback.md) |
+| `tools/feedback_loop.py` | 利用者から送付された票の受領・検証(`intake`)、独立文書数での集約と回帰ケース化(`triage`)、改良案の下書き(`propose`、既定は送信しない)、修正前後の比較(`verify`)。`skills/` は書き換えない。[利用者のフィードバック](feedback.md) |
 | `tools/upstream_watch.py` | 参考にしたリポジトリの更新を調べ(`check`)、追跡 Issue を作り(`notify`)、解析を終えた基準を進める(`mark-reviewed`)、参考先を登録する(`add`)。登録簿は `docs/upstream/sources.json`。Skill の外にあり、配布物には入らない。[参考にしたリポジトリの更新確認](upstream-watch.md) |
 | `tools/check_all.py` | 検証とテストをまとめて実行する。内容は「[検証](#検証)」 |
-| `.claude-plugin/` | Claude Code のプラグインとして入れるための定義。`skill/` を指すだけで、Skill は複製しない |
+| `.claude-plugin/` | Claude Code のプラグインとして入れるための定義。`skills/` を指すだけで、Skill は複製しない |
 | `.github/workflows/` | CI(検証、テスト、パッケージ生成)、タグを push したときの Release、週に1回の参考先の更新確認(`upstream-watch.yml`。追跡 Issue を作るだけで、リポジトリは書き換えない) |
 
 ## パッケージ生成
@@ -123,7 +123,7 @@ D の正本は共通 `SKILL.md` と `references/fiction-writing.md`、`reference
 
 ```bash
 python3 tools/validate_skill.py
-python3 skill/japanese-readability-editor/scripts/validate_kokugo_rules.py
+python3 skills/japanese-readability-editor/scripts/validate_kokugo_rules.py
 python3 tools/check_all.py
 ```
 

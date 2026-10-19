@@ -166,7 +166,7 @@ class RegistryTest(unittest.TestCase):
             update.find_source(registry, "NOPE")
 
     def test_the_tool_is_outside_the_skill_so_it_is_not_distributed(self):
-        skill = TOOLS_DIR.parent / "skill" / "japanese-readability-editor"
+        skill = TOOLS_DIR.parent / "skills" / "japanese-readability-editor"
         self.assertFalse([p for p in skill.rglob("update_kokugo_sources.py")])
 
 

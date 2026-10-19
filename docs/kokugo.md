@@ -17,7 +17,7 @@
 
 文の長さの目安(30〜45字、46字以上を候補、段落は200字以上)は、この skill の運用上の目安です。文化庁の基準ではありません。「公用文作成の考え方」の解説は、一文の長さを「適当な長さは一概に決められないが、50〜60字ほどになってきたら読みにくくなっていないか意識するとよい」と述べるにとどまります。
 
-採用した資料、確認日、ハッシュは [references/kokugo-sources.md](../skill/japanese-readability-editor/references/kokugo-sources.md) にあります。
+採用した資料、確認日、ハッシュは [references/kokugo-sources.md](../skills/japanese-readability-editor/references/kokugo-sources.md) にあります。
 
 ## 適用設定
 

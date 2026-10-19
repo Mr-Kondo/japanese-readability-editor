@@ -6,10 +6,10 @@
 
 ## 証拠と原因の仮説
 
-- 基点版の[参照文書](https://github.com/Mr-Kondo/japanese-readability-editor/blob/69188f6fc505ae44b64187a03cd29eb4713aa69c/skill/japanese-readability-editor/references/readability-rules.md)の「万能動詞」は、「再試行が安定性に効く」を「通信が失敗しても再試行するため、一時的な障害でジョブが止まらない」へ展開できるとしている。原文にない通信という対象、失敗・障害という条件、停止しないという保証を足している。
+- 基点版の[参照文書](https://github.com/Mr-Kondo/japanese-readability-editor/blob/69188f6fc505ae44b64187a03cd29eb4713aa69c/skills/japanese-readability-editor/references/readability-rules.md)の「万能動詞」は、「再試行が安定性に効く」を「通信が失敗しても再試行するため、一時的な障害でジョブが止まらない」へ展開できるとしている。原文にない通信という対象、失敗・障害という条件、停止しないという保証を足している。
 - 直前の確認手順も「何をするのか」「その結果、何が変わるのか」の有無だけを問う。根拠が足りない場合の扱いが、この節内にない。
-- [共通指示](../skill/japanese-readability-editor/SKILL.md)は、元の述語が伝わるなら保ち、抽象的という理由だけで評価の種類や強さを変えないよう求めている。
-- [例集の例7](../skill/japanese-readability-editor/assets/examples.md)は既に、対象を通信やジョブへ限定せず、「支える」「高める」を残す例に修正されている。同種の保証への変更は誤りとして示されている。
+- [共通指示](../skills/japanese-readability-editor/SKILL.md)は、元の述語が伝わるなら保ち、抽象的という理由だけで評価の種類や強さを変えないよう求めている。
+- [例集の例7](../skills/japanese-readability-editor/assets/examples.md)は既に、対象を通信やジョブへ限定せず、「支える」「高める」を残す例に修正されている。同種の保証への変更は誤りとして示されている。
 
 以上は実装前のファイルで確認した事実。局所的な例が共通指示より優先され、根拠のない具体化を誘発する可能性がある、というのは仮説である。実施した比較では手順と例を同時に変更しており、この例だけを既存のモデル失敗の原因だとは断定しない。
 
@@ -56,7 +56,7 @@
 
 ## 推奨する差分案
 
-最初の実装は、`skill/japanese-readability-editor/references/readability-rules.md` の「万能動詞」の確認手順と例文だけを、次の内容へ置き換える。
+最初の実装は、`skills/japanese-readability-editor/references/readability-rules.md` の「万能動詞」の確認手順と例文だけを、次の内容へ置き換える。
 
 ```text
 確認の手順:

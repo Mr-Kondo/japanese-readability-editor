@@ -8,5 +8,5 @@
   "repository": "https://github.com/Mr-Kondo/japanese-readability-editor",
   "license": "MIT",
   "keywords": ["japanese", "writing", "readability", "proofreading", "agent-skill"],
-  "skills": ["./skill/"]
+  "skills": ["./skills/"]
 }
