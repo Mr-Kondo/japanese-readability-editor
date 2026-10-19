@@ -48,7 +48,7 @@ D は先に [references/fiction-writing.md](references/fiction-writing.md) を�
 8. 直訳調。
 9. AI的な抽象表現、造語、比喩。
 10. 冗長表現。
-11. 漢字・表記。補助指標にとどめる。国語の表記・用法の確認は、下の「国語の表記・用法」に従う。
+11. 漢字・表記。補助指標にとどめる。国語の表記・用法の確認は、[references/kokugo-check.md](references/kokugo-check.md) に従う。
 
 各段階の見方と直し方は [references/readability-rules.md](references/readability-rules.md) にある。判断に迷うときに読む。
 
@@ -101,6 +101,10 @@ D は先に [references/fiction-writing.md](references/fiction-writing.md) を�
 
 一つでも違う箇所は、書き換える前の形に戻す。同じ関係・状態・評価と確かめられない箇所も、その部分だけ元に戻す。
 
+## スクリプト
+
+同梱のスクリプトは、実行して出力だけを使う。ソースは読まない。用法と出力形式は、`--help` と [references/scripts.md](references/scripts.md)(計測の `measure.py` もここ)にある。国語の表記・用法の検査は [references/kokugo-check.md](references/kokugo-check.md)。実行できない環境では、規則と目視で確かめ、実行したとは報告しない。
+
 スクリプトを実行できる環境では、書き換える前の文章を、対象と別のディレクトリ(一時ディレクトリなど)へ保存しておき、下のコマンドで照合の候補を挙げる。終わったら、その保存先を削除する。この Skill のコマンドは `python3` で書いている。動かなければ `python` で実行する(Windows など)。コマンドの `scripts/` などの相対パスは、この Skill のフォルダ(`SKILL.md` があるフォルダ)からの相対パスで、作業ディレクトリからのものではない。実行するときは、Skill のフォルダの絶対パスを前に付ける。
 
 ```bash
@@ -108,47 +112,6 @@ python3 scripts/compare_rewrite.py before.md after.md
 ```
 
 数値・URL・コード・用語の増減、対応する元の文がない文、否定・推量・可能・依頼などの表現の増減、文体の変化を示す。判定ではないので、挙がった箇所を上の観点で元の文と見比べる。SudachiPy が入っていれば、否定と文の対応をより正確に判定する。
-
-出力の `tokenizer` が `regex` なら、SudachiPy が入っていない。利用者の手元ではない、クラウドの実行環境(ChatGPT や Claude のアプリなど)では、SudachiPy を入れて、照合をやり直す。入れるコマンドは `python3 -m pip install sudachipy sudachidict-small` である。
-
-コマンドのネットワークが制限されていれば、ネットワークを使える権限で実行する(承認が要るなら求める)。一度試して入らなければ、`regex` の結果を使う。利用者の手元の環境(Codex、Claude Code など)には、断りなく入れない。
-
-## 国語の表記・用法
-
-文化庁の公式資料（内閣告示・内閣訓令・建議など）に基づく表記・用法の判断規則を持つ。モードとは独立した「適用設定」で当て方を変える。指定がなければ `general-tech` とし、文体が堅いという理由だけで `official` にしない。
-
-| 適用設定 | 用途 | 動作 |
-|---|---|---|
-| `general-tech`（既定） | 技術・業務文書 | 明確な誤りを確認し、専門用語・組織の表記・許容形を尊重する |
-| `public-explanation` | 一般向けの解説・案内・広報 | 読み手に応じた表記を検討する。説明不足は、原文に根拠がなければ指摘にとどめる |
-| `official` | 公用文基準が明示された文書 | 公用文固有の表記・用語の運用も確認する |
-
-表記は、明示された基準・組織の用語集、適用設定の順で決める。用語集と公用文への準拠指定が競合するときは、黙って片方を適用せず、競合を利用者に示す。複数の表記が許容される場合にだけ、文書内の統一を判断材料にする。多数派という理由で、明確な誤りを広げない。
-
-指摘の区分は、`error`（明確な誤り）、`recommendation`（推奨）、`accepted_variant`（許容）、`needs_context`（要確認）、`excluded`（保護対象）である。許容形と適用範囲外の表記は、誤りとして直さない。`needs_context` は、確定した誤りとして直さない。常用漢字は字種だけで音訓まで確認済みとせず、異字同訓は読みや多数派で決めない。
-
-スクリプトを実行できる環境では、次の手順にする。
-
-1. 適用設定と保護対象（固有名詞、専門用語、コード、URL、引用）を確定する。用語集があれば `--glossary` に渡す。
-2. 診断の順序のとおり、構成・論理・読みやすさを先に確認する。
-3. `python3 scripts/check_kokugo.py document.md --profile general-tech` を実行する（`--json` あり。終了コード 0=指摘なし、1=error あり、2=検査できず）。
-4. 指摘を、文脈と一次資料（`references/kokugo-notation.md` の出典）に照らして判断する。
-5. モード B では `compare_rewrite.py` を実行し、意味の変化候補を確認する。
-6. 直した後に、再検査する。
-
-モード C では、国語の規則を理由に文言・句読点・語順を変更しない。表記上の問題は、本文を変えずに報告する。
-
-実行できない環境では、`references/` の規則で確認し、検査を実行したとは報告しない。このスクリプトは、意味の保存や日本語の正しさ全体を保証しない。検査していない項目は、出力の `coverage` に示される。
-
-## 計測（スクリプトを実行できる環境のみ）
-
-```bash
-python3 scripts/measure.py --locate README.md
-```
-
-段落と文の長さの候補を、ファイル名・行番号・長さ・冒頭で示す。`--json` で機械可読な出力になる。`--extras` を加えると、連続漢字、名詞と「の」の3連、二重否定、表示されない太字を指摘する。
-
-読み取り専用であり、修正の要否と方法は自分で判断する。実行できない環境では、長さを目視で見積もる。
 
 ## Paragraph-only の手順
 
@@ -190,15 +153,16 @@ python3 scripts/verify_preservation.py --strict before.md after.md
 
 ## 参照
 
-- [references/fiction-writing.md](references/fiction-writing.md)。D の操作契約と確認観点。
-- [assets/fiction-examples.md](assets/fiction-examples.md)。小説の直す例・残す例・誤った改稿例。
-- [assets/fiction-context-template.md](assets/fiction-context-template.md)。長編用の任意メモ。
-
-- [references/readability-rules.md](references/readability-rules.md)。各段階の詳しい基準。
-- [references/feedback.md](references/feedback.md)。利用者がこの Skill の結果の問題を報告したいと言ったときだけ読む。自分から勧めない。
+- [references/readability-rules.md](references/readability-rules.md)。各段階の詳しい基準。判断に迷うときに読む。
 - [assets/examples.md](assets/examples.md)。修正前後の例。書き方の感覚が必要なときに読む。
+- [references/scripts.md](references/scripts.md)。compare_rewrite.py と measure.py の使い方。
+- [references/kokugo-check.md](references/kokugo-check.md)。国語の表記・用法の適用手順。
 - [references/kokugo-policy.md](references/kokugo-policy.md)。適用設定、判定区分、用語集との競合、資料の性格。国語の表記を確認するときに読む。
 - [references/kokugo-notation.md](references/kokugo-notation.md)。規則の一覧と出典。指摘の根拠を確かめるときに読む。
 - [references/kokugo-official.md](references/kokugo-official.md)。`official` で追加で確認する公用文の運用。
 - [references/kokugo-sources.md](references/kokugo-sources.md)。公式資料の正式名称、発出主体、日付、URL、確認日、ハッシュ。
 - [assets/kokugo-cases.md](assets/kokugo-cases.md)。国語の表記の修正例と、変更してはいけない反例。
+- [references/fiction-writing.md](references/fiction-writing.md)。D の操作契約と確認観点。
+- [assets/fiction-examples.md](assets/fiction-examples.md)。小説の直す例・残す例・誤った改稿例。
+- [assets/fiction-context-template.md](assets/fiction-context-template.md)。長編用の任意メモ。
+- [references/feedback.md](references/feedback.md)。利用者がこの Skill の結果の問題を報告したいと言ったときだけ読む。自分から勧めない。

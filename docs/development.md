@@ -19,7 +19,7 @@ japanese-readability-editor/
 ├── README.md
 ├── skills/japanese-readability-editor/     # 正本。配布するのはここだけ
 │   ├── SKILL.md
-│   ├── references/                         # readability-rules.md、fiction-*.md、kokugo-*.md、feedback.md
+│   ├── references/                         # readability-rules.md、scripts.md、kokugo-check.md、fiction-*.md、kokugo-*.md、feedback.md
 │   ├── scripts/                            # measure.py、verify_preservation.py、compare_rewrite.py、check_kokugo.py ほか
 │   ├── data/                               # 国語の規則、資料の記録、常用漢字表、異字同訓
 │   └── assets/                             # examples.md、kokugo-cases.md、fiction-*.md
@@ -39,6 +39,7 @@ japanese-readability-editor/
 | ファイル | 責務 |
 |---|---|
 | `SKILL.md` | 頻繁に使う判断とワークフロー。4つのモード(A〜D)とその指定、診断の順序、変更してはならないもの |
+| `references/scripts.md`、`references/kokugo-check.md` | 全モードでは使わない手順を、本文から出したもの。スクリプトの一覧と用法、国語の表記・用法の適用手順。C の手順は、参照にすると C のたびに読み込みの1ターンが増えて損だったので、本文に残した(計測: [docs/validation/skill-token-usage-2026-10-19.md](validation/skill-token-usage-2026-10-19.md))。Skill 読み込み時の入力トークンを減らすために分けた。100行を超える参照には目次を付ける(`tests/test_skill_guards.py`) |
 | `references/readability-rules.md` | 各診断段階の詳しい基準と、モードの指定が食い違うときの扱い。Agent が迷ったときだけ読む |
 | `assets/examples.md` | 修正前後の例。必要なときだけ読む |
 | `references/fiction-writing.md`、`references/fiction-checks.md`、`assets/fiction-*.md` | モード D の操作契約、補助検査の仕様、修正例、任意の文脈メモ。[小説モードの正本と評価](#小説モードの正本と評価) |
@@ -65,7 +66,7 @@ japanese-readability-editor/
 | `tools/feedback_loop.py` | 利用者から送付された票の受領・検証(`intake`)、独立文書数での集約と回帰ケース化(`triage`)、改良案の下書き(`propose`、既定は送信しない)、修正前後の比較(`verify`)。`skills/` は書き換えない。[利用者のフィードバック](feedback.md) |
 | `tools/upstream_watch.py` | 参考にしたリポジトリの更新を調べ(`check`)、追跡 Issue を作り(`notify`)、解析を終えた基準を進める(`mark-reviewed`)、参考先を登録する(`add`)。登録簿は `docs/upstream/sources.json`。Skill の外にあり、配布物には入らない。[参考にしたリポジトリの更新確認](upstream-watch.md) |
 | `tools/check_all.py` | 検証とテストをまとめて実行する。内容は「[検証](#検証)」 |
-| 評価用のツール | `review_readability.py`、`compare_readability.py`、`comprehension_readability.py`、`statistics_readability.py`、`feedback_readability.py`、`evaluate_readability.py`、`ragas_readability.py`、`validate_public_corpus.py`、`extract_*_text.py`(と画面テンプレートの `*.html`)。文書は冒頭の表にある。Skill の外にあり、配布物には入らない |
+| 評価用のツール | `review_readability.py`、`compare_readability.py`、`comprehension_readability.py`、`statistics_readability.py`、`feedback_readability.py`、`evaluate_readability.py`、`ragas_readability.py`、`validate_public_corpus.py`、`measure_skill_tokens.py`(Skill を入れた隔離プロジェクトで `claude -p` を流し、トークンとスクリプトの実行を記録する。[計測の記録](validation/skill-token-usage-2026-10-19.md))、`extract_*_text.py`(と画面テンプレートの `*.html`)。文書は冒頭の表にある。Skill の外にあり、配布物には入らない |
 | `.claude-plugin/` | Claude Code のプラグインとして入れるための定義。`skills/` を指すだけで、Skill は複製しない |
 | `.github/workflows/` | CI(検証、テスト、パッケージ生成)、タグを push したときの Release、週に1回の参考先の更新確認(`upstream-watch.yml`。追跡 Issue を作るだけで、リポジトリは書き換えない) |
 
@@ -93,7 +94,7 @@ ZIP は再現可能で、同じ入力からは同じ SHA-256 になります。`
 
 `dist/opencode/` と `dist/hermes/` の `japanese-readability-editor/` は、正本の完全な複製です。環境ごとに変えるのは、配置先とコマンドを書いた `INSTALL.md` だけで、Skill の本文は複製しません。生成のたびに、`verify_install.py` と同じ検証(正本との一致を含む)を行い、失敗すると終了コード 1 です。`--bundle opencode` のように対象を選べ、`--no-agent-bundles` で省けます。
 
-`v` で始まるタグを GitHub に push すると、Actions が Release を作ります(`.github/workflows/release.yml`)。Release は、[Releases のページ](https://github.com/Mr-Kondo/japanese-readability-editor/releases)で公開されます。添付されるものと、ダウンロードの方法は、[インストール](installation.md#アップロード型の環境に入れる)にあります。
+`v` で始まるタグを GitHub に push すると、Actions が Release を作ります(`.github/workflows/release.yml`)。`docs/release-notes/v<版>.md` があれば、それが Release のノートになります。なければ自動生成です。Release は、[Releases のページ](https://github.com/Mr-Kondo/japanese-readability-editor/releases)で公開されます。添付されるものと、ダウンロードの方法は、[インストール](installation.md#アップロード型の環境に入れる)にあります。
 
 ## 一般文書 A/B のモデル評価
 

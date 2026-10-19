@@ -33,9 +33,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # PR で確認済みのリリースノートがあれば、それを使う。なければ自動生成する。
+          notes="docs/release-notes/$GITHUB_REF_NAME.md"
+          if [ -f "$notes" ]; then notes_args=(--notes-file "$notes"); else notes_args=(--generate-notes); fi
           gh release create "$GITHUB_REF_NAME" \
             dist/japanese-readability-editor.zip \
             dist/japanese-readability-editor.sha256 \
             dist/gemini-apps-instructions.md \
             --title "$GITHUB_REF_NAME" \
-            --generate-notes
+            "${notes_args[@]}"

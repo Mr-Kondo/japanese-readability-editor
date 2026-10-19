@@ -1,0 +1,42 @@
+{
+ "input_tokens": 10,
+ "output_tokens": 4317,
+ "cache_creation_input_tokens": 28981,
+ "cache_read_input_tokens": 178439,
+ "input_side_tokens": 207430,
+ "turn_input_totals": [
+  26736,
+  40453,
+  43839,
+  47701,
+  48701
+ ],
+ "cost_usd": 0.3539158,
+ "num_turns": 6,
+ "duration_ms": 45805,
+ "models": [
+  "claude-opus-5-5"
+ ],
+ "is_error": false,
+ "skill_called": true,
+ "tools": [
+  "Skill",
+  "Bash",
+  "Bash",
+  "Bash"
+ ],
+ "scripts_run": [
+  {
+   "script": "measure.py",
+   "output_chars": 4348
+  }
+ ],
+ "source_reads": [],
+ "references_read": [],
+ "label": "before",
+ "variant": "default",
+ "model_alias": "opus",
+ "input": "medium",
+ "run": 3,
+ "input_chars": 2879
+}
