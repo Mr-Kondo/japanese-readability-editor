@@ -1,8 +1,16 @@
 # 開発
 
-文章の定量・定性評価、自動／手動検証、モードBの匿名二候補比較は[文章評価ツール](human-evaluation.md)を参照してください。確認記録と回帰ケース出力・LLM判定との照合は `tools/feedback_readability.py`、単一候補の理解問題は `tools/comprehension_readability.py`、匿名比較の文書単位の区間推定は `tools/statistics_readability.py` を使います。公開文書を評価データにする計画と、出典・利用条件・分割の台帳を検査する `tools/validate_public_corpus.py` は[公開文書による評価データ整備の計画](public-document-evaluation.md)を参照してください。Ragas を任意依存として使う自動評価（`tools/ragas_readability.py`）は[Ragas による自動評価](ragas-evaluation.md)を参照してください。これらの開発用ツールと画面テンプレートは配布スキルの外に置いています。
-
 このリポジトリを変更する人向けの説明です。
+
+評価用のツールと画面テンプレートは、配布スキルの外に置いています。
+
+| 文書 | 内容 |
+|---|---|
+| [文章評価ツール](human-evaluation.md) | 定量・定性評価、自動／手動検証、モードBの匿名二候補比較。`tools/review_readability.py`、`compare_readability.py`、`comprehension_readability.py`、`statistics_readability.py`、`feedback_readability.py` |
+| [公開文書による評価データ整備の計画](public-document-evaluation.md) | 出典・利用条件・分割の台帳を検査する `tools/validate_public_corpus.py`。文書群ごとの手順は `public-documents-*.md` |
+| [Ragas による自動評価](ragas-evaluation.md) | 任意依存の自動評価 `tools/ragas_readability.py` |
+| [評価ケースと記録](../evals/README.md) | モデルを使う評価の入力と結果。`tools/evaluate_readability.py` が使う |
+| [利用者のフィードバック](feedback.md)、[参考にしたリポジトリの更新確認](upstream-watch.md) | `tools/feedback_loop.py`、`tools/upstream_watch.py` の手順と限界 |
 
 ## ディレクトリ構成
 
@@ -11,50 +19,31 @@ japanese-readability-editor/
 ├── README.md
 ├── skills/japanese-readability-editor/     # 正本。配布するのはここだけ
 │   ├── SKILL.md
-│   ├── references/readability-rules.md
-│   ├── references/kokugo-policy.md        # 国語の表記・用法の適用方針
-│   ├── references/kokugo-notation.md      # 規則の一覧と出典(規則データから生成)
-│   ├── references/kokugo-official.md      # official の運用
-│   ├── references/kokugo-sources.md       # 公式資料の記録(資料データから生成)
-│   ├── scripts/measure.py
-│   ├── scripts/verify_preservation.py
-│   ├── scripts/compare_rewrite.py
-│   ├── scripts/make_feedback.py            # 問題報告の票を出す
-│   ├── scripts/check_kokugo.py
-│   ├── scripts/kokugo_engine.py
-│   ├── scripts/validate_kokugo_rules.py
-│   ├── data/kokugo-rules.json             # 規則(出典・適用条件・例)
-│   ├── data/kokugo-sources.json           # 資料の記録(日付・URL・確認日・SHA-256)
-│   ├── data/joyo-kanji.json               # 常用漢字表の字種と音訓(派生データ)
-│   ├── data/ijidokun.json                 # 異字同訓の133項目(派生データ)
-│   ├── assets/examples.md
-│   └── assets/kokugo-cases.md
-├── tools/
-│   ├── install.py
-│   ├── uninstall.py
-│   ├── verify_install.py                  # 配置した Skill の検証(構造、メタデータ、内容、実行、依存、重複)
-│   ├── skill_env.py                       # OpenCode と Hermes の配置先の解決、同名 Skill の探索、内容の比較
-│   ├── package.py
-│   ├── validate_skill.py
-│   ├── update_kokugo_sources.py           # 公式資料の照合・抽出(ネットワークを使う唯一のコード)
-│   ├── render_kokugo_docs.py              # 規則データから、規則の一覧と出典の文書を生成
-│   ├── upstream_watch.py                  # 参考にしたリポジトリの更新確認(gh を使う)
-│   └── check_all.py                       # 検証とテストをまとめて実行
+│   ├── references/                         # readability-rules.md、fiction-*.md、kokugo-*.md、feedback.md
+│   ├── scripts/                            # measure.py、verify_preservation.py、compare_rewrite.py、check_kokugo.py ほか
+│   ├── data/                               # 国語の規則、資料の記録、常用漢字表、異字同訓
+│   └── assets/                             # examples.md、kokugo-cases.md、fiction-*.md
+├── tools/                                  # 配布物の生成、検証、評価、更新確認(Skill の外。配布物には入らない)
 ├── tests/
-├── docs/                                  # 詳しい説明と実測の記録
-├── .claude-plugin/                        # Claude Code プラグインの定義(正本を指すだけ)
-├── .github/workflows/                     # CI、Release、参考先の更新確認(週1回)
-├── LICENSE                                # MIT
-└── dist/                                  # 生成物。Git には含めない
+├── evals/                                  # モデルを使う評価の入力と結果
+├── docs/                                   # 詳しい説明と実測の記録
+├── reports/、research_notes/               # 設計時の調査の記録(2026-10-16。リンクは当時の絶対パスのまま)
+├── .claude-plugin/                         # Claude Code プラグインの定義(正本を指すだけ)
+├── .github/workflows/                      # CI、Release、参考先の更新確認(週1回)
+├── LICENSE                                 # MIT
+└── dist/                                   # 生成物。Git には含めない
 ```
 
 ## 各ファイルの責務
 
 | ファイル | 責務 |
 |---|---|
-| `SKILL.md` | 頻繁に使う判断とワークフロー。3つのモードとその指定、診断の順序、変更してはならないもの |
+| `SKILL.md` | 頻繁に使う判断とワークフロー。4つのモード(A〜D)とその指定、診断の順序、変更してはならないもの |
 | `references/readability-rules.md` | 各診断段階の詳しい基準と、モードの指定が食い違うときの扱い。Agent が迷ったときだけ読む |
 | `assets/examples.md` | 修正前後の例。必要なときだけ読む |
+| `references/fiction-writing.md`、`references/fiction-checks.md`、`assets/fiction-*.md` | モード D の操作契約、補助検査の仕様、修正例、任意の文脈メモ。[小説モードの正本と評価](#小説モードの正本と評価) |
+| `references/feedback.md` | 利用者が問題の報告を求めたときだけ読む手順 |
+| `scripts/check_fiction.py` | 小説向けの字数、括弧、指定文字列の検査(読み取り専用) |
 | `scripts/measure.py` | 段落・文の長さなどの計測、修正候補の位置の表示、`--extras` の指摘(読み取り専用) |
 | `scripts/verify_preservation.py` | 空白以外の文字列が同一かの検査。`--strict` は、改行以外の全文字が同一で改行が減っていないことまで検査する(読み取り専用) |
 | `scripts/compare_rewrite.py` | 書き換えの前後の比較。意味が変わったかもしれない箇所を挙げる(読み取り専用。SudachiPy が入っていれば使う) |
@@ -76,6 +65,7 @@ japanese-readability-editor/
 | `tools/feedback_loop.py` | 利用者から送付された票の受領・検証(`intake`)、独立文書数での集約と回帰ケース化(`triage`)、改良案の下書き(`propose`、既定は送信しない)、修正前後の比較(`verify`)。`skills/` は書き換えない。[利用者のフィードバック](feedback.md) |
 | `tools/upstream_watch.py` | 参考にしたリポジトリの更新を調べ(`check`)、追跡 Issue を作り(`notify`)、解析を終えた基準を進める(`mark-reviewed`)、参考先を登録する(`add`)。登録簿は `docs/upstream/sources.json`。Skill の外にあり、配布物には入らない。[参考にしたリポジトリの更新確認](upstream-watch.md) |
 | `tools/check_all.py` | 検証とテストをまとめて実行する。内容は「[検証](#検証)」 |
+| 評価用のツール | `review_readability.py`、`compare_readability.py`、`comprehension_readability.py`、`statistics_readability.py`、`feedback_readability.py`、`evaluate_readability.py`、`ragas_readability.py`、`validate_public_corpus.py`、`extract_*_text.py`(と画面テンプレートの `*.html`)。文書は冒頭の表にある。Skill の外にあり、配布物には入らない |
 | `.claude-plugin/` | Claude Code のプラグインとして入れるための定義。`skills/` を指すだけで、Skill は複製しない |
 | `.github/workflows/` | CI(検証、テスト、パッケージ生成)、タグを push したときの Release、週に1回の参考先の更新確認(`upstream-watch.yml`。追跡 Issue を作るだけで、リポジトリは書き換えない) |
 
@@ -164,6 +154,8 @@ python3 -m unittest discover -s tests -v
 - `SKILL.md` の `description`(要件で挙げたトリガー語と、除外する入力を含むか、200字以内か)
 - `SKILL.md` の行数が、`tests/test_skill_guards.py` の `MAX_SKILL_LINES` 以内か、参照先の節が残っているか(指示の文言そのものは、テストで固定せず、evals で測る)
 - `.claude-plugin/` の定義(正本を指し、Skill を複製していないか)
+- `check_fiction.py`、`make_feedback.py`、`feedback_loop.py`と、評価用のツール(`review_readability.py` ほか。通信せず、モデルの呼び出しは差し替える)
+- 各スクリプトの標準出力が UTF-8 であること(`test_stdio_utf8.py`)
 
 CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で、Skill の検証、国語の規則データの検証、テスト、パッケージ生成を実行します。
 

@@ -4,7 +4,7 @@
 
 - [Codex、Claude Code などにインストールする](#必要なもの)
 - [ChatGPT Work、Claude Cowork、Gemini Apps にアップロードする](#アップロード型の環境に入れる)
-- [gh skill（GitHub CLI）で入れる](#github-cligh-skill-で入れる)
+- [gh skill（GitHub CLI）で入れる](#github-cligh-skillで入れる)
 - [動作を確認する](#動作を確認する)
 - [OpenCode と Hermes Agent の配置先・重複を確認する](#opencode-と-hermes-agent-に入れる)
 - [削除する](#削除する)
@@ -78,7 +78,7 @@ v0.15.0 以降（`skills/` の配置）で入れたものは、`gh skill update`
 - gh は、Skill のディレクトリ（`skills/japanese-readability-editor/`）の内容の差（tree sha）で判定します。**docs や tools だけが変わったリリースは、更新として検出されません**（v0.15.0 から v0.15.1 で、「All skills are up to date.」を確認しました）。
 - 更新の検出は、`github-tree-sha` を変えて版が古い入れ方を模擬して確かめました（「1 update(s) available」）。実際の更新（`--all`）は、Skill の内容が変わる次のリリースで確かめます。
 
-v0.14.0 以前の `skill/` の配置で入れたものは、`gh skill update` が見つけられません（「no skills found」と出して飛ばし、「All skills are up to date.」と表示します）。[GitHub CLI（gh skill）で入れる](#github-cligh-skill-で入れる)のコマンドで、入れ直してください。
+v0.14.0 以前の `skill/` の配置で入れたものは、`gh skill update` が見つけられません（「no skills found」と出して飛ばし、「All skills are up to date.」と表示します）。[GitHub CLI（gh skill）で入れる](#github-cligh-skillで入れる)のコマンドで、入れ直してください。
 
 ### 退避した版へ戻す
 
@@ -405,6 +405,7 @@ python3 tools/uninstall.py --scope user --target all
 |---|---|
 | Claude Code のプラグイン | `claude plugin uninstall japanese-readability-editor@japanese-readability-editor` |
 | ChatGPT Work、Claude Cowork、Gemini Apps | 各製品の画面から、アップロードしたものを削除する(手順は、この文書では確かめていません) |
+
 ## SudachiPy を入れる(任意)
 
 `compare_rewrite.py` は、SudachiPy と辞書が入っていれば、否定と文の対応をより正確に判定します。入っていなければ、標準ライブラリだけで動きます。どちらで動いたかは、出力の `tokenizer` で分かります。
@@ -441,7 +442,7 @@ python3 -m pip install --user --break-system-packages sudachipy sudachidict-core
 
 Codex のサンドボックスでは、ネットワークを使えないので、エージェントが実行中に入れることはできません。先に入れておけば、サンドボックスの中でも使えます。macOS の Codex CLI 0.155.1 で、読み取り専用と workspace-write の両方を確認しました(2026-10-06)。
 
-辞書は、core と small のどちらでも動きます。インストール後の大きさは、core が約190MB、small が約110MBです。`skills/japanese-readability-editor/assets/examples.md` の18組の修正例では、どちらも同じ指摘になりました。クラウドの実行環境では、入れる時間を短くするために、Skill は small を使います。
+辞書は、core と small のどちらでも動きます。インストール後の大きさは、core が約190MB、small が約110MBです。2026-10-06 の測定では、当時の `assets/examples.md` の18組の修正例で、どちらも同じ指摘になりました。以降に増えた例では測っていません。クラウドの実行環境では、入れる時間を短くするために、Skill は small を使います。
 
 SudachiPy と辞書は、ZIP には含めません。小さい small の辞書でも、配布用のファイルが約42MBあり、ChatGPT のアップロードの上限(1ファイルあたり25MB)を超えるためです。アップロード型の環境では、エージェントが実行中に small を入れます。入らなければ、標準ライブラリの経路で動きます。
 

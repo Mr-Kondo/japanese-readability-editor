@@ -187,8 +187,6 @@ OpenCode は、`.agents/skills/` と `.claude/skills/` も読みます(公式文
 
 モードの指定は、依頼に書きます。次の依頼は、書き方の例です。
 
-モデルによっては、Skill を読み込んでも、スクリプトを実行しません。実行させるには、依頼に「`scripts/measure.py` を、Skill の Base directory を基準にした絶対パスで実行して」のように書きます。パスに空白があると、引用符で囲まずに失敗するモデルがありました。モード C は、返ってきた文章を、`verify_preservation.py --strict` で確かめてください。
-
 ```text
 japanese-readability-editor を使って、モード A で、この調査結果を技術レポートにまとめて。
 ```
@@ -200,6 +198,8 @@ japanese-readability-editor を使って、モード B で、README.md を読み
 ```text
 japanese-readability-editor を使って、モード C で、docs/design.md の段落だけ分けて。
 ```
+
+モデルによっては、Skill を読み込んでも、スクリプトを実行しません。実行させるには、依頼に「`scripts/measure.py` を、Skill の Base directory を基準にした絶対パスで実行して」のように書きます。パスに空白があると、引用符で囲まずに失敗するモデルがありました。モード C は、返ってきた文章を、`verify_preservation.py --strict` で確かめてください。
 
 ### Python と依存
 
@@ -219,7 +219,7 @@ Python 3.10 以上が必要です。標準ライブラリだけで動きます�
 
 ### 確認した版と未検証
 
-2026-10-10 に、公式文書と `sst/opencode` のソース(`055d95bb7e27`)を確認しました。手元の `opencode 2.0.20` では、`.opencode/skills/`、XDG の設定ディレクトリ、`.agents/skills/`、`.claude/skills/`(プロジェクトとユーザー)に置いた Skill が発見されることを確かめました。`.opencode/skills/` に置いた Skill は、`skill` ツールで本文が読み込まれることも確かめました。手元のローカルモデルでは、スクリプトの実行は、手順を明示した依頼の 1 回だけ成功しました。普通の依頼では実行しないモデルがあり、`モード C` は守られませんでした。ホスト型の主要モデルと `OPENCODE_CONFIG_DIR` は、確かめていません。詳しくは[確認の記録](opencode-hermes-checks.md#opencode-2020)にあります。
+2026-10-10 に、公式文書と `sst/opencode` のソース(`055d95bb7e27`)を確認しました。手元の `opencode 2.0.20` では、`.opencode/skills/`、XDG の設定ディレクトリ、`.agents/skills/`、`.claude/skills/` に置いた Skill の発見と、`.opencode/skills/` の Skill の本文の読み込みを確かめました。手元のローカルモデルでは、スクリプトの実行は、手順を明示した依頼の 1 回だけ成功し、`モード C` は守られませんでした。ホスト型の主要モデルと `OPENCODE_CONFIG_DIR` は、確かめていません。詳しくは[確認の記録](opencode-hermes-checks.md#opencode-2020)にあります。
 
 ## Hermes Agent
 
@@ -273,7 +273,7 @@ Docker と Singularity は、`~/.hermes` の Skill を bind mount します。SS
 
 ### 確認した版と未検証
 
-2026-10-10 に、公式文書と `NousResearch/hermes-agent` のソース(`46d7718a52ff`)を確認しました。手元の `Hermes Agent v0.21.0 (2026.8.31)` では、`hermes skills list`、`hermes skills trust`、Skill の読み込み、参照資料の読み込み、`[Skill directory]` のパスからのスクリプトの実行を、隔離した `HERMES_HOME` で確かめました。手元のローカルモデルでは、モデルを介した動作も試しました。`-s` を付けた計測は、gemma4 で 3 回中 2 回動き、通常の依頼では動かず、qwen3-coder で `モード C` は守られませんでした。ホスト型の主要モデルと、手元ではないターミナルの backend は、確かめていません。詳しくは[確認の記録](opencode-hermes-checks.md#hermes-agent-v0210)にあります。
+2026-10-10 に、公式文書と `NousResearch/hermes-agent` のソース(`46d7718a52ff`)を確認しました。手元の `Hermes Agent v0.21.0 (2026.8.31)` では、`hermes skills list`、`hermes skills trust`、Skill と参照資料の読み込み、`[Skill directory]` のパスからのスクリプトの実行を、隔離した `HERMES_HOME` で確かめました。手元のローカルモデルでは、`-s` を付けた計測が gemma4 で 3 回中 2 回動き、通常の依頼では動かず、qwen3-coder で `モード C` は守られませんでした。ホスト型の主要モデルと、手元ではないターミナルの backend は、確かめていません。詳しくは[確認の記録](opencode-hermes-checks.md#hermes-agent-v0210)にあります。
 
 ## 参照した公式資料
 

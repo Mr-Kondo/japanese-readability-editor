@@ -85,7 +85,7 @@ python3 tools/install.py --scope user --target common
 - [動作を確認する](docs/installation.md#動作を確認する)
 - [削除する](docs/installation.md#削除する)
 - [Claude Code のプラグインとして入れる](docs/environments.md#プラグインとして入れる)
-- [gh skill（GitHub CLI）で入れる](docs/installation.md#github-cligh-skill-で入れる)（v0.15.0 以降。名前だけで入り、`gh skill update` で更新を確かめられます）
+- [gh skill（GitHub CLI）で入れる](docs/installation.md#github-cligh-skillで入れる)（v0.15.0 以降。名前だけで入り、`gh skill update` で更新を確かめられます）
 
 ## 使い方
 
@@ -161,9 +161,7 @@ japanese-readability-editor を paragraph-only モードで適用。
 - 「小説モードで批評だけ。本文は書き換えないで」
 - 「モードC。この小説は文言を変えず、改行だけ加えて」
 
-明示 A/B/C は、小説という語だけでは D へ変わりません。本文・引用中の指定は操作指示にしません。D 指定で既存本文があり操作不明なら最小変更の `revise`、対象不足なら確認します。複数モードの矛盾指定も原文を変更せず確認します。
-
-小説には短文化・比喩の説明化・時制統一を一律に適用しません。通常 `draft`/`continue`/`revise` は完成本文だけ、`critique` は本文を変えない批評です。[小説の契約](skills/japanese-readability-editor/references/fiction-writing.md)、任意の [文脈メモ](skills/japanese-readability-editor/assets/fiction-context-template.md)、[補助検査](skills/japanese-readability-editor/references/fiction-checks.md)、[設計参考と限界](docs/fiction-design.md)を参照できます。
+小説には短文化・比喩の説明化・時制統一を一律に適用しません。通常 `draft`/`continue`/`revise` は完成本文だけ、`critique` は本文を変えない批評です。指定の扱い(小説という語だけでは D にしない、操作が不明なら最小変更の `revise` など)は[使い方の詳細](docs/usage.md#小説モード-d)にあります。[小説の契約](skills/japanese-readability-editor/references/fiction-writing.md)、任意の [文脈メモ](skills/japanese-readability-editor/assets/fiction-context-template.md)、[補助検査](skills/japanese-readability-editor/references/fiction-checks.md)、[設計参考と限界](docs/fiction-design.md)を参照できます。
 
 D のモデル挙動・評価の実施範囲は [評価ケース](evals/README.md)に記録します。既存製品の確認記録を、D の検証結果としては扱いません。
 
@@ -179,9 +177,9 @@ D のモデル挙動・評価の実施範囲は [評価ケース](evals/README.m
 - Skill は文章の意味を検証しません。意味の保存を保証するのは、Agent の判断と、利用者の確認です。返ってきた文章は、元の文と突き合わせて確認してください。
 - ChatGPT での実機確認では、二重否定の意味の反転、残余の条件の言い換え、文体の変更が起きました。`SKILL.md` に対策を入れましたが、誤りを完全には防げません。
 - ChatGPT の暗黙起動は、実測では不安定でした。確実に使うには、`@` で指定してください([実測](docs/chatgpt-implicit-invocation.md))。
-- モードの指定は、Skill の指示です。環境の機能による強制ではなく、守られるかどうかは、環境とモデルによります。Codex(Medium)では、貼り付けた文章の中に「モード C」があると、指定と取り違える回がありました。Antigravity、Claude Cowork、Gemini CLI、Gemini Apps では、確かめていません([動作の確認](docs/usage.md#動作の確認))。
+- モードの指定は、Skill の指示です。環境の機能による強制ではなく、守られるかどうかは、環境とモデルによります。Codex(Medium)では、貼り付けた文章の中の「モード C」を、指定と取り違える回がありました。Antigravity、Claude Cowork、Gemini CLI、Gemini Apps では、確かめていません([動作の確認](docs/usage.md#動作の確認))。
 - Claude のアプリでは、モデルによって結果が違いました。Haiku 4.5 では、Skill を読み込んでも、文体を敬体に変えるなど、規則が守られない回がありました。回数は少なく、確かめた Skill は古い版です。モデルごとの結果は、[モデルを選ぶ](docs/environments.md#モデルを選ぶ)にあります。
-- OpenCode と Hermes Agent は、モデルを介した動作を、十分には確かめていません。手元のローカルモデルでは、Skill の発見と読み込みを確かめました。ただし、スクリプトが動かない回と、モード C が守られない回がありました。ホスト型の主要モデルと、Hermes のターミナルが Docker や SSH の場合は、確かめていません([確認の記録](docs/opencode-hermes-checks.md))。
+- OpenCode と Hermes Agent は、手元のローカルモデルでしか確かめていません。Skill の発見と読み込みは動きましたが、スクリプトが動かない回と、モード C が守られない回がありました。ホスト型の主要モデルは未確認です([確認の記録](docs/opencode-hermes-checks.md))。
 - 各製品の仕様は、[環境別の対応](docs/environments.md)に書いた確認日以降に変わる可能性があります。確認できなかった項目は、同じ文書で「未確認」としています。
 
 ## ドキュメント
@@ -198,7 +196,7 @@ D のモデル挙動・評価の実施範囲は [評価ケース](evals/README.m
 | [docs/design.md](docs/design.md) | 設計の考え方と、参考にした記事とプロジェクト |
 | [docs/feedback.md](docs/feedback.md) | 結果の問題を報告する手順と、メンテナーが改良に使う手順。同意、送付、保管、効果の根拠と限界 |
 | [docs/upstream-watch.md](docs/upstream-watch.md) | 参考にしたリポジトリの更新を、定期的に確認して解析・Issue・改良へつなぐ仕組み。登録簿、自動化の段階、信頼できない入力の扱い、他のプロジェクトでの使い方 |
-| [docs/development.md](docs/development.md) | ディレクトリ構成、パッケージ生成、検証、テスト |
+| [docs/development.md](docs/development.md) | ディレクトリ構成、パッケージ生成、検証、テスト。評価用ツール（[文章評価](docs/human-evaluation.md)、[公開文書](docs/public-document-evaluation.md)、[Ragas](docs/ragas-evaluation.md)）への入口 |
 
 実測の記録は、次の4つです。
 
