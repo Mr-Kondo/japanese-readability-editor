@@ -323,10 +323,10 @@
         "releases": false
       },
       "reviewed": {
-        "ref": "055d95b",
-        "sha": "055d95bb7e278c94baf06235a52cac79dd13ba67",
-        "at": "2026-10-09T22:29:16Z",
-        "review": null
+        "ref": "afc6805",
+        "sha": "afc68054c3b39cbc0d580a92184e00e2b8a97ae9",
+        "at": "2026-10-19T00:45:02Z",
+        "review": "docs/upstream/reviews/opencode-2026-10-19.md"
       },
       "adopted": [
         "Skill の発見場所の確認(docs/environments.md)"
