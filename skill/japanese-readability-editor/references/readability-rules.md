@@ -8,7 +8,7 @@
 2. Zenn (ncdc)。直訳調と複雑な文構造の検出、書かせる前の論点整理。
 3. Zenn (lotation)。読者が次の文を予測しながら読めることを軸にした、AI特有の癖の一覧。
 4. GitHub の coji/natural-japanese(MIT)。語順、読点、接続詞の射程、否定の入れ子、列挙の埋没、語形の重さの整理と、実文書での閾値の校正結果。太字を文中の要点に限ること。見出しと各段落の先頭文だけを読んで、論旨を確かめる手順。同リポジトリは、本多勝一、木下是雄、石黒圭、結城浩らの作文技術書を出典としている。
-5. GitHub の nanaism/yomiyasu(MIT)。書き換えで保つものとしての「比重」「言い切りの強さ」「文の働き」。読者向けの本文に残った指示・仮置き・チャット応答の名残の見直し。書き直す前に各文の働きを控え、直した後で読み比べる手順。述語ごとの主体・対象・修飾先の照合、文書の用件と段落の目的の確認。太字が表示されない書き方と、その直し方。定着した慣用句を残す目安と、比喩の含みを残すこと。結論や警告を伝える見出しを薄めないこと。定型の結び。[指示](https://github.com/nanaism/yomiyasu/blob/main/skills/yomiyasu/SKILL.md)と[構文変換原則](https://github.com/nanaism/yomiyasu/blob/main/references/gemini-syntax.md)を参考に、手順を再構成した。
+5. GitHub の nanaism/yomiyasu(MIT)。書き換えで保つものとしての「比重」「言い切りの強さ」「文の働き」。読者向けの本文に残った、中身のない挨拶や同意の定型の見直しと、指示の名残・仮置きの扱い(削らず報告する)。書き直す前に各文の働きを控え、直した後で読み比べる手順。述語ごとの主体・対象・修飾先の照合、文書の用件と段落の目的の確認。太字が表示されない書き方と、その直し方。定着した慣用句を残す目安と、比喩の含みを残すこと。結論や警告を伝える見出しを薄めないこと。定型の結び。[指示](https://github.com/nanaism/yomiyasu/blob/main/skills/yomiyasu/SKILL.md)と[構文変換原則](https://github.com/nanaism/yomiyasu/blob/main/references/gemini-syntax.md)を参考に、手順を再構成した。
 6. GitHub Gist の k16shikano/japanese-tech-writing(Unlicense)。推量や可能性を、根拠なく断定へ変えないこと。太字を論理の要所に限ること。翻訳調の比喩を見分ける二段階の判定。説明の中で読者を「あなた」と呼ばないこと。
 
 製品の仕様やインストール方法は、これらではなく各ベンダーの公式資料に従う。
