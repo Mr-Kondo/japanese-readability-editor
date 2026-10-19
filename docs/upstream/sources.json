@@ -19,10 +19,10 @@
         ]
       },
       "reviewed": {
-        "ref": "84e1f5b",
-        "sha": "84e1f5b15e497538fcfe19ab7e9c6f6d138f19ff",
-        "at": "2026-10-17T11:56:31Z",
-        "review": "docs/upstream/reviews/yomiyasu-2.0.1.md"
+        "ref": "5b7cacc",
+        "sha": "5b7cacc7749e9195338d7305635c06871fc6daf1",
+        "at": "2026-10-19T00:17:05Z",
+        "review": "docs/upstream/reviews/yomiyasu-2.0.2.md"
       },
       "adopted": [
         "書き換えで保つものとしての比重・言い切りの強さ・文の働き",
@@ -352,10 +352,10 @@
         "releases": false
       },
       "reviewed": {
-        "ref": "ccc6956",
-        "sha": "ccc695635094d7615373db267b77f894d978b1a0",
-        "at": "2026-10-18T00:34:35Z",
-        "review": "docs/upstream/reviews/hermes-agent-2026-10-18.md"
+        "ref": "20acba0",
+        "sha": "20acba0376944d11ee970d6e734afd54bfd8045c",
+        "at": "2026-10-18T23:44:32Z",
+        "review": "docs/upstream/reviews/hermes-agent-2026-10-19.md"
       },
       "adopted": [
         "Skill の読み込みと trust の確認(docs/environments.md)"
