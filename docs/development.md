@@ -162,7 +162,7 @@ python3 -m unittest discover -s tests -v
 - `verify_install.py`(壊れた配置の検出、対象の環境ごとのメタデータ、リポジトリの外からのスクリプトの実行)と、配置した複製が正本と同じ出力を返すこと
 - `compare_rewrite.py` の SudachiPy がない経路と、`tokenizer` の表示(`test_tokenizer_modes.py`。SudachiPy が入っている環境でも、import を塞いだ別プロセスで試す)
 - `SKILL.md` の `description`(要件で挙げたトリガー語と、除外する入力を含むか、200字以内か)
-- `SKILL.md` と references の、意味を保つための指示と、モードの指定の指示が消えていないか。`SKILL.md` の行数が、`tests/test_skill_guards.py` の `MAX_SKILL_LINES` 以内か
+- `SKILL.md` の行数が、`tests/test_skill_guards.py` の `MAX_SKILL_LINES` 以内か、参照先の節が残っているか(指示の文言そのものは、テストで固定せず、evals で測る)
 - `.claude-plugin/` の定義(正本を指し、Skill を複製していないか)
 
 CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で、Skill の検証、国語の規則データの検証、テスト、パッケージ生成を実行します。

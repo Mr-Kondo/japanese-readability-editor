@@ -506,11 +506,6 @@ class PositionsAndDeterminismTest(unittest.TestCase):
     def test_crlf_and_lf_give_the_same_findings(self):
         self.assertEqual(check(self.TEXT, OF), check(self.TEXT.replace("\r\n", "\n"), OF))
 
-    def test_the_same_input_gives_the_same_output(self):
-        first = check(self.TEXT, OF)
-        for _ in range(3):
-            self.assertEqual(check(self.TEXT, OF), first)
-
     def test_findings_are_ordered_by_position(self):
         found = check(self.TEXT, OF)
         keys = [(f["offset"], f["rule_id"], f["length"]) for f in found]

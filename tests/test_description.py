@@ -65,13 +65,6 @@ class DescriptionTest(unittest.TestCase):
                    if not any(word in self.text for word in alternatives)]
         self.assertEqual(missing, [], f"description does not exclude: {missing}")
 
-    def test_exclusions_are_phrased_as_exclusions(self):
-        self.assertIn("対象外", self.text)
-
-    def test_says_what_is_preserved(self):
-        for word in ("意味", "数値", "コード"):
-            self.assertIn(word, self.text)
-
     def test_contains_no_yaml_hazards(self):
         self.assertNotIn(": ", self.text)
         self.assertNotIn(" #", self.text)

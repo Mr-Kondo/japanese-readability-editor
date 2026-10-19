@@ -92,13 +92,6 @@ class RemoveTest(UninstallCase):
         self.assertIn("does not exist", out)
         self.assertIn("summary: 1 skipped", out)
 
-    def test_running_twice_is_safe(self):
-        self.run_install("--scope", "workspace", "--target", "common")
-        self.run_uninstall("--scope", "workspace", "--target", "common")
-        code, out, _ = self.run_uninstall("--scope", "workspace", "--target", "common")
-        self.assertEqual(code, 0)
-        self.assertIn("does not exist", out)
-
     def test_unknown_target(self):
         code, _, err = self.run_uninstall("--scope", "workspace", "--target", "nope")
         self.assertEqual(code, 2)

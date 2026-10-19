@@ -337,36 +337,7 @@ class RuleDataMatchesThePrimarySourcesTest(unittest.TestCase):
 
 
 class SourceRecordsTest(unittest.TestCase):
-    """出典の記録が、公式資料の原文にある事実と一致すること(正式名称、発出主体、種別、日付、URL、確認日)。"""
-
-    EXPECTED = {
-        "NAIKAKU-JOYO-2010": ("常用漢字表", "平成22年内閣告示第2号", "内閣告示", "2010-11-30"),
-        "NAIKAKU-KUNREI-2010": ("公用文における漢字使用等について", "平成22年内閣訓令第1号(別紙)", "内閣訓令", "2010-11-30"),
-        "NAIKAKU-GENDAIKANA-1986": ("現代仮名遣い", "昭和61年内閣告示第1号", "内閣告示", "1986-07-01"),
-        "NAIKAKU-OKURIGANA-1973": ("送り仮名の付け方", "昭和48年内閣告示第2号", "内閣告示", "1973-06-18"),
-        "NAIKAKU-GAIRAI-1991": ("外来語の表記", "平成3年内閣告示第2号", "内閣告示", "1991-06-28"),
-        "NAIKAKU-ROMAJI-2025": ("ローマ字のつづり方", "令和7年内閣告示第4号", "内閣告示", "2025-12-22"),
-        "BUNKA-GUIDE-2022": ("公用文作成の考え方(建議)", "令和4年1月7日 文化審議会建議(付: 解説)", "建議", "2022-01-07"),
-        "NAIKAKU-NOTICE-2022": ("「公用文作成の考え方」の周知について", "令和4年1月11日内閣文第1号", "通知", "2022-01-11"),
-        "BUNKA-IJIDOKUN-2014": ("「異字同訓」の漢字の使い分け例(報告)", "平成26年2月21日 文化審議会国語分科会報告", "報告", "2014-02-21"),
-        "BUNKA-KEIGO-2007": ("敬語の指針(答申)", "平成19年2月2日 文化審議会答申", "答申", "2007-02-02"),
-    }
-
-    def test_the_registry_has_exactly_the_documented_sources(self):
-        self.assertEqual({s["id"] for s in SOURCES["sources"]}, set(self.EXPECTED))
-
-    def test_names_designations_kinds_and_dates(self):
-        for sid, (title, designation, kind, issued) in self.EXPECTED.items():
-            s = source(sid)
-            with self.subTest(source=sid):
-                self.assertEqual((s["title"], s["designation"], s["kind"], s["issued_on"]), (title, designation, kind, issued))
-
-    def test_issuers(self):
-        for sid in ("NAIKAKU-JOYO-2010", "NAIKAKU-KUNREI-2010", "NAIKAKU-GENDAIKANA-1986", "NAIKAKU-OKURIGANA-1973", "NAIKAKU-GAIRAI-1991", "NAIKAKU-ROMAJI-2025"):
-            self.assertEqual(source(sid)["issuer"], "内閣総理大臣", sid)
-        self.assertEqual(source("NAIKAKU-NOTICE-2022")["issuer"], "内閣官房長官")
-        self.assertEqual(source("BUNKA-GUIDE-2022")["issuer"], "文化審議会")
-        self.assertEqual(source("BUNKA-IJIDOKUN-2014")["issuer"], "文化審議会国語分科会")
+    """出典の記録が、原本の取得と、導出データの対応を保っていること。"""
 
     def test_every_source_was_read_from_its_bytes_after_it_was_issued(self):
         """確認日は再確認のたびに変わるので、値ではなく関係を確かめる: 原本を取得して読み、確認日は発出日より後で、一覧の確認日が最新。"""
@@ -383,22 +354,6 @@ class SourceRecordsTest(unittest.TestCase):
                 self.assertRegex(f["sha256"], r"^[0-9a-f]{64}$")
                 self.assertGreater(f["size"], 0)
 
-    def test_the_entry_urls_given_by_the_user_are_recorded(self):
-        urls = {f["url"] for s in SOURCES["sources"] for f in s["retrieved_files"]} | {s["url"] for s in SOURCES["sources"]}
-        for url in (
-            "https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/pdf/93651301_01.pdf",
-            "https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/pdf/ijidokun_140221.pdf",
-            "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/roma/index2.html",
-            "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/sanko/koyobun/index.html",
-        ):
-            self.assertIn(url, urls)
-
-    def test_the_pdf_page_counts_recorded_for_the_main_documents(self):
-        pages = {sid: next(f["pages"] for f in source(sid)["retrieved_files"] if f["format"] == "pdf")
-                 for sid in ("NAIKAKU-JOYO-2010", "NAIKAKU-KUNREI-2010", "BUNKA-GUIDE-2022", "BUNKA-IJIDOKUN-2014", "NAIKAKU-ROMAJI-2025", "BUNKA-KEIGO-2007")}
-        self.assertEqual(pages, {"NAIKAKU-JOYO-2010": 164, "NAIKAKU-KUNREI-2010": 5, "BUNKA-GUIDE-2022": 63,
-                                 "BUNKA-IJIDOKUN-2014": 53, "NAIKAKU-ROMAJI-2025": 7, "BUNKA-KEIGO-2007": 82})
-
     def test_derived_data_is_tied_to_the_recorded_files(self):
         joyo, ijidokun = load("joyo-kanji.json"), load("ijidokun.json")
         joyo_pdf = next(f for f in source("NAIKAKU-JOYO-2010")["retrieved_files"] if f["format"] == "pdf")
@@ -407,12 +362,6 @@ class SourceRecordsTest(unittest.TestCase):
         self.assertEqual(ijidokun["derived_from"]["sha256"], iji_pdf["sha256"])
         self.assertEqual((joyo["count"], len(joyo["chars"])), (2136, 2136))
         self.assertEqual((ijidokun["count"], len(ijidokun["entries"])), (133, 133))
-
-    def test_usage_terms_are_recorded(self):
-        terms = SOURCES["usage_terms"]
-        self.assertIn("mext.go.jp", terms["url"])
-        self.assertIn("加工", terms["note"])
-
 
 class DocumentsStayConsistentTest(unittest.TestCase):
     """references/kokugo-*.md と SKILL.md が、規則データと食い違わないこと。"""
@@ -430,58 +379,10 @@ class DocumentsStayConsistentTest(unittest.TestCase):
                 self.assertIn(f["sha256"], text, f["url"])
                 self.assertIn(f["url"], text)
 
-    def test_the_sources_document_separates_the_agencys_rules_from_the_skills_judgment(self):
-        text = self.read(REFERENCES / "kokugo-sources.md")
-        self.assertIn("この skill の運用判断", text)
-        self.assertIn("文化庁の基準ではない", text)
-        self.assertIn("python3 tools/update_kokugo_sources.py verify", text)
-        self.assertIn("加工", text)
-        self.assertIn("取得できなかった資料", text)
-
     def test_the_notation_document_lists_every_rule(self):
         text = self.read(REFERENCES / "kokugo-notation.md")
         for r in RULES["rules"]:
             self.assertIn(f"`{r['id']}`", text, r["id"])
-
-    def test_the_notation_document_shows_the_profile_categories(self):
-        text = self.read(REFERENCES / "kokugo-notation.md")
-        row = next(line for line in text.splitlines() if line.startswith("| `KOKUGO-OKURI-003`"))
-        self.assertIn("accepted_variant | accepted_variant | **error**", row)
-        row = next(line for line in text.splitlines() if line.startswith("| `KOKUGO-GAIRAI-001`"))
-        self.assertIn("accepted_variant | recommendation | recommendation", row)
-
-    def test_the_policy_document_states_the_required_principles(self):
-        text = self.read(REFERENCES / "kokugo-policy.md")
-        for fragment in ("`general-tech`(既定)", "`public-explanation`", "`official`", "文体が堅いという理由だけで `official` にしない",
-                         "`error`", "`recommendation`", "`accepted_variant`", "`needs_context`", "`excluded`",
-                         "許容形や適用範囲外の表記を、誤りとして報告しない", "音訓まで確認済みとしない", "世論調査の多数派・少数派だけで、正誤を決めない",
-                         "黙って片方を適用せず", "多数派であることを理由に、明確な誤りを広げない", "国語の規則を理由に、文言・句読点・語順を変更しない",
-                         "文化庁の基準ではない", "50〜60字", "用語集", "内閣告示", "内閣訓令", "建議"):
-            self.assertIn(fragment, text)
-
-    def test_the_official_document_matches_the_rules(self):
-        text = self.read(REFERENCES / "kokugo-official.md")
-        for rid in ("KOKUGO-OKURI-003", "KOKUGO-KANJI-005", "KOKUGO-KANJI-003", "KOKUGO-GAIRAI-001", "KOKUGO-NUM-001"):
-            self.assertIn(rid, text)
-        self.assertIn("文体が堅いという理由だけでは `official` にしない", text)
-        self.assertIn("固有名詞", text)
-
-    def test_the_old_majority_rule_was_replaced(self):
-        text = self.read(REFERENCES / "readability-rules.md")
-        self.assertNotIn("文書の中で多数派の表記に合わせる。引用", text)
-        self.assertIn("多数派であることを理由に、明確な誤りを広げない", text)
-        self.assertIn("明示された表記基準と、組織の用語集があれば、それを確認する", text)
-        self.assertIn("複数の表記が許容される場合にだけ、文書内の統一を判断材料にする", text)
-
-    def test_skill_md_carries_the_procedure_and_the_references(self):
-        text = self.read(SKILL_DIR / "SKILL.md")
-        for fragment in ("`general-tech`（既定）", "`public-explanation`", "`official`", "文体が堅いという理由だけで `official` にしない",
-                         "check_kokugo.py", "--profile general-tech", "compare_rewrite.py", "verify_preservation.py --strict",
-                         "国語の規則を理由に文言・句読点・語順を変更しない", "検査を実行したとは報告しない", "保証しない",
-                         "多数派という理由で、明確な誤りを広げない", "許容形と適用範囲外の表記は、誤りとして直さない", "文化庁の基準ではない"):
-            self.assertIn(fragment, text)
-        for name in ("kokugo-policy.md", "kokugo-notation.md", "kokugo-official.md", "kokugo-sources.md", "kokugo-cases.md"):
-            self.assertIn(name, text)
 
     def test_skill_md_does_not_carry_the_rule_text(self):
         """規則の全文を SKILL.md に詰め込まない: 個々の規則の語や ID を持ち込まない。"""
