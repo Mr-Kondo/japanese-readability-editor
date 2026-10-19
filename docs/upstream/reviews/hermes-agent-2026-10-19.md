@@ -19,4 +19,5 @@
 
 ## 限界
 
-- 監視パスの外（`tools/skills_tool.py` など）の変更は見ていない。探索場所そのものの変更は、この範囲では確かめられていない。
+- 比較 API は 300 ファイルで切れる。そこで、探索の本体 `tools/skills_tool.py` と、`tools/skills_hub.py`、`agent/skill_utils.py` を、基準以降のコミット履歴で調べた。変更は `tools/skills_tool.py` の 1 コミット(`93fafc4`)だけで、関数名の公開化(`_skill_search_dirs` → `skill_search_dirs` など)に限られ、探索場所の動作は変わらない。
+- 実機での再確認はしていない。
