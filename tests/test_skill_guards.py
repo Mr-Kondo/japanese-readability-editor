@@ -139,7 +139,7 @@ class ReferencesStayConsistentTest(unittest.TestCase):
         self.assertIn("中身のない挨拶や同意の定型だけを削る", read("SKILL.md"))
         self.assertIn("申し出と方針の宣言は、迷うときは削らず", read("SKILL.md"))
         examples = read("assets/examples.md")
-        self.assertIn("## 27. 読者向けでない言葉の名残を直す(迷うときは削らず報告する)", examples)
+        self.assertIn("## 28. 読者向けでない言葉の名残を直す(迷うときは削らず報告する)", examples)
         self.assertIn("「〇〇」は仮置きで、期限を推測した「月末」で埋めてはいけない", examples)
 
     def test_examples_show_changes_of_strength_and_weight(self):
@@ -155,7 +155,7 @@ class ReferencesStayConsistentTest(unittest.TestCase):
         self.assertIn("B では直す前に各文の働きを控え、直した後で読み比べる", read("SKILL.md"))
         self.assertIn("伝聞を断定に、例えを言い切りに変えない", read("SKILL.md"))
         examples = read("assets/examples.md")
-        self.assertIn("## 26. 文の働きを変えない(伝聞・例え・反語・仮定)", examples)
+        self.assertIn("## 27. 文の働きを変えない(伝聞・例え・反語・仮定)", examples)
         self.assertIn("本当にこれで足りるだろうか。いや、足りない。", examples)
 
 
