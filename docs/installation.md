@@ -228,7 +228,7 @@ Release に添付されるのは、ZIP、SHA-256、Gemini Apps 向けの指示�
 `gh skill`（GitHub CLI のプレビュー機能。予告なく変わる）で入れられます。確かめたのは、gh 2.102.0、macOS、2026-10-18 です。
 
 ```bash
-gh skill install Mr-Kondo/japanese-readability-editor skill/japanese-readability-editor/SKILL.md --dir <入れ先の skills ディレクトリ>
+gh skill install Mr-Kondo/japanese-readability-editor skills/japanese-readability-editor/SKILL.md --dir <入れ先の skills ディレクトリ>
 ```
 
 - **SKILL.md のパスを指定します。** リポジトリ名だけを指定すると、`no skills found` になります。gh が探す場所は `skills/*/SKILL.md` などで、このリポジトリの `skill/`（単数）は含まれないためです。
@@ -438,7 +438,7 @@ python3 -m pip install --user --break-system-packages sudachipy sudachidict-core
 
 Codex のサンドボックスでは、ネットワークを使えないので、エージェントが実行中に入れることはできません。先に入れておけば、サンドボックスの中でも使えます。macOS の Codex CLI 0.155.1 で、読み取り専用と workspace-write の両方を確認しました(2026-10-06)。
 
-辞書は、core と small のどちらでも動きます。インストール後の大きさは、core が約190MB、small が約110MBです。`skill/japanese-readability-editor/assets/examples.md` の18組の修正例では、どちらも同じ指摘になりました。クラウドの実行環境では、入れる時間を短くするために、Skill は small を使います。
+辞書は、core と small のどちらでも動きます。インストール後の大きさは、core が約190MB、small が約110MBです。`skills/japanese-readability-editor/assets/examples.md` の18組の修正例では、どちらも同じ指摘になりました。クラウドの実行環境では、入れる時間を短くするために、Skill は small を使います。
 
 SudachiPy と辞書は、ZIP には含めません。小さい small の辞書でも、配布用のファイルが約42MBあり、ChatGPT のアップロードの上限(1ファイルあたり25MB)を超えるためです。アップロード型の環境では、エージェントが実行中に small を入れます。入らなければ、標準ライブラリの経路で動きます。
 

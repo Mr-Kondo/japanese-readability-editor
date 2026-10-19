@@ -396,7 +396,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--on-conflict", choices=("skip", "backup", "overwrite"), default="skip",
                         help="配置先に、内容の違うものが既にある場合の動作。skip=何もしない(既定), backup=退避してから配置, overwrite=削除して配置。"
                              "内容が同じなら、どれを指定しても何もしない")
-    parser.add_argument("--source", type=Path, default=None, help="skill のディレクトリ。既定 skill/japanese-readability-editor")
+    parser.add_argument("--source", type=Path, default=None, help="skill のディレクトリ。既定 skills/japanese-readability-editor")
     return parser
 
 

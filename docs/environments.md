@@ -115,7 +115,7 @@ Claude Code のプラグインとしても、入れられます。
 
 プラグインの Skill は、プラグイン名を前に付けて呼びます。たとえば、`/japanese-readability-editor:japanese-readability-editor` です。
 
-定義ファイル(`.claude-plugin/`)は、`skill/` を指すだけです。Skill は複製していません。`version` を設定していないので、更新はコミットに追従します。更新の手順は、「[更新する](installation.md#更新する)」にあります。
+定義ファイル(`.claude-plugin/`)は、`skills/` を指すだけです。Skill は複製していません。`version` を設定していないので、更新はコミットに追従します。更新の手順は、「[更新する](installation.md#更新する)」にあります。
 
 プラグインの定義は、`claude plugin validate` で検証しました。
 

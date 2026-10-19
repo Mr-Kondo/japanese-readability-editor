@@ -2,7 +2,7 @@
 
 `japanese-readability-editor` で日本語の文章を扱う実践ガイドです。新規作成、推敲、段落分け、小説の執筆を、コピーして使える依頼例で説明します。
 
-Skill を導入済みの環境を前提にします。未導入なら、先に [インストール](installation.md)を済ませてください。このガイドは、リポジトリ内の [SKILL.md](../skill/japanese-readability-editor/SKILL.md)と[小説モードの操作契約](../skill/japanese-readability-editor/references/fiction-writing.md)に基づきます。
+Skill を導入済みの環境を前提にします。未導入なら、先に [インストール](installation.md)を済ませてください。このガイドは、リポジトリ内の [SKILL.md](../skills/japanese-readability-editor/SKILL.md)と[小説モードの操作契約](../skills/japanese-readability-editor/references/fiction-writing.md)に基づきます。
 
 ## まず短い文章で試す
 
@@ -210,7 +210,7 @@ $japanese-readability-editor 小説モードで批評（critique）
 僕はポケットの鍵を握った。夜が肺に溜まる。
 ```
 
-鍵の所在は、示された設定との不整合です。一方、比喩の好みは、それだけで設定の誤りにはなりません。長編では、[任意の小説メモ](../skill/japanese-readability-editor/assets/fiction-context-template.md)を使い、確定設定・未確定の案・人物の誤解を分けて渡せます。
+鍵の所在は、示された設定との不整合です。一方、比喩の好みは、それだけで設定の誤りにはなりません。長編では、[任意の小説メモ](../skills/japanese-readability-editor/assets/fiction-context-template.md)を使い、確定設定・未確定の案・人物の誤解を分けて渡せます。
 
 小説にも、文言の完全保持を求めるならモード C を使います。モード A・B・C の明示指定は、「小説」という語があるだけでは D に切り替わりません。
 
@@ -242,9 +242,9 @@ docs/report.md を推敲し、国語の表記は general-tech で確認して。
 次の入力は、リポジトリに含まれるテスト用文書です。そのまま実行できます。
 
 ```bash
-python3 skill/japanese-readability-editor/scripts/measure.py --locate --extras tests/fixtures/before.md
-python3 skill/japanese-readability-editor/scripts/compare_rewrite.py tests/fixtures/before.md tests/fixtures/after_split.md
-python3 skill/japanese-readability-editor/scripts/verify_preservation.py --strict tests/fixtures/before.md tests/fixtures/after_split.md
+python3 skills/japanese-readability-editor/scripts/measure.py --locate --extras tests/fixtures/before.md
+python3 skills/japanese-readability-editor/scripts/compare_rewrite.py tests/fixtures/before.md tests/fixtures/after_split.md
+python3 skills/japanese-readability-editor/scripts/verify_preservation.py --strict tests/fixtures/before.md tests/fixtures/after_split.md
 ```
 
 `measure.py` は文や段落の長さなどの候補を示します。`compare_rewrite.py` は数値・用語・否定などの変化候補を示します。最後の検証は、改行だけを挿入したサンプルなので、`OK (strict)` と終了コード 0 を返します。
@@ -252,7 +252,7 @@ python3 skill/japanese-readability-editor/scripts/verify_preservation.py --stric
 文言を変えたサンプルも確かめられます。
 
 ```bash
-python3 skill/japanese-readability-editor/scripts/verify_preservation.py --strict tests/fixtures/before.md tests/fixtures/after_changed_char.md
+python3 skills/japanese-readability-editor/scripts/verify_preservation.py --strict tests/fixtures/before.md tests/fixtures/after_changed_char.md
 ```
 
 「ことである」が「ことだ」に変わっているため、`FAIL (strict)` と終了コード 1 を返します。これは、検証が変更を検出した結果です。
@@ -262,8 +262,8 @@ python3 skill/japanese-readability-editor/scripts/verify_preservation.py --stric
 ### 表記と小説の補助検査を試す
 
 ```bash
-python3 skill/japanese-readability-editor/scripts/check_kokugo.py tests/fixtures/kokugo/has_error.md --profile general-tech
-python3 skill/japanese-readability-editor/scripts/check_fiction.py tests/fixtures/before.md --json
+python3 skills/japanese-readability-editor/scripts/check_kokugo.py tests/fixtures/kokugo/has_error.md --profile general-tech
+python3 skills/japanese-readability-editor/scripts/check_fiction.py tests/fixtures/before.md --json
 ```
 
 最初のコマンドは、サンプルの `こんにちわ` と `そうゆう` を `error` として示します。終了コードは 1 です。後のコマンドは、文字数と括弧の対応などを JSON で返します。このサンプルには括弧の不整合がなく、終了コードは 0 です。物語としての評価はしません。
@@ -280,7 +280,7 @@ python3 skill/japanese-readability-editor/scripts/check_fiction.py tests/fixture
 原稿を UTF-8 の `manuscript.md` として用意し、次を実行します。
 
 ```bash
-python3 skill/japanese-readability-editor/scripts/check_fiction.py manuscript.md --settings work-checks.json --json
+python3 skills/japanese-readability-editor/scripts/check_fiction.py manuscript.md --settings work-checks.json --json
 ```
 
 `forbidden` は出現すると候補、`required` はファイルに一度も出ないと候補です。文字列の部分一致なので、「アオイー」にも「アオイ」が含まれます。必須語があることだけでは、表記や人物の整合性を確認できません。
@@ -295,7 +295,7 @@ python3 skill/japanese-readability-editor/scripts/check_fiction.py manuscript.md
 
 `compare_rewrite.py` は、変化候補があっても、正常に照合できれば終了コード 0 です。0 を意味保存の合格判定として扱わず、表示された候補を原文と見比べます。`tokenizer: regex` は、SudachiPy を使わずに照合したことを示します。任意の導入方法は、[インストールの SudachiPy の説明](installation.md#sudachipy-を入れる任意)にあります。
 
-`verify_preservation.py --strict` は、CRLF と LF の違いを区別せず、先頭の BOM も除いて比較します。モード C では、元の改行コードと BOM の保持も別途確認します。各ツールの詳しい仕様と限界は、[スクリプト](scripts.md)と[小説の補助検査](../skill/japanese-readability-editor/references/fiction-checks.md)を参照してください。
+`verify_preservation.py --strict` は、CRLF と LF の違いを区別せず、先頭の BOM も除いて比較します。モード C では、元の改行コードと BOM の保持も別途確認します。各ツールの詳しい仕様と限界は、[スクリプト](scripts.md)と[小説の補助検査](../skills/japanese-readability-editor/references/fiction-checks.md)を参照してください。
 
 ## 意図した結果にならないとき
 
@@ -316,7 +316,7 @@ python3 skill/japanese-readability-editor/scripts/check_fiction.py manuscript.md
 - [モード指定の扱いと動作確認](usage.md)
 - [計測・照合スクリプトの詳細](scripts.md)
 - [国語の表記・用法の検査](kokugo.md)
-- [小説の操作契約](../skill/japanese-readability-editor/references/fiction-writing.md)
-- [小説の修正例・保持例](../skill/japanese-readability-editor/assets/fiction-examples.md)
+- [小説の操作契約](../skills/japanese-readability-editor/references/fiction-writing.md)
+- [小説の修正例・保持例](../skills/japanese-readability-editor/assets/fiction-examples.md)
 
 このガイドで実行した例と未確認の範囲は、[実践ガイドの検証記録](user-guide-validation.md)にあります。製品の仕様は[環境別の対応](environments.md)、小説モード全体の確認は[小説モードの検証記録](fiction-validation.md)を参照してください。依頼例は使い方を示すもので、各製品・各モデルで同じ出力を保証するものではありません。

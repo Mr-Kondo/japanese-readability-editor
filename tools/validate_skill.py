@@ -3,7 +3,7 @@
 
     python3 tools/validate_skill.py [SKILL_DIR]
 
-SKILL_DIR の既定は skill/japanese-readability-editor。エラーがあれば終了コード 1。
+SKILL_DIR の既定は skills/japanese-readability-editor。エラーがあれば終了コード 1。
 
 検証する内容:
   - SKILL.md が存在し、大文字小文字まで正確に SKILL.md である
@@ -404,13 +404,13 @@ def validate_skill(skill_dir: Path, expected_name: str = EXPECTED_NAME,
 
 
 def default_skill_dir() -> Path:
-    return Path(__file__).resolve().parent.parent / "skill" / EXPECTED_NAME
+    return Path(__file__).resolve().parent.parent / "skills" / EXPECTED_NAME
 
 
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="Agent Skill の構造と互換性を検証する。")
     parser.add_argument("skill_dir", nargs="?", type=Path, default=None,
-                        help="検証する skill のディレクトリ。既定 skill/japanese-readability-editor")
+                        help="検証する skill のディレクトリ。既定 skills/japanese-readability-editor")
     parser.add_argument("--expected-name", default=EXPECTED_NAME, help=f"期待する name。既定 {EXPECTED_NAME}")
     parser.add_argument("--allow-standard-optional", action="store_true",
                         help="Agent Skills 仕様の任意項目(license, compatibility, metadata, allowed-tools)を許す")

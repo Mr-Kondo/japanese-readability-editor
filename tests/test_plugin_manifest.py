@@ -26,13 +26,13 @@ class PluginManifestTest(unittest.TestCase):
 
     def test_skills_path_points_at_the_canonical_skill(self):
         paths = load("plugin.json")["skills"]
-        self.assertEqual(paths, ["./skill/"])
+        self.assertEqual(paths, ["./skills/"])
         for path in paths:
             self.assertTrue(path.startswith("./"), "component paths must start with ./")
             self.assertTrue((REPO_ROOT / path / SKILL_NAME / "SKILL.md").is_file())
 
     def test_the_manifest_does_not_copy_the_skill(self):
-        # 正本は skill/ の1か所だけ。プラグイン用に SKILL.md を複製していない。
+        # 正本は skills/ の1か所だけ。プラグイン用に SKILL.md を複製していない。
         ignored = {".git", "dist", ".agents", ".claude"}  # 生成物と、install.py でこの repo に配置したコピー
         found = [p for p in REPO_ROOT.rglob("SKILL.md") if not ignored & set(p.relative_to(REPO_ROOT).parts)]
         self.assertEqual([p.resolve() for p in found], [(SKILL_DIR / "SKILL.md").resolve()])

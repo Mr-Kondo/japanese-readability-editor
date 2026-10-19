@@ -8,7 +8,7 @@
     feedback_loop.py verify  --cases CASES --before RUN --after RUN --out-dir NEW   修正前後を失敗の種類別に並べる
 
 守ること:
-  - skill/ を書き換えない。確認者・根拠を自動で埋めない。利用者の主張は、メンテナーが確認するまで確認済みにしない。
+  - skills/ を書き換えない。確認者・根拠を自動で埋めない。利用者の主張は、メンテナーが確認するまで確認済みにしない。
   - intake・triage・verify は通信しない。propose は --execute を付けたときだけ、同意のある票を Claude CLI へ送る。
   - 工程間は SHA-256 でつなぐ(確認記録は findings に、集約は findings/decisions に紐づく)。
   - 改良案の下書きに送るのは、確認者が書いた引用・根拠・保つこと・禁止だけ。原文・結果の全文は送らない。
@@ -31,7 +31,7 @@ from pathlib import Path
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parent.parent
-SKILL = ROOT / "skill" / "japanese-readability-editor"
+SKILL = ROOT / "skills" / "japanese-readability-editor"
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(SKILL / "scripts"))
 import make_feedback as form  # noqa: E402
