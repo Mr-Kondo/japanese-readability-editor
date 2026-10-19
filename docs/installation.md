@@ -73,7 +73,10 @@ claude plugin update japanese-readability-editor@japanese-readability-editor
 
 ### gh skill で入れた場合
 
-v0.15.0 以降（`skills/` の配置）で入れたものは、`gh skill update` で更新を確かめられます。入れ先を `--dir` で指定したときは、`gh skill update --dry-run --dir <入れ先>` で確かめ、`gh skill update --all --dir <入れ先>` で更新します。
+v0.15.0 以降（`skills/` の配置）で入れたものは、`gh skill update` で更新を確かめられます。入れ先を `--dir` で指定したときは、`gh skill update --dry-run --dir <入れ先>` で確かめます。
+
+- gh は、Skill のディレクトリ（`skills/japanese-readability-editor/`）の内容の差（tree sha）で判定します。**docs や tools だけが変わったリリースは、更新として検出されません**（v0.15.0 から v0.15.1 で、「All skills are up to date.」を確認しました）。
+- 更新の検出は、`github-tree-sha` を変えて版が古い入れ方を模擬して確かめました（「1 update(s) available」）。実際の更新（`--all`）は、Skill の内容が変わる次のリリースで確かめます。
 
 v0.14.0 以前の `skill/` の配置で入れたものは、`gh skill update` が見つけられません（「no skills found」と出して飛ばし、「All skills are up to date.」と表示します）。[GitHub CLI（gh skill）で入れる](#github-cligh-skill-で入れる)のコマンドで、入れ直してください。
 
