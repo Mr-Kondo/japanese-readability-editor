@@ -69,6 +69,13 @@ FAMILY_TITLES = [
 ]
 
 
+def join_with_toc(lines: List[str]) -> str:
+    """100行を超える参照ファイルの先頭に、節の目次を付ける(Agent が全文を読まずに節を選べる)。"""
+    first = next(i for i, line in enumerate(lines) if line.startswith("## "))
+    toc = ["## 目次", ""] + [f"- {line[3:]}" for line in lines if line.startswith("## ")] + [""]
+    return "\n".join(lines[:first] + toc + lines[first:]) + "\n"
+
+
 def render_sources_md(reg: dict) -> str:
     role_labels = {"implemented": "規則の根拠として使っている", "reference-only": "参照先として記録するだけ(自動判定しない)"}
     verification_labels = {"bytes-fetched-and-read": "公式サイトから原本のバイト列を取得し、本文を読んで確認した", "summary-only": "要約でのみ確認した"}
@@ -149,7 +156,7 @@ def render_sources_md(reg: dict) -> str:
     emit("- 「法令における漢字使用等について」(内閣法制局長官決定)。「公用文作成の考え方」と内閣訓令から参照されているが、原資料は取得していない。この skill は法令の表記を検査しない。")
     emit("- 「表外漢字字体表」(平成12年国語審議会答申)と「常用漢字表の字体・字形に関する指針」(平成28年文化審議会国語分科会報告)。取得しておらず、字体の検査は行わない。")
     emit("- 文部科学省ウェブサイト利用規約のページは、証明書の検証に失敗して直接取得できなかった。要約でのみ確認した。")
-    return "\n".join(lines) + "\n"
+    return join_with_toc(lines)
 
 
 def render_notation_md(rules: List[dict]) -> str:
@@ -208,7 +215,7 @@ def render_notation_md(rules: List[dict]) -> str:
     emit("- `skill-policy`: この skill の運用判断。公式資料が定めていない確認を、判断材料として示す。error にはならない。")
     emit("")
     emit("`error` を出せるのは、内閣告示または内閣訓令を根拠に挙げる規則だけである(`validate_kokugo_rules.py` が検査する)。建議・報告・答申(考え方、異字同訓、敬語の指針)と、この skill の運用判断は、recommendation か needs_context までにとどまる。")
-    return "\n".join(lines) + "\n"
+    return join_with_toc(lines)
 
 
 def render_all() -> dict:

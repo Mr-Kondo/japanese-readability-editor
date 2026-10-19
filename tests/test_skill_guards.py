@@ -1,12 +1,15 @@
 """SKILL.md の分量と、参照先の節が残っていることの回帰テスト。文言の一致は見ない(推敲の質は evals で測る)。"""
 
+import re
 import unittest
 
 from helpers import SKILL_DIR
 
-# SKILL.md を肥大させない(詳細は references へ)。国語の表記・用法の適用手順(適用設定、区分、実行手順)を
-# 加えたため190行、D の入口を追加したため205行を上限とする。詳細は references と assets に分離する。
-MAX_SKILL_LINES = 205
+# SKILL.md を肥大させない。国語の表記・用法の適用手順とスクリプトの詳細は references に置き(モード C の手順は、参照にすると読み込みの1ターンが増えて損だったので、本文に残す)、
+# 本文は、全モードで使う規則と入口に絞る。Skill 読み込み時の入力トークンを減らすための上限である。
+MAX_SKILL_LINES = 175
+# 参照ファイルがこの行数を超えたら、先頭に目次(「## 目次」)を付ける。
+TOC_FROM_LINES = 100
 
 
 def read(relative: str) -> str:
@@ -19,6 +22,30 @@ class SkillGuardsTest(unittest.TestCase):
 
     def test_skill_md_stays_lean(self):
         self.assertLessEqual(len(self.skill.splitlines()), MAX_SKILL_LINES)
+
+
+class ScriptsAreDocumentedTest(unittest.TestCase):
+    def test_scripts_are_run_not_read(self):
+        self.assertIn("ソースは読まない", read("SKILL.md"))
+        self.assertIn("ソースは読まない", read("references/scripts.md"))
+
+    def test_every_script_is_listed_in_the_script_table(self):
+        table = read("references/scripts.md")
+        for path in sorted((SKILL_DIR / "scripts").glob("*.py")):
+            self.assertIn(f"`{path.name}`", table, path.name)
+
+
+class ReferencesAreNavigableTest(unittest.TestCase):
+    def test_skill_links_resolve(self):
+        for target in re.findall(r"\]\(((?:references|assets)/[^)#]+)\)", read("SKILL.md")):
+            self.assertTrue((SKILL_DIR / target).is_file(), target)
+
+    def test_long_reference_files_have_a_table_of_contents(self):
+        for folder in ("references", "assets"):
+            for path in sorted((SKILL_DIR / folder).glob("*.md")):
+                text = path.read_text(encoding="utf-8")
+                if len(text.splitlines()) > TOC_FROM_LINES:
+                    self.assertIn("\n## 目次\n", text, path.name)
 
 
 class ReferencesStayConsistentTest(unittest.TestCase):

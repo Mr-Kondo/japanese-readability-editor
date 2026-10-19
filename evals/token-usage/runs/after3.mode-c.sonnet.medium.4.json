@@ -1,0 +1,47 @@
+{
+ "input_tokens": 8,
+ "output_tokens": 2483,
+ "cache_creation_input_tokens": 24206,
+ "cache_read_input_tokens": 132006,
+ "input_side_tokens": 156220,
+ "turn_input_totals": [
+  26698,
+  41770,
+  43710,
+  44042
+ ],
+ "cost_usd": 0.14807120000000001,
+ "num_turns": 9,
+ "duration_ms": 26545,
+ "models": [
+  "claude-sonnet-5-5"
+ ],
+ "is_error": false,
+ "skill_called": true,
+ "tools": [
+  "Skill",
+  "Read",
+  "Bash",
+  "Edit",
+  "Edit",
+  "Edit",
+  "Bash"
+ ],
+ "scripts_run": [
+  {
+   "script": "verify_preservation.py",
+   "output_chars": 124
+  }
+ ],
+ "source_reads": [],
+ "references_read": [],
+ "changed": true,
+ "nonspace_same": true,
+ "strict_same": true,
+ "label": "after3",
+ "variant": "mode-c",
+ "model_alias": "sonnet",
+ "input": "medium",
+ "run": 4,
+ "input_chars": 2879
+}

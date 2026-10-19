@@ -1,0 +1,40 @@
+{
+ "input_tokens": 10,
+ "output_tokens": 5872,
+ "cache_creation_input_tokens": 28024,
+ "cache_read_input_tokens": 174577,
+ "input_side_tokens": 202611,
+ "turn_input_totals": [
+  26742,
+  38869,
+  41757,
+  47499,
+  47744
+ ],
+ "cost_usd": 0.3765874,
+ "num_turns": 6,
+ "duration_ms": 55059,
+ "models": [
+  "claude-opus-5-5"
+ ],
+ "is_error": false,
+ "skill_called": true,
+ "tools": [
+  "Skill",
+  "Bash",
+  "Bash",
+  "Bash"
+ ],
+ "scripts_run": [],
+ "source_reads": [],
+ "references_read": [],
+ "changed": true,
+ "nonspace_same": false,
+ "strict_same": false,
+ "label": "after",
+ "variant": "default",
+ "model_alias": "opus",
+ "input": "medium",
+ "run": 2,
+ "input_chars": 2879
+}

@@ -166,6 +166,12 @@ def render_gemini_apps_instructions(skill_dir: Path) -> str:
             "",
             demote_headings(strip_relative_links(fiction_path.read_text(encoding="utf-8").strip("\n")), 2),
         ]
+    # SKILL.md 本文から参照している手順。Gem は参照先のファイルを読めないので、末尾へ埋め込む。
+    for number, (name, title) in enumerate((("kokugo-check.md", "国語の表記・用法の適用手順"),), start=4):
+        path = skill_dir / "references" / name
+        if path.is_file():
+            parts += ["", f"## Part {number}. {title}(references/{name})", "",
+                      demote_headings(strip_relative_links(path.read_text(encoding="utf-8").strip("\n")), 2)]
     return "\n".join(parts) + "\n"
 
 
