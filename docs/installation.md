@@ -73,7 +73,7 @@ claude plugin update japanese-readability-editor@japanese-readability-editor
 
 ### gh skill で入れた場合
 
-`gh skill update` は、このリポジトリの Skill を見つけられません。[GitHub CLI（gh skill）で入れる](#github-cligh-skill-で入れる)のコマンドに `--force` を付けて、入れ直します。
+v0.14.0 以前の `skill/` の配置で入れたものは、`gh skill update` が見つけられません（「no skills found」と出して飛ばし、「All skills are up to date.」と表示します）。[GitHub CLI（gh skill）で入れる](#github-cligh-skill-で入れる)のコマンドに `--force` を付けて、入れ直します。`skills/` の配置のリリース（v0.15.0 以降）で入れたものの `gh skill update` は、次のリリースで確かめて、結果をここに書きます。
 
 ### 退避した版へ戻す
 
@@ -225,21 +225,19 @@ Release に添付されるのは、ZIP、SHA-256、Gemini Apps 向けの指示�
 
 ## GitHub CLI（gh skill）で入れる
 
-`gh skill`（GitHub CLI のプレビュー機能。予告なく変わる）で入れられます。確かめたのは、gh 2.102.0、macOS、2026-10-18 です。
+`gh skill`（GitHub CLI のプレビュー機能。予告なく変わる）で入れられます。確かめたのは、gh 2.102.0、macOS、2026-10-19 です。
 
 ```bash
-gh skill install Mr-Kondo/japanese-readability-editor skills/japanese-readability-editor/SKILL.md --dir <入れ先の skills ディレクトリ>
+gh skill install Mr-Kondo/japanese-readability-editor japanese-readability-editor --dir <入れ先の skills ディレクトリ>
 ```
 
-- **SKILL.md のパスを指定します。** リポジトリ名だけを指定すると、`no skills found` になります。gh が探す場所は `skills/*/SKILL.md` などで、このリポジトリの `skill/`（単数）は含まれないためです。
-- 最新のタグ付きリリースの版が入ります（確認したときは v0.13.0）。版を固定するときは、`--pin <タグ>` を付けます。
+- **名前だけで入ります。** `skills/japanese-readability-editor/SKILL.md` という配置が、gh の探す場所（`skills/*/SKILL.md`）に当たるためです。`--pin <タグまたはコミット>` で版を固定できます。
+- 版を指定しないと、最新のタグ付きリリースが入ります。
+- **v0.14.0 以前のタグは、`skill/`（単数）の配置です。** 名前だけでは見つからないので、そのときは `skill/japanese-readability-editor/SKILL.md` のパスを指定してください。
 - 入った内容は、`SKILL.md`、`scripts/`（8 本）、`references/`、`assets/`、`data/` です。
 - gh は `SKILL.md` の frontmatter に、`metadata:`（`github-repo`、`github-ref`、`github-path`、`github-tree-sha`）を足します。このリポジトリの `tools/validate_skill.py` は、frontmatter の複数行の値を認めないので、gh で入れたものには使えません（エラーになります）。
 - `--agent` と `--scope` で入れ先を選ぶ形は、`gh skill install --help` にありますが、確かめていません。確かめたのは `--dir` だけです。
-- **`gh skill update` は使えません。** このリポジトリの Skill を見つけられず、「no skills found」と出して飛ばしたうえで、「All skills are up to date.」と表示します。更新するときは、上のコマンドに `--force` を付けて、入れ直します。
 - `npx skills add` は、確かめていません。
-
-名前だけで入れられるようにするには、`skill/` を `skills/` に改名する必要があります。改名は、公開の URL、プラグインの定義、配布物に響くので、別の Issue（#66、決定待ち）で扱います。
 
 ## 動作を確認する
 
