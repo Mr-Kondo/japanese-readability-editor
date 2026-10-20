@@ -18,6 +18,14 @@ class DetectAppTest(unittest.TestCase):
     def test_marker_variable_gives_name_only(self):
         self.assertEqual(info.detect_app({"GEMINI_CLI": "1"})["name"], "gemini-cli")
 
+    def test_apps_own_markers_beat_an_inherited_ai_agent(self):
+        inherited = {"AI_AGENT": "claude-code_2-1-299_agent", "CLAUDECODE": "1"}  # 子プロセスは親の環境を引き継ぐ
+        self.assertEqual(info.detect_app({**inherited, "CODEX_THREAD_ID": "t", "CODEX_VERSION": "0.155.1"}),
+                         {"name": "codex", "version": "0.155.1", "source": "CODEX_THREAD_ID"})
+        self.assertEqual(info.detect_app({**inherited, "OPENCODE": "1"})["name"], "opencode")
+        self.assertEqual(info.detect_app({**inherited, "HERMES_AGENT": "true"})["name"], "hermes")
+        self.assertEqual(info.detect_app({"CODEX_THREAD_ID": "t"})["version"], "unknown")
+
     def test_unknown_when_nothing_matches(self):
         self.assertEqual(info.detect_app({"AI_AGENT": "weird"})["name"], "unknown")
 

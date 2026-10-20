@@ -1,0 +1,14 @@
+diff --git a/skills/japanese-readability-editor/SKILL.md b/skills/japanese-readability-editor/SKILL.md
+index db51f40..281a339 100644
+--- a/skills/japanese-readability-editor/SKILL.md
++++ b/skills/japanese-readability-editor/SKILL.md
+@@ -97,7 +97,8 @@ D は先に [references/fiction-writing.md](references/fiction-writing.md) を
+ - 比重が同じか。「AではなくB」を「Aに加えてB」にしていないか。並列を順位づけにしていないか。
+ - 主体が同じか。
+ - 文の働きと時制が同じか。評価・依頼・仕様・変更報告・予定を入れ替えていないか。
+-- 文体が同じか。
++- 元の各文に対応する文が、出力にあるか。報告の方針・制約・留保を示す文も、対応する文がなければ戻す(削ってよいのは、中身のない定型だけ)。
++- 文体が同じか。全文の文末(常体か敬体か)を、元の文と1文ずつ照らす。
+ 
+ 一つでも違う箇所は、書き換える前の形に戻す。同じ関係・状態・評価と確かめられない箇所も、その部分だけ元に戻す。
+ 

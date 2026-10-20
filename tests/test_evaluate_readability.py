@@ -73,6 +73,18 @@ class ReadabilityEvaluationTest(unittest.TestCase):
             evaluation.invoke("採点", Path(tmp) / "judge.json")  # 採点は従来どおり、ツールなしの隔離
             self.assertIn("--safe-mode", calls[1][0])
 
+    def test_case_ids_and_repeats_narrow_the_run_and_unknown_ids_are_refused(self):
+        other = {**CASE, "id": "two"}
+        with temporary_directory() as tmp, patch.object(evaluation.subprocess, "run", side_effect=AssertionError("network forbidden")):
+            suite = Path(tmp) / "suite.json"
+            suite.write_text(json.dumps({**SUITE, "cases": [CASE, other]}), encoding="utf-8")
+            self.assertEqual(evaluation.main(["--suite", str(suite), "--out-dir", str(Path(tmp) / "a"), "--case-ids", "two", "--repeats", "5"]), 0)
+            record = json.loads((Path(tmp) / "a" / "run.json").read_text(encoding="utf-8"))
+            self.assertEqual([c["id"] for c in record["suite"]["cases"]], ["two"])
+            self.assertEqual(record["repeats"], 5)
+            self.assertEqual(evaluation.main(["--suite", str(suite), "--out-dir", str(Path(tmp) / "b"), "--case-ids", "nope"]), 2)
+        evaluation.REPEATS = 3  # main() が変えたモジュール変数を戻す
+
     def test_prepare_makes_no_model_calls_and_refuses_to_overwrite(self):
         with temporary_directory() as tmp, patch.object(evaluation.subprocess, "run", side_effect=AssertionError("network forbidden")):
             suite = Path(tmp) / "suite.json"

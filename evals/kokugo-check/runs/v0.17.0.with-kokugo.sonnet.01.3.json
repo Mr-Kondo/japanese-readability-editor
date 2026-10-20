@@ -1,0 +1,55 @@
+{
+ "input_tokens": 10,
+ "output_tokens": 1383,
+ "cache_creation_input_tokens": 22577,
+ "cache_read_input_tokens": 168452,
+ "input_side_tokens": 191039,
+ "turn_input_totals": [
+  26726,
+  39561,
+  40702,
+  41638,
+  42412
+ ],
+ "cost_usd": 0.13784839999999998,
+ "num_turns": 7,
+ "duration_ms": 33860,
+ "models": [
+  "claude-sonnet-5-5"
+ ],
+ "is_error": false,
+ "error": null,
+ "skill_called": true,
+ "tools": [
+  "Skill",
+  "Read",
+  "Bash",
+  "Bash",
+  "Bash"
+ ],
+ "scripts_run": [
+  {
+   "script": "check_kokugo.py",
+   "output_chars": 1389
+  },
+  {
+   "script": "check_kokugo.py",
+   "output_chars": 1051
+  },
+  {
+   "script": "compare_rewrite.py",
+   "output_chars": 631
+  }
+ ],
+ "source_reads": [],
+ "references_read": [],
+ "changed": true,
+ "nonspace_same": false,
+ "strict_same": false,
+ "label": "v0.17.0",
+ "variant": "with-kokugo",
+ "model_alias": "sonnet",
+ "input": "01",
+ "run": 3,
+ "input_chars": 83
+}

@@ -1,0 +1,46 @@
+{
+ "input_tokens": 10,
+ "output_tokens": 4995,
+ "cache_creation_input_tokens": 27074,
+ "cache_read_input_tokens": 174663,
+ "input_side_tokens": 201747,
+ "turn_input_totals": [
+  26740,
+  39430,
+  42310,
+  46474,
+  46793
+ ],
+ "cost_usd": 0.3514646,
+ "num_turns": 6,
+ "duration_ms": 45951,
+ "models": [
+  "claude-opus-5-5"
+ ],
+ "is_error": false,
+ "error": null,
+ "skill_called": true,
+ "tools": [
+  "Skill",
+  "Bash",
+  "Bash",
+  "Bash"
+ ],
+ "scripts_run": [
+  {
+   "script": "compare_rewrite.py",
+   "output_chars": 825
+  }
+ ],
+ "source_reads": [],
+ "references_read": [],
+ "changed": true,
+ "nonspace_same": false,
+ "strict_same": false,
+ "label": "v0.17.0",
+ "variant": "default",
+ "model_alias": "opus",
+ "input": "medium",
+ "run": 4,
+ "input_chars": 2879
+}

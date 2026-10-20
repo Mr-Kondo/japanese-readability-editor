@@ -7,7 +7,7 @@
 このスクリプトは、ファイルを書き込まない。共有のエージェントフォルダ(~/.agents/skill-env/<スキル名>.json)へ
 保存するのは、実行した側(エージェント)で、標準エラーの save_to の場所へ、標準出力の JSON をそのまま書く。
 モデル名は環境から分からないので、実行する側が --model で渡す。渡さなければ unknown。
-アプリは、環境変数から推定する(確かめたのは Claude Code の AI_AGENT だけ。ほかは目安なので、違えば --app で指定する)。
+アプリは、環境変数から推定する(Claude Code・Codex・OpenCode・Hermes は実環境で確かめた。Gemini CLI は未確認。違えば --app で指定する)。
 ユーザー名・ホスト名・パス・メールアドレスは、JSON に出さない。
 
 終了コード: 0=出した。
@@ -26,9 +26,11 @@ SKILL_DIR = Path(__file__).resolve().parent.parent
 NAME = SKILL_DIR.name
 SCHEMA_VERSION = 1
 SAVE_TO = Path.home() / ".agents" / "skill-env" / f"{NAME}.json"
-# AI_AGENT が無い環境の目安。(環境変数, アプリ名)。上から順に調べる。
-MARKERS = (("CLAUDECODE", "claude-code"), ("CODEX_THREAD_ID", "codex"), ("CODEX_SANDBOX", "codex"),
-           ("GEMINI_CLI", "gemini-cli"), ("OPENCODE", "opencode"))
+# アプリ自身が設定する目印(環境変数, アプリ名, 版を持つ環境変数)。子プロセスは親の AI_AGENT を引き継ぐので、これを先に調べる。
+# Codex・OpenCode・Hermes は実環境で確かめた。入れ子の起動(例: Claude Code から Codex を呼ぶ)では、子のアプリになる。
+APP_MARKERS = (("CODEX_THREAD_ID", "codex", "CODEX_VERSION"), ("OPENCODE", "opencode", None), ("HERMES_AGENT", "hermes", None))
+# AI_AGENT が無い環境の目安。Gemini CLI は未確認(この環境に入っていない)。
+FALLBACK_MARKERS = (("CLAUDECODE", "claude-code"), ("GEMINI_CLI", "gemini-cli"))
 
 
 def read_version() -> str:
@@ -39,11 +41,14 @@ def read_version() -> str:
 
 
 def detect_app(env) -> dict:
-    """AI_AGENT(例: claude-code_2-1-299_agent)があれば名前と版を取る。なければ目印の環境変数から推定する。"""
+    """アプリ自身の目印、AI_AGENT(例: claude-code_2-1-299_agent)、目安の順に調べる。"""
+    for variable, name, version_variable in APP_MARKERS:
+        if env.get(variable):
+            return {"name": name, "version": env.get(version_variable or "", "") or "unknown", "source": variable}
     match = re.match(r"^([a-z][a-z-]*)_(\d+(?:-\d+)*)(?:_|$)", env.get("AI_AGENT", ""))
     if match:
         return {"name": match.group(1), "version": match.group(2).replace("-", "."), "source": "AI_AGENT"}
-    for variable, name in MARKERS:
+    for variable, name in FALLBACK_MARKERS:
         if env.get(variable):
             return {"name": name, "version": "unknown", "source": variable}
     return {"name": "unknown", "version": "unknown", "source": "none"}

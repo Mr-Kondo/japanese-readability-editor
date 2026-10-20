@@ -26,6 +26,7 @@ VARIANTS = {
     "default": "",
     "no-scripts": " 同梱のスクリプトは実行せず、references の規則と目視だけで確認してください。",
     "mode-c": "",  # モード C で処理させ、改行の挿入だけかを自動で確かめる
+    "with-kokugo": " 国語の表記・用法の検査(scripts/check_kokugo.py)も実行し、指摘を確認してください。",
 }
 SCRIPT_RUN = re.compile(r"scripts/(\w+\.py)")
 SOURCE_READ = re.compile(r"\b(cat|head|tail|sed|less|more|bat|nl|awk)\b[^|;&]*scripts/\w+\.py")
@@ -97,6 +98,7 @@ def run_one(skill_dir: Path, text: str, prompt: str, model: str, raw_path: Path)
             cwd=project, stdin=subprocess.DEVNULL, capture_output=True, text=True, encoding="utf-8", timeout=900)
         after = (project / "doc.md").read_text(encoding="utf-8")
     raw_path.write_text(completed.stdout, encoding="utf-8")
+    raw_path.with_suffix(".doc.md").write_text(after, encoding="utf-8")  # 直した後の文書(別の検査にかけるため)
     return parse_transcript(completed.stdout.splitlines()) | preservation(text, after)
 
 
