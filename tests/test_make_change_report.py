@@ -56,9 +56,11 @@ class MakeChangeReportTest(unittest.TestCase):
         original = folder / "CANARYFILE-before.md"
         original.write_text(ORIGINAL + "カナリア固有の文です。\n", encoding="utf-8")
         _, out, _ = self.run_report(original=str(original))
+        report = json.loads(out)
+        out = json.dumps({**report, "case_id": ""}, ensure_ascii=False)  # ランダムな UUID の16進数字に "30" が混ざるため除く
         for canary in ("CANARY", "カナリア", "承認", "canary.example", "30", "before", self.folder.name):
             self.assertNotIn(canary, out)
-        self.assertEqual(set(json.loads(out)), {"schema_version", "kind", "case_id", "evidence_status", "context", "checks", "readability"})
+        self.assertEqual(set(report), {"schema_version", "kind", "case_id", "evidence_status", "context", "checks", "readability"})
 
     def test_unchanged_text_has_no_candidates_and_same_readability(self):
         report = self.report(result=self.original)
