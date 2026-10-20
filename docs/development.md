@@ -48,7 +48,7 @@ japanese-readability-editor/
 | `scripts/measure.py` | 段落・文の長さなどの計測、修正候補の位置の表示、`--extras` の指摘(読み取り専用) |
 | `scripts/verify_preservation.py` | 空白以外の文字列が同一かの検査。`--strict` は、改行以外の全文字が同一で改行が減っていないことまで検査する(読み取り専用) |
 | `scripts/compare_rewrite.py` | 書き換えの前後の比較。意味が変わったかもしれない箇所を挙げる(読み取り専用。SudachiPy が入っていれば使う) |
-| `VERSION` | Skill の版。リリースのタグ(`v` + この値)と一致する。`release.yml` が照合し、`tests/test_skill_info.py` が、同じ版のリリースノートがあることを確かめる |
+| `VERSION` | Skill の版。この値が変わった main への push で、`release.yml` がタグ(`v` + この値)と Release を作る。`tests/test_skill_info.py` が、同じ版のリリースノートがあることを確かめる |
 | `scripts/skill_info.py` | 版と実行環境(OS・アプリ・モデル・日付)の JSON を標準出力に出す(読み取り専用)。保存先は `~/.agents/skill-env/<スキル名>.json` で、保存は実行した側 |
 | `scripts/make_feedback.py` | 結果の問題を報告する票(JSON)を標準出力に出す(読み取り専用、通信なし)。[利用者のフィードバック](feedback.md) |
 | `references/kokugo-*.md` | 国語の表記・用法の適用方針、規則の一覧、公用文の運用、出典。Agent が必要なときだけ読む。詳細は [国語の表記・用法の検査](kokugo.md) |
@@ -96,7 +96,7 @@ ZIP は再現可能で、同じ入力からは同じ SHA-256 になります。`
 
 `dist/opencode/` と `dist/hermes/` の `japanese-readability-editor/` は、正本の完全な複製です。環境ごとに変えるのは、配置先とコマンドを書いた `INSTALL.md` だけで、Skill の本文は複製しません。生成のたびに、`verify_install.py` と同じ検証(正本との一致を含む)を行い、失敗すると終了コード 1 です。`--bundle opencode` のように対象を選べ、`--no-agent-bundles` で省けます。
 
-`v` で始まるタグを GitHub に push すると、Actions が Release を作ります(`.github/workflows/release.yml`)。`docs/release-notes/v<版>.md` があれば、それが Release のノートになります。なければ自動生成です。Release は、[Releases のページ](https://github.com/Mr-Kondo/japanese-readability-editor/releases)で公開されます。添付されるものと、ダウンロードの方法は、[インストール](installation.md#アップロード型の環境に入れる)にあります。
+main の `skills/japanese-readability-editor/VERSION` が変わると、Actions が、その版のタグ(`v` + VERSION)と Release を作ります(`.github/workflows/release.yml`)。同じ版の Release が既にあれば、何もしません。版を上げる PR をマージするだけでリリースされます。失敗したときは、Actions の画面から手動で再実行できます。`docs/release-notes/v<版>.md` があれば、それが Release のノートになります。なければ自動生成です。Release は、[Releases のページ](https://github.com/Mr-Kondo/japanese-readability-editor/releases)で公開されます。添付されるものと、ダウンロードの方法は、[インストール](installation.md#アップロード型の環境に入れる)にあります。
 
 ## 一般文書 A/B のモデル評価
 
