@@ -49,6 +49,30 @@ class ReadabilityEvaluationTest(unittest.TestCase):
             with self.subTest(payload=payload), self.assertRaises(ValueError):
                 evaluation.parse_judgments(json.dumps({"judgments": payload}), {"j1"})
 
+    def test_skill_dir_generates_through_the_installed_skill_with_tools_and_grading_stays_isolated(self):
+        calls = []
+
+        def fake_run(command, **kwargs):
+            calls.append((command, kwargs))
+            body = json.dumps({"result": "出力", "modelUsage": {"test-model": {}}, "is_error": False})
+            return subprocess.CompletedProcess(command, 0, stdout=body, stderr="")
+
+        with temporary_directory() as tmp, patch.object(evaluation.subprocess, "run", side_effect=fake_run):
+            skill = Path(tmp) / "skill"
+            skill.mkdir()
+            (skill / "SKILL.md").write_text("x", encoding="utf-8")
+            record = {"skill_dir": str(skill), "suite": copy.deepcopy(SUITE), "outputs": []}
+            with patch.object(evaluation, "REPEATS", 1):
+                evaluation.generate(record, Path(tmp))
+            generation = calls[0][0]
+            self.assertNotIn("--safe-mode", generation)
+            self.assertNotIn("--tools", generation)
+            self.assertIn("project", generation)
+            self.assertNotIn("SKILL_FILES", calls[0][1]["input"])
+            self.assertEqual(record["outputs"][0]["text"], "出力")
+            evaluation.invoke("採点", Path(tmp) / "judge.json")  # 採点は従来どおり、ツールなしの隔離
+            self.assertIn("--safe-mode", calls[1][0])
+
     def test_prepare_makes_no_model_calls_and_refuses_to_overwrite(self):
         with temporary_directory() as tmp, patch.object(evaluation.subprocess, "run", side_effect=AssertionError("network forbidden")):
             suite = Path(tmp) / "suite.json"

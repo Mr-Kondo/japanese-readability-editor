@@ -52,6 +52,13 @@ class ParseTranscriptTest(unittest.TestCase):
         self.assertEqual(record["references_read"], ["scripts.md"])
 
 
+class ScheduleTest(unittest.TestCase):
+    def test_versions_alternate_within_each_input_and_run(self):
+        order = list(measure.schedule({"before": "a", "after": "b"}, ["short", "long"], first=3, repeats=2))
+        self.assertEqual(order, [("short", 3, "before"), ("short", 3, "after"), ("short", 4, "before"), ("short", 4, "after"),
+                                 ("long", 3, "before"), ("long", 3, "after"), ("long", 4, "before"), ("long", 4, "after")])
+
+
 class PreservationTest(unittest.TestCase):
     def test_only_inserted_newlines_pass_strict(self):
         self.assertTrue(measure.preservation("a b\nc", "a b\n\nc")["strict_same"])
