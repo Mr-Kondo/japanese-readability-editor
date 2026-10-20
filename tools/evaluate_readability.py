@@ -105,7 +105,7 @@ def invoke(prompt: str, destination: Path, skill_dir: Path = None) -> dict:
 
 def generate(record: dict, folder: Path) -> None:
     skill_dir = Path(record["skill_dir"]) if record.get("skill_dir") else None
-    prefix = INSTALLED_GENERATION if skill_dir else GENERATION + "SKILL_FILES:\n" + json.dumps(record["skill_files"], ensure_ascii=False)
+    prefix = INSTALLED_GENERATION + record.get("extra_instruction", "") if skill_dir else GENERATION + "SKILL_FILES:\n" + json.dumps(record["skill_files"], ensure_ascii=False)
     for repeat in range(1, REPEATS + 1):
         for case in record["suite"]["cases"]:
             key = f"g{len(record['outputs']) + 1:03}"
@@ -184,12 +184,16 @@ def summary(record: dict) -> dict:
 
 def prepare(args: argparse.Namespace) -> dict:
     suite = read_suite(args.suite)
+    if args.case_ids:  # 指定したケースだけに絞る(対照は残す)
+        suite["cases"] = [c for c in suite["cases"] if c["id"] in args.case_ids]
+        if len(suite["cases"]) != len(args.case_ids):
+            raise ValueError("unknown case id")
     skill = args.skill_dir or SKILL
     record = {"schema_version": 1, "prepared_at": datetime.now(timezone.utc).isoformat(), "status": "prepared",
               "suite": suite, "suite_sha256": digest(args.suite.read_text(encoding="utf-8")), "repeats": REPEATS,
               "flags": FLAGS, "system_prompt": SYSTEM, "generation_instruction": GENERATION, "grading_instruction": GRADING,
               "skill_files": {} if args.skill_dir else {name: (SKILL / name).read_text(encoding="utf-8") for name in FILES},
-              "skill_dir": str(args.skill_dir) if args.skill_dir else None, "skill_sha256": file_digests(skill), "runner_sha256": digest(Path(__file__).read_text(encoding="utf-8")),
+              "skill_dir": str(args.skill_dir) if args.skill_dir else None, "extra_instruction": args.extra_instruction, "skill_sha256": file_digests(skill), "runner_sha256": digest(Path(__file__).read_text(encoding="utf-8")),
               "outputs": [], "grading_calls": []}
     args.out_dir.mkdir(parents=True, exist_ok=False)
     save_json(args.out_dir / "run.json", record)
@@ -216,8 +220,13 @@ def main(argv=None) -> int:
     parser.add_argument("--suite", type=Path, default=ROOT / "evals/readability-generalization-cases.json")
     parser.add_argument("--out-dir", type=Path, required=True, help="新規ディレクトリ。既存の評価を上書きしない")
     parser.add_argument("--skill-dir", type=Path, help="Skill のフォルダ。指定すると、Skill を入れた claude -p(ツールあり)で生成する。省略時は、SKILL.md などをプロンプトに貼る従来の方式")
+    parser.add_argument("--extra-instruction", default="", help="--skill-dir の生成の依頼に足す一文(例: スクリプトを必ず実行させる)")
+    parser.add_argument("--repeats", type=int, default=3, help="ケースごとの生成回数(既定 3)")
+    parser.add_argument("--case-ids", type=lambda text: text.split(","), help="カンマ区切りのケース ID。省略時は全ケース")
     parser.add_argument("--execute", action="store_true", help="既存認証のClaude CLIで生成・採点する（外部通信あり）")
     args = parser.parse_args(argv)
+    global REPEATS
+    REPEATS = args.repeats
     args.out_dir = args.out_dir.resolve()
     args.skill_dir = args.skill_dir.resolve() if args.skill_dir else None
     try:

@@ -144,7 +144,7 @@ python3 scripts/skill_info.py --model claude-sonnet-5-5
 - 引数なし(または `--model`)では、版・OS(システム、リリース、CPU)・アプリ(名前、版、推定の根拠)・モデル・Python の版・日付を JSON で出します。ユーザー名・ホスト名・パス・メールアドレスは出しません。
 - 標準エラーに、保存先の目安 `save_to: ~/.agents/skill-env/<スキル名>.json` を出します。スクリプトは書き込まないので、標準出力の JSON をその場所へ保存するのは、実行した側です(Agent の場合は、Agent が保存します)。
 - モデル名は環境から分からないので、実行する側が `--model` で渡します。渡さなければ `unknown` です。
-- アプリは環境変数から推定します。確かめたのは、Claude Code の `AI_AGENT`(名前と版)だけです。Codex、Gemini CLI、OpenCode は目印の環境変数による推定で、実環境では確かめていません。違えば `--app` と `--app-version` で指定します。
+- アプリは環境変数から推定します。Claude Code(`AI_AGENT`。名前と版)、Codex(`CODEX_THREAD_ID`、版は `CODEX_VERSION`)、OpenCode(`OPENCODE`)、Hermes(`HERMES_AGENT`)は、実環境で確かめました。Gemini CLI は未確認です(確かめた環境に入っていません)。子プロセスは親の環境変数を引き継ぐので、アプリ自身の目印を先に調べます(Claude Code から Codex を呼ぶと、Codex と判定します)。違えば `--app` と `--app-version` で指定します。
 - Agent が実行すると、Bash のターンが1回増え、約4.6万トークンの入力が増えます([計測](validation/skill-token-usage-2026-10-19.md))。そのため、Skill は、版や環境を尋ねられたときと、問題の報告票を作るときだけ実行します。
 
 ## 限界

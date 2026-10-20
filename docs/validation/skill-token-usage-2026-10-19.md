@@ -33,6 +33,23 @@ SKILL.md を軽くし、スクリプトの扱いを明記したときに、入�
 
 したがって、**この変更の確かなトークンの効果は、SKILL.md の本文が約15%(約1,130トークン)減ったことだけ**です。1回の実行の入力側合計への影響は、見積もりで約2%で、実測では検出できません。実行ごとの入力は、API 呼び出しの回数(スクリプトの実行や編集の回数)でほぼ決まります。
 
+## 追加計測: ほかのモデル、約3.7万字の文書、ほかのエージェント(2026-10-20)
+
+[Issue 87](https://github.com/Mr-Kondo/japanese-readability-editor/issues/87)。最終版(v0.17.0)で、B を各5回流しました(版の比較ではなく、挙動の記録です)。記録は [evals/token-usage/runs-other-models/](../../evals/token-usage/runs-other-models/) にあります。
+
+| モデル | 入力 | 回数 | 入力側合計(最小/中央値/最大) | API 呼び出し 中央値 | 出力 中央値 | 費用 USD 中央値 | スクリプトを実行した回 | スクリプト出力(字) | ソースを読んだ回 |
+|---|---|---|---|---|---|---|---|---|---|
+| Opus 5.5 | 中程度(約2,900字) | 5 | 201,747 / 210,139 / 252,772 | 5 | 5,580 | 0.367 | 5/5 | 518〜825 | 0/5 |
+| Haiku 4.5(`haiku`) | 中程度(約2,900字) | 5 | 294,011 / 348,964 / 746,496 | 8 | 7,881 | 0.135 | 0/5 | - | 0/5 |
+| Sonnet 5.5 | 約3.7万字(README、installation、user-guide を連結) | 5 | 161,266 / 232,334 / 558,707 | 4 | 4,490 | 0.279 | 2/5 | 726〜872 | 0/5 |
+
+- **Opus 5.5** は、5/5 でスクリプト(`compare_rewrite.py` など)を実行しました。Sonnet 5.5 の 22〜36% より多く、入力側は中央値で約 21 万、費用は Sonnet の約 2.4 倍(0.367 と 0.155)です。
+- **エイリアス `haiku` は、Haiku 5.5 ではなく Haiku 4.5(`claude-haiku-4-5-20251001`)でした。** Haiku 5.5 は、この計測の範囲では未実施です。Haiku 4.5 は、スクリプトを一度も実行せず、API 呼び出しが多く(中央値 8 回)、出力が Sonnet の約 2.7 倍(7,881 トークン)で、ばらつきも大きい(294,011〜746,496)です。
+- **約3.7万字の文書**(Sonnet 5.5)でも、スクリプトの出力は 726〜872 字で、小さいままでした。入力側は中央値 232,334 で、中程度(約2,900字)の約 1.5 倍です。最大の 558,707 は、API 呼び出しが増えた1回です。
+- ソースを読んだ回は、3つとも 0/5 です。ここまでの合計は、0/157 になります。
+- **Codex 0.155.1、OpenCode、Hermes は、アプリ判定の目印だけを確かめました**(`CODEX_THREAD_ID` と `CODEX_VERSION`、`OPENCODE`、`HERMES_AGENT`)。この Skill を各アプリで実行して、トークンや挙動を測ってはいません。Gemini CLI は、この環境に入っていません。
+- 注意として、Codex を実行したとき、**「Exceeded skills context budget. All skill descriptions were removed and 62 additional skills were not included」という警告**が出ました(この環境には Skill が多数入っています)。Skill の description が全部外れると、Skill は自動では選ばれません。Skill が多い環境では、Codex での発火を、別に確かめる必要があります(未確認)。
+
 ## 条件(最初の計測)
 
 - 計測の道具: [tools/measure_skill_tokens.py](../../tools/measure_skill_tokens.py)。Skill を、隔離した一時プロジェクトの `.claude/skills/` に入れ、`claude -p`(Claude Code 2.1.292、`--setting-sources project`)で実行します。ユーザーの設定とプラグインは外しています。usage は、実行結果の合計です。

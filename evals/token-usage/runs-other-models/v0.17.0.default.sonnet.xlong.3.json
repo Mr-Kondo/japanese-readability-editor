@@ -1,0 +1,55 @@
+{
+ "input_tokens": 18,
+ "output_tokens": 6260,
+ "cache_creation_input_tokens": 52866,
+ "cache_read_input_tokens": 505823,
+ "input_side_tokens": 558707,
+ "turn_input_totals": [
+  26697,
+  39397,
+  66151,
+  69675,
+  70031,
+  70798,
+  71382,
+  71875,
+  72701
+ ],
+ "cost_usd": 0.3752646,
+ "num_turns": 11,
+ "duration_ms": 61335,
+ "models": [
+  "claude-sonnet-5-5"
+ ],
+ "is_error": false,
+ "error": null,
+ "skill_called": true,
+ "tools": [
+  "Skill",
+  "Read",
+  "Bash",
+  "Edit",
+  "Edit",
+  "Edit",
+  "Edit",
+  "Edit",
+  "Bash"
+ ],
+ "scripts_run": [
+  {
+   "script": "compare_rewrite.py",
+   "output_chars": 726
+  }
+ ],
+ "source_reads": [],
+ "references_read": [],
+ "changed": true,
+ "nonspace_same": false,
+ "strict_same": false,
+ "label": "v0.17.0",
+ "variant": "default",
+ "model_alias": "sonnet",
+ "input": "xlong",
+ "run": 3,
+ "input_chars": 36543
+}
