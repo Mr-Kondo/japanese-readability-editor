@@ -14,6 +14,8 @@
 
 ## 更新する
 
+入れている版は、`python3 scripts/skill_info.py --version` で確かめられます(Skill のフォルダで実行します。例: `japanese-readability-editor 0.17.0`)。最新の版は、[Releases のページ](https://github.com/Mr-Kondo/japanese-readability-editor/releases)にあります。
+
 ### コピーで入れた場合
 
 取得済みリポジトリのディレクトリで `git pull` し、`--on-conflict backup` を付けて配置し直します。以前の版は退避されます。

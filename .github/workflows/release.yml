@@ -1,10 +1,13 @@
 name: Release
 
-# v で始まるタグを push すると、ZIP などを GitHub Release に添付する。
+# main の Skill の VERSION が変わると、その版のタグと Release を作る(版を上げる PR をマージするだけでよい)。
+# 同じ版の Release が既にあれば、何もしない。失敗したときは、Actions の画面から手動で再実行できる。
 on:
   push:
-    tags:
-      - "v*"
+    branches: [main]
+    paths:
+      - "skills/japanese-readability-editor/VERSION"
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -16,29 +19,45 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Read the version
+        id: version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="v$(tr -d '[:space:]' < skills/japanese-readability-editor/VERSION)"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          if gh release view "$tag" > /dev/null 2>&1; then echo "exists=true" >> "$GITHUB_OUTPUT"; fi
+
       - uses: actions/setup-python@v7
+        if: steps.version.outputs.exists != 'true'
         with:
           python-version: "3.x"
 
       - name: Validate the skill
+        if: steps.version.outputs.exists != 'true'
         run: python tools/validate_skill.py
 
       - name: Run the tests
+        if: steps.version.outputs.exists != 'true'
         run: python -m unittest discover -s tests
 
       - name: Build the packages
+        if: steps.version.outputs.exists != 'true'
         run: python tools/package.py
 
       - name: Create the release
+        if: steps.version.outputs.exists != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.version.outputs.tag }}
         run: |
           # PR で確認済みのリリースノートがあれば、それを使う。なければ自動生成する。
-          notes="docs/release-notes/$GITHUB_REF_NAME.md"
+          notes="docs/release-notes/$TAG.md"
           if [ -f "$notes" ]; then notes_args=(--notes-file "$notes"); else notes_args=(--generate-notes); fi
-          gh release create "$GITHUB_REF_NAME" \
+          gh release create "$TAG" \
             dist/japanese-readability-editor.zip \
             dist/japanese-readability-editor.sha256 \
             dist/gemini-apps-instructions.md \
-            --title "$GITHUB_REF_NAME" \
+            --target "$GITHUB_SHA" \
+            --title "$TAG" \
             "${notes_args[@]}"
