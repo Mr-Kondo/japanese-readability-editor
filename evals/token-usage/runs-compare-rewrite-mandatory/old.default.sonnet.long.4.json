@@ -1,0 +1,39 @@
+{
+ "input_tokens": 6,
+ "output_tokens": 3032,
+ "cache_creation_input_tokens": 30157,
+ "cache_read_input_tokens": 98530,
+ "input_side_tokens": 128693,
+ "turn_input_totals": [
+  28312,
+  48843,
+  51538
+ ],
+ "cost_usd": 0.160813,
+ "num_turns": 6,
+ "duration_ms": 25281,
+ "models": [
+  "claude-sonnet-5-5"
+ ],
+ "is_error": false,
+ "error": null,
+ "skill_called": true,
+ "tools": [
+  "Skill",
+  "Read",
+  "Edit",
+  "Edit"
+ ],
+ "scripts_run": [],
+ "source_reads": [],
+ "references_read": [],
+ "changed": true,
+ "nonspace_same": false,
+ "strict_same": false,
+ "label": "old",
+ "variant": "default",
+ "model_alias": "sonnet",
+ "input": "long",
+ "run": 4,
+ "input_chars": 9192
+}
