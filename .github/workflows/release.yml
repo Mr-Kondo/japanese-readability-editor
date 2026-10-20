@@ -20,6 +20,10 @@ jobs:
         with:
           python-version: "3.x"
 
+      # タグと Skill の VERSION が食い違う Release を作らない。
+      - name: Check the tag matches VERSION
+        run: test "v$(tr -d '[:space:]' < skills/japanese-readability-editor/VERSION)" = "$GITHUB_REF_NAME"
+
       - name: Validate the skill
         run: python tools/validate_skill.py
 

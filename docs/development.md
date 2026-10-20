@@ -48,6 +48,8 @@ japanese-readability-editor/
 | `scripts/measure.py` | 段落・文の長さなどの計測、修正候補の位置の表示、`--extras` の指摘(読み取り専用) |
 | `scripts/verify_preservation.py` | 空白以外の文字列が同一かの検査。`--strict` は、改行以外の全文字が同一で改行が減っていないことまで検査する(読み取り専用) |
 | `scripts/compare_rewrite.py` | 書き換えの前後の比較。意味が変わったかもしれない箇所を挙げる(読み取り専用。SudachiPy が入っていれば使う) |
+| `VERSION` | Skill の版。リリースのタグ(`v` + この値)と一致する。`release.yml` が照合し、`tests/test_skill_info.py` が、同じ版のリリースノートがあることを確かめる |
+| `scripts/skill_info.py` | 版と実行環境(OS・アプリ・モデル・日付)の JSON を標準出力に出す(読み取り専用)。保存先は `~/.agents/skill-env/<スキル名>.json` で、保存は実行した側 |
 | `scripts/make_feedback.py` | 結果の問題を報告する票(JSON)を標準出力に出す(読み取り専用、通信なし)。[利用者のフィードバック](feedback.md) |
 | `references/kokugo-*.md` | 国語の表記・用法の適用方針、規則の一覧、公用文の運用、出典。Agent が必要なときだけ読む。詳細は [国語の表記・用法の検査](kokugo.md) |
 | `data/*.json` | 国語の規則、資料の記録、常用漢字表、異字同訓。`scripts/check_kokugo.py` と `scripts/validate_kokugo_rules.py` が読む |

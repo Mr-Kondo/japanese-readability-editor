@@ -105,6 +105,8 @@ D は先に [references/fiction-writing.md](references/fiction-writing.md) を�
 
 同梱のスクリプトは、実行して出力だけを使う。ソースは読まない。用法と出力形式は、`--help` と [references/scripts.md](references/scripts.md)(計測の `measure.py` もここ)にある。国語の表記・用法の検査は [references/kokugo-check.md](references/kokugo-check.md)。実行できない環境では、規則と目視で確かめ、実行したとは報告しない。
 
+Skill の版や実行環境を尋ねられたとき、または問題の報告票を作るときだけ、`python3 scripts/skill_info.py --model <自分のモデル名>` を実行する(通常の依頼では実行しない)。標準出力の JSON を、標準エラーの `save_to` の場所に保存する。
+
 スクリプトを実行できる環境では、書き換える前の文章を、対象と別のディレクトリ(一時ディレクトリなど)へ保存しておき、下のコマンドで照合の候補を挙げる。終わったら、その保存先を削除する。この Skill のコマンドは `python3` で書いている。動かなければ `python` で実行する(Windows など)。コマンドの `scripts/` などの相対パスは、この Skill のフォルダ(`SKILL.md` があるフォルダ)からの相対パスで、作業ディレクトリからのものではない。実行するときは、Skill のフォルダの絶対パスを前に付ける。
 
 ```bash
