@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "kind": "jre-change-report",
+  "case_id": "b487fa80-11a6-4fea-a515-7c7b4c034036",
+  "evidence_status": "reported_not_independently_verified",
+  "context": {
+    "mode": "B",
+    "origin": "artificial",
+    "skill_version": "0.19.1",
+    "model": "claude-sonnet-5-5",
+    "os": "Darwin",
+    "tokenizer": "regex",
+    "date": "2026-10-21"
+  },
+  "checks": {
+    "numbers": {
+      "status": "no_candidate",
+      "method": "deterministic",
+      "direction": []
+    },
+    "urls": {
+      "status": "no_candidate",
+      "method": "deterministic",
+      "direction": []
+    },
+    "code": {
+      "status": "no_candidate",
+      "method": "deterministic",
+      "direction": []
+    },
+    "terms": {
+      "status": "no_candidate",
+      "method": "deterministic",
+      "direction": []
+    },
+    "added_content": {
+      "status": "no_candidate",
+      "method": "deterministic",
+      "direction": []
+    },
+    "omitted_content": {
+      "status": "no_candidate",
+      "method": "deterministic",
+      "direction": []
+    },
+    "negation": {
+      "status": "no_candidate",
+      "method": "deterministic",
+      "direction": []
+    },
+    "modality": {
+      "status": "problem",
+      "method": "human",
+      "direction": [
+        "removed",
+        "added"
+      ]
+    },
+    "style": {
+      "status": "no_candidate",
+      "method": "deterministic",
+      "direction": []
+    }
+  },
+  "readability": {
+    "chars": "increased",
+    "long_paragraphs": "same",
+    "long_sentences": "same",
+    "short_runs": "same"
+  }
+}
