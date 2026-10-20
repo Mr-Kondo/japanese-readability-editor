@@ -1,0 +1,57 @@
+{
+ "input_tokens": 14,
+ "output_tokens": 10746,
+ "cache_creation_input_tokens": 41782,
+ "cache_read_input_tokens": 319064,
+ "input_side_tokens": 360860,
+ "turn_input_totals": [
+  29083,
+  42617,
+  51179,
+  54679,
+  59498,
+  60641,
+  63163
+ ],
+ "cost_usd": 0.01692144,
+ "num_turns": 15,
+ "duration_ms": 56000,
+ "models": [
+  "claude-haiku-5-5"
+ ],
+ "is_error": false,
+ "error": null,
+ "skill_called": true,
+ "tools": [
+  "Skill",
+  "Bash",
+  "Read",
+  "Bash",
+  "Bash",
+  "Edit",
+  "Edit",
+  "Edit",
+  "Edit",
+  "Edit",
+  "Bash",
+  "Edit",
+  "Bash"
+ ],
+ "scripts_run": [
+  {
+   "script": "compare_rewrite.py",
+   "output_chars": 1206
+  }
+ ],
+ "source_reads": [],
+ "references_read": [],
+ "changed": true,
+ "nonspace_same": false,
+ "strict_same": false,
+ "label": "new",
+ "variant": "default",
+ "model_alias": "claude-haiku-5-5",
+ "input": "long",
+ "run": 4,
+ "input_chars": 9192
+}

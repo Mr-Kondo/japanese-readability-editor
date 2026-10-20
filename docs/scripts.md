@@ -151,6 +151,32 @@ python3 scripts/skill_info.py --model claude-sonnet-5-5
 - アプリは環境変数から推定します。Claude Code(`AI_AGENT`。名前と版)、Codex(`CODEX_THREAD_ID`、版は `CODEX_VERSION`)、OpenCode(`OPENCODE`)、Hermes(`HERMES_AGENT`)は、実環境で確かめました。Gemini CLI は未確認です(確かめた環境に入っていません)。子プロセスは親の環境変数を引き継ぐので、アプリ自身の目印を先に調べます(Claude Code から Codex を呼ぶと、Codex と判定します)。違えば `--app` と `--app-version` で指定します。
 - Agent が実行すると、Bash のターンが1回増え、約4.6万トークンの入力が増えます([計測](validation/skill-token-usage-2026-10-19.md))。そのため、Skill は、版や環境を尋ねられたときと、問題の報告票を作るときだけ実行します。
 
+### 実行環境の自動記録(Claude Code、任意)
+
+モデルを介さずに記録を取りたいときは、Claude Code の `SessionStart` フックで `skill_info.py` を実行します。フックのコマンドはシェルが実行するので、API 呼び出しも入力トークンも増えません(Agent が実行すると約4.6万トークン増えます)。**既定では有効になりません。** 書き込みが起きる設定なので、使いたい利用者が、自分の `~/.claude/settings.json` に書きます。
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p ~/.agents/skill-env && python3 ~/.claude/skills/japanese-readability-editor/scripts/skill_info.py > ~/.agents/skill-env/japanese-readability-editor.json 2>/dev/null"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+- 書き込むのは、版・OS・アプリ・モデル・Python の版・日付だけです(ユーザー名・ホスト名・パス・メールアドレスは含みません)。セッションを始めるたびに上書きされます。
+- **モデル名は `unknown` になります。** Claude Code 2.1.304 の `SessionStart` フックの入力(`session_id`、`transcript_path`、`cwd`、`hook_event_name`、`source`)には、モデル名が含まれません。固定のモデルを使うなら、コマンドに `--model <モデル名>` を足します。
+- Skill を入れた場所が違えば、パスを直します。Claude Code 専用です。Codex、OpenCode、Hermes には、同じ仕組みを用意していません。
+- 動作は、フックを入れた `claude -p` で確かめました(JSON が書き込まれ、アプリは `claude-code`、版は `AI_AGENT` から取れました)。
+
 ## 限界
 
 - 国語の表記の検査の限界は、[国語の表記・用法の検査](kokugo.md#検査していないもの限界)にあります。

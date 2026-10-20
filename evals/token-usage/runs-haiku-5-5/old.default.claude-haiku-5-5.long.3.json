@@ -1,0 +1,40 @@
+{
+ "input_tokens": 6,
+ "output_tokens": 7208,
+ "cache_creation_input_tokens": 35683,
+ "cache_read_input_tokens": 99443,
+ "input_side_tokens": 135132,
+ "turn_input_totals": [
+  29090,
+  48978,
+  57064
+ ],
+ "cost_usd": 0.01173563,
+ "num_turns": 7,
+ "duration_ms": 56545,
+ "models": [
+  "claude-haiku-5-5"
+ ],
+ "is_error": false,
+ "error": null,
+ "skill_called": true,
+ "tools": [
+  "Skill",
+  "Read",
+  "Edit",
+  "Edit",
+  "Edit"
+ ],
+ "scripts_run": [],
+ "source_reads": [],
+ "references_read": [],
+ "changed": true,
+ "nonspace_same": false,
+ "strict_same": false,
+ "label": "old",
+ "variant": "default",
+ "model_alias": "claude-haiku-5-5",
+ "input": "long",
+ "run": 3,
+ "input_chars": 9192
+}
