@@ -134,6 +134,13 @@ class ReadabilityEvaluationTest(unittest.TestCase):
                 self.assertEqual(evaluation.main(["--suite", str(path), "--out-dir", str(out)]), 2)
                 self.assertFalse(out.exists())
 
+    def test_model_option_changes_only_the_installed_generation_flags(self):
+        with patch.object(evaluation, "MODEL", "haiku"):
+            flags = evaluation.installed_flags()
+        self.assertEqual(flags[flags.index("--model") + 1], "haiku")
+        self.assertEqual(evaluation.INSTALLED_FLAGS[evaluation.INSTALLED_FLAGS.index("--model") + 1], "sonnet")
+        self.assertEqual(evaluation.FLAGS[evaluation.FLAGS.index("--model") + 1], "sonnet")
+
 
 if __name__ == "__main__":
     unittest.main()

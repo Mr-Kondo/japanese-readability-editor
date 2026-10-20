@@ -64,5 +64,17 @@ class VersionFileTest(unittest.TestCase):
         self.assertTrue((REPO_ROOT / "docs" / "release-notes" / f"v{version}.md").is_file(), "版を上げる PR には、リリースノートを入れる")
 
 
+class HookRecipeTest(unittest.TestCase):
+    def test_documented_hook_runs_skill_info_without_the_model_and_is_not_enabled_by_default(self):
+        text = (REPO_ROOT / "docs" / "scripts.md").read_text(encoding="utf-8")
+        block = re.search(r"### 実行環境の自動記録.*?```json\n(.*?)\n```", text, re.S).group(1)
+        hook = json.loads(block)["hooks"]["SessionStart"][0]["hooks"][0]
+        self.assertEqual(hook["type"], "command")
+        self.assertIn("scripts/skill_info.py", hook["command"])
+        self.assertIn("~/.agents/skill-env/", hook["command"])
+        self.assertIn("既定では有効になりません", text)
+        self.assertFalse((REPO_ROOT / ".claude-plugin" / "hooks").exists(), "フックを同梱して既定で有効にしない")
+
+
 if __name__ == "__main__":
     unittest.main()

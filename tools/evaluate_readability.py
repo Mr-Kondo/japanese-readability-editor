@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SKILL = ROOT / "skills" / "japanese-readability-editor"
 FILES = ("SKILL.md", "references/readability-rules.md", "assets/examples.md")
 REPEATS = 3
+MODEL = "sonnet"  # --skill-dir の生成のモデル。採点は常に FLAGS の sonnet
 FLAGS = ["--print", "--safe-mode", "--strict-mcp-config", "--tools", "",
          "--no-session-persistence", "--model", "sonnet", "--effort", "medium", "--output-format", "json"]
 # --skill-dir: Skill を隔離した一時プロジェクトに入れ、ツールを使える状態で生成する(参照やスクリプトの読み込みを含めて評価する)。
@@ -78,11 +79,17 @@ def read_suite(path: Path) -> dict:
     return suite
 
 
+def installed_flags() -> list:
+    flags = list(INSTALLED_FLAGS)
+    flags[flags.index("--model") + 1] = MODEL
+    return flags
+
+
 def invoke(prompt: str, destination: Path, skill_dir: Path = None) -> dict:
     with tempfile.TemporaryDirectory() as project:
         if skill_dir:
             shutil.copytree(skill_dir, Path(project) / ".claude" / "skills" / SKILL.name, ignore=shutil.ignore_patterns("__pycache__"))
-            command, cwd = ["claude"] + INSTALLED_FLAGS, project
+            command, cwd = ["claude"] + installed_flags(), project
         else:
             command, cwd = ["claude"] + FLAGS + ["--system-prompt", SYSTEM], destination.parent
         try:
@@ -100,7 +107,9 @@ def invoke(prompt: str, destination: Path, skill_dir: Path = None) -> dict:
     if not isinstance(response.get("result"), str) or not response["result"].strip() or not isinstance(models, dict) or not models or any(not isinstance(m, str) for m in models):
         raise ValueError(f"missing output/model identity; see {destination}")
     return {"text": response["result"], "model_ids": sorted(response["modelUsage"]),
-            "prompt_sha256": digest(prompt), "raw_file": destination.name}
+            "prompt_sha256": digest(prompt), "raw_file": destination.name,
+            # 道具ありの生成で、スクリプトを実行したかの目安(実行すると API 呼び出しが増え、num_turns が 1 より大きくなる)
+            "num_turns": response.get("num_turns"), "cost_usd": response.get("total_cost_usd")}
 
 
 def generate(record: dict, folder: Path) -> None:
@@ -191,7 +200,7 @@ def prepare(args: argparse.Namespace) -> dict:
     skill = args.skill_dir or SKILL
     record = {"schema_version": 1, "prepared_at": datetime.now(timezone.utc).isoformat(), "status": "prepared",
               "suite": suite, "suite_sha256": digest(args.suite.read_text(encoding="utf-8")), "repeats": REPEATS,
-              "flags": FLAGS, "system_prompt": SYSTEM, "generation_instruction": GENERATION, "grading_instruction": GRADING,
+              "flags": installed_flags() if args.skill_dir else FLAGS, "system_prompt": SYSTEM, "generation_instruction": GENERATION, "grading_instruction": GRADING,
               "skill_files": {} if args.skill_dir else {name: (SKILL / name).read_text(encoding="utf-8") for name in FILES},
               "skill_dir": str(args.skill_dir) if args.skill_dir else None, "extra_instruction": args.extra_instruction, "skill_sha256": file_digests(skill), "runner_sha256": digest(Path(__file__).read_text(encoding="utf-8")),
               "outputs": [], "grading_calls": []}
@@ -223,10 +232,13 @@ def main(argv=None) -> int:
     parser.add_argument("--extra-instruction", default="", help="--skill-dir の生成の依頼に足す一文(例: スクリプトを必ず実行させる)")
     parser.add_argument("--repeats", type=int, default=3, help="ケースごとの生成回数(既定 3)")
     parser.add_argument("--case-ids", type=lambda text: text.split(","), help="カンマ区切りのケース ID。省略時は全ケース")
+    parser.add_argument("--model", default="sonnet", help="--skill-dir の生成のモデル(claude の --model に渡す。採点は sonnet のまま)")
     parser.add_argument("--execute", action="store_true", help="既存認証のClaude CLIで生成・採点する（外部通信あり）")
     args = parser.parse_args(argv)
     global REPEATS
     REPEATS = args.repeats
+    global MODEL
+    MODEL = args.model
     args.out_dir = args.out_dir.resolve()
     args.skill_dir = args.skill_dir.resolve() if args.skill_dir else None
     try:
