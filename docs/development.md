@@ -51,6 +51,7 @@ japanese-readability-editor/
 | `VERSION` | Skill の版。この値が変わった main への push で、`release.yml` がタグ(`v` + この値)と Release を作る。`tests/test_skill_info.py` が、同じ版のリリースノートがあることを確かめる |
 | `scripts/skill_info.py` | 版と実行環境(OS・アプリ・モデル・日付)の JSON を標準出力に出す(読み取り専用)。保存先は `~/.agents/skill-env/<スキル名>.json` で、保存は実行した側 |
 | `scripts/make_feedback.py` | 結果の問題を報告する票(JSON)を標準出力に出す(読み取り専用、通信なし)。[利用者のフィードバック](feedback.md) |
+| `scripts/make_change_report.py` | 書き換えの前後の変化を、本文を含まない選択式の記録(JSON)として標準出力に出す(読み取り専用、通信なし)。[変化の記録](feedback.md#使った後の変化を記録する) |
 | `references/kokugo-*.md` | 国語の表記・用法の適用方針、規則の一覧、公用文の運用、出典。Agent が必要なときだけ読む。詳細は [国語の表記・用法の検査](kokugo.md) |
 | `data/*.json` | 国語の規則、資料の記録、常用漢字表、異字同訓。`scripts/check_kokugo.py` と `scripts/validate_kokugo_rules.py` が読む |
 | `scripts/check_kokugo.py` | 国語の表記・用法の規則で文章を検査する。区分、位置、理由、候補、出典 ID を出す(読み取り専用、ネットワークなし) |

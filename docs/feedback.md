@@ -3,6 +3,7 @@
 この Skill の結果に問題を見つけた利用者が、その事例を報告し、メンテナーが規則・例の改良に使うための手順です。通信による自動収集はしません。利用者が自分で内容を確かめ、ファイルとして送ります。判定の確定と `skills/` への反映は、メンテナーが人手で行います。
 
 - 利用者向け: [報告する](#報告する利用者向け)
+- 使った後の変化の記録: [使った後の変化を記録する](#使った後の変化を記録する)
 - メンテナー向け: [受け取って改良につなぐ](#受け取って改良につなぐメンテナー向け)
 - 効果と限界: [効果の根拠と限界](#効果の根拠と限界)
 
@@ -58,6 +59,33 @@ python3 scripts/make_feedback.py --original before.md --result after.md \
 - **公開してよい内容(機密でなく、伏せ字済み): GitHub Issue に添付してもかまいません。** Issue は公開されます。誤って機密を貼った場合は、すぐにコメントを削除し、メールで連絡してください。
 
 送付後に、判定の結果や改良の反映を約束するものではありません。メンテナーが確認し、同じ種類の失敗が複数の文書・複数の人から確認できた場合に、規則・例の修正を検討します。
+
+## 使った後の変化を記録する
+
+問題の報告([票](#報告する利用者向け))とは別に、Skill を使った後に文章がどう変わったかを、**本文を含まない選択式の記録**として残せます。[official-prompt-tailor](https://github.com/Mr-Kondo/official-prompt-tailor) の `private_feedback.py`(原文を持ち出さずに評価を報告する方式)を参考にしました。取り入れたのは、固定の検査項目、状態と方法の組、本文・件数・パスを出さない、ランダムな `case_id`、総合点や改善率を出さない、の各点です。取り入れなかったのは、`--confirm-share`(出力が標準出力のみで、送る操作は利用者が行うため)と、ファイルへの書き込み(スクリプトを読み取り専用に保つため)です。
+
+```bash
+python3 scripts/make_change_report.py --original before.md --result after.md --mode B --model claude-sonnet-5-5 > change-report.json
+```
+
+出力の例は [change-report-example.json](change-report-example.json) です。人工の文章から作った例で、実際の失敗ではありません。
+
+| 項目 | 内容 |
+|---|---|
+| `checks` | 9つの検査(`numbers` `urls` `code` `terms` `added_content` `omitted_content` `negation` `modality` `style`)。それぞれ `status`、`method`、`direction` |
+| `status` | `no_candidate`(スクリプトが候補を挙げなかった)、`candidate`(挙げた。正しい言い換えも拾うので、問題とは限らない)、`ok` / `problem`(元の文と見比べた結果) |
+| `method` | `deterministic`(`compare_rewrite.py`)、`human`(人が見比べた)、`model_self_report`(生成したモデル自身の申告) |
+| `direction` | 候補の向き。`removed`(元にあって消えた)、`added`(新しく出た)、`changed`(文体の多数派が変わった) |
+| `readability` | 文字数、長い段落、長い文、短い文の連続が、`decreased` / `same` / `increased` のどれか。値の大きさは出さない |
+| `context` | モード、実際のモデル出力か人工例か、Skill の版、モデル名、OS の種類、形態素解析の種類(`regex` か `sudachi`)、日付 |
+
+- 候補が挙がった検査は、元の文と見比べたうえで、`--review numbers=ok --reviewed-by human` のように結果を足して、もう一度実行します。`--review` は、候補が挙がっていない検査には付けられません。
+- 出るのは決まった選択肢だけです。原文・結果・引用・行番号・ファイル名・パス・件数は出ません。`--model` は英数字と `. _ : / -` の64字まで(自由記述は通しません)。
+- `case_id` は実行のたびに作るランダムな UUID です。同じ原本から2回出すと別のIDになり、同じ原本の記録を重ねて数えない照合は、メンテナーが行います。
+- 本文を含まないので、機密を含みうる文書の記録も、メールだけでなく GitHub Issue に添付できます。ただし、検査の組み合わせが手がかりになりうるので、送る前に内容を確かめてください。
+- `candidate` の記録は、改善の証拠になりません。`model_self_report` も同じです。`human` で `ok` / `problem` と確かめたものが、比べる材料になります。
+- 記録は利用者の申告で、メンテナーの確認前は確認済みの変化ではありません。候補がないことは、意味が保たれたことの証明でもありません。選ばれた記録だけでは、失敗率や改善率は求められません。
+- まだないもの: 複数の記録を集計するメンテナー側のツール。`tools/feedback_loop.py` が読む票(`jre-feedback`)とは形式が違うので、`feedback-inbox/` には入れず、人手で読みます。
 
 ## 受け取って改良につなぐ(メンテナー向け)
 
