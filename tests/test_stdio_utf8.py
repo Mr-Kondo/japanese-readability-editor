@@ -13,7 +13,7 @@ from pathlib import Path
 
 from helpers import SCRIPTS_DIR, load_module, temporary_directory
 
-CLIS = ("check_fiction", "check_kokugo", "compare_rewrite", "make_feedback", "measure", "validate_kokugo_rules",
+CLIS = ("check_fiction", "check_kokugo", "compare_rewrite", "make_change_report", "make_feedback", "measure", "validate_kokugo_rules",
         "verify_preservation")
 CP932_ENV = {"PYTHONUTF8": "0", "PYTHONIOENCODING": "cp932", "PYTHONDONTWRITEBYTECODE": "1"}
 
@@ -64,6 +64,13 @@ class Cp932OutputTest(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertIn("国語.md", out)
         self.assertIn("形態素解析", out)
+
+    def test_make_change_report_prints_a_japanese_notice(self):
+        before, after = self.write("a.md", "全く別の内容🙂です。\n"), self.write("b.md", "新しい情報🚀を追加しました。\n")
+        code, out, err = run_cp932("make_change_report", "--original", before, "--result", after)
+        self.assertEqual(code, 0, err)
+        self.assertIn("jre-change-report", out)
+        self.assertIn("確認", err)
 
     def test_make_feedback_prints_json_with_emoji_and_a_japanese_notice(self):
         before, after = self.write("a.md", "全く別の内容🙂です。\n"), self.write("b.md", "新しい情報🚀を追加しました。\n")

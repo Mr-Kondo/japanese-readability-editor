@@ -168,3 +168,4 @@ python3 scripts/verify_preservation.py --strict before.md after.md
 - [assets/fiction-examples.md](assets/fiction-examples.md)。小説の直す例・残す例・誤った改稿例。
 - [assets/fiction-context-template.md](assets/fiction-context-template.md)。長編用の任意メモ。
 - [references/feedback.md](references/feedback.md)。利用者がこの Skill の結果の問題を報告したいと言ったときだけ読む。自分から勧めない。
+- [references/change-report.md](references/change-report.md)。利用者が、この Skill を使った後の変化の記録(JSON)を求めたときだけ読む。自分から勧めない。
