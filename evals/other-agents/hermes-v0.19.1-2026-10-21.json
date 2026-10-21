@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-21",
+  "skill_version": "0.19.1",
+  "source_commit": "081ed93a492907f0b8adb08bd8d2c0c9d337db60",
+  "skill_md_sha256": "dc6d8a91e064b983bad8c95d62807f0cb4b871e27d44ce93956bda686ae26c5a",
+  "agent": "Hermes Agent",
+  "agent_version": "0.21.6+730.g97a9ae8",
+  "model": "qwen38-27b-unc-64k",
+  "provider": "custom",
+  "inference_endpoint": "http://127.0.0.1:11434/v1",
+  "terminal_backend": "docker",
+  "isolated_home": true,
+  "agent_max_turns": 20,
+  "timeout_seconds": 900,
+  "status": "timeout_after_comparison",
+  "compare_rewrite_execution_confirmed": true,
+  "comparison_exit_code": 0,
+  "final_response_observed": false,
+  "final_response_instruction_compliance": "unverified",
+  "semantic_preservation": "not_evaluated",
+  "completed_api_calls": 4,
+  "completed_calls_input_tokens": 24395,
+  "completed_calls_output_tokens": 5125,
+  "token_counts_scope": "completed API calls only; interrupted request excluded",
+  "prompt": "japanese-readability-editor のモード B で、以下の文章を読みやすくしてください。本文だけ返してください。\n\n本システムでは、管理者が承認した場合に限り、担当者は保存期間を30日から60日に変更できる。ただし、監査対象の記録については、保存期間を変更してはならない。変更前には、対象の記録と設定値を確認する必要がある。承認がない場合や対象が不明な場合は、現在の設定を維持する。設定の変更後、担当者は結果を管理者へ報告する。",
+  "tool_calls": [
+    {
+      "message_id": 2,
+      "tool": "terminal",
+      "arguments": {
+        "command": "grep -ril \"japanese-readability-editor\" / --include=\"*.md\" --include=\"*.txt\" --include=\"*.json\" --include=\"*.yaml\" --include=\"*.yml\" --include=\"*.toml\" 2>/dev/null | head -50",
+        "timeout": 120
+      },
+      "result_exit_code": 0,
+      "result_error": null,
+      "output_chars": 57,
+      "output_sha256": "40f63f5640e668fe627bc460bf3524168c89a802b4e2550db54c8a60b775d297"
+    },
+    {
+      "message_id": 4,
+      "tool": "terminal",
+      "arguments": {
+        "command": "cat /root/.hermes/skills/japanese-readability-editor/SKILL.md && ls /root/.hermes/skills/japanese-readability-editor/"
+      },
+      "result_exit_code": 0,
+      "result_error": null,
+      "output_chars": 8697,
+      "output_sha256": "4b0a11ce90edad1d224312147a2bdb95ca322d4a2df49db32009b858d12681f5"
+    },
+    {
+      "message_id": 6,
+      "tool": "terminal",
+      "arguments": {
+        "command": "cat /root/.hermes/skills/japanese-readability-editor/references/readability-rules.md"
+      },
+      "result_exit_code": 0,
+      "result_error": null,
+      "output_chars": 20691,
+      "output_sha256": "60d49d00522a38677c3cf42bff0b4ff01cd49076cfdd75dbf0c806317a05dfd5"
+    },
+    {
+      "message_id": 8,
+      "tool": "terminal",
+      "arguments": {
+        "command": "ls /root/.hermes/skills/japanese-readability-editor/scripts/ && D=$(mktemp -d) && printf '%s\\n' '本システムでは、管理者が承認した場合に限り、担当者は保存期間を30日から60日に変更できる。ただし、監査対象の記録については、保存期間を変更してはならない。変更前には、対象の記録と設定値を確認する必要がある。承認がない場合や対象が不明な場合は、現在の設定を維持する。設定の変更後、担当者は結果を管理者へ報告する。' > \"$D/before.md\" && printf '%s\\n' '本システムでは、管理者が承認した場合に限り、担当者は保存期間を30日から60日に変更できる。\n- 監査対象の記録については、保存期間を変更してはならない。\n- 変更前には、対象の記録と設定値を確認する必要がある。\n- 承認がない場合や対象が不明な場合は、現在の設定を維持する。\n設定の変更後、担当者は結果を管理者へ報告する。' > \"$D/after.md\" && python3 /root/.hermes/skills/japanese-readability-editor/scripts/compare_rewrite.py \"$D/before.md\" \"$D/after.md\"; echo \"exit=$?\"; echo \"TMPDIR=$D\""
+      },
+      "result_exit_code": 0,
+      "result_error": null,
+      "output": "check_fiction.py\ncheck_kokugo.py\ncompare_rewrite.py\nkokugo_engine.py\nmake_change_report.py\nmake_feedback.py\nmeasure.py\nskill_info.py\nvalidate_kokugo_rules.py\nverify_preservation.py\nbefore: /tmp/tmp.YrnRRo9nia/before.md\nafter:  /tmp/tmp.YrnRRo9nia/after.md\ntokenizer: regex\npointers (info only, not verdicts):\nnumbers: 0 missing, 0 added\nurls: 0 missing, 0 added\ncode: 0 missing, 0 added\nterms: 0 missing, 0 added\nunmatched sentences: 0 in after, 0 in before\nmarkers (before -> after):\nstyle: polite 0 / plain 5 -> polite 0 / plain 5\nexit=0\nTMPDIR=/tmp/tmp.YrnRRo9nia"
+    }
+  ],
+  "evidence_scope": "Extracted tool calls and results from isolated state.db; credentials, reasoning, and unrelated logs excluded."
+}
