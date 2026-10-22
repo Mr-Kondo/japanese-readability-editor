@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Skill で書き換えた前後の変化を、本文を含まない選択式の記録(JSON)として標準出力に出す。読み取り専用。
+"""Skill で書き換えた前後の変化を、本文を含まない選択式の記録(JSON)として自動保存し、標準出力にも出す。
 
-    make_change_report.py --original before.md --result after.md --mode B --model NAME > change-report.json
+    make_change_report.py --original before.md --result after.md --mode B --model NAME
     make_change_report.py ... --review numbers=ok --review style=problem --reviewed-by human
 
 compare_rewrite.py と measure.py の結果を、決まった選択肢だけに直して出す。原文・結果・引用・行番号・
-ファイル名・パス・件数は出さない(official-prompt-tailor の private_feedback.py の方式)。
-ファイルの書き込みも通信もしない。出した JSON を、利用者が内容を確かめて自分で保存する。
+ファイル名・パス・件数は JSON に含めない(official-prompt-tailor の private_feedback.py の方式)。
+既定では ~/.agents/feedback/japanese-readability-editor/ に新規保存する。
+--out-dir で保存先を変えられる。通信はしない。保存先は標準エラーに出す。
 
 各検査の状態(status)と方法(method):
     no_candidate   deterministic   スクリプトが照合の候補を挙げなかった
@@ -17,7 +18,7 @@ compare_rewrite.py と measure.py の結果を、決まった選択肢だけに�
 保証しないこと: 候補がないことは、意味が保たれたことの証明ではない。記録は申告であり、
 メンテナーの確認前は確認済みの変化ではない。総合点や改善率は出さない。
 
-終了コード: 0=出した、2=入力の誤りで出さなかった。
+終了コード: 0=保存して出力した、2=入力または保存の誤りで出力しなかった。
 """
 
 from __future__ import annotations
@@ -35,6 +36,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import compare_rewrite  # noqa: E402
 import measure  # noqa: E402
 import skill_info  # noqa: E402
+from feedback_storage import save_report  # noqa: E402
 
 SCHEMA_VERSION = 1
 KIND = "jre-change-report"
@@ -157,13 +159,16 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--review", action="append", default=[], metavar="CHECK=ok|problem",
                         help="候補が挙がった検査を、元の文と見比べた結果。検査名: " + " / ".join(f"{k}={v}" for k, v in CHECKS.items()))
     parser.add_argument("--reviewed-by", choices=("human", "model"), help="--review を付けた主体。モデルの申告は改善の証拠にならない")
+    parser.add_argument("--out-dir", help="保存先フォルダ(既定: ~/.agents/feedback/japanese-readability-editor/)")
     args = parser.parse_args(argv)
     try:
         report = build(args)
+        saved = save_report(report, args.out_dir)
     except (ValueError, OSError, UnicodeDecodeError) as error:
         print(f"make_change_report failed: {error}", file=sys.stderr)
         return 2
-    print("確認: 標準出力の JSON をファイルに保存し、内容を確かめてから送る。本文は含まれない。", file=sys.stderr)
+    print("確認: 保存した JSON の内容を確かめてから送る。本文は含まれない。", file=sys.stderr)
+    print(f"saved_to: {saved}", file=sys.stderr)
     sys.stdout.write(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
     return 0
 

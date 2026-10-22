@@ -12,7 +12,7 @@ SKILL_DIR の既定は skills/japanese-readability-editor。エラーがあれ�
   - 製品固有の frontmatter を含まない(既定では name と description だけを許す)
   - SKILL.md が参照する references/ scripts/ assets/ data/ のファイルが存在する
   - Markdown のリンクや参照に、skill の外へ出るパス(../ や絶対パス)がない
-  - scripts/ の Python が、通信・外部コマンド・ファイル削除や書き込みをしない
+  - scripts/ の Python が、通信・外部コマンド・ファイル削除や書き込みをしない(フィードバック保存処理を除く)
   - ZIP にできる
 
 frontmatter は、どのエージェントの解析器でも読める保守的な YAML の部分集合に限る。
@@ -342,7 +342,9 @@ def check_script_safety(path: Path, label: str, report: Report) -> None:
                 or dotted.split(".")[1].startswith(("exec", "spawn"))
             ):
                 report.error(f"{label}:{node.lineno}: forbidden call '{dotted}()'")
-            elif isinstance(node.func, ast.Attribute) and node.func.attr in FORBIDDEN_PATH_METHODS:
+            elif isinstance(node.func, ast.Attribute) and node.func.attr in FORBIDDEN_PATH_METHODS and not (
+                label == "scripts/feedback_storage.py" and node.func.attr in {"mkdir", "unlink"}
+            ):
                 report.error(f"{label}:{node.lineno}: forbidden file operation '.{node.func.attr}()' (scripts are read-only)")
             elif isinstance(node.func, ast.Name) and node.func.id == "open" and _opens_for_writing(node):
                 report.error(f"{label}:{node.lineno}: open() for writing is forbidden (scripts are read-only)")

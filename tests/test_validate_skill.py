@@ -349,6 +349,21 @@ class ScriptSafetyTest(ValidationCase):
     def test_reading_files_is_allowed(self):
         self.assertTrue(self.script_report("open('a.txt')\nopen('a.txt', 'rb')\n").ok)
 
+    def test_feedback_storage_exception_does_not_allow_other_writes_or_network(self):
+        path = self.tmp / "feedback_storage.py"
+        path.write_text("folder.mkdir()\nsaved.unlink()\n", encoding="utf-8")
+        report = validate.Report()
+        validate.check_script_safety(path, "scripts/feedback_storage.py", report)
+        self.assertTrue(report.ok, report.errors)
+        for code, forbidden in (("import socket\n", "forbidden import"),
+                                ("folder.write_text('x')\n", "write_text"),
+                                ("os.remove('a')\n", "os.remove")):
+            with self.subTest(code=code):
+                path.write_text(code, encoding="utf-8")
+                report = validate.Report()
+                validate.check_script_safety(path, "scripts/feedback_storage.py", report)
+                self.assertError(report, forbidden)
+
     def test_syntax_error_is_reported(self):
         self.assertError(self.script_report("def broken(:\n"), "cannot parse")
 

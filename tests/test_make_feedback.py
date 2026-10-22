@@ -22,7 +22,7 @@ class MakeFeedbackTest(unittest.TestCase):
 
     def run_form(self, *extra, quote="必ず"):
         return run_script(SCRIPT, "--original", str(self.original), "--result", str(self.result),
-                          "--type", "strength_changed", "--quote", quote, *extra)
+                          "--type", "strength_changed", "--quote", quote, "--out-dir", str(Path(self.folder.name) / "reports"), *extra)
 
     def test_outputs_a_ticket_with_consent_and_quote_location(self):
         code, out, _ = self.run_form("--consent-storage", "--mode", "B")
@@ -38,13 +38,15 @@ class MakeFeedbackTest(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(json.loads(out)["case"]["quote_in"], "result")
         code, out, _ = run_script(SCRIPT, "--original", str(self.original), "--result", str(self.result),
-                                  "--type", "meaning_lost", "--quote", "承認後", "--consent-storage")
+                                  "--type", "meaning_lost", "--quote", "承認後", "--consent-storage",
+                                  "--out-dir", str(Path(self.folder.name) / "reports"))
         self.assertEqual(json.loads(out)["case"]["quote_in"], "original")
 
     def test_without_storage_consent_nothing_is_output(self):
         code, out, err = self.run_form()
         self.assertEqual((code, out), (2, ""))
         self.assertIn("--consent-storage", err)
+        self.assertFalse((Path(self.folder.name) / "reports").exists())
 
     def test_a_quote_that_is_in_neither_text_is_refused(self):
         code, out, err = self.run_form("--consent-storage", quote="どこにもない文")

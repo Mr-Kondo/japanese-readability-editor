@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""スキルの結果への問題報告(フィードバック票)を JSON として標準出力に出す。読み取り専用。
+"""スキルの結果への問題報告(フィードバック票)を JSON として自動保存し、標準出力にも出す。
 
     make_feedback.py --original before.md --result after.md --type over_editing \\
-        --quote "出力にある該当箇所" --consent-storage > feedback.json
+        --quote "出力にある該当箇所" --consent-storage
 
-このスクリプトは、ファイルの書き込みも通信もしない。出した JSON を、利用者が自分で
-内容を確かめてファイルに保存し、メンテナーへ送る(送り方は docs/feedback.md)。
+既定では ~/.agents/feedback/japanese-readability-editor/ に新規保存する。
+--out-dir で保存先を変えられる。通信はしない。保存した JSON を利用者が確かめて送る。
 
 保証すること:
     引用が結果(または原文)に実在する。問題の種類が決まった値である。非公開の保管への
@@ -15,7 +15,7 @@
     機密や個人情報が含まれないこと。警告は目安で、送る前に利用者が内容を確かめる。
     問題が実在すること。票は利用者の報告であり、メンテナーの確認前は確認済みの問題ではない。
 
-終了コード: 0=出力した、2=入力の誤りなどで出さなかった。
+終了コード: 0=保存して出力した、2=入力または保存の誤りで出力しなかった。
 """
 
 from __future__ import annotations
@@ -25,6 +25,9 @@ import json
 import re
 import sys
 from typing import Dict, List, Optional
+
+sys.dont_write_bytecode = True
+from feedback_storage import save_report
 
 SCHEMA_VERSION = 1
 KIND = "jre-feedback"
@@ -139,16 +142,19 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--consent-ai", action="store_true", help="任意。AIサービスへの送信(改良案の下書き)への同意")
     parser.add_argument("--consent-publish", action="store_true",
                         help="任意。匿名化した上で、公開の回帰ケースなどへ使うことへの同意")
+    parser.add_argument("--out-dir", help="保存先フォルダ(既定: ~/.agents/feedback/japanese-readability-editor/)")
     args = parser.parse_args(argv)
     try:
         document = build(args)
-    except ValueError as error:
+        saved = save_report(document, args.out_dir)
+    except (ValueError, OSError) as error:
         print(f"make_feedback failed: {error}", file=sys.stderr)
         return 2
     for warning in sensitive_warnings({"原文": document["case"]["original"], "結果": document["case"]["result"],
                                        "コメント": document["case"]["comment"]}):
         print(f"warning: {warning}", file=sys.stderr)
-    print("確認: 標準出力の JSON をファイルに保存し、内容を確かめてから送る。機密は GitHub Issue に貼らず、メールで送る。", file=sys.stderr)
+    print("確認: 保存した JSON の内容を確かめてから送る。機密は GitHub Issue に貼らず、メールで送る。", file=sys.stderr)
+    print(f"saved_to: {saved}", file=sys.stderr)
     sys.stdout.write(json.dumps(document, ensure_ascii=False, indent=2) + "\n")
     return 0
 
