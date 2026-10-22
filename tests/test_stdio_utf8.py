@@ -67,7 +67,7 @@ class Cp932OutputTest(unittest.TestCase):
 
     def test_make_change_report_prints_a_japanese_notice(self):
         before, after = self.write("a.md", "全く別の内容🙂です。\n"), self.write("b.md", "新しい情報🚀を追加しました。\n")
-        code, out, err = run_cp932("make_change_report", "--original", before, "--result", after)
+        code, out, err = run_cp932("make_change_report", "--original", before, "--result", after, "--out-dir", str(self.root / "reports"))
         self.assertEqual(code, 0, err)
         self.assertIn("jre-change-report", out)
         self.assertIn("確認", err)
@@ -75,7 +75,7 @@ class Cp932OutputTest(unittest.TestCase):
     def test_make_feedback_prints_json_with_emoji_and_a_japanese_notice(self):
         before, after = self.write("a.md", "全く別の内容🙂です。\n"), self.write("b.md", "新しい情報🚀を追加しました。\n")
         code, out, err = run_cp932("make_feedback", "--original", before, "--result", after, "--type", "other", "--quote", "🚀",
-                                   "--consent-storage")
+                                   "--consent-storage", "--out-dir", str(self.root / "reports"))
         self.assertEqual(code, 0, err)
         self.assertIn("🚀", out)
         self.assertIn("確認", err)

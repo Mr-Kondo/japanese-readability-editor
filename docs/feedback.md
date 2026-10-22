@@ -11,11 +11,11 @@
 
 ### 1. 票を作る
 
-スクリプトを実行できる環境では、Skill の `scripts/make_feedback.py` で票(JSON)を出せます。書き込みも送信もしません。出力を自分でファイルに保存します。
+スクリプトを実行できる環境では、Skill の `scripts/make_feedback.py` で票(JSON)を出せます。JSON は `~/.agents/feedback/japanese-readability-editor/` に自動保存されます。`--out-dir <フォルダ>` で保存先を変更できます。フォルダは必要なら作成し、記録ごとに別のファイル名を付けるため、既存の記録は上書きしません。標準エラーに `saved_to: <保存先>`、標準出力に従来どおり JSON を出します。保存に失敗した場合は終了コード 2 となり、JSON は標準出力に出しません。自動送信はしません。
 
 ```bash
 python3 scripts/make_feedback.py --original before.md --result after.md \
-  --type strength_changed --quote "必ず" --mode B --consent-storage > feedback.json
+  --type strength_changed --quote "必ず" --mode B --consent-storage
 ```
 
 - `--original` は Skill に渡す前の文章、`--result` は Skill が返した文章のファイルです。
@@ -34,6 +34,8 @@ python3 scripts/make_feedback.py --original before.md --result after.md \
 | `other` | 上のどれでもない |
 
 任意の項目: `--mode`(A/B/C/D)、`--severity`(major/minor)、`--comment`(何が問題か、読者への影響)、`--request`(Skill に出した依頼文)、`--skill-version`、`--model`、`--origin`(実際の出力は `model_output`、作った例は `artificial`)。
+
+保存名は `jre-feedback-<ランダム文字列>.json` です。原文・結果を含むので、保存したファイルは非公開で扱います。POSIX 環境では新規ファイルの権限を `0600` にします。Windows のアクセス権は保存先から継承します。保存するだけでは暗号化されません。
 
 票の例は [feedback-example.json](feedback-example.json) にあります。人工の文章で、実際の失敗ではありません。
 
@@ -62,10 +64,10 @@ python3 scripts/make_feedback.py --original before.md --result after.md \
 
 ## 使った後の変化を記録する
 
-問題の報告([票](#報告する利用者向け))とは別に、Skill を使った後に文章がどう変わったかを、**本文を含まない選択式の記録**として残せます。[official-prompt-tailor](https://github.com/Mr-Kondo/official-prompt-tailor) の `private_feedback.py`(原文を持ち出さずに評価を報告する方式)を参考にしました。取り入れたのは、固定の検査項目、状態と方法の組、本文・件数・パスを出さない、ランダムな `case_id`、総合点や改善率を出さない、の各点です。取り入れなかったのは、`--confirm-share`(出力が標準出力のみで、送る操作は利用者が行うため)と、ファイルへの書き込み(スクリプトを読み取り専用に保つため)です。
+問題の報告([票](#報告する利用者向け))とは別に、Skill を使った後に文章がどう変わったかを、**本文を含まない選択式の記録**として残せます。[official-prompt-tailor](https://github.com/Mr-Kondo/official-prompt-tailor) の `private_feedback.py`(原文を持ち出さずに評価を報告する方式)を参考にしました。取り入れたのは、固定の検査項目、状態と方法の組、本文・件数・パスを出さない、ランダムな `case_id`、総合点や改善率を出さない、の各点です。送る操作は利用者が行うため、`--confirm-share` は取り入れていません。記録は問題の報告票と同じフォルダに、`jre-change-report-<ランダム文字列>.json` として自動保存します。`--out-dir` で保存先を変更でき、標準エラーに保存先、標準出力に JSON を出します。
 
 ```bash
-python3 scripts/make_change_report.py --original before.md --result after.md --mode B --model claude-sonnet-5-5 > change-report.json
+python3 scripts/make_change_report.py --original before.md --result after.md --mode B --model claude-sonnet-5-5
 ```
 
 出力の例は [change-report-example.json](change-report-example.json) です。人工の文章から作った例で、実際の失敗ではありません。

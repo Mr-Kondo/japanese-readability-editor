@@ -28,7 +28,7 @@ class MakeChangeReportTest(unittest.TestCase):
         return str(path)
 
     def run_report(self, *extra, original=None, result=None):
-        return run_script(SCRIPT, "--original", original or self.original, "--result", result or self.result, *extra)
+        return run_script(SCRIPT, "--original", original or self.original, "--result", result or self.result, "--out-dir", str(self.root / "reports"), *extra)
 
     def report(self, *extra, **files):
         code, out, err = self.run_report(*extra, **files)
@@ -88,6 +88,7 @@ class MakeChangeReportTest(unittest.TestCase):
             code, out, err = self.run_report(*extra)
             self.assertEqual((code, out), (2, ""), extra)
             self.assertIn("make_change_report failed", err)
+        self.assertFalse((self.root / "reports").exists())
 
     def test_free_text_model_and_empty_or_missing_inputs_are_refused(self):
         self.assertEqual(self.run_report("--model", "my secret project")[0], 2)
