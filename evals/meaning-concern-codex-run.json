@@ -1,0 +1,655 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "baseline_commit": "46cd26c57c74105a099afc8af87ec4dd75e0edd9",
+  "suite": "meaning-concern-cases.json",
+  "suite_sha256": "66423f9de7841afb9a79fd1c0e9a23038d1ae827028830e0a20a79d0ff3e7731",
+  "conditions": {
+    "requested_model": "gpt-6.1-sol",
+    "returned_model_id": "not exposed by CLI events",
+    "cli_flags": [
+      "exec",
+      "--ignore-user-config",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "read-only",
+      "--model",
+      "gpt-6.1-sol",
+      "-c",
+      "model_reasoning_effort=\"medium\"",
+      "-c",
+      "project_doc_max_bytes=0",
+      "--json"
+    ],
+    "instruction": "SKILL_FILESを使ってREQUESTに回答してください。ツールは使わず、返答だけを出してください。",
+    "independent_context_per_case": true,
+    "repeats": 1,
+    "tools_used": false,
+    "installed_skill_invocation": false,
+    "selected_sections": [
+      "SKILL.md (full)",
+      "references/readability-rules.md section 4",
+      "assets/examples.md section 29 onward"
+    ],
+    "follow_up": "Original prompt and assistant response replayed as text, followed by the user clarification."
+  },
+  "source_sha256": {
+    "before": {
+      "SKILL.md": "7115cb111a40b62c9a2715e1f440f1b061de63b2824f032e1da8783a78dafbaf",
+      "references/readability-rules.md": "ca7a0e1c5ba931aaff34c47bfecd296afd7ef799f0e56edf541edc62f31edc96",
+      "assets/examples.md": "ca20c552b480521cae008af8166949e9e262a6f9b159fcca8eef6b4677743425"
+    },
+    "after": {
+      "SKILL.md": "872e98f71686e7783c8373c889a3cb6433feef8ca1cf98016eaa0a45965bf073",
+      "references/readability-rules.md": "b43e077b1d3911b8c69b2cd1380a300de03d72170b7d7b0e36c7892d4564bf34",
+      "assets/examples.md": "8fbf71d7710be6e2497b92de3e14b6559aaa0e4d16f796ff21d8c1498ad94bf0"
+    }
+  },
+  "provided_text_sha256": {
+    "before": {
+      "SKILL.md": "7115cb111a40b62c9a2715e1f440f1b061de63b2824f032e1da8783a78dafbaf",
+      "references/readability-rules.md": "ae6844c9ed3e9bceec9370ebc0e02a8fd5f118611ef5f11207f2fe253873779f",
+      "assets/examples.md": "aac1d906f20f808b3ba18cae78267385142a06bffc82ce0e98b8318ef28ee295"
+    },
+    "after": {
+      "SKILL.md": "872e98f71686e7783c8373c889a3cb6433feef8ca1cf98016eaa0a45965bf073",
+      "references/readability-rules.md": "3969791af59f213cec6d88d8359dcfe484802efb169197b3c62ea63c723eb66d",
+      "assets/examples.md": "58050a0da1ba0aa4192258bdbc00d8433e25dba0fe1fb71cec9fd08b1150a29c"
+    }
+  },
+  "outputs": {
+    "before": {
+      "m01": {
+        "status": "executed",
+        "output": "比較する二つの対象は何ですか。また、「展示案」は何を指していますか。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "e9895759a6dc7185f8aa3f74fc89cf1eef9d01d5ed21654c4b225ded9ebc8086",
+        "usage": [
+          {
+            "input_tokens": 32587,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 85,
+            "reasoning_output_tokens": 58
+          }
+        ],
+        "elapsed_seconds": 5.969,
+        "follow_up": {
+          "user": "当館の展示案と他館の企画を比較するという意味です。報告と担当者間の確認も残してください。",
+          "status": "executed",
+          "output": "当館の展示案と他館の企画を比較し、調べた内容と考察・結論を報告して、担当者間で確認する。",
+          "exit_code": 0,
+          "tool_item_types": [],
+          "prompt_sha256": "482990e1190bd2effb0f467c5fc6418c816f7a9be261196aee673c0c7ccb8555",
+          "usage": [
+            {
+              "input_tokens": 32653,
+              "cached_input_tokens": 12288,
+              "cache_write_input_tokens": 0,
+              "output_tokens": 41,
+              "reasoning_output_tokens": 0
+            }
+          ],
+          "elapsed_seconds": 5.217
+        }
+      },
+      "m02": {
+        "status": "executed",
+        "output": "当館の展示案と他館の企画を比較し、その結果を報告する。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "9d19d1c7dc06eac9cfa92f84c925ec13830e06c5d6c370abd2c4cbb890e0985d",
+        "usage": [
+          {
+            "input_tokens": 32569,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 83,
+            "reasoning_output_tokens": 56
+          }
+        ],
+        "elapsed_seconds": 6.38
+      },
+      "m03": {
+        "status": "executed",
+        "output": "受付票の処理は、発送済みの場合、または発送不要と判断済みの場合に終了できる。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "12deb65a05329adb7c1a94b614ea06a3e03518388393a2593da9a690b9742558",
+        "usage": [
+          {
+            "input_tokens": 32598,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 64,
+            "reasoning_output_tokens": 32
+          }
+        ],
+        "elapsed_seconds": 6.482
+      },
+      "m04": {
+        "status": "executed",
+        "output": "展示案の他館企画比較について、調査内容を報告する。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "0f1b10f55cb6d7d87d87bcf35c0d2a1474a5f25724a1bd82d276b1b929de46d5",
+        "usage": [
+          {
+            "input_tokens": 34777,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 74,
+            "reasoning_output_tokens": 50
+          }
+        ],
+        "elapsed_seconds": 7.052
+      },
+      "m05": {
+        "status": "executed",
+        "output": "訪問した友人の写真を見た。その後、感想を記録した。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "fa83c771d9f835124f7497417083deb555d9b6aa0d2506938faa8b3d3af30448",
+        "usage": [
+          {
+            "input_tokens": 32608,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 62,
+            "reasoning_output_tokens": 36
+          }
+        ],
+        "elapsed_seconds": 4.851
+      },
+      "m06": {
+        "status": "executed",
+        "output": "必要な条件をすべて残すと、15字以内には収まりません。1文・体言止めは維持し、字数制限を緩めてもよいですか。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "9d3cb7ae8ffe51af302ae29124ae50e3cebc89470307dc484731cf743c55a665",
+        "usage": [
+          {
+            "input_tokens": 32634,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 166,
+            "reasoning_output_tokens": 115
+          }
+        ],
+        "elapsed_seconds": 8.692
+      },
+      "m07": {
+        "status": "executed",
+        "output": "担当者が収蔵品の所在を調べて記録を修正し、確認結果と未解決事項を管理者に説明できる。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "13a05172c5363447a76fdeafebc4bdbf162cdd2b38859f6d47c6dd6093b2303c",
+        "usage": [
+          {
+            "input_tokens": 32593,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 112,
+            "reasoning_output_tokens": 71
+          }
+        ],
+        "elapsed_seconds": 6.847
+      },
+      "m08": {
+        "status": "executed",
+        "output": "案内を送信した後、必要な場合だけ内容を再確認する。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "6f0c31ea28ff091a621ae7a7e07468ed7b1ee641217b3389c53d2ea09b92c557",
+        "usage": [
+          {
+            "input_tokens": 32580,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 80,
+            "reasoning_output_tokens": 56
+          }
+        ],
+        "elapsed_seconds": 6.019
+      },
+      "n01": {
+        "status": "executed",
+        "output": "比較する二つの対象は何ですか。また、「蔵書分類案」は何を指していますか。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "13fb559c0bd27909f939852058c4b15ee5f34f5b6161a1d39417a7197ed66a0a",
+        "usage": [
+          {
+            "input_tokens": 32570,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 170,
+            "reasoning_output_tokens": 140
+          }
+        ],
+        "elapsed_seconds": 9.39
+      },
+      "n02": {
+        "status": "executed",
+        "output": "必須語だけで合計16字になります。すべての内容を残せるよう、8字以内という制限を緩められますか。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "41953aa9d0dc5dae79c3858ae83c8329fda4d2cf899d62691c8bf37d8340e530",
+        "usage": [
+          {
+            "input_tokens": 32646,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 160,
+            "reasoning_output_tokens": 117
+          }
+        ],
+        "elapsed_seconds": 9.655
+      },
+      "n03": {
+        "status": "executed",
+        "output": "当番職員が装置の状態を確認し、確認結果を記録する。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "97c85421ec45e4291842bc90d07f824cef5022254c1d892769c03101d2cd4ec9",
+        "usage": [
+          {
+            "input_tokens": 32613,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 159,
+            "reasoning_output_tokens": 133
+          }
+        ],
+        "elapsed_seconds": 8.196
+      },
+      "n04": {
+        "status": "executed",
+        "output": "「二つの文をそれぞれ独立した文として残す」と「全体を1文にする」は両立しません。二つの事実はどちらも残したうえで、どちらの条件を調整できますか。\n\n- 「全体を1文」を緩め、独立した2文として残す。\n- 「それぞれ独立した文」を緩め、1文につなげる。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "10d3e852af38af91038d5da6b185a88d1c64768866e487482b51542b27e59e83",
+        "usage": [
+          {
+            "input_tokens": 32612,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 214,
+            "reasoning_output_tokens": 109
+          }
+        ],
+        "elapsed_seconds": 9.166
+      },
+      "h01": {
+        "status": "executed",
+        "output": "比較する二つの対象は何ですか。「献立案」は何を指しますか。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "5a290618ea8a4c10e337a3897994ce0a035461fa8beb044af17c7f91f511eb8a",
+        "usage": [
+          {
+            "input_tokens": 32566,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 61,
+            "reasoning_output_tokens": 34
+          }
+        ],
+        "elapsed_seconds": 6.124
+      },
+      "h02": {
+        "status": "executed",
+        "output": "必須語だけで12字あるため、5字以内には収まりません。内容を省略せずに残すため、本文全体の字数上限を何字まで増やせますか。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "5ae39bffdb7e905f5f95585ce280041b3658a1e75fb4b0cc18ca35f3e1ddf3ae",
+        "usage": [
+          {
+            "input_tokens": 32629,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 231,
+            "reasoning_output_tokens": 178
+          }
+        ],
+        "elapsed_seconds": 10.257
+      },
+      "h03": {
+        "status": "executed",
+        "output": "貸出履歴の訂正は、記録係のみが担当する。受付係が利用者の申告を受け取り、記録係が申告内容を確認したうえで貸出履歴を訂正し、訂正理由を残す。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "d9dbdea0d2899d039d44c56a08537cf7a440d5e783b6c8d580013827f83efad1",
+        "usage": [
+          {
+            "input_tokens": 32622,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 409,
+            "reasoning_output_tokens": 344
+          }
+        ],
+        "elapsed_seconds": 14.12
+      },
+      "h04": {
+        "status": "executed",
+        "output": "配色案の既製品比較について、調査結果を説明する。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "f2ff56a34faa2e1b3c50d09efd6076365e6997d1f0071701b8ba58b13471b532",
+        "usage": [
+          {
+            "input_tokens": 32580,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 63,
+            "reasoning_output_tokens": 40
+          }
+        ],
+        "elapsed_seconds": 4.957
+      }
+    },
+    "after": {
+      "m01": {
+        "status": "executed",
+        "output": "比較する二つの対象は何ですか。また、「展示案」は何を指しますか。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "b867c5216a1e52297494ef001cce026e7bdeea4d9d4263c2302a588630b4a297",
+        "usage": [
+          {
+            "input_tokens": 33685,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 61,
+            "reasoning_output_tokens": 34
+          }
+        ],
+        "elapsed_seconds": 5.298,
+        "follow_up": {
+          "user": "当館の展示案と他館の企画を比較するという意味です。報告と担当者間の確認も残してください。",
+          "status": "executed",
+          "output": "当館の展示案と他館の企画を比較し、調べた内容と考察・結論を報告して、担当者間で確認する。",
+          "exit_code": 0,
+          "tool_item_types": [],
+          "prompt_sha256": "421770ee1b74dd9da8af3393cb5fc2a030409d14f396de8978f18dc27ad2933f",
+          "usage": [
+            {
+              "input_tokens": 33751,
+              "cached_input_tokens": 12288,
+              "cache_write_input_tokens": 0,
+              "output_tokens": 41,
+              "reasoning_output_tokens": 0
+            }
+          ],
+          "elapsed_seconds": 4.135
+        }
+      },
+      "m02": {
+        "status": "executed",
+        "output": "当館の展示案と他館の企画を比較し、その結果を報告する。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "504d5a351f187e23988aa90b81e83640c1b846d5eaa29525a194b5cc5cb5f1b3",
+        "usage": [
+          {
+            "input_tokens": 33667,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 121,
+            "reasoning_output_tokens": 94
+          }
+        ],
+        "elapsed_seconds": 8.519
+      },
+      "m03": {
+        "status": "executed",
+        "output": "受付票の処理は、発送済みの場合、または発送不要と判断済みの場合に終了できる。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "bb7d63d5bd39caccae8ff0244c92938035d6b1a40fd7abc37ed1f752bdbf0462",
+        "usage": [
+          {
+            "input_tokens": 33696,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 74,
+            "reasoning_output_tokens": 42
+          }
+        ],
+        "elapsed_seconds": 6.166
+      },
+      "m04": {
+        "status": "executed",
+        "output": "展示案の他館企画比較について、調査内容を報告する。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "a06252dd9015ff295e46e533bc9bf84a8e62d3542545c17a5e957d7954faf8df",
+        "usage": [
+          {
+            "input_tokens": 33670,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 35,
+            "reasoning_output_tokens": 11
+          }
+        ],
+        "elapsed_seconds": 5.051
+      },
+      "m05": {
+        "status": "executed",
+        "output": "訪問した友人の写真を見た。その後、感想を記録した。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "be106452dd48231418141e188dcb578bf62a2046455e6fa1dd61924dfb5c8a15",
+        "usage": [
+          {
+            "input_tokens": 33706,
+            "cached_input_tokens": 20736,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 98,
+            "reasoning_output_tokens": 72
+          }
+        ],
+        "elapsed_seconds": 7.617
+      },
+      "m06": {
+        "status": "executed",
+        "output": "必要な条件をすべて残すと、15字以内には収まりません。1文・体言止めは維持したまま、字数上限を緩めてもよいですか。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "5d8652757689a12a71a8811700b4ac3f0998153a5c0ce1d4e2d660b15e4670db",
+        "usage": [
+          {
+            "input_tokens": 33732,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 51,
+            "reasoning_output_tokens": 0
+          }
+        ],
+        "elapsed_seconds": 5.207
+      },
+      "m07": {
+        "status": "executed",
+        "output": "担当者が収蔵品の所在を調べて記録を修正し、確認結果と未解決事項を管理者に説明できる。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "ed9e3023f8634c288dd2e3edc81af9b4fe30f0693f90605609cadb6989451e22",
+        "usage": [
+          {
+            "input_tokens": 33691,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 193,
+            "reasoning_output_tokens": 152
+          }
+        ],
+        "elapsed_seconds": 7.133
+      },
+      "m08": {
+        "status": "executed",
+        "output": "案内を送信した後、必要な場合だけ内容を再確認する。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "6d31e80df18e8be7df3ade1b9fb5b392df4c3428d8589f2f4c71e3c58465a4a5",
+        "usage": [
+          {
+            "input_tokens": 33678,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 67,
+            "reasoning_output_tokens": 43
+          }
+        ],
+        "elapsed_seconds": 8.761
+      },
+      "n01": {
+        "status": "executed",
+        "output": "「蔵書分類案の既刊目録比較」は、何と何を比較するという意味ですか。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "79b1b194b4e08ba383888a1c4f8e8ed4914e660386a4033151b3daebbb5980c1",
+        "usage": [
+          {
+            "input_tokens": 33668,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 152,
+            "reasoning_output_tokens": 121
+          }
+        ],
+        "elapsed_seconds": 9.33
+      },
+      "n02": {
+        "status": "executed",
+        "output": "必須語をすべて残すと8字を超えます。総字数の上限を緩められますか。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "c25fa97925719d70ea560e97e98a730e27e84d465bf6627c336b1b76a2c5f282",
+        "usage": [
+          {
+            "input_tokens": 33744,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 123,
+            "reasoning_output_tokens": 85
+          }
+        ],
+        "elapsed_seconds": 7.308
+      },
+      "n03": {
+        "status": "executed",
+        "output": "当番職員が装置の状態を確認し、記録を残す。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "d31021adb230d0f892fffff44f425be35094a16ba9e392102c09a8cc5ea35498",
+        "usage": [
+          {
+            "input_tokens": 33711,
+            "cached_input_tokens": 20736,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 68,
+            "reasoning_output_tokens": 43
+          }
+        ],
+        "elapsed_seconds": 5.632
+      },
+      "n04": {
+        "status": "executed",
+        "output": "「それぞれ独立した文として残す」と「全体を1文にする」は両立しません。二つの事実はどちらも残したうえで、どちらの条件を緩めますか。\n\n- 全体を2文にする：「受付は午前に行う。結果は午後に知らせる。」\n- 独立した文という条件を外す：「受付は午前に行い、結果は午後に知らせる。」",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "ae512fedf85c2f048cd4639f46124960121dac2d3a87af28bce9c080552ac165",
+        "usage": [
+          {
+            "input_tokens": 33710,
+            "cached_input_tokens": 20736,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 217,
+            "reasoning_output_tokens": 107
+          }
+        ],
+        "elapsed_seconds": 9.782
+      },
+      "h01": {
+        "status": "executed",
+        "output": "比較する二つの対象は何ですか。また、「献立案」は何を指しますか。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "1f84cfde51d67c6391018fd691dc4a6dd79222fac8e01a070d32f25618d566df",
+        "usage": [
+          {
+            "input_tokens": 33664,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 129,
+            "reasoning_output_tokens": 101
+          }
+        ],
+        "elapsed_seconds": 8.565
+      },
+      "h02": {
+        "status": "executed",
+        "output": "必須語だけで5字を超えるため、総字数の上限を緩められますか。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "feeb8216fd47c224ec26a4b62a6813f5f6f7e363bf5321440b50a57f5d632e56",
+        "usage": [
+          {
+            "input_tokens": 33727,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 143,
+            "reasoning_output_tokens": 110
+          }
+        ],
+        "elapsed_seconds": 8.312
+      },
+      "h03": {
+        "status": "executed",
+        "output": "記録係が利用者の申告内容を確かめ、貸出履歴を訂正し、訂正理由を残す。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "e80660abe1362d5599a67bd9f8bbc2a67846f09fec0075240fd1043e2c7ae5f4",
+        "usage": [
+          {
+            "input_tokens": 35925,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 169,
+            "reasoning_output_tokens": 132
+          }
+        ],
+        "elapsed_seconds": 13.376
+      },
+      "h04": {
+        "status": "executed",
+        "output": "配色案の既製品比較について、調査結果を説明する。",
+        "exit_code": 0,
+        "tool_item_types": [],
+        "prompt_sha256": "abd5c11f8cad47aa9fba58ec15c674839798a1cefe77f654f0f5911424925b7d",
+        "usage": [
+          {
+            "input_tokens": 33678,
+            "cached_input_tokens": 12288,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 54,
+            "reasoning_output_tokens": 31
+          }
+        ],
+        "elapsed_seconds": 5.221
+      }
+    }
+  },
+  "limits": [
+    "Artificial cases only",
+    "One generation per input and version",
+    "Not a product-specific installed-skill invocation",
+    "Actual served model identity not exposed by CLI",
+    "Semantics reviewed by the implementer; no independent human grading",
+    "Claude and Codex results are separate comparisons, not pooled"
+  ]
+}
