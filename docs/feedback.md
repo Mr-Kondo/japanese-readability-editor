@@ -64,7 +64,7 @@ python3 scripts/make_feedback.py --original before.md --result after.md \
 
 ## 使った後の変化を記録する
 
-問題の報告([票](#報告する利用者向け))とは別に、Skill を使った後に文章がどう変わったかを、**本文を含まない選択式の記録**として残せます。[official-prompt-tailor](https://github.com/Mr-Kondo/official-prompt-tailor) の `private_feedback.py`(原文を持ち出さずに評価を報告する方式)を参考にしました。取り入れたのは、固定の検査項目、状態と方法の組、本文・件数・パスを出さない、ランダムな `case_id`、総合点や改善率を出さない、の各点です。送る操作は利用者が行うため、`--confirm-share` は取り入れていません。記録は問題の報告票と同じフォルダに、`jre-change-report-<ランダム文字列>.json` として自動保存します。`--out-dir` で保存先を変更でき、標準エラーに保存先、標準出力に JSON を出します。
+問題の報告([票](#報告する利用者向け))とは別に、モード B の通常の推敲では、返す文章が確定した後に**本文を含まない選択式の記録**を自動保存します。原文を変更せずに返す場合も記録します。ほかのモードでは、記録を依頼したときに作成します。Windows の既定の保存先は `%USERPROFILE%\.agents\feedback\japanese-readability-editor\` です。[official-prompt-tailor](https://github.com/Mr-Kondo/official-prompt-tailor) の `private_feedback.py`(原文を持ち出さずに評価を報告する方式)を参考にしました。取り入れたのは、固定の検査項目、状態と方法の組、本文・件数・パスを出さない、ランダムな `case_id`、総合点や改善率を出さない、の各点です。送る操作は利用者が行うため、`--confirm-share` は取り入れていません。記録は問題の報告票と同じフォルダに、`jre-change-report-<ランダム文字列>.json` として自動保存します。`--out-dir` で保存先を変更でき、標準エラーに保存先、標準出力に JSON を出します。
 
 ```bash
 python3 scripts/make_change_report.py --original before.md --result after.md --mode B --model claude-sonnet-5-5
