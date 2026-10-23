@@ -16,6 +16,19 @@
   3. [Zenn: lotation](https://zenn.dev/lotation/articles/8520b50540b274)
 - 下の「[参考にしたプロジェクト](#参考にしたプロジェクト)」に挙げた3つのリポジトリからも、原則と手順を取り入れました。
 
+## 意味を確かめる対話と照合
+
+対象・条件・状態に複数の読みがあり、推敲で選ぶ必要があるときだけ、その関係を尋ねます。確認済みの情報は聞き直しません。本文のみの指定や意図的な曖昧さは尊重し、不明な部分を原文のまま残します。短さのために必要な条件を落とさず、原文・資料の主張と修正文を照合します。
+
+調査した既存 Skill は `skill-creator`、`contextual-terminology-review`、`japanese-readability-editor` です。短い入口と詳細参照の分離、本人の説明と生成文の区別、状態や責務を追加しない原則を取り入れました。用語レビュー専用の記録・検索処理は、推敲の意味確認には不要なため取り入れていません。frontmatter、既存モードの選択、共通の配布・導入・更新・削除経路は変えていません。
+
+- Min, Michael, Hajishirzi, Zettlemoyer (2020), [AmbigQA: Answering Ambiguous Open-domain Questions](https://aclanthology.org/2020.emnlp-main.466/), EMNLP, pp. 5783–5797, DOI: 10.18653/v1/2020.emnlp-main.466。確認したのは書誌情報と要旨です。複数の解釈を区別する考え方を参照しました。日本語推敲で質問を挟む効果の証明とは扱いません。
+- GOV.UK Design System, [Question pages](https://design-system.service.gov.uk/patterns/question-pages/)（2026-10-24確認）。必要な情報だけを尋ね、既に得た情報を再入力させない指針を参照しました。フォーム設計の指針を対話へ当てはめる部分は、この Skill の判断です。
+
+Claude Code（`claude-sonnet-5-5`）には、固有情報を含めない設計案の反例と検証観点を尋ねました。質問で対象を持ち込まないこと、意味が変わらない質問を避けること、照合で条件や状態を落とさないことを採用しました。一律の質問数制限と保持箇所の末尾注記は、不要な制約や本文のみの指定との衝突を招くため採用していません。Gemini Antigravityは利用できる接続・CLIを確認できず、相談は未実施です。意見の一致を効果の証拠とは扱いません。
+
+人工例による確認の方法と限界は、[意味確認の評価記録](../evals/meaning-confirmation-result.md)にあります。
+
 ## 国語の表記・用法の基準
 
 文化庁が公開する国語の表記・用法の基準を、出典と適用条件を持つ規則として組み込んでいます。使い方と限界は、[国語の表記・用法の検査](kokugo.md)にあります。
