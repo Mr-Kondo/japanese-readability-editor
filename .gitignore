@@ -17,3 +17,6 @@ __pycache__/
 /.venv-ragas/
 # 利用者から送付された非公開のフィードバック(docs/feedback.md)。リポジトリに置かない
 /feedback-inbox/
+
+# Local feedback files
+/feedback/
