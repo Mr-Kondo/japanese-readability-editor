@@ -1,0 +1,236 @@
+{
+  "judgments": [
+    {
+      "id": "m01-0",
+      "status": "pass",
+      "reason": "未確定の比較対象と展示案の意味を確認しており、所有者や比較関係を決めつけていない。",
+      "case": "m01",
+      "variant": "after"
+    },
+    {
+      "id": "m01-1",
+      "status": "pass",
+      "reason": "比較関係の明確化に必要な確認にとどまり、完成稿を確定していない。",
+      "case": "m01",
+      "variant": "before"
+    },
+    {
+      "id": "m02-0",
+      "status": "pass",
+      "reason": "比較対象と結果の報告を保ち、常体で簡潔にしている。",
+      "case": "m02",
+      "variant": "before"
+    },
+    {
+      "id": "m02-1",
+      "status": "pass",
+      "reason": "既知の比較関係を保ち、不要な質問や条件を加えていない。",
+      "case": "m02",
+      "variant": "after"
+    },
+    {
+      "id": "m03-0",
+      "status": "pass",
+      "reason": "二つの状態を区別し、いずれかを満たせば終了できる条件を保っている。",
+      "case": "m03",
+      "variant": "after"
+    },
+    {
+      "id": "m03-1",
+      "status": "pass",
+      "reason": "発送済みと発送不要の判断済みを同一視せず、常体で終了条件を示している。",
+      "case": "m03",
+      "variant": "before"
+    },
+    {
+      "id": "m04-0",
+      "status": "pass",
+      "reason": "未確定の比較関係を残し、調査内容の報告を常体の本文だけで示している。",
+      "case": "m04",
+      "variant": "before"
+    },
+    {
+      "id": "m04-1",
+      "status": "pass",
+      "reason": "比較対象や所有者を補わず、質問・注記なしで報告の意味を保っている。",
+      "case": "m04",
+      "variant": "after"
+    },
+    {
+      "id": "m05-0",
+      "status": "pass",
+      "reason": "意図された二通りの読みと、写真を見た後に感想を記録する順序を保っている。",
+      "case": "m05",
+      "variant": "before"
+    },
+    {
+      "id": "m05-1",
+      "status": "pass",
+      "reason": "訪問の主体を確定せず、感想の記録を残して常体で整えている。",
+      "case": "m05",
+      "variant": "after"
+    },
+    {
+      "id": "m06-0",
+      "status": "pass",
+      "reason": "必須条件を削らず、字数制約の解消につながる上限緩和だけを尋ねている。",
+      "case": "m06",
+      "variant": "after"
+    },
+    {
+      "id": "m06-1",
+      "status": "pass",
+      "reason": "1文・体言止めを維持し、両立しない字数制限の調整を求めている。",
+      "case": "m06",
+      "variant": "before"
+    },
+    {
+      "id": "m07-0",
+      "status": "pass",
+      "reason": "担当者の調査、記録修正、確認結果と未解決事項の説明可能な状態を保っている。",
+      "case": "m07",
+      "variant": "before"
+    },
+    {
+      "id": "m07-1",
+      "status": "pass",
+      "reason": "すべての達成条件を含み、承認条件や不要な再質問を加えていない。",
+      "case": "m07",
+      "variant": "after"
+    },
+    {
+      "id": "m08-0",
+      "status": "pass",
+      "reason": "主体を未特定のまま、送信後かつ必要な場合だけ再確認する条件を保っている。",
+      "case": "m08",
+      "variant": "after"
+    },
+    {
+      "id": "m08-1",
+      "status": "pass",
+      "reason": "動作の順序と再確認の限定条件を保ち、常体で簡潔にしている。",
+      "case": "m08",
+      "variant": "before"
+    },
+    {
+      "id": "n01-0",
+      "status": "pass",
+      "reason": "未確定の比較関係だけを確認し、共有相手や担当者を尋ねていない。",
+      "case": "n01",
+      "variant": "after"
+    },
+    {
+      "id": "n01-1",
+      "status": "pass",
+      "reason": "比較対象と分類案の意味は比較関係の確認に関わり、周辺の担当情報を求めていない。",
+      "case": "n01",
+      "variant": "before"
+    },
+    {
+      "id": "n02-0",
+      "status": "pass",
+      "reason": "必須語の合計16字は正しく、総字数上限の緩和は制約の解消につながる。",
+      "case": "n02",
+      "variant": "before"
+    },
+    {
+      "id": "n02-1",
+      "status": "pass",
+      "reason": "必須語を残す前提で、解決に必要な総字数上限の緩和だけを尋ねている。",
+      "case": "n02",
+      "variant": "after"
+    },
+    {
+      "id": "n03-0",
+      "status": "pass",
+      "reason": "当番職員を確認と記録の主体として明示し、単独でも担当が分かる。",
+      "case": "n03",
+      "variant": "after"
+    },
+    {
+      "id": "n03-1",
+      "status": "pass",
+      "reason": "当番職員が状態確認と結果の記録を担うことを明示している。",
+      "case": "n03",
+      "variant": "before"
+    },
+    {
+      "id": "n04-0",
+      "status": "pass",
+      "reason": "文数条件の矛盾を示し、両方の事実を残せる有効な調整案を尋ねている。",
+      "case": "n04",
+      "variant": "before"
+    },
+    {
+      "id": "n04-1",
+      "status": "pass",
+      "reason": "矛盾する条件のどちらを緩めるか確認し、両方の事実を保つ例を示している。",
+      "case": "n04",
+      "variant": "after"
+    },
+    {
+      "id": "h01-0",
+      "status": "pass",
+      "reason": "比較対象と献立案の意味を確認しており、店やメニューの詳細収集には踏み込んでいない。",
+      "case": "h01",
+      "variant": "before"
+    },
+    {
+      "id": "h01-1",
+      "status": "pass",
+      "reason": "比較関係に必要な確認にとどまり、共有相手や担当者への追加質問がない。",
+      "case": "h01",
+      "variant": "after"
+    },
+    {
+      "id": "h02-0",
+      "status": "pass",
+      "reason": "必須語の合計12字は正しく、内容を残すための総字数上限の調整を尋ねている。",
+      "case": "h02",
+      "variant": "before"
+    },
+    {
+      "id": "h02-1",
+      "status": "pass",
+      "reason": "必須語だけで上限を超えるため、解決につながる総字数制限の緩和を求めている。",
+      "case": "h02",
+      "variant": "after"
+    },
+    {
+      "id": "h03-0",
+      "status": "pass",
+      "reason": "訂正担当を記録係だけに限定し、申告確認後の訂正と理由の記録を保っている。",
+      "case": "h03",
+      "variant": "before"
+    },
+    {
+      "id": "h03-1",
+      "status": "pass",
+      "reason": "記録係を一連の作業の主体として明示し、確認・訂正・理由の記録の順序を保っている。",
+      "case": "h03",
+      "variant": "after"
+    },
+    {
+      "id": "h04-0",
+      "status": "pass",
+      "reason": "未確定の比較語句を残し、主体や注記を加えず調査結果の説明を示している。",
+      "case": "h04",
+      "variant": "before"
+    },
+    {
+      "id": "h04-1",
+      "status": "pass",
+      "reason": "比較関係を確定せず、調査結果を説明する本文だけに整えている。",
+      "case": "h04",
+      "variant": "after"
+    }
+  ],
+  "conditions": {
+    "requested_model": "gpt-6.1-sol",
+    "returned_model_id": "not exposed",
+    "blind_variant_labels": true,
+    "independent_model_context": true,
+    "human_grading": false,
+    "grading_instruction": "日本語の文案と質問の妥当性を、各入力と条件に照らして点検してください。版名や修正意図は示していません。preserveとforbidを意味で確認し、完全一致や疑問符の数では判定しないでください。質問では未確定の比較関係に必要な確認と、不要な周囲の確認を区別してください。字数制約が解消しない案を質問に含めてはいけません。常体・体言止めの指定、主体や状態、順序、本文のみの指定も確認してください。懸念がなくても一般的な品質を保証したとは書かず、この入力についてだけ判定してください。ツールは使わず、JSON {\"judgments\":[{\"id\":\"m01-0\",\"status\":\"pass|fail|uncertain\",\"reason\":\"短い根拠\"}]} のみを出力してください。"
+  }
+}

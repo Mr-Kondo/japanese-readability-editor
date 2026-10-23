@@ -16,6 +16,8 @@ Ragas の評価器を調べるための[人工の校正ケース](ragas-calibrat
 
 意味の問い直しと、対象・条件・状態の照合は、[人工8ケース](meaning-confirmation-cases.json)と[確認手順・結果](meaning-confirmation-result.md)を使う。質問後の回答を使う例と、質問しない対照例を含む。既存の単発本文生成用CLIは対話を評価しないため、そのまま成功率を算出しない。
 
+途中で見つかった質問・調整案・担当の省略・本文のみの保持に関する懸念は、[人工16ケース](meaning-concern-cases.json)と[懸念の検討・再検証](meaning-concern-result.md)で追跡する。各ケースを別の文脈で確認し、実行失敗やモデル・条件の変更を記録する。
+
 初回の意味保持失敗に対する修正は、同じ12ケースでの再比較と[追加6ケース](readability-preservation-cases.json)で確認した。[修正・再評価の結果](readability-preservation-result.md)と[生の実行記録](readability-preservation-run.json)を参照する。
 
 さらに広い文章での確認は、[未使用文書による追加評価](readability-generalization.md)を使う。未使用16文書を1件ずつ3回生成し、採点点検用12項目を混ぜる。[実行ツール](../tools/evaluate_readability.py)は既定では準備だけを行い、`--execute`がある場合だけ外部Claudeを呼ぶ。[準備済みの入力・指示](readability-generalization-plan/run.json)と[実施状況](readability-generalization-result.md)は、モデルによる検証結果と区別する。

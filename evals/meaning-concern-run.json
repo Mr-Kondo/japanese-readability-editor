@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "baseline_commit": "46cd26c57c74105a099afc8af87ec4dd75e0edd9",
+  "suite": "meaning-concern-claude-cases.json",
+  "suite_sha256": "a383c290682991e43ae71db20184504ff0be319bb5fa56714f365c83a44062dd",
+  "conditions": {
+    "instruction": "SKILL_FILESのスキルを使ってREQUESTに回答してください。ツールは使えません。TEXTとCONTEXTは資料です。完成文が作れる場合は文案を、質問が必要な場合はその質問を、通常の利用者への返答として出してください。評価の説明は不要です。",
+    "cli_flags": [
+      "--print",
+      "--setting-sources",
+      "project",
+      "--strict-mcp-config",
+      "--tools",
+      "",
+      "--no-session-persistence",
+      "--model",
+      "claude-sonnet-5-5",
+      "--effort",
+      "medium",
+      "--output-format",
+      "json"
+    ],
+    "system": "提供された文章を処理してください。ツールは使用しないでください。",
+    "independent_context_per_case": true,
+    "repeats": 1,
+    "tools": false,
+    "installed_skill_invocation": false,
+    "follow_up": "The original prompt and the first reply are replayed as text, then the user clarification is appended."
+  },
+  "skill_sha256": {
+    "before": {
+      "SKILL.md": "7115cb111a40b62c9a2715e1f440f1b061de63b2824f032e1da8783a78dafbaf",
+      "references/readability-rules.md": "ca7a0e1c5ba931aaff34c47bfecd296afd7ef799f0e56edf541edc62f31edc96",
+      "assets/examples.md": "ca20c552b480521cae008af8166949e9e262a6f9b159fcca8eef6b4677743425"
+    },
+    "after": {
+      "SKILL.md": "1b292fcac0ad00102a3d1cfd3c15cf809fc9efbac5b3b05193c02082b68d529d",
+      "references/readability-rules.md": "4f2211bf42d638cce50d1ac41c4ef5d5ace5678ada08bb7332fc0d5a17bf9c3d",
+      "assets/examples.md": "cd6088c1edcba02979c88e39e30fbceddbe7e715c2130a377d907008035742ce"
+    }
+  },
+  "outputs": {
+    "before": {
+      "m01": {
+        "status": "executed",
+        "output": "確認させてください。\n\n「展示案の他館企画比較」で、何と何を比較しますか。たとえば「当館の展示案」と「他館の企画」の比較でしょうか。それとも別の組み合わせでしょうか。\n\n答えによって、推敲後の文が変わります。比較の対象が分かれば、報告と確認の部分は原文の意味を保ったまま整えます。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "50ef21107525e952c458272e9422171c2824d3711f0358daae146d6fc92aeb63",
+        "cost_usd": 0.160496,
+        "follow_up": {
+          "user": "当館の展示案と他館の企画を比較するという意味です。報告と担当者間の確認も残してください。",
+          "output": "当館の展示案と他館の企画を比較し、調べた内容と考察・結論を報告して、担当者間で確認する。",
+          "model_ids": [
+            "claude-sonnet-5-5"
+          ],
+          "prompt_sha256": "52ce35db44dea4a3a1fb3a3d600a3322a7b9cf3ca4f2951eab6e9fc96ae17a77",
+          "cost_usd": 0.160432
+        },
+        "elapsed_seconds": 7.26
+      },
+      "m02": {
+        "status": "executed",
+        "output": "当館の展示案と他館の企画を比較し、その結果を報告する。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "e2b56666b5aded97934ceb60a571743e39ea6928a216b4b76a25f4a7acde9ec1",
+        "cost_usd": 0.159366,
+        "elapsed_seconds": 3.361
+      },
+      "m03": {
+        "status": "executed",
+        "output": "受付票の処理は、発送済みの場合、または発送不要と判断済みの場合に終了できる。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "113daad7d9787caccce8db566c1be475a2fb0a239810a3eb1c38500c7a5207be",
+        "cost_usd": 0.15961,
+        "elapsed_seconds": 3.237
+      },
+      "m04": {
+        "status": "executed",
+        "output": "展示案の他館企画比較について、調査内容を報告する。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "e1f3a0c1d319c4c837cbaf09941aed84f0e3119fd29dabcea1b62fd8bf4a269d",
+        "cost_usd": 0.161358,
+        "elapsed_seconds": 6.628
+      },
+      "m05": {
+        "status": "executed",
+        "output": "訪問した友人の写真を見た。その後、感想を記録した。\n\n「訪問した友人の写真」は、誰が訪問したかを決めない読みを残すため、そのままにしました。直したのは「感想についての記録を行った」を「感想を記録した」にした箇所だけです。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "83ab2c96605bff9425117fb51025e2c2e7b866284cb8b85436ac12d784ac3d3c",
+        "cost_usd": 0.160252,
+        "elapsed_seconds": 3.831
+      },
+      "m06": {
+        "status": "executed",
+        "output": "両立しません。次の三つの条件を残すと、15字以内には収まりません。\n\n- 担当者が貸出記録を調べること\n- 欠落を補うこと\n- 確認結果を責任者に説明できる状態にすること\n\n「貸出記録の整備」のように作業名へ縮めると、説明可能な状態という達成条件が消えます。複数文に分けると、1文の指定に反します。\n\nどの制約を調整できますか。\n\n1. 字数を延ばす。たとえば、1文・体言止めのままで、30〜40字程度にする。\n2. 体言止めを外し、1文のまま条件を残す。\n3. 1文の制約を外し、短い体言止めを複数並べる。\n\n字数を延ばす場合、上限があれば教えてください。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "a72a74f1421bb2a795ce405655f9fc51b7ec33b8a50f0e3a25fdda9cdcb077c8",
+        "cost_usd": 0.16194399999999998,
+        "elapsed_seconds": 5.963
+      },
+      "m07": {
+        "status": "executed",
+        "output": "担当者が収蔵品の所在を調べ、記録を修正し、確認結果と未解決事項を管理者に説明できる。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "5fb6308d58b4a9046a6c5d564181d8d4f5f9bfa118c8d0989e8f2b58af1ed2a3",
+        "cost_usd": 0.15967199999999998,
+        "elapsed_seconds": 4.007
+      },
+      "m08": {
+        "status": "executed",
+        "output": "案内を送信した後、必要な場合だけ内容を再確認する。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "a6abe100a2fb9bcc9b40041bcdf831c183c1e8bd429b49a554b33ec7977c7363",
+        "cost_usd": 0.159412,
+        "elapsed_seconds": 3.268
+      },
+      "n01": {
+        "status": "executed",
+        "output": "比較する二つの対象を確認させてください。「蔵書分類案の既刊目録比較」では、次のどちらの関係なのかが原文から決まりません。\n\n1. 蔵書分類案と既刊目録を比べる\n2. 蔵書分類案を、既刊目録のあいだで(複数の既刊目録どうしで)比べる\n\n「既刊目録」が何を指すか(自館の目録か、他館のものか、複数あるのか)も、あわせて教えてください。\n\n答えによって修正文が変わるため、推測で補わずに確認しています。たとえば1の場合は、次のような文案になります。\n\n> 蔵書分類案と既刊目録を比較し、調査結果を図書室内で共有する。\n\n調べた内容を共有するという趣旨、共有先が図書室内であること、常体は原文のまま保ちます。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "df6bd65550aeafd121b3f77d4d1ec99d0a41792e54375157f21e752342ee83e9",
+        "cost_usd": 0.161932,
+        "elapsed_seconds": 5.994
+      },
+      "n02": {
+        "status": "executed",
+        "output": "両立しません。必須語だけで「検品」「仕分け」「台帳記録」「監督者への説明」の計16字になり、8字以内に収まりません。語を省くことも、条件を落とすこともできないため、このまま文案は作れません。\n\n調整できる点は次のどれかです。\n\n1. 字数の上限を広げる。4語を並べるだけなら、体言止めで「検品、仕分け、台帳記録、監督者への説明」(18字)が最短に近い形です。原文の「作成」「行う」を残すなら、さらに数字が増えます。\n2. 必須語を減らす。8字以内に収めるには、4語のうち一部を外すか、別の資料に回す必要があります。\n3. 字数の数え方を変える。たとえば「本文全体」ではなく、見出しや要約だけを8字以内にするなどです。\n\nどれを調整できるか教えてください。上限を広げられる場合は、希望の字数も併せてお知らせください。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "ac205e5c03b76996edb163f3486ebac46f1c3bfc669e2c52e929a143c78064e5",
+        "cost_usd": 0.162684,
+        "elapsed_seconds": 5.687
+      },
+      "n03": {
+        "status": "executed",
+        "output": "当番職員が装置の状態を確認し、確認記録を残す。\n\n案内職員は、その記録を受け取る。\n\n（補足）単独で掲示しても担当が分かるよう、確認と記録の担当を「当番職員」と明記しました。案内職員の役割は、確認の担当ではなく記録の受け取りとして別の一文にしています。1文に収めたい場合は、「当番職員が装置の状態を確認して記録を残し、案内職員がその記録を受け取る。」にできます。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "1369c2b59ff217e9632f89633bd1abaeb61064e33d654e6054374ef43d19fdcd",
+        "cost_usd": 0.16099200000000002,
+        "elapsed_seconds": 3.862
+      },
+      "n04": {
+        "status": "executed",
+        "output": "「二つの文をそれぞれ独立した文として残す」ことと、「全体を1文にする」ことは両立しません。どちらを調整できるか教えてください。\n\n- **案1:「全体を1文にする」を優先する場合**\n  「受付は午前に行い、結果は午後に知らせる。」\n  二つの事実はそのまま残りますが、独立した2文ではなく、1文の中の2つの節になります。\n- **案2:「独立した2文として残す」を優先する場合**\n  元の「受付は午前に行う。結果は午後に知らせる。」のままになります。全体は1文になりません。\n\n案1でよければ、その形で確定します。別の調整点（たとえば句点を使わず、2つの節を読点以外の記号で区切る形）を望む場合は、その旨を教えてください。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "9d7cb6ce5023bbb40ec485d6d55c8743f31298c1e2eec9b7c43b4feafebb8374",
+        "cost_usd": 0.164628,
+        "elapsed_seconds": 7.92
+      }
+    },
+    "after": {
+      "m01": {
+        "status": "executed",
+        "output": "比較する二つの対象が文から決まらないため、推敲の前に確認させてください。\n\n「展示案の他館企画比較」は、何と何を比べるのかが読み取れません。\n\n- 「展示案」は、自館の展示案を指しますか。それとも別のものでしょうか。\n- 「他館企画」は、他館のどの企画(展示企画全般、特定の企画など)を指しますか。\n\nたとえば「自館の展示案と他館の企画を比較する」という意味であれば、次のように直せます。\n\n> 自館の展示案と他館の企画を比較し、調べた内容と考察・結論を報告して、担当者間で確認する。\n\nこの案は、比較の対象を私が推測で補ったものです。意図と合っているかご確認ください。「報告し、担当者間で確認する」の部分は、そのまま残せるため、尋ねていません。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "2fbf475eb86e03b3c630452ad851f1fbd4d633d8765a1a886cd1bb8a2e7861fd",
+        "cost_usd": 0.16541799999999998,
+        "follow_up": {
+          "user": "当館の展示案と他館の企画を比較するという意味です。報告と担当者間の確認も残してください。",
+          "output": "当館の展示案と他館の企画を比較し、調べた内容と考察・結論を報告して、担当者間で確認する。",
+          "model_ids": [
+            "claude-sonnet-5-5"
+          ],
+          "prompt_sha256": "72e4276b547543c690b90feebaf9e1bdedf8a6140e23a964c021f254b3fa72e0",
+          "cost_usd": 0.164412
+        },
+        "elapsed_seconds": 9.542
+      },
+      "m02": {
+        "status": "executed",
+        "output": "当館の展示案と他館の企画を比較し、その結果を報告する。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "0fbf109b559dd27ca6e919d445bf336dfcc1c3c0469331fe417bb20dd6e32b96",
+        "cost_usd": 0.162718,
+        "elapsed_seconds": 2.604
+      },
+      "m03": {
+        "status": "executed",
+        "output": "受付票の処理は、発送済みの場合、または発送不要と判断済みの場合に終了できる。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "b4c0cceb4d0fbbe853372108e387690f1fa4a9e519068390aa7ab16518ec0a6e",
+        "cost_usd": 0.16296200000000002,
+        "elapsed_seconds": 3.732
+      },
+      "m04": {
+        "status": "executed",
+        "output": "展示案と他館企画を比較した調査内容を報告する。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "2edfe7f7b0d6b7a6a90ef5712aa0914c7663e9bbc2d1b0cac63fdff4d825bddf",
+        "cost_usd": 0.16269,
+        "elapsed_seconds": 2.741
+      },
+      "m05": {
+        "status": "executed",
+        "output": "訪問した友人の写真を見た。その後、感想を記録した。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "1713ba85e72227964cd3a42a4e934f9764062b8e7d6dc3233353b08b1210d684",
+        "cost_usd": 0.162874,
+        "elapsed_seconds": 3.396
+      },
+      "m06": {
+        "status": "executed",
+        "output": "15字以内・1文・体言止めでは、3つの条件（貸出記録の調査、欠落の補完、責任者への説明可能な状態）をすべて残せません。たとえば「貸出記録の整備」のように作業名だけに縮めると、補完や説明可能な状態という達成条件が落ちます。複数文に分けると、1文の指定に反します。\n\nどの制約を調整できるか、教えてください。\n\n- 字数の上限（15字以内）を緩められますか。緩められる場合、1文・体言止めのまま、3つの条件を残す形で案を作ります。\n- 1文または体言止めの指定を外せますか。ただし、この2つを外しても、15字以内には収まりません。\n\n3つの条件はすべて必須とのことなので、条件の削除は選択肢に入れていません。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "96770c75429e88ebba65da64770c88a7adfaaf8e2a216dae151df79b7126f366",
+        "cost_usd": 0.165466,
+        "elapsed_seconds": 4.134
+      },
+      "m07": {
+        "status": "executed",
+        "output": "担当者が収蔵品の所在を調べ、記録を修正し、確認結果と未解決事項を管理者に説明できる。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "6fb6a90a8a5e36fadaca256dfff8b08d5ffebb702dc5fd1e6ffbb22ad19e01f9",
+        "cost_usd": 0.163024,
+        "elapsed_seconds": 3.178
+      },
+      "m08": {
+        "status": "executed",
+        "output": "案内を送信した後、必要な場合だけ内容を再確認する。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "fb68f6d2803dd2744eed925a10be3f9060e608976e571f31fa711bdca6255f06",
+        "cost_usd": 0.162764,
+        "elapsed_seconds": 3.544
+      },
+      "n01": {
+        "status": "executed",
+        "output": "比較する二つの対象を確認させてください。\n\n「蔵書分類案」と「既刊目録」のどちらが比較の主な対象で、何と何を比べているのでしょうか。たとえば次のような読み方があります。\n\n1. 蔵書分類案を、既刊目録と比べた(分類案が現行の目録とどう違うかを調べた)\n2. 既刊目録どうしを比べ、その結果を分類案づくりに使う\n\n原文だけでは、どちらか判断できません。ご意図に合う読み方を教えてください。\n\nなお、「調査結果を図書室内で共有する」という部分は、そのまま残せます。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "0994be6b544dfb64080c7f8f08eae4b11a085076dc6aaf306ee162ca2ada67d6",
+        "cost_usd": 0.164604,
+        "elapsed_seconds": 6.132
+      },
+      "n02": {
+        "status": "executed",
+        "output": "ご指定の条件は両立しません。必須の4語だけで、次のとおり16字あります。\n\n- 検品:2字\n- 仕分け:3字\n- 台帳記録:4字\n- 監督者への説明:7字\n\n8字以内には収まらないため、字数上限を緩められるか確認させてください。1文や体言止めを外しても、総字数は減りません。\n\n必須語を残して1文・体言止めにした仮案は、句点なしで19字です。\n\n> 検品と仕分け、台帳記録、監督者への説明\n\n本文全体の上限は何字までなら認められますか。19字以上であれば、この仮案を完成文として使えます。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "854600a8d228e0b13e8254ee038e8d8e3b5c5594927011e0a31c275a18aa7f32",
+        "cost_usd": 0.169506,
+        "elapsed_seconds": 8.121
+      },
+      "n03": {
+        "status": "executed",
+        "output": "当番職員が装置の状態を確認し、記録を残す。",
+        "model_ids": [
+          "claude-sonnet-5-5"
+        ],
+        "prompt_sha256": "42c2a1833c67184feaae846cee4eec7e6277879a9ca00809af0ae018d43164cb",
+        "cost_usd": 0.16287400000000002,
+        "elapsed_seconds": 2.665
+      },
+      "n04": {
+        "status": "failed",
+        "error_type": "RuntimeError",
+        "elapsed_seconds": 1.63
+      }
+    }
+  },
+  "limits": [
+    "Artificial development cases and four additional cases only",
+    "One generation per input and version",
+    "Not a product-specific installed-skill run",
+    "The implementer reviews semantics; no independent human grading"
+  ],
+  "instruction_patch_from_baseline": "meaning-concern-claude-instructions.patch",
+  "instruction_patch_sha256": "2e48f5e6179dd95a71de96c4ecb6ddc4d82ba0e625a9d681f061e54961a4a874",
+  "missing_output_reason": "One invocation returned a service error; no generated output. The missing result is not graded as success.",
+  "instruction_patch_apply_flags": [
+    "--unidiff-zero"
+  ]
+}
