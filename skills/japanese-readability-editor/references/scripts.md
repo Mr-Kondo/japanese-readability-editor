@@ -15,7 +15,7 @@
 | `verify_preservation.py` | C の保存の検証(`SKILL.md` の「Paragraph-only の手順」) | `verify_preservation.py --strict before.md after.md` | 一致したか、違う位置 | 0=一致、1=不一致、2=読めない |
 | `check_fiction.py` | D の文字数・括弧・指定文字列の検査([fiction-checks.md](fiction-checks.md)) | `check_fiction.py FILE [--settings FILE] [--json]` | 候補の一覧 | fiction-checks.md を参照 |
 | `make_feedback.py` | 利用者が結果の問題を報告したいと言ったときだけ([feedback.md](feedback.md)) | feedback.md を参照 | フィードバック票(JSON)の保存と標準出力、保存先の表示 | 0=保存した、2=入力・保存の誤り |
-| `make_change_report.py` | 利用者が、使った後の変化の記録を求めたときだけ([change-report.md](change-report.md)) | change-report.md を参照 | 本文を含まない選択式の記録(JSON)の保存と標準出力、保存先の表示 | 0=保存した、2=入力・保存の誤り |
+| `make_change_report.py` | モード B の推敲後は自動。ほかは記録を求められたとき([change-report.md](change-report.md)) | change-report.md を参照 | 本文を含まない選択式の記録(JSON)の保存と標準出力、保存先の表示 | 0=保存した、2=入力・保存の誤り |
 | `feedback_storage.py` | `make_feedback.py` と `make_change_report.py` の保存処理。直接実行しない | - | 新規の JSON ファイル | - |
 | `skill_info.py` | 版や実行環境を尋ねられたとき、問題の報告票を作るとき(通常の依頼では実行しない) | `skill_info.py --model <モデル名>` | 版・OS・アプリ・モデル・日付の JSON(標準出力)と、保存先 `~/.agents/skill-env/<スキル名>.json`(標準エラーの `save_to`)。JSON を保存するのは実行した側。`--version` は1行 | 0=出した |
 | `validate_kokugo_rules.py` | 規則データを変えた後の検証。通常の依頼では使わない | `validate_kokugo_rules.py` | 検証結果。`--json` あり | 0=問題なし、1=問題あり、2=実行できず |

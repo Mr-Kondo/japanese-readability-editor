@@ -133,7 +133,7 @@ document.md  (profile: official, rules: 2026-10-10)
 
 ## make_change_report.py
 
-書き換えの前後の変化を、本文を含まない選択式の記録(JSON)として自動保存し、標準出力にも出します。保存先・`--out-dir`・`saved_to`・保存失敗時の動作は `make_feedback.py` と同じです。送信はしません。`compare_rewrite.py` と `measure.py` の結果を、決まった選択肢だけに直します。必須は `--original` と `--result` です。原文か結果が空・読めない場合、`--model` が英数字と `. _ : / -` の64字を超える・外れる場合、`--review` が不正な場合は、何も出さずに終了コード 2 を返します。出力の見方と送付の手順は[変化の記録](feedback.md#使った後の変化を記録する)にあります。
+モード B では通常の推敲後に自動で実行します。書き換えの前後の変化を、本文を含まない選択式の記録(JSON)として自動保存し、標準出力にも出します。保存先・`--out-dir`・`saved_to`・保存失敗時の動作は `make_feedback.py` と同じです。送信はしません。`compare_rewrite.py` と `measure.py` の結果を、決まった選択肢だけに直します。必須は `--original` と `--result` です。原文か結果が空・読めない場合、`--model` が英数字と `. _ : / -` の64字を超える・外れる場合、`--review` が不正な場合は、何も出さずに終了コード 2 を返します。出力の見方と送付の手順は[変化の記録](feedback.md#使った後の変化を記録する)にあります。
 
 ## skill_info.py
 

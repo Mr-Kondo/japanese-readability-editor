@@ -107,13 +107,17 @@ D は先に [references/fiction-writing.md](references/fiction-writing.md) を�
 
 Skill の版や実行環境を尋ねられたとき、または問題の報告票を作るときだけ、`python3 scripts/skill_info.py --model <自分のモデル名>` を実行する(通常の依頼では実行しない)。標準出力の JSON を、標準エラーの `save_to` の場所に保存する。
 
-モード B でスクリプトを実行できる環境では、返す前に必ず、次の照合を行う。書き換える前の文章を、対象と別のディレクトリ(一時ディレクトリなど)へ保存しておき、書き換えた後に、下のコマンドで照合の候補を挙げ、挙がった箇所を元の文と見比べてから返す。短い文章でも省かない(省くと、文体の変化や文の脱落を見落としやすい)。終わったら、その保存先を削除する。この Skill のコマンドは `python3` で書いている。動かなければ `python` で実行する(Windows など)。コマンドの `scripts/` などの相対パスは、この Skill のフォルダ(`SKILL.md` があるフォルダ)からの相対パスで、作業ディレクトリからのものではない。実行するときは、Skill のフォルダの絶対パスを前に付ける。
+モード B でスクリプトを実行できる環境では、返す前に必ず、次の照合を行う。書き換える前の文章を、対象と別のディレクトリ(一時ディレクトリなど)へ保存しておき、書き換えた後に、下のコマンドで照合の候補を挙げ、挙がった箇所を元の文と見比べてから返す。短い文章でも省かない(省くと、文体の変化や文の脱落を見落としやすい)。下の照合と変化の記録が終わったら、その一時保存先を削除する。この Skill のコマンドは `python3` で書いている。動かなければ `python` で実行する(Windows など)。コマンドの `scripts/` などの相対パスは、この Skill のフォルダ(`SKILL.md` があるフォルダ)からの相対パスで、作業ディレクトリからのものではない。実行するときは、Skill のフォルダの絶対パスを前に付ける。
 
 ```bash
 python3 scripts/compare_rewrite.py before.md after.md
 ```
 
 数値・URL・コード・用語の増減、対応する元の文がない文、否定・推量・可能・依頼などの表現の増減、文体の変化を示す。判定ではないので、挙がった箇所を上の観点で元の文と見比べる。SudachiPy が入っていれば、否定と文の対応をより正確に判定する。
+
+モード B では、返す文章が確定した後、記録の依頼がなくても `python3 scripts/make_change_report.py --original before.md --result after.md --mode B` を実行する。原文をそのまま返す場合も記録する。本文を含まない変化の記録が `~/.agents/feedback/japanese-readability-editor/` に保存される。
+
+終了コード 0 と標準エラーの `saved_to` で保存を確認する。保存できなければ「変化の記録は未保存」と伝える。記録の詳細は [references/change-report.md](references/change-report.md)。原文と最終結果の一時ファイルは、記録の後に削除する。
 
 ## Paragraph-only の手順
 
@@ -145,7 +149,7 @@ python3 scripts/verify_preservation.py --strict before.md after.md
 
 ## 出力
 
-通常は、完成した文章だけを返す。ただし、本文だけを返す依頼でも、モード B の返す前の照合(スクリプトを実行できる環境では `compare_rewrite.py`)は省かない。照合の結果は表示しない。漢字率、平均文長、診断結果、内部の確認手順は表示しない。
+通常は、完成した文章だけを返す。ただし、本文だけを返す依頼でも、モード B の返す前の照合と変化の記録(スクリプトを実行できる環境では `compare_rewrite.py` と `make_change_report.py`)は省かない。照合の結果と記録の内容は表示しない。漢字率、平均文長、診断結果、内部の確認手順は表示しない。
 
 利用者が「レビューして」「問題点を挙げて」「計測して」「before/after を比べて」と求めたときだけ、診断情報を示す。
 
@@ -168,4 +172,4 @@ python3 scripts/verify_preservation.py --strict before.md after.md
 - [assets/fiction-examples.md](assets/fiction-examples.md)。小説の直す例・残す例・誤った改稿例。
 - [assets/fiction-context-template.md](assets/fiction-context-template.md)。長編用の任意メモ。
 - [references/feedback.md](references/feedback.md)。利用者がこの Skill の結果の問題を報告したいと言ったときだけ読む。自分から勧めない。
-- [references/change-report.md](references/change-report.md)。利用者が、この Skill を使った後の変化の記録(JSON)を求めたときだけ読む。自分から勧めない。
+- [references/change-report.md](references/change-report.md)。モード B の自動記録、または利用者が変化の記録(JSON)を求めたときの詳細。
