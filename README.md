@@ -91,7 +91,7 @@ python3 tools/install.py --scope user --target common
 
 コピーして使える依頼例と、結果を確認する手順は、[実践ガイド](docs/user-guide.md)にあります。
 
-Skill は、依頼の内容が `description` に合うと自動で使われます。名前を指定して呼ぶこともできます。
+対応環境では、依頼の内容と `description` に基づいて Skill が自動で選ばれる場合があります。自動起動の有無や動作は環境によって異なります。Skill を指定したいときは、下の方法で明示的に呼び出してください。各環境での確認範囲は、[環境別の対応](docs/environments.md)を参照してください。
 
 | 環境 | 明示的に呼ぶ方法 |
 |---|---|
