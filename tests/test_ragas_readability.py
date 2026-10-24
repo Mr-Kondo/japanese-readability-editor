@@ -1,5 +1,4 @@
 """Ragas 採点CLI。Ragas が無い環境では結合試験をスキップする。LLM 呼出しは偽の invoke で置き換え、通信しない。"""
-import copy
 import importlib.util
 import json
 import tempfile

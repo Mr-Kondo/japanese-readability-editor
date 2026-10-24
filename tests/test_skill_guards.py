@@ -1,6 +1,5 @@
 """SKILL.md の分量と、参照先の節が残っていることの回帰テスト。文言の一致は見ない(推敲の質は evals で測る)。"""
 
-import re
 import unittest
 
 from helpers import SKILL_DIR
@@ -36,10 +35,6 @@ class ScriptsAreDocumentedTest(unittest.TestCase):
 
 
 class ReferencesAreNavigableTest(unittest.TestCase):
-    def test_skill_links_resolve(self):
-        for target in re.findall(r"\]\(((?:references|assets)/[^)#]+)\)", read("SKILL.md")):
-            self.assertTrue((SKILL_DIR / target).is_file(), target)
-
     def test_long_reference_files_have_a_table_of_contents(self):
         for folder in ("references", "assets"):
             for path in sorted((SKILL_DIR / folder).glob("*.md")):

@@ -17,7 +17,6 @@ from __future__ import annotations
 import argparse
 import asyncio
 from datetime import datetime, timezone
-import hashlib
 import importlib
 import importlib.metadata as metadata
 import json
