@@ -3,7 +3,6 @@
 macOS や Linux で、`PYTHONUTF8=0` と `PYTHONIOENCODING=cp932` を渡して、Windows の日本語環境に近づけた再現である。
 実機の Windows では確かめていない。
 """
-import contextlib
 import io
 import os
 import subprocess

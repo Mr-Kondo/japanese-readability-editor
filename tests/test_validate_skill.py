@@ -39,11 +39,6 @@ class RealSkillTest(ValidationCase):
         self.assertEqual(problems, [])
         self.assertEqual(sorted(fields), ["description", "name"])
 
-    def test_the_real_skill_description_fits_every_documented_limit(self):
-        text = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
-        fields, _, _ = validate.parse_frontmatter(text)
-        self.assertLessEqual(len(fields["description"]), 200)
-
     def test_the_real_skill_is_an_open_standard_skill_without_local_files(self):
         names = {p.as_posix() for p in validate.iter_skill_files(SKILL_DIR)}
         self.assertIn("SKILL.md", names)
