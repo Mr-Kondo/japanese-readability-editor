@@ -55,6 +55,8 @@ class ReadabilityEvaluationTest(unittest.TestCase):
         def fake_run(command, **kwargs):
             calls.append((command, kwargs))
             body = json.dumps({"result": "出力", "modelUsage": {"test-model": {}}, "is_error": False})
+            if "stream-json" in command:
+                body = json.dumps({**json.loads(body), "type": "result"}) + "\n"
             return subprocess.CompletedProcess(command, 0, stdout=body, stderr="")
 
         with temporary_directory() as tmp, patch.object(evaluation.subprocess, "run", side_effect=fake_run):
@@ -68,10 +70,63 @@ class ReadabilityEvaluationTest(unittest.TestCase):
             self.assertNotIn("--safe-mode", generation)
             self.assertNotIn("--tools", generation)
             self.assertIn("project", generation)
+            self.assertIn("stream-json", generation)
+            self.assertIn("--verbose", generation)
             self.assertNotIn("SKILL_FILES", calls[0][1]["input"])
             self.assertEqual(record["outputs"][0]["text"], "出力")
             evaluation.invoke("採点", Path(tmp) / "judge.json")  # 採点は従来どおり、ツールなしの隔離
             self.assertIn("--safe-mode", calls[1][0])
+
+    def test_tool_results_are_matched_by_id_and_mentions_help_and_shell_chains_do_not_prove_execution(self):
+        commands = ["python3 /skill/scripts/compare_rewrite.py before.md after.md --json",
+                    "python3 /skill/scripts/compare_rewrite.py missing.md after.md",
+                    "python3 /skill/scripts/compare_rewrite.py before.md after.md",
+                    "echo 'python3 scripts/compare_rewrite.py before.md after.md'",
+                    "python3 scripts/compare_rewrite.py --help",
+                    "python3 scripts/compare_rewrite.py before.md after.md || true",
+                    "cat scripts/compare_rewrite.py before.md after.md"]
+        events = [{"type": "assistant", "message": {"content": [
+            {"type": "tool_use", "id": str(i), "name": "Bash", "input": {"command": command}}]}}
+                  for i, command in enumerate(commands)]
+        for i in reversed(range(len(commands))):
+            if i != 2:
+                events.append({"type": "user", "message": {"content": [
+                    {"type": "tool_result", "tool_use_id": str(i), "is_error": i == 1,
+                     "content": "FileNotFoundError" if i == 1 else "output"}]}})
+        events += events[:1]  # 同じメッセージの再送を二重に数えない
+        result = evaluation.tool_evidence(events)
+        self.assertEqual(len(result["tool_calls"]), len(commands))
+        self.assertEqual([c["compare_rewrite_status"] for c in result["tool_calls"]],
+                         ["success", "failed"] + ["unconfirmed"] * 5)
+        self.assertEqual(result["compare_rewrite_status"], "success")
+        self.assertEqual(result["tool_calls"][1]["result"]["content"], "FileNotFoundError")
+        failed_result = next(e for e in events if e["type"] == "user"
+                             and e["message"]["content"][0]["tool_use_id"] == "1")
+        self.assertEqual(evaluation.tool_evidence(events[1:2] + [failed_result])["compare_rewrite_status"], "failed")
+        self.assertEqual(evaluation.tool_evidence([])["compare_rewrite_status"], "unconfirmed")
+        background = copy.deepcopy(events[:1] + [next(e for e in events if e["type"] == "user"
+                                                     and e["message"]["content"][0]["tool_use_id"] == "0")])
+        background[1]["tool_use_result"] = {"backgroundTaskId": "task-1"}
+        self.assertEqual(evaluation.tool_evidence(background)["compare_rewrite_status"], "unconfirmed")
+
+    def test_installed_stream_keeps_raw_evidence_and_requires_a_final_result(self):
+        final = {"type": "result", "result": "本文", "modelUsage": {"test-model": {}},
+                 "is_error": False, "num_turns": 3, "total_cost_usd": 0.1}
+        with temporary_directory() as tmp:
+            skill = Path(tmp) / "skill"
+            skill.mkdir()
+            path = Path(tmp) / "raw.json"
+            for events in ([{"type": "system"}, final], [{"type": "system"}], [[], final]):
+                raw = "\n".join(json.dumps(e) for e in events)
+                with patch.object(evaluation.subprocess, "run", return_value=subprocess.CompletedProcess([], 0, raw, "")):
+                    if events[0] == {"type": "system"} and len(events) == 2:
+                        result = evaluation.invoke("input", path, skill)
+                        self.assertEqual(result["compare_rewrite_status"], "unconfirmed")
+                        self.assertEqual(result["num_turns"], 3)
+                    else:
+                        with self.assertRaises((ValueError, RuntimeError)):
+                            evaluation.invoke("input", path, skill)
+                self.assertEqual(json.loads(path.read_text(encoding="utf-8"))["stdout"], raw)
 
     def test_case_ids_and_repeats_narrow_the_run_and_unknown_ids_are_refused(self):
         other = {**CASE, "id": "two"}
@@ -98,7 +153,8 @@ class ReadabilityEvaluationTest(unittest.TestCase):
 
     def test_failed_model_call_preserves_partial_outputs_and_error_evidence(self):
         raw = json.dumps({"result": CASE["text"], "modelUsage": {"test-model": {}}, "is_error": False})
-        responses = [subprocess.CompletedProcess([], 0, raw, ""), subprocess.TimeoutExpired("claude", 180)]
+        responses = [subprocess.CompletedProcess([], 0, raw, ""),
+                     subprocess.TimeoutExpired("claude", 180, output=b"partial stream", stderr=b"timeout detail")]
         with temporary_directory() as tmp:
             folder = Path(tmp)
             record = {"suite": copy.deepcopy(SUITE), "skill_files": {}, "outputs": [], "grading_calls": []}
@@ -110,6 +166,7 @@ class ReadabilityEvaluationTest(unittest.TestCase):
             self.assertEqual(len(saved["outputs"]), 1)
             self.assertNotIn("summary", saved)
             self.assertIn("error", json.loads((folder / "g002.json").read_text(encoding="utf-8")))
+            self.assertEqual(json.loads((folder / "g002.json").read_text(encoding="utf-8"))["stdout"], "partial stream")
 
     def test_invalid_model_responses_leave_raw_evidence_and_raise(self):
         valid = {"result": "本文", "modelUsage": {"test-model": {}}, "is_error": False}
