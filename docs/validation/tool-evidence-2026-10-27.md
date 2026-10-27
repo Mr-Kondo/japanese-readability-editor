@@ -32,7 +32,7 @@
 | `--help`のみ | 用法表示に成功 | `unconfirmed` |
 
 1セッションの定価換算費用は **$0.0658283**。
-生記録は公開しない `feedback/issue-100/live-direct.json`、抽出結果は同じ場所の
+生記録は公開しない `feedback/claude-resume-20261027/issue-100/live-direct.json`、抽出結果は同じ場所の
 `live-direct-summary.json` に保存した。保存済みstreamを最終実装で再抽出して照合できる。
 この確認は記録方式の検証であり、実際の推敲の品質や照合後の修正を評価するものではない。
 
