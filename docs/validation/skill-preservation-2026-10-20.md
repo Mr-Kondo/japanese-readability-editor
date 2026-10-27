@@ -64,6 +64,8 @@ fail の中身(回数はケースごとの3回中):
 
 ## 追記: B で `compare_rewrite.py` を必ず実行させた版の比較(v0.18.0、v0.19.1、2026-10-21 に訂正)
 
+2026-10-27に、同じv0.19.1を基準とする[A/B文言の比較](compare-wording-2026-10-27.md)を新規に実行した。x16がモードAであること、照合結果の観察と終了状態の区別、採点の自己矛盾を記録した。以下の旧数値はそのまま残す。
+
 Issue 90 の判断(利用者の指示)で、B の既定の手順を「書き換える前の文章を保存し、書き換えた後に `compare_rewrite.py` で照合する」に変えた(v0.18.0)。記録は [evals/skill-dir-preservation/](../../evals/skill-dir-preservation/) と [evals/token-usage/runs-compare-rewrite-mandatory/](../../evals/token-usage/runs-compare-rewrite-mandatory/)。
 
 **訂正:** 最初に書いた版(v0.18.0 のリリースノートと、この節の最初の版)は、「意味保存の試験は道具なし(`--tools ''`)で流した」と書いていた。**誤りだった。** `--skill-dir` を指定した生成は、最初から道具あり(`INSTALLED_FLAGS`、`bypassPermissions`)で、スクリプトを実行できる。誤解の原因は、記録 `run.json` の `flags` 欄が、`--skill-dir` のときも道具なしの従来の値のままだったこと。直した(`flags` に実際の値を入れ、出力ごとに `num_turns` と費用を記録する)。ただし、v0.18.0 までの記録(`v0.17.0-*`、`v0.17.1-full-16x3`、`v0.18.0-full-16x3`、`v0.18.0-x08-x14-x15-x16-10x`)には、`num_turns` がない。**そのため、それらの回でスクリプトを実行したかは、確かめられない。** 以下は、`num_turns` を記録して流し直した結果(Sonnet 5.5)。当初は、Skill の読み込み・書き換え・返答で3ターンと仮定し、4以上を照合実行、3を未実行と分類した。この分類は、次の追加訂正のとおり推定にとどまる。
