@@ -40,7 +40,7 @@ from validate_skill import EXPECTED_NAME, SKILL_FILE, default_skill_dir, iter_sk
 ZIP_TIMESTAMP = (2026, 1, 1, 0, 0, 0)  # 再現可能な ZIP にするため固定する
 AGENT_BUNDLE_TARGETS = install.ENVIRONMENT_TARGETS  # 配布物を生成する環境。配置先は install.py の表から取る
 REPOSITORY_URL = "https://github.com/Mr-Kondo/japanese-readability-editor"
-GEMINI_EXCLUDED_DIRS = ("scripts", "data")  # Gemini Apps では実行できない scripts/ と、その入力にしか使わない data/ は含めない
+GEMINI_EXCLUDED_DIRS = ("scripts", "data")  # 本SkillのGemini Apps実行は未確認のため、スクリプトと専用入力を除外する
 FENCE_RE = re.compile(r"^\s{0,3}(`{3,}|~{3,})")
 RELATIVE_LINK_RE = re.compile(r"\[([^\]]+)\]\((?![A-Za-z][A-Za-z0-9+.-]*:|#)[^)\s]+\)")
 
@@ -139,7 +139,7 @@ def render_gemini_apps_instructions(skill_dir: Path) -> str:
         "Gem の「指示」、または Custom Instructions に貼り付けて使う。"
         "Gemini Apps の Skills では、この文書ではなく Skill のフォルダ(SKILL.md)をそのままアップロードできる。",
         "",
-        "この文書は、共通の Agent Skill から自動生成した。scripts/ は実行できないので、"
+        "この文書は、共通の Agent Skill から自動生成した。この貼付用の文書には scripts/ を同梱しない。"
         "計測と検証が必要なときは、長さの見積もりと空白以外の文字の一致を自分で確かめる。",
         "",
         "## Part 1. 指示",

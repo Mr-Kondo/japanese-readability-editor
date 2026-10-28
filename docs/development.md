@@ -91,7 +91,7 @@ dist/
 └── hermes/                                  # Hermes Agent 用。japanese-readability-editor/ と INSTALL.md
 ```
 
-ZIP の最上位は `japanese-readability-editor/` の1フォルダです。その直下に、`SKILL.md`、`references/`、`scripts/`、`data/`、`assets/` が入ります。Gemini Apps 向けのフォルダは、実行できない `scripts/` と、その入力にしか使わない `data/` を含めません。ZIP のルートへ直接 `SKILL.md` を置く構造ではありません。
+ZIP の最上位は `japanese-readability-editor/` の1フォルダです。その直下に、`SKILL.md`、`references/`、`scripts/`、`data/`、`assets/` が入ります。Gemini Apps 向けのフォルダは、本Skillの実機実行を未確認のため、`scripts/` と、その入力にしか使わない `data/` を含めません。これはGemini Apps全体でスクリプトを実行できないという意味ではありません。ZIP のルートへ直接 `SKILL.md` を置く構造ではありません。
 
 ZIP は再現可能で、同じ入力からは同じ SHA-256 になります。`--no-gemini-apps` で、Gemini Apps 向けの出力を省けます。
 

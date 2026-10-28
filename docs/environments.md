@@ -15,7 +15,7 @@
 | Claude Cowork | あり | 非対応(アップロード方式) | 非対応 | 可。Customize → Skills。ZIP の最上位にフォルダ | コード実行の有効化が必要。プランの記載は公式ページ間で異なる。`description` に200字の上限があるという記載あり |
 | Claude Code | あり | `.claude/skills/` | `~/.claude/skills/` | 不要 | `.agents/skills` は読まない。未知の frontmatter は無視される。symlink 可 |
 | GitHub Copilot | あり(cloud agent、code review、CLI、app、VS Code / JetBrains の agent mode) | `.agents/skills/`、`.github/skills/`、`.claude/skills/` | `~/.agents/skills/`、`~/.copilot/skills/` | 不要 | 利用できるプランは未確認 |
-| Gemini Apps | あり(Skills。Gems は 2026-11 以降 Skills へ移行) | 非対応 | 非対応(アカウントに保存) | `SKILL.md` またはフォルダをアップロード。ZIP の可否は未確認 | `scripts/` の扱いは未確認。生成物は [Gemini Apps](#gemini-apps) |
+| Gemini Apps | あり(Skills。Gems は 2026-11 以降 Skills へ移行) | 非対応 | 非対応(アカウントに保存) | `SKILL.md`、フォルダ、ZIPのアップロードを公式資料で確認 | 本Skillの実取り込み・スクリプト実行は未確認。生成物は [Gemini Apps](#gemini-apps) |
 | Gemini CLI | あり | `.agents/skills/`、`.gemini/skills/` | `~/.agents/skills/`、`~/.gemini/skills/` | 不要 | 同じ階層では `.agents/skills` が優先。`/skills list` で確認 |
 | Antigravity IDE | あり | `.agents/skills/`(旧 `.agent/skills/` も互換) | `~/.gemini/config/skills/`(旧 `~/.gemini/antigravity/skills/`) | 不要 | `/<skill-name>` で呼べる |
 | Antigravity CLI | あり | `.agents/skills/` | `~/.gemini/antigravity-cli/skills/` | 不要 | `~/.agents/skills` は自動では読まれないとする記述あり(Codelab)。未確認 |
@@ -33,7 +33,7 @@ OpenAI ヘルプセンターの記事は、自動取得できませんでした�
 次の項目は、公式資料で確認できていません。
 
 - ChatGPT Work のプラン条件と、管理者の設定(Plus プランでの動作は確認済み)
-- Gemini Apps の `scripts/` の扱いと、ZIP の可否
+- Gemini Apps での本Skillの取り込み、参照ファイルの利用、スクリプト実行（ZIP対応と対応形式は公式資料で確認済み）
 - Copilot のプラン条件
 - Antigravity の `~/.agents/skills`
 - Hermes Agent の、ホスト型の主要モデルでの動作(確かめたのはローカルモデルだけ)と、対話セッションでの `/japanese-readability-editor`
@@ -154,9 +154,13 @@ Skills は、`SKILL.md` またはそれを含むフォルダをアップロー�
 | `dist/gemini-apps/japanese-readability-editor/` | `scripts/` を除いたコピー。Skills へフォルダごとアップロードする |
 | `dist/gemini-apps-instructions.md` | Gem の指示、または Custom Instructions に貼り付ける |
 
-指示文は、Part 1(`SKILL.md` の本文)と Part 2(詳細ルール)からなります。文字数の上限で貼れない場合は、Part 2 を省いてください。上限は公式資料で確認できていません。Gemini Apps では `scripts/` を実行できないので、計測と検証は Agent が手作業で近似します。
+指示文は、Part 1(`SKILL.md` の本文)と Part 2(詳細ルール)からなります。文字数の上限で貼れない場合は、Part 2 を省いてください。指示欄の文字数上限は公式資料で確認できていません。
+
+2026-10-28に確認した[公式のSkills取り込み手順](https://support.google.com/gemini/answer/17094296?hl=en)では、ルートにSKILL.mdを置いたフォルダまたはZIP、参照ファイル、`.py`・`.sh`などの形式に対応し、アップロード全体の上限は100 MBです。外部サイトへの操作・リクエストや、インターネットへの接続を要するスクリプトは非対応です。ファイル形式の対応は、本Skillの実行確認ではありません。現行の生成物は引き続き`scripts/`を除外しており、本Skillの参照・スクリプト処理は実機で未確認です。
 
 ## Gemini CLI
+
+2026-10-28に0.66.0を隔離環境で起動し、v0.21.2の登録と検出を確認しました。既存の個人アカウントOAuthでは`IneligibleTierError`で拒否され、推敲・照合は実行できませんでした。Googleは[個人アカウント向けCode Assistの提供終了とAntigravityへの移行](https://developers.google.com/gemini-code-assist/docs/deprecations/code-assist-individuals)を案内しています。以下の配置仕様と、現在のアカウントでモデルを呼べることは区別してください。
 
 `.agents/skills/` は `.gemini/skills/` の別名で、同じ階層では優先されます。適用順は、ワークスペース、ユーザー、拡張機能、組み込みの順です。確認と管理には、次の機能を使えます。
 
