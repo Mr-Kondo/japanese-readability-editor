@@ -40,7 +40,7 @@ from validate_skill import EXPECTED_NAME, SKILL_FILE, default_skill_dir, iter_sk
 ZIP_TIMESTAMP = (2026, 1, 1, 0, 0, 0)  # 再現可能な ZIP にするため固定する
 AGENT_BUNDLE_TARGETS = install.ENVIRONMENT_TARGETS  # 配布物を生成する環境。配置先は install.py の表から取る
 REPOSITORY_URL = "https://github.com/Mr-Kondo/japanese-readability-editor"
-GEMINI_EXCLUDED_DIRS = ("scripts", "data")  # 本SkillのGemini Apps実行は未確認のため、スクリプトと専用入力を除外する
+GEMINI_EXCLUDED_DIRS = ("scripts", "data")  # Gemini Apps Chat向けはスクリプトを使わない構成とし、専用入力も除外する
 FENCE_RE = re.compile(r"^\s{0,3}(`{3,}|~{3,})")
 RELATIVE_LINK_RE = re.compile(r"\[([^\]]+)\]\((?![A-Za-z][A-Za-z0-9+.-]*:|#)[^)\s]+\)")
 
@@ -176,14 +176,14 @@ def render_gemini_apps_instructions(skill_dir: Path) -> str:
 
 
 def export_gemini_apps_folder(skill_dir: Path, target_root: Path) -> List[str]:
-    """scripts/ と data/ を除いた skill のコピーを target_root/<name>/ に作る。"""
+    """scripts/、data/、取り込みで拒否される VERSION を除いたコピーを作る。"""
     skill_dir = Path(skill_dir)
     destination = target_root / skill_dir.resolve().name
     if target_root.exists():
         shutil.rmtree(target_root)
     copied: List[str] = []
     for relative in iter_skill_files(skill_dir):
-        if relative.parts[0] in GEMINI_EXCLUDED_DIRS:
+        if relative.parts[0] in GEMINI_EXCLUDED_DIRS or relative == Path("VERSION"):
             continue
         target = destination / relative
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -350,7 +350,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         instructions.write_text(text, encoding="utf-8")
         print(f"gemini  {instructions} ({len(text)} chars)")
         copied = export_gemini_apps_folder(skill_dir, out_dir / "gemini-apps")
-        print(f"gemini  {out_dir / 'gemini-apps' / name} ({len(copied)} files, scripts/ and data/ excluded)")
+        print(f"gemini  {out_dir / 'gemini-apps' / name} ({len(copied)} files, scripts/, data/, and VERSION excluded)")
 
     if not args.no_agent_bundles and not build_agent_bundles(skill_dir, out_dir, args.bundle or AGENT_BUNDLE_TARGETS):
         return 1

@@ -150,6 +150,12 @@ class GeminiAppsAdapterTest(PackageCase):
         self.assertFalse([c for c in copied if c.startswith("scripts/")])
         self.assertFalse((self.out / "gemini-apps" / SKILL_NAME / "scripts").exists())
 
+    def test_folder_export_omits_unsupported_extensionless_version_marker(self):
+        copied = package.export_gemini_apps_folder(SKILL_DIR, self.out / "gemini-apps")
+        self.assertTrue((SKILL_DIR / "VERSION").is_file())
+        self.assertNotIn("VERSION", copied)
+        self.assertFalse((self.out / "gemini-apps" / SKILL_NAME / "VERSION").exists())
+
 
 class AgentBundleTest(PackageCase):
     """OpenCode と Hermes Agent 向けの配布物。正本の完全な複製と、生成した INSTALL.md。"""

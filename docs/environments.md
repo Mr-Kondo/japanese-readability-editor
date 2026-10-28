@@ -15,7 +15,7 @@
 | Claude Cowork | あり | 非対応(アップロード方式) | 非対応 | 可。Customize → Skills。ZIP の最上位にフォルダ | コード実行の有効化が必要。プランの記載は公式ページ間で異なる。`description` に200字の上限があるという記載あり |
 | Claude Code | あり | `.claude/skills/` | `~/.claude/skills/` | 不要 | `.agents/skills` は読まない。未知の frontmatter は無視される。symlink 可 |
 | GitHub Copilot | あり(cloud agent、code review、CLI、app、VS Code / JetBrains の agent mode) | `.agents/skills/`、`.github/skills/`、`.claude/skills/` | `~/.agents/skills/`、`~/.copilot/skills/` | 不要 | 利用できるプランは未確認 |
-| Gemini Apps | あり(Skills。Gems は 2026-11 以降 Skills へ移行) | 非対応 | 非対応(アカウントに保存) | `SKILL.md`、フォルダ、ZIPのアップロードを公式資料で確認 | 本Skillの実取り込み・スクリプト実行は未確認。生成物は [Gemini Apps](#gemini-apps) |
+| Gemini Apps | あり(Skills。Gems は 2026-11 以降 Skills へ移行) | 非対応 | 非対応(アカウントに保存) | `SKILL.md`、フォルダ、ZIPに対応。ZIPは実機でも確認 | Chatではコードなし構成の参照利用を確認。スクリプトの実行成功は未確認。[Gemini Apps](#gemini-apps) |
 | Gemini CLI | あり | `.agents/skills/`、`.gemini/skills/` | `~/.agents/skills/`、`~/.gemini/skills/` | 不要 | 同じ階層では `.agents/skills` が優先。`/skills list` で確認 |
 | Antigravity IDE | あり | `.agents/skills/`(旧 `.agent/skills/` も互換) | `~/.gemini/config/skills/`(旧 `~/.gemini/antigravity/skills/`) | 不要 | `/<skill-name>` で呼べる |
 | Antigravity CLI | あり | `.agents/skills/` | `~/.gemini/antigravity-cli/skills/` | 不要 | `~/.agents/skills` は自動では読まれないとする記述あり(Codelab)。未確認 |
@@ -33,7 +33,7 @@ OpenAI ヘルプセンターの記事は、自動取得できませんでした�
 次の項目は、公式資料で確認できていません。
 
 - ChatGPT Work のプラン条件と、管理者の設定(Plus プランでの動作は確認済み)
-- Gemini Apps での本Skillの取り込み、参照ファイルの利用、スクリプト実行（ZIP対応と対応形式は公式資料で確認済み）
+- Gemini Appsでのスクリプトの実行成功と、Chat以外のモードでの利用（ChatのZIP取り込み・参照利用は実機確認済み）
 - Copilot のプラン条件
 - Antigravity の `~/.agents/skills`
 - Hermes Agent の、ホスト型の主要モデルでの動作(確かめたのはローカルモデルだけ)と、対話セッションでの `/japanese-readability-editor`
@@ -151,12 +151,14 @@ Skills は、`SKILL.md` またはそれを含むフォルダをアップロー�
 
 | 生成物 | 使い方 |
 |---|---|
-| `dist/gemini-apps/japanese-readability-editor/` | `scripts/` を除いたコピー。Skills へフォルダごとアップロードする |
+| `dist/gemini-apps/japanese-readability-editor/` | `scripts/`・`data/`・`VERSION`を除いたコピー。Skills へフォルダごとアップロードする |
 | `dist/gemini-apps-instructions.md` | Gem の指示、または Custom Instructions に貼り付ける |
 
 指示文は、Part 1(`SKILL.md` の本文)と Part 2(詳細ルール)からなります。文字数の上限で貼れない場合は、Part 2 を省いてください。指示欄の文字数上限は公式資料で確認できていません。
 
-2026-10-28に確認した[公式のSkills取り込み手順](https://support.google.com/gemini/answer/17094296?hl=en)では、ルートにSKILL.mdを置いたフォルダまたはZIP、参照ファイル、`.py`・`.sh`などの形式に対応し、アップロード全体の上限は100 MBです。外部サイトへの操作・リクエストや、インターネットへの接続を要するスクリプトは非対応です。ファイル形式の対応は、本Skillの実行確認ではありません。現行の生成物は引き続き`scripts/`を除外しており、本Skillの参照・スクリプト処理は実機で未確認です。
+2026-10-28に確認した[公式のSkills取り込み手順](https://support.google.com/gemini/answer/17094296?hl=en)では、ルートにSKILL.mdを置いたフォルダまたはZIP、参照ファイル、`.py`・`.sh`などの形式に対応し、アップロード全体の上限は100 MBです。外部サイトへの操作・リクエストや、インターネットへの接続を要するスクリプトは非対応です。ファイル形式の対応と、本Skillの実行成功は区別します。
+
+同日の実機では、`VERSION`入りのZIPが未対応形式として拒否され、同じZIPから`VERSION`だけを除くと保存できました。コード同梱版についてGemini FlashのChatはロード不可と回答し、スクリプトの実行結果は得られませんでした。`scripts/`・`data/`・`VERSION`を除く通常構成では、参照ファイルの見出し・記述と回答の一致、およびモードBの本文出力を確認しました。スクリプト実行の成功や、Taskなど他モードの対応は未確認です。[実機確認の範囲と限界](validation/gemini-apps-2026-10-28.md)に記録しています。
 
 ## Gemini CLI
 
