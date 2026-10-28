@@ -172,3 +172,16 @@ CI は `.github/workflows/ci.yml` にあります。Ubuntu、macOS、Windows で
 Ubuntu では、Python 3.10 と最新版で試し、2つのジョブでは SudachiPy を入れて試します。辞書は、一方が core、もう一方が small です。`compare_rewrite.py` の SudachiPy を使うテストは、SudachiPy が入っている環境だけで実行します。
 
 テストは、利用者の Python 環境に何も入れません。SudachiPy がない経路は、入っていない仮想環境、または import を塞いだ別プロセスで試します。ある経路は、SudachiPy が入っている環境で実行します。OpenCode と Hermes の配置先のテストは、一時ディレクトリの `--home`、または一時ディレクトリを指す `HOME` だけを使います。利用者の `HERMES_HOME` などの環境変数が混ざらないよう、子プロセスから外しています。
+
+## PR 後の CI 失敗通知(auto_fix)の対象と Codex での扱い
+
+`auto_fix` は、Claude Code デスクトップアプリの PR 監視の設定です(ツール `ccd_pr` の `set_monitor`)。有効にすると、アプリが、そのセッションが開いた PR の CI 失敗、マージの競合、レビューコメントを、セッションへの通知として届けます。GitHub の機能ではなく、リポジトリ側の設定でもありません。
+
+Codex には、これに相当する設定の操作が見当たりません(確認: 2026-10-29、Codex CLI 0.164.0 のコマンド一覧と `config.toml` に PR 監視の項目がない。この環境の Codex から使えるのは GitHub のプラグインと MCP で、監視の設定は含まれない)。したがって、Codex が作った PR は次のように扱います。
+
+- 自動マージ(必須チェックが通ったら GitHub がマージする設定)は、Codex からも設定できる。設定する。
+- `auto_fix` は未設定と報告する。設定済みとは言わない。
+- `gh`・Monitor・ScheduleWakeup・定期ポーリングで CI を繰り返し確認しない。
+- CI の失敗を受け取りたい PR は、Claude Code のセッションで開く、または利用者が GitHub の通知で受ける。
+
+OpenAI の公式ガイド([Autofix CI failures](https://developers.openai.com/codex/guides/autofix-ci))にある方法は、GitHub Actions の `workflow_run` で `openai/codex-action` を動かし、修正を別の PR として提案するものです。セッションへの通知ではなく、`auto_fix` の代わりにはなりません。`OPENAI_API_KEY` を GitHub のシークレットに置く必要があり、リポジトリの恒久的な設定になるため、利用者の許可なしには入れません。
