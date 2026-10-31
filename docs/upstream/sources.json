@@ -317,7 +317,7 @@
         "checked": "2026-10-18"
       },
       "watch": {
-        "enabled": true,
+        "enabled": false,
         "paths": [
           "packages/core/src/skill.ts",
           "packages/core/src/skill/**"
@@ -345,7 +345,7 @@
         "checked": "2026-10-18"
       },
       "watch": {
-        "enabled": true,
+        "enabled": false,
         "paths": [
           "agent/skill_*.py",
           "hermes_cli/skills_*.py",
