@@ -65,10 +65,10 @@
         ]
       },
       "reviewed": {
-        "ref": "v1.6.0",
-        "sha": "a739fee1b6d5cdac157959cb4fefb7f84a29c77b",
-        "at": "2026-10-16T03:52:01Z",
-        "review": "docs/upstream/reviews/natural-japanese-v1.6.0.md"
+        "ref": "v1.6.4",
+        "sha": "25a8638b780037a2012e2bb3f624a0b1710666fb",
+        "at": "2026-10-28T13:06:11Z",
+        "review": "docs/upstream/reviews/natural-japanese-v1.6.4.md"
       },
       "adopted": [
         "語順、読点、接続詞の射程、否定の入れ子、列挙の埋没、語形の重さの整理",
@@ -230,10 +230,10 @@
         ]
       },
       "reviewed": {
-        "ref": "4b8019d",
-        "sha": "4b8019d7fa08e1e1866be360fadab2a2f7cbcf11",
-        "at": "2026-10-14T20:46:44Z",
-        "review": "docs/upstream/reviews/story-skills-v0.24.0.md"
+        "ref": "v0.24.1",
+        "sha": "e44c97ce8eee4db3bbc82db05c4f7982e470e2bd",
+        "at": "2026-10-27T22:35:03Z",
+        "review": "docs/upstream/reviews/story-skills-v0.24.1.md"
       },
       "adopted": [
         "chapter-writing・voice-style・revision-continuity・line-editing の責務分離。設定・文体・整合性を区別する考え方"
