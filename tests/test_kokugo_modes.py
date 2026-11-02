@@ -254,13 +254,13 @@ class MeaningChangesAreStillFlaggedByTheExistingComparisonTest(unittest.TestCase
         self.assertEqual([i.text for i in result["terms"]["missing"]], ["ユーザー"])
         self.assertEqual([i.text for i in result["terms"]["added"]], ["システム"])
 
-    def test_known_limit_a_subject_swap_between_plain_kanji_nouns_is_not_flagged(self):
-        """既知の限界: 漢字の名詞だけの主体の入れ替え(利用者→管理者)は、現在の照合では挙がらない。
+    def test_a_subject_swap_to_a_role_word_is_flagged_as_roles_only(self):
+        """漢字の名詞だけの主体の入れ替えのうち、足された語が担当・役割の語(利用者→管理者)なら、roles で挙がる(#136)。
 
-        SKILL.md の『主体が同じか』は、人が元の文と見比べて確かめる。このテストは、機械が補助できない範囲を明示するためにある。
-        機械が拾えるように改良したときは、このテストを意図して更新する。
+        一覧にない語どうしの入れ替えは、挙がらない。SKILL.md の『主体が同じか』は、人が元の文と見比べて確かめる。
         """
-        self.assertEqual(pointers(run_compare("利用者が申請を承認する。\n", "管理者が申請を承認する。\n")), [])
+        self.assertEqual(pointers(run_compare("利用者が申請を承認する。\n", "管理者が申請を承認する。\n")), ["roles"])
+        self.assertEqual(pointers(run_compare("利用者が申請を承認する。\n", "従業員が申請を承認する。\n")), [])
 
     def test_known_limit_a_causal_reversal_is_not_flagged(self):
         """既知の限界: 因果関係の入れ替えは、現在の照合では挙がらない。人が確かめる。"""

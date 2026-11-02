@@ -17,6 +17,8 @@ SKILL.md の「書き換えた後の照合」を、機械で補助する。挙�
   code       インラインコードと fenced code block が消えた、または増えた
   terms      英数字の語とカタカナ語(固有名詞・技術用語の候補)が、文書から消えた、または新しく出た。
              出る回数は比べない(重複を減らす書き換えで、回数は自然に減る)
+  roles      担当・役割の語(担当者、管理者など)が、原文になく書き換え後に新しく出た。
+             書き換えで足された担当の候補。消えた語は挙げない。--allow-role で語を除ける
   unmatched  書き換え後の文に、対応する元の文がない(原文にない情報の候補)。
              元の文に、対応する書き換え後の文がない(削除の候補)
   markers    否定、推量、可能、義務、依頼、勧誘、強調、限定、残余の条件の表現が、
@@ -79,6 +81,8 @@ COUNTER_VARIANT_RE = re.compile(rf"[{_COUNTER_VARIANT}]([所月])$")
 ASCII_TERM_RE = re.compile(r"[A-Za-z][A-Za-z0-9_.+#/-]*[A-Za-z0-9+#]|[A-Za-z]{2,}")
 KATAKANA_TERM_RE = re.compile(r"[ァ-ヴ][ァ-ヴー]{2,}")
 FENCED_BLOCK_RE = re.compile(r"^ {0,3}(`{3,}|~{3,})[^\n]*\n(.*?)^ {0,3}\1[`~]*[ \t]*$", re.M | re.S)
+# 担当・役割の語。固有の役職名や部署名は拾わない小さな一覧で、同義語は見逃す。長い語を先に書く。
+ROLE_RE = re.compile(r"システム管理者|管理者|担当者|責任者|運用者|運営者|事務局|部署|チーム")
 HEADING_MARK_RE = re.compile(r"^\s{0,3}#{1,6}\s+")
 
 # --- 表現の種類 -------------------------------------------------------------
@@ -248,6 +252,7 @@ class Document:
     urls: List[Item] = field(default_factory=list)
     code: List[Item] = field(default_factory=list)
     terms: List[Item] = field(default_factory=list)
+    roles: List[Item] = field(default_factory=list)
     sentences: List[Sentence] = field(default_factory=list)
 
 
@@ -293,6 +298,7 @@ def collect_line_items(number: int, line: str, doc: Document, markdown: bool, an
     for m in NUMBER_RE.finditer(line):
         text = m.group(0).replace(" ", "")
         doc.numbers.append(Item(number, text, number_key(text)))
+    doc.roles += [Item(number, m.group(0)) for m in ROLE_RE.finditer(line)]
     for pattern in (ASCII_TERM_RE, KATAKANA_TERM_RE):
         doc.terms += [Item(number, m.group(0), analyzer.term_key(m.group(0))) for m in pattern.finditer(line)]
 
@@ -463,7 +469,14 @@ def majority_style(counts: Dict[str, int]) -> Optional[str]:
     return "polite" if counts["polite"] > counts["plain"] else "plain"
 
 
-def compare_documents(before: Document, after: Document, tokenizer: str = RegexAnalyzer.name) -> dict:
+def compare_roles(before: List[Item], after: List[Item], allowed: Sequence[str]) -> Dict[str, List[Item]]:
+    """書き換え後に新しく出た担当・役割の語だけを返す。原文にある語と、除く指定の語は挙げない。"""
+    added = compare_presence(before, after)["added"]
+    return {"missing": [], "added": [item for item in added if item.text not in allowed]}
+
+
+def compare_documents(before: Document, after: Document, tokenizer: str = RegexAnalyzer.name,
+                      allow_roles: Sequence[str] = ()) -> dict:
     unmatched, markers = compare_sentences(before, after)
     style_before, style_after = style_counts(before), style_counts(after)
     majorities = (majority_style(style_before), majority_style(style_after))
@@ -473,6 +486,7 @@ def compare_documents(before: Document, after: Document, tokenizer: str = RegexA
         "urls": compare_items(before.urls, after.urls),
         "code": compare_items(before.code, after.code),
         "terms": compare_presence(before.terms, after.terms),
+        "roles": compare_roles(before.roles, after.roles, allow_roles),
         "unmatched": unmatched,
         "markers": markers,
         "style": {"before": style_before, "after": style_after,
@@ -482,7 +496,7 @@ def compare_documents(before: Document, after: Document, tokenizer: str = RegexA
 
 # --- 出力 -------------------------------------------------------------------
 
-ITEM_KINDS = ("numbers", "urls", "code", "terms")
+ITEM_KINDS = ("numbers", "urls", "code", "terms", "roles")
 
 
 def format_list(lines: List[str], items: List[Item], path: str, label: str, limit: int) -> None:
@@ -552,6 +566,8 @@ def build_parser() -> argparse.ArgumentParser:
                         help=f"種類ごとに表示する件数の上限。0 で無制限。既定 {DEFAULT_MAX_SHOWN}")
     parser.add_argument("--format", choices=("auto", "markdown", "plain"), default="auto",
                         help="Markdown として解析するか。auto は before の拡張子で判断する。既定 auto")
+    parser.add_argument("--allow-role", action="append", default=[], metavar="WORD",
+                        help="roles として挙げない語(原文以外の資料にある担当など)。繰り返して指定できる")
     parser.add_argument("--tokenizer", choices=("auto", "sudachi", "regex"), default="auto",
                         help="auto は SudachiPy が入っていれば使い、なければ regex。既定 auto")
     return parser
@@ -585,7 +601,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         return 2
     markdown = measure.is_markdown_path(args.before, args.format)
     result = compare_documents(parse_document(before_text, args.before, markdown, analyzer),
-                               parse_document(after_text, args.after, markdown, analyzer), analyzer.name)
+                               parse_document(after_text, args.after, markdown, analyzer), analyzer.name,
+                               allow_roles=args.allow_role)
     if args.json:
         print(json.dumps(to_json(result, args.before, args.after), ensure_ascii=False, indent=2))
     else:
