@@ -394,6 +394,58 @@ class CommandLineTest(unittest.TestCase):
         self.assertFalse((skill / "scripts" / "__pycache__").exists())
 
 
+class PermissionStatusCausalMarkersTest(unittest.TestCase):
+    """許可・未定の状態・因果の接続の語を、表現の種類として数える(#141)。"""
+
+    def assert_changed(self, before: str, after: str, kind: str):
+        self.assertIn(kind, changed_markers(run(before, after)), (before, after))
+
+    def test_permission_changes_are_reported(self):
+        self.assert_changed("設定を変更してよい。", "設定を変更できる。", "permission")
+        self.assert_changed("削除しても構わない。", "削除する。", "permission")
+        self.assert_changed("この操作は許可されている。", "この操作を行う。", "permission")
+
+    def test_status_words_lost_are_reported(self):
+        self.assert_changed("公開日は未定である。", "公開日は来月である。", "status")
+        self.assert_changed("原因は調査中である。", "原因は設定の誤りである。", "status")
+        self.assert_changed("結論はまだ出ていない。", "結論は出ている。", "status")
+
+    def test_added_or_dropped_causal_links_are_reported(self):
+        self.assert_changed("速度が改善した。", "キャッシュを削除した結果、速度が改善した。", "causal")
+        self.assert_changed("削除した。速度が改善した。", "削除したことで、速度が改善した。", "causal")
+        self.assert_changed("負荷が高いため、応答が遅れた。", "負荷が高い。応答が遅れた。", "causal")
+
+    def test_unchanged_wording_is_not_reported(self):
+        for before, after in (("公開日は未定である。", "公開日は未定です。"),
+                              ("設定を変更してよい。", "設定を変更してよいです。"),
+                              ("負荷が高いため、応答が遅れた。", "負荷が高いため、応答が遅れました。")):
+            changed = changed_markers(run(before, after))
+            for kind in ("permission", "status", "causal"):
+                self.assertNotIn(kind, changed, (before, after))
+
+    def test_koto_de_aru_is_not_a_causal_link(self):
+        """「ことである」「ことでは」は、手段・原因の「ことで」ではない。"""
+        self.assertNotIn("causal", changed_markers(run("原因は共有していたことである。", "原因は共有していたことだ。")))
+
+    def test_boundaries_of_each_pattern(self):
+        for kind, before, after in (
+            ("permission", "削除してもよく、保存してもよい。", "削除する。保存する。"),
+            ("permission", "この変更は認められている。", "この変更を行う。"),
+            ("status", "公開の予定はない。", "公開する。"),
+            ("status", "結論はまだ誰も確かめていない。", "結論は確かめられている。"),
+            ("causal", "利用者が増えた結果、負荷が上がった。", "利用者が増えた。負荷が上がった。"),
+            ("causal", "この変更は遅延の解消につながる。", "この変更は遅延を解消する。"),
+        ):
+            self.assert_changed(before, after, kind)
+        self.assertNotIn("causal", changed_markers(run("確認したことでは足りない。", "確認したのでは足りない。")))
+        self.assertNotIn("status", changed_markers(run("まだ使う。確認した。ない。", "使う。確認した。ない。")))
+
+    def test_known_limit_synonyms_of_the_causal_words_are_not_matched(self):
+        """既知の限界: 「ので」と「ため」の言い換えは、同じ型に数える。「により」の読点のない形は数えない。"""
+        self.assertNotIn("causal", changed_markers(run("負荷が高いため、応答が遅れた。", "負荷が高いので、応答が遅れた。")))
+        self.assertIn("causal", changed_markers(run("削除により速度が改善した。", "削除したことにより速度が改善した。")))
+
+
 class RolesTest(unittest.TestCase):
     """書き換えで原文にない担当・役割の語が足された文を、情報として示す(#136)。"""
 
