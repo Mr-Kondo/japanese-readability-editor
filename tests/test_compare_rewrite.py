@@ -394,5 +394,64 @@ class CommandLineTest(unittest.TestCase):
         self.assertFalse((skill / "scripts" / "__pycache__").exists())
 
 
+class RolesTest(unittest.TestCase):
+    """書き換えで原文にない担当・役割の語が足された文を、情報として示す(#136)。"""
+
+    def test_added_roles_are_reported(self):
+        result = run("APIのエラーを返す。", "担当者がAPIのエラーを確認して、管理者に通知する。")
+        self.assertEqual(texts(result["roles"]["added"]), ["担当者", "管理者"])
+        self.assertEqual(result["roles"]["missing"], [])
+
+    def test_role_already_in_source_is_not_reported(self):
+        result = run("担当者がAPIのエラーを確認する。", "APIのエラーは担当者が確認する。")
+        self.assertEqual(result["roles"]["added"], [])
+
+    def test_dropped_role_is_not_reported(self):
+        result = run("管理者がAPIのエラーを確認する。", "APIのエラーを確認する。")
+        self.assertEqual(result["roles"], {"missing": [], "added": []})
+
+    def test_allowed_roles_are_skipped(self):
+        before = compare.parse_document("APIのエラーを返す。", "b.md", True, REGEX)
+        after = compare.parse_document("担当者がAPIのエラーを確認して、管理者に通知する。", "a.md", True, REGEX)
+        result = compare.compare_documents(before, after, REGEX.name, allow_roles=("管理者",))
+        self.assertEqual(texts(result["roles"]["added"]), ["担当者"])
+
+    def test_roles_in_code_are_ignored(self):
+        result = run("エラーを返す。", "エラーを返す。`manager` の `担当者` 設定を使う。")
+        self.assertEqual(result["roles"]["added"], [])
+
+    def test_longest_role_word_wins(self):
+        result = run("エラーを返す。", "システム管理者がエラーを確認する。")
+        self.assertEqual(texts(result["roles"]["added"]), ["システム管理者"])
+
+    def test_presence_is_per_document_so_a_role_word_in_a_compound_hides_a_new_one(self):
+        """既知の限界: 原文のどこかに同じ語(複合語の一部を含む)があれば、足された語は挙がらない。terms と同じ設計。"""
+        result = run("営業担当者がエラーを返す。", "担当者がエラーを確認する。")
+        self.assertEqual(result["roles"]["added"], [])
+
+    def test_json_output_has_roles(self):
+        with temporary_directory() as tmp:
+            before, after = Path(tmp) / "b.md", Path(tmp) / "a.md"
+            before.write_text("エラーを返す。\n", encoding="utf-8")
+            after.write_text("管理者がエラーを確認する。\n", encoding="utf-8")
+            code, out, _ = run_script(SCRIPT, str(before), str(after), "--tokenizer", "regex", "--json")
+            self.assertEqual(code, 0)
+            roles = json.loads(out)["roles"]
+            self.assertEqual([item["text"] for item in roles["added"]], ["管理者"])
+            self.assertEqual(roles["missing"], [])
+
+    def test_cli_prints_roles_and_accepts_allow_role(self):
+        with temporary_directory() as tmp:
+            before, after = Path(tmp) / "b.md", Path(tmp) / "a.md"
+            before.write_text("エラーを返す。\n", encoding="utf-8")
+            after.write_text("担当者がエラーを確認する。\n", encoding="utf-8")
+            code, out, _ = run_script(SCRIPT, str(before), str(after), "--tokenizer", "regex")
+            self.assertEqual(code, 0)
+            self.assertIn("roles: 0 missing, 1 added", out)
+            code, out, _ = run_script(SCRIPT, str(before), str(after), "--tokenizer", "regex", "--allow-role", "担当者")
+            self.assertEqual(code, 0)
+            self.assertIn("roles: 0 missing, 0 added", out)
+
+
 if __name__ == "__main__":
     unittest.main()
