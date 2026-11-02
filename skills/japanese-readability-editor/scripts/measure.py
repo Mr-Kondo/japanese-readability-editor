@@ -15,10 +15,11 @@ Markdown として扱うのは既定で拡張子が .md .markdown .mdx .mkd の�
 
 文の区切りは、句点・感嘆符・疑問符と括弧の対応から推定する。ASCII のピリオドでは区切らない。
 
---extras を付けると、長さとは別に、読み流すと見落としやすい4種類の箇所を「指摘」として挙げる。
+--extras を付けると、長さとは別に、読み流すと見落としやすい5種類の箇所を「指摘」として挙げる。
   kanji-run        漢字が7字以上続く箇所(造語の圧縮漢語など。固有名詞・法令用語も拾う)
   no-chain         名詞と「の」が3回以上つながる箇所
   double-negative  「ないわけではない」のような二重否定
+  paren-sentence   長い括弧(60字以上)の中に、句点で終わる文と続きが入っている箇所
   unrendered-bold  太字にならず `**` がそのまま表示される箇所(Markdown のみ)
 これらは判定ではない。読んで引っかからなければ直さない。
 
@@ -47,6 +48,7 @@ DEFAULT_MAX_LOCATE = 20
 PREVIEW_LENGTH = 30
 KANJI_RUN_THRESHOLD = 7
 NO_CHAIN_COUNT = 3
+PAREN_SENTENCE_LENGTH = 60
 SNIPPET_MARGIN = 10
 
 MARKDOWN_SUFFIXES = (".md", ".markdown", ".mdx", ".mkd")
@@ -107,10 +109,17 @@ DOUBLE_NEGATIVE_RE = re.compile(
         )
     )
 )
+# 括弧の内側が長く、句点などで終わる文のあとに、さらに続きがあるもの(複数の文を括弧に詰めた箇所)。
+# 入れ子の括弧は対象外。短い補足や、文が1つだけの括弧は拾わない。
+PAREN_SENTENCE_RE = re.compile(
+    "[（(](?=[^（）()]{" + str(PAREN_SENTENCE_LENGTH) + ",}[）)])"
+    "[^（）()]*?[。！？](?=[^（）()]*[^（）()。！？」』\\s])[^（）()]*[）)]"
+)
 EXTRA_PATTERNS = (
     ("kanji-run", KANJI_RUN_RE),
     ("no-chain", NO_CHAIN_RE),
     ("double-negative", DOUBLE_NEGATIVE_RE),
+    ("paren-sentence", PAREN_SENTENCE_RE),
 )
 UNRENDERED_BOLD = "unrendered-bold"
 EXTRA_KINDS = tuple(kind for kind, _ in EXTRA_PATTERNS) + (UNRENDERED_BOLD,)
@@ -118,6 +127,7 @@ EXTRA_LABELS = {
     "kanji-run": f"kanji-run (>={KANJI_RUN_THRESHOLD} kanji in a row)",
     "no-chain": f"no-chain (noun + の x{NO_CHAIN_COUNT}+)",
     "double-negative": "double-negative",
+    "paren-sentence": f"paren-sentence (parenthesis >={PAREN_SENTENCE_LENGTH} chars holding sentences)",
     UNRENDERED_BOLD: "unrendered-bold (** shown as-is)",
 }
 
@@ -816,7 +826,7 @@ def build_parser() -> argparse.ArgumentParser:
                         help="長い段落、長い文、短い文の連続の位置(ファイル名・行番号・長さ・冒頭)を示す")
     parser.add_argument("--extras", action="store_true",
                         help=f"連続漢字({KANJI_RUN_THRESHOLD}字以上)、名詞+「の」の{NO_CHAIN_COUNT}連、二重否定、"
-                             "表示されない太字を指摘として挙げる。判定ではない")
+                             "長い括弧に詰めた文、表示されない太字を指摘として挙げる。判定ではない")
     parser.add_argument("--json", action="store_true", help="JSON で出力する(--locate と --extras の候補は全件)")
     parser.add_argument("--max-locate", type=int, default=DEFAULT_MAX_LOCATE, metavar="N",
                         help=f"--locate で表示する件数の上限(段落・文それぞれ)。0 で無制限。既定 {DEFAULT_MAX_LOCATE}")

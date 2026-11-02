@@ -414,6 +414,36 @@ class ExtrasTest(unittest.TestCase):
             with self.subTest(text=text):
                 self.assertEqual(self.pointers(text)["double-negative"], [])
 
+    def test_paren_sentence_flags_long_parentheses_holding_sentences(self):
+        long_paren = "（" + "これは補足の説明である" * 5 + "。" + "続きの注意点もここに書いておく" + "）"
+        for text in (f"設定を変える{long_paren}。", f"設定を変える({long_paren[1:-1]})。"):
+            with self.subTest(text=text):
+                self.assertEqual(len(self.pointers(text)["paren-sentence"]), 1)
+
+    def test_paren_sentence_flags_two_sentences_that_both_end_with_a_terminator(self):
+        body = "これは補足の説明である" * 3
+        for text in (f"設定を変える（{body}。{body}。）。", f"設定を変える（{body}！{body}？）。"):
+            with self.subTest(text=text):
+                self.assertEqual(len(self.pointers(text)["paren-sentence"]), 1)
+
+    def test_paren_sentence_length_boundary(self):
+        for length, expected in ((59, 0), (60, 1)):
+            body = "あ" * (length - 2)
+            with self.subTest(length=length):
+                self.assertEqual(len(self.pointers(f"設定を変える（{body}。い）。")["paren-sentence"]), expected)
+
+    def test_paren_sentence_ignores_one_quoted_sentence_closed_by_a_bracket(self):
+        text = "設定を変える（" + "これは補足の説明である" * 6 + "。」）。"
+        self.assertEqual(self.pointers(text)["paren-sentence"], [])
+
+    def test_paren_sentence_ignores_short_or_single_part_parentheses(self):
+        for text in ("非対話のため。対話では確かめていません、と書く。",
+                     "設定を変える（調整用は未実施。最終評価用は使わない）。",
+                     "設定を変える（" + "補足の説明が長く続くが句点は一つもない" * 4 + "）。",
+                     "設定を変える（" + "これは補足の説明である" * 6 + "。）。"):
+            with self.subTest(text=text):
+                self.assertEqual(self.pointers(text)["paren-sentence"], [])
+
     def test_pointers_report_the_line_of_the_match(self):
         result = self.pointers("一行目である。\n初回課金転換率を見る。\n")
         self.assertEqual(result["kanji-run"], [(2, 7)])
@@ -477,7 +507,8 @@ class ExtrasCommandLineTest(unittest.TestCase):
     def setUp(self):
         self._tmp = temporary_directory()
         self.path = Path(self._tmp.name) / "a.md"
-        self.path.write_text("初回課金転換率を見る。\n\nできないわけではない。\n\n次に**「立場」**を決める。\n",
+        self.path.write_text("初回課金転換率を見る。\n\nできないわけではない。\n\n次に**「立場」**を決める。\n\n"
+                             "設定を変える（" + "これは補足の説明である" * 5 + "。続きの注意点もある）。\n",
                              encoding="utf-8")
 
     def tearDown(self):
@@ -491,6 +522,8 @@ class ExtrasCommandLineTest(unittest.TestCase):
         self.assertIn(f"{self.path}:1  kanji-run  7  ", out)
         self.assertIn("double-negative: 1", out)
         self.assertIn(f"{self.path}:3  double-negative  ", out)
+        self.assertIn("paren-sentence (parenthesis >=60 chars holding sentences): 1", out)
+        self.assertIn(f"{self.path}:7  paren-sentence  ", out)
         self.assertIn("unrendered-bold (** shown as-is): 1", out)
         self.assertIn(f"{self.path}:5  unrendered-bold  ", out)
 
