@@ -1,10 +1,12 @@
 ---
-status: accepted
+status: superseded
 date: 2026-11-02
 decision-makers: repository owner
 ---
 
 # スキル更新の知見を少数の索引で試す
+
+2026-11-02: 試行を完了し、[後継ADR](2026-11-02-conclude-update-knowledge-pilot.md)で採否を確定した。以下は当初の試行計画として保存する。
 
 ## 文脈と判断
 
