@@ -215,7 +215,7 @@ Python 3.10 以上が必要です。標準ライブラリだけで動きます�
 
 | 症状 | 確かめること |
 |---|---|
-| Skill が見つからない | `python3 tools/verify_install.py --scope user --target opencode` で、配置先と中身を確かめる。`opencode debug paths` の `config` が、配置先の親と一致するか。OpenCode を開き直す。プロジェクトに入れたなら、そのプロジェクトの中で起動しているか。`permission.skill` が `deny` でないか。`OPENCODE_DISABLE_EXTERNAL_SKILLS` を設定していると、`.claude/skills/` と `.agents/skills/` の Skill は読まれない |
+| Skill が見つからない | `python3 tools/verify_install.py <入れた場所>/japanese-readability-editor --target opencode` で、中身を確かめる(`npx skills` は `~/.agents/skills/` に入れる)。`opencode debug paths` の `config` が、配置先の親と一致するか。OpenCode を開き直す。プロジェクトに入れたなら、そのプロジェクトの中で起動しているか。`permission.skill` が `deny` でないか。`OPENCODE_DISABLE_EXTERNAL_SKILLS` を設定していると、`.claude/skills/` と `.agents/skills/` の Skill は読まれない |
 | 一覧が空、または組み込みの 2 件だけ | `opencode serve` の起動直後は、Skill の読み込みが遅れる。`GET /api/skill` を 3 回以上呼ぶと出る。サーバは、起動したディレクトリに固定される |
 | `name` が合わない | `name` は `japanese-readability-editor` で、ディレクトリ名と一致しなければならない。ディレクトリ名を変えない |
 | 同じ Skill が複数の場所にある | OpenCode は 1 つしか使わず、どれが使われるかは当てにならない。残す 1 か所を決め、ほかは利用者が削除する |

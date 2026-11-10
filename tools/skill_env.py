@@ -368,7 +368,7 @@ def add_location_arguments(parser: argparse.ArgumentParser) -> None:
                         help="--scope user の基準ディレクトリ。既定はホームディレクトリ。指定すると HERMES_HOME などの環境変数は使わない")
     parser.add_argument("--dest", type=Path, default=None, metavar="DIR",
                         help="skills ディレクトリを直接指定する(DIR/japanese-readability-editor/ に配置する)。--scope の代わりに使う。"
-                             "--target は、opencode か hermes のときだけ、検証と重複の確認の基準になる")
+                             "--target は、opencode か hermes のときだけ、検証の基準になる")
     parser.add_argument("--hermes-home", type=Path, default=None, metavar="PATH",
                         help="--target hermes --scope user の Hermes ホーム(PATH/skills/ に配置する)。HERMES_HOME とプロファイルより優先する")
     parser.add_argument("--profile", default=None, metavar="NAME",

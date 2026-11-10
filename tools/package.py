@@ -241,15 +241,16 @@ npx skills add ./{skill} -a {npx_agent} -g
 `npx` がない場合や、配置先を自分で決める場合は、フォルダを手でコピーします。
 
 ```bash
+mkdir -p <skills ディレクトリ>
 cp -R {skill} <skills ディレクトリ>/
 ```
 
 ## 確かめる
 
-リポジトリを取得しているときは、置いた Skill を検証します。構造、メタデータ、正本との一致、同梱スクリプトの実行を確かめます。
+リポジトリを取得しているときは、置いた Skill を検証します(`<skills ディレクトリ>` は、実際に置いた場所です。`npx skills` は、OpenCode では `~/.agents/skills/` に置きます)。構造、メタデータ、正本との一致、同梱スクリプトの実行を確かめます。
 
 ```bash
-python3 tools/verify_install.py --scope user --target {target}
+python3 tools/verify_install.py <skills ディレクトリ>/{skill} --target {target}
 ```
 
 リポジトリがなくても、置いた Skill のスクリプトは、どのディレクトリからでも実行できます。

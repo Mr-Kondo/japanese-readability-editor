@@ -18,7 +18,7 @@
 
 ### npx skills で入れた場合
 
-入れたときと同じコマンドを、もう一度実行します。同名のものは上書きされます(2026-11-10、隔離したホームで、余分に追加したファイルも消えることを確かめました)。
+リポジトリから入れた場合は、先にリポジトリを `git pull` で更新します。そのうえで、入れたときと同じコマンドを、もう一度実行します。同名のものは上書きされます(2026-11-10、隔離したホームで、余分に追加したファイルも消えることを確かめました)。
 
 ```bash
 npx skills add . -a claude-code -g
@@ -150,6 +150,7 @@ npx skills add . -a claude-code -g
 `npx` を使わない場合と、`npx skills` が入れない場所へ入れる場合は、`skills/japanese-readability-editor/` を、配置先へコピーします。
 
 ```bash
+mkdir -p ~/.gemini/config/skills ~/.gemini/antigravity-cli/skills
 cp -R skills/japanese-readability-editor ~/.gemini/config/skills/
 cp -R skills/japanese-readability-editor ~/.gemini/antigravity-cli/skills/
 ```
@@ -249,7 +250,7 @@ gh skill install Mr-Kondo/japanese-readability-editor japanese-readability-edito
 
 ## OpenCode と Hermes Agent の配置先
 
-どちらも、配置先が環境変数やプロファイルで変わります。`npx skills add -a opencode`、`-a hermes-agent` が入れる場所が、下の配置先と同じかを、`verify_install.py` で確かめられます(「[配置した Skill を検証する](#配置した-skill-を検証する)」)。
+どちらも、配置先が環境変数やプロファイルで変わります。`npx skills add -a opencode` は `~/.agents/skills/`(OpenCode が読む場所)に、`-a hermes-agent` は `~/.hermes/skills/` に入れます。入れた場所は、`verify_install.py` に、フォルダのパスを渡して確かめます(「[配置した Skill を検証する](#配置した-skill-を検証する)」)。下の配置先は、環境変数やプロファイルで変わる場所を、手動でコピーするときの参考です。
 
 配置先のパスは、空白や日本語を含んでいてもかまいません。
 

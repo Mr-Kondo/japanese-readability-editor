@@ -57,7 +57,7 @@ npx skills add . -a claude-code -g
 
 Antigravity のユーザー全体と、Hermes のプロファイルなど、`npx skills` が入れない場所は、手動でコピーします([手順と配置先](docs/installation.md#インストールする))。Python 3.10 以上が、同梱のスクリプトに必要です(Windows では `python3` を `python` に読み替える場合があります。[Python のコマンド名](docs/installation.md#python-のコマンド名))。
 
-既に入っている場合は、[更新手順](docs/installation.md#更新する)を使います。
+リポジトリから入れた場合は、`git pull` で更新してから、同じコマンドをもう一度実行します。既に入っている場合は、[更新手順](docs/installation.md#更新する)を使います。
 
 ### ChatGPT Work、Claude Cowork、Gemini Apps に入れる
 

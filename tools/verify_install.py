@@ -301,7 +301,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--source", type=Path, default=None, help="比べる正本。既定はこのリポジトリの skills/japanese-readability-editor(あれば)")
     parser.add_argument("--no-source", action="store_true", help="正本との比較を省く(リポジトリがない環境で、配置済みの Skill だけを検証する)")
     parser.add_argument("--strict-source", action="store_true", help="正本との差を、警告ではなく誤りとして扱う")
-    parser.add_argument("--no-run", action="store_true", help="スクリプトを実行しない(構造・メタデータ・内容・重複だけを検証する)")
+    parser.add_argument("--no-run", action="store_true", help="スクリプトを実行しない(構造・メタデータ・内容だけを検証する)")
     parser.add_argument("--json", action="store_true", help="結果を JSON で出力する")
     return parser
 
