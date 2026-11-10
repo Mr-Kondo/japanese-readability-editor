@@ -5,6 +5,7 @@
 - [Codex、Claude Code などにインストールする](#必要なもの)
 - [ChatGPT Work、Claude Cowork、Gemini Apps にアップロードする](#アップロード型の環境に入れる)
 - [gh skill（GitHub CLI）で入れる](#github-cligh-skillで入れる)
+- [npx skills で入れる](#npx-skills-で入れる)
 - [動作を確認する](#動作を確認する)
 - [OpenCode と Hermes Agent の配置先・重複を確認する](#opencode-と-hermes-agent-に入れる)
 - [削除する](#削除する)
@@ -244,7 +245,17 @@ gh skill install Mr-Kondo/japanese-readability-editor japanese-readability-edito
 - 入った内容は、`SKILL.md`、`scripts/`（8 本）、`references/`、`assets/`、`data/` です。
 - gh は `SKILL.md` の frontmatter に、`metadata:`（`github-repo`、`github-ref`、`github-path`、`github-tree-sha`）を足します。このリポジトリの `tools/validate_skill.py` は、frontmatter の複数行の値を認めないので、gh で入れたものには使えません（エラーになります）。
 - `--agent` と `--scope` で入れ先を選ぶ形は、`gh skill install --help` にありますが、確かめていません。確かめたのは `--dir` だけです。
-- `npx skills add` は、確かめていません。
+
+## npx skills で入れる
+
+`skills` CLI（`npx skills add`）でも入ります。`skills/*/SKILL.md` の配置が探す場所に当たるため、追加の設定はありません。確かめたのは、macOS、2026-11-10 です。`--list` では、ローカルのパスと `Mr-Kondo/japanese-readability-editor` の両方で Skill が 1 件見つかりました。ローカルのパスから `-a claude-code --copy` で入れた内容は、`skills/japanese-readability-editor/` と一致しました。
+
+```bash
+npx skills add Mr-Kondo/japanese-readability-editor
+```
+
+- 入れ先を選ぶときは `-a <エージェント>`、一覧だけ見るときは `--list` です。
+- GitHub から実際に入れること、`--copy` なしの既定の入れ方、更新（`npx skills update`）は、確かめていません。
 
 ## 動作を確認する
 
