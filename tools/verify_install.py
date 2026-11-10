@@ -6,7 +6,7 @@
     python3 tools/verify_install.py --scope user --target hermes --profile coder
     python3 tools/verify_install.py --dest "/path with spaces/skills" --no-run
 
-配置先の決め方は install.py と同じ(--scope、--target、--workspace、--home、--dest、--hermes-home、--profile、
+配置先の決め方は skill_env.destinations_from_args(--scope、--target、--workspace、--home、--dest、--hermes-home、--profile、
 --opencode-config-dir)。位置引数で Skill のディレクトリを直接渡すこともできる。
 
 検証する内容:
@@ -16,7 +16,6 @@
   - 実行: カレントディレクトリが Skill でもリポジトリでもない、空白と日本語を含む一時ディレクトリから、同梱のスクリプトを
           すべて実行する(--no-run で省く)。実行する Python は、この検証を動かしている Python である
   - 依存: Python 3.10 以上か。SudachiPy は任意。入っていなくても動き、どちらで動いたかを tokenizer で示す。インストールはしない
-  - 重複: 同じ Skill が、その製品の別の探索先でも見つかるか(--scope か --dest を指定したときだけ)。何も削除しない
 
 終了コード: 0=問題なし(警告はありうる)、1=誤りがある、2=引数が不正。
 """
@@ -37,8 +36,8 @@ from typing import List, Optional, Tuple
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import skill_env  # noqa: E402
-from install import (ENVIRONMENT_TARGETS, add_location_arguments, destination_target,  # noqa: E402
-                     destinations_from_args, location_host)
+from skill_env import (ENVIRONMENT_TARGETS, add_location_arguments, destination_target,  # noqa: E402
+                       destinations_from_args)
 from validate_skill import (MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH, SKILL_FILE, default_skill_dir,  # noqa: E402
                             parse_frontmatter, validate_skill)
 
@@ -96,10 +95,6 @@ class VerifyReport:
         for finding in self.findings:
             if finding.code == "source" and finding.level == "warn":
                 finding.level = "error"
-
-    def add_duplicates(self, copies: List[skill_env.Copy], target: Optional[str]) -> None:
-        for copy in copies:
-            self.add("warn", "duplicate", skill_env.describe_copy(copy, target or ""))
 
     @property
     def errors(self) -> List[Finding]:
@@ -284,7 +279,7 @@ def check_against_source(path: Path, source: Path, report: VerifyReport) -> None
         report.add("ok", "source", f"identical to the source {source} ({len(skill_env.file_digests(path))} files)")
     else:
         report.add("warn", "source", f"differs from the source {source}: {diff.summary()} "
-                                     "(an older version? update with install.py --on-conflict backup)")
+                                     "(an older version? install it again with npx skills add)")
 
 
 # --- CLI --------------------------------------------------------------------
@@ -315,7 +310,6 @@ def build_parser() -> argparse.ArgumentParser:
 class Job:
     path: Path
     target: Optional[str]
-    duplicates: List[skill_env.Copy] = field(default_factory=list)
 
 
 def resolve_source(args: argparse.Namespace) -> Optional[Path]:
@@ -333,22 +327,13 @@ def resolve_source(args: argparse.Namespace) -> Optional[Path]:
 
 
 def collect_jobs(args: argparse.Namespace, source: Optional[Path]) -> List[Job]:
-    """検証する Skill のディレクトリを決める。位置引数なら1つ、--scope か --dest なら install.py と同じ配置先。"""
+    """検証する Skill のディレクトリを決める。位置引数なら1つ、--scope か --dest なら skill_env と同じ配置先。"""
     if args.path is not None:
         if args.scope is not None or args.dest is not None:
             raise ValueError("pass either a path or --scope/--dest, not both")
         targets = [name for value in (args.target or []) for name in value.split(",")]
         return [Job(args.path, next((t for t in targets if t in ENVIRONMENT_TARGETS), None))]
-    host = location_host(args)
-    jobs: List[Job] = []
-    for destination in destinations_from_args(args):
-        target = destination_target(destination)
-        copies: List[skill_env.Copy] = []
-        if target:
-            roots = skill_env.duplicate_roots(target, args.scope or "user", host, destination.skills_dir)
-            copies = skill_env.find_other_copies(roots, destination=destination.path, source=source)
-        jobs.append(Job(destination.path, target, copies))
-    return jobs
+    return [Job(destination.path, destination_target(destination)) for destination in destinations_from_args(args)]
 
 
 def main(argv: Optional[List[str]] = None) -> int:
@@ -363,7 +348,6 @@ def main(argv: Optional[List[str]] = None) -> int:
     reports = []
     for job in jobs:
         report = verify_installation(job.path, target=job.target, source=source, run_scripts=not args.no_run)
-        report.add_duplicates(job.duplicates, job.target)
         if args.strict_source:
             report.require_source_match()
         reports.append(report)
