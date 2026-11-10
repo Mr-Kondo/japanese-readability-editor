@@ -18,7 +18,8 @@ class LocationTest(unittest.TestCase):
         self.ws, self.home = self.root / "ws", self.root / "home"
 
     def dirs(self, scope, *targets):
-        return [d.skills_dir for d in env.resolve_destinations(scope, list(targets), self.ws, self.home)]
+        options = env.LocationOptions(platform="linux")  # Windows の Hermes は別の既定の場所を使う。ここでは表を確かめる
+        return [d.skills_dir for d in env.resolve_destinations(scope, list(targets), self.ws, self.home, options)]
 
     def test_workspace_targets_that_read_agents_skills_share_one_location(self):
         self.assertEqual(self.dirs("workspace", "common", "codex", "copilot", "gemini-cli"), [self.ws / ".agents/skills"])
