@@ -88,6 +88,7 @@ python3 tools/install.py --scope user --target common
 - [削除する](docs/installation.md#削除する)
 - [Claude Code のプラグインとして入れる](docs/environments.md#プラグインとして入れる)
 - [gh skill（GitHub CLI）で入れる](docs/installation.md#github-cligh-skillで入れる)（v0.15.0 以降。名前だけで入り、`gh skill update` で更新を確かめられます）
+- [npx skills で入れる](docs/installation.md#npx-skills-で入れる)（`npx skills add Mr-Kondo/japanese-readability-editor`）
 
 ## 使い方
 
