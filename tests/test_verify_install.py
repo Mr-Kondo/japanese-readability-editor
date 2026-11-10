@@ -188,15 +188,6 @@ class TargetMetadataTest(VerifyCase):
         self.assertNotIn("symlink-remote", codes(opencode, "warn"))
 
 
-class DuplicateReportTest(VerifyCase):
-    def test_duplicates_are_reported_as_warnings_and_do_not_fail(self):
-        copy = skill_env.Copy(self.base / "elsewhere", "~/.agents/skills", "differs")
-        report = verify.verify_installation(self.installed(), target="opencode", source=SKILL_DIR, run_scripts=False)
-        report.add_duplicates([copy], "opencode")
-        self.assertTrue(report.ok)
-        self.assertIn("duplicate", codes(report, "warn"))
-
-
 class CommandLineTest(VerifyCase):
     def test_positional_path_exit_zero_and_text_report(self):
         code, out, err = run_script(SCRIPT, str(self.installed()), "--target", "hermes")
@@ -217,11 +208,9 @@ class CommandLineTest(VerifyCase):
         self.assertTrue(report["ok"])
         self.assertTrue(all({"level", "code", "message"} <= set(f) for f in report["findings"]))
 
-    def test_scope_target_resolves_the_install_location_like_the_installer(self):
+    def test_scope_target_resolves_the_install_location_from_the_environment_table(self):
         home = self.tmp / "home"
-        install_script = TOOLS_DIR / "install.py"
-        code, out, err = run_script(install_script, "--scope", "user", "--target", "hermes", "--home", str(home))
-        self.assertEqual(code, 0, out + err)
+        copy_real_skill(hermes_default_home(home) / "skills")
         code, out, err = run_script(SCRIPT, "--scope", "user", "--target", "hermes", "--home", str(home))
         self.assertEqual(code, 0, out + err)
         self.assertIn(str(hermes_default_home(home) / "skills" / SKILL_NAME), out)
@@ -230,14 +219,6 @@ class CommandLineTest(VerifyCase):
         code, out, _ = run_script(SCRIPT, "--scope", "user", "--target", "opencode", "--home", str(self.tmp / "empty"))
         self.assertEqual(code, 1)
         self.assertIn("is not a directory", out)
-
-    def test_scope_dest_reports_duplicates_found_in_the_other_discovery_directories(self):
-        home = self.tmp / "home"
-        run_script(TOOLS_DIR / "install.py", "--scope", "user", "--target", "opencode", "--home", str(home))
-        copy_real_skill(home / ".agents" / "skills")
-        code, out, _ = run_script(SCRIPT, "--scope", "user", "--target", "opencode", "--home", str(home), "--no-run")
-        self.assertEqual(code, 0)
-        self.assertIn("[duplicate]", out)
 
     def test_bad_arguments_exit_two(self):
         for args in ((), (str(self.base), "--scope", "user"), ("--no-source", "--source", str(SKILL_DIR), str(self.base)),

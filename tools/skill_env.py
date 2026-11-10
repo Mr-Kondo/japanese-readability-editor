@@ -25,7 +25,7 @@ from typing import Dict, List, Mapping, Optional, Tuple
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from validate_skill import EXPECTED_NAME, SKILL_FILE, iter_skill_files  # noqa: E402
+from validate_skill import EXPECTED_NAME, iter_skill_files  # noqa: E402
 
 # Hermes のプロファイル名(hermes_constants.PROFILE_ID_RE)。
 HERMES_PROFILE_RE = re.compile(r"^[a-z0-9][a-z0-9_-]{0,63}$")

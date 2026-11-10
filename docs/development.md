@@ -58,10 +58,8 @@ japanese-readability-editor/
 | `scripts/kokugo_engine.py` | 検査エンジン(保護対象の判定、検出、区分の決定)。単独では実行しない |
 | `scripts/validate_kokugo_rules.py` | 規則データの検証(読み取り専用) |
 | `assets/kokugo-cases.md` | 国語の表記の修正例と、変更してはいけない反例 |
-| `tools/install.py` | 各環境の配置先へコピーまたはリンクする。内容が同じなら何もせず、違う既存のものは上書きしない。OpenCode と Hermes の配置先は `skill_env.py` で解決し、同名 Skill の重複を警告する |
-| `tools/uninstall.py` | `install.py` で配置したものを、配置先から削除する。配置先の決め方は `install.py` と共有する |
 | `tools/verify_install.py` | 配置した Skill を検証する。スクリプトを、Skill でもリポジトリでもない、空白と日本語を含むディレクトリから実行する(何も変更せず、何もインストールしない) |
-| `tools/skill_env.py` | OpenCode と Hermes の配置先の解決(環境変数は引数で受ける)、同名 Skill の探索、正本との内容の比較。`install.py`、`uninstall.py`、`verify_install.py`、`package.py` が使う |
+| `tools/skill_env.py` | 環境ごとの配置先の表と解決(OpenCode と Hermes は環境変数を引数で受ける)、正本との内容の比較。`verify_install.py` と `package.py` が共有する |
 | `tools/package.py` | ZIP、SHA-256、Gemini Apps 向けの出力、OpenCode と Hermes 向けの配布物を生成する |
 | `tools/validate_skill.py` | Skill の構造と互換性を検証する |
 | `tools/update_kokugo_sources.py` | 公式資料を取得して SHA-256 を照合する(`verify`)。PDF から常用漢字表と異字同訓のデータを作る(`extract-*`)。Skill の外にあり、配布物には入らない |
@@ -157,8 +155,8 @@ python3 -m unittest discover -s tests -v
 - `tools/upstream_watch.py`(gh の応答を差し替える。通信しない)と、登録簿 `docs/upstream/sources.json` の整合(確認の記録の実在、ライセンスの条件)、`upstream-watch.yml` の権限
 - モード C の厳密な確認と、モード B の意味保存の回帰(`test_kokugo_modes.py`)
 - `assets/kokugo-cases.md` の例と、実際の検査結果の一致(`test_kokugo_cases.py`)
-- `validate_skill.py`、`install.py`、`uninstall.py`、`package.py`
-- `skill_env.py`(OpenCode と Hermes の配置先の解決、プロファイルと `active_profile`、`config.yaml` の読み取り、同名 Skill の探索、内容の比較)と、`install.py` の OpenCode と Hermes の対応(冪等性、内容が違う既存のものの保護、`--dest`、空白と日本語を含むパス、環境変数と `--home`)
+- `validate_skill.py`、`package.py`
+- `skill_env.py`(配置先の表と解決、OpenCode と Hermes の配置先、プロファイルと `active_profile`、内容の比較。`tests/test_skill_env.py` と `tests/test_locations.py`)
 - `verify_install.py`(壊れた配置の検出、対象の環境ごとのメタデータ、リポジトリの外からのスクリプトの実行)と、配置した複製が正本と同じ出力を返すこと
 - `compare_rewrite.py` の SudachiPy がない経路と、`tokenizer` の表示(`test_tokenizer_modes.py`。SudachiPy が入っている環境でも、import を塞いだ別プロセスで試す)
 - `SKILL.md` の `description`(要件で挙げたトリガー語と、除外する入力を含むか、200字以内か)

@@ -8,7 +8,7 @@ __pycache__/
 # OS
 .DS_Store
 
-# このリポジトリ自体へ install.py で配置したコピー
+# このリポジトリ自体へ npx skills などで配置したコピー
 /.agents/
 /.claude/skills/
 /.venv-sources/

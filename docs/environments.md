@@ -183,7 +183,7 @@ Skill が有効になるときは、名前と参照するディレクトリを�
 
 OpenCode は、`skill` ツールで Skill を読み込みます。ツールの説明に、Skill の名前と `description` が並びます。Agent が必要と判断したときに、本文が読み込まれます。
 
-配置先は、プロジェクトでは `.opencode/skills/`、ユーザー全体では `~/.config/opencode/skills/` です。`XDG_CONFIG_HOME` と `OPENCODE_CONFIG_DIR` で変わります。導入、更新、検証のコマンドと配置先の決め方は、[インストール](installation.md#opencode-と-hermes-agent-に入れる)にあります。
+配置先は、プロジェクトでは `.opencode/skills/`、ユーザー全体では `~/.config/opencode/skills/` です。`XDG_CONFIG_HOME` と `OPENCODE_CONFIG_DIR` で変わります。導入、更新、検証のコマンドと配置先の決め方は、[インストール](installation.md#opencode-と-hermes-agent-の配置先)にあります。
 
 OpenCode は、`.agents/skills/` と `.claude/skills/` も読みます(公式文書)。そこにも同じ Skill があると、重複します。OpenCode は、同名のうち 1 つしか使いません。
 
@@ -218,7 +218,7 @@ Python 3.10 以上が必要です。標準ライブラリだけで動きます�
 | Skill が見つからない | `python3 tools/verify_install.py --scope user --target opencode` で、配置先と中身を確かめる。`opencode debug paths` の `config` が、配置先の親と一致するか。OpenCode を開き直す。プロジェクトに入れたなら、そのプロジェクトの中で起動しているか。`permission.skill` が `deny` でないか。`OPENCODE_DISABLE_EXTERNAL_SKILLS` を設定していると、`.claude/skills/` と `.agents/skills/` の Skill は読まれない |
 | 一覧が空、または組み込みの 2 件だけ | `opencode serve` の起動直後は、Skill の読み込みが遅れる。`GET /api/skill` を 3 回以上呼ぶと出る。サーバは、起動したディレクトリに固定される |
 | `name` が合わない | `name` は `japanese-readability-editor` で、ディレクトリ名と一致しなければならない。ディレクトリ名を変えない |
-| 重複の警告が出る | `verify_install.py` が、重複する場所を示す。残す 1 か所を決め、ほかは利用者が削除する。ツールは削除しない |
+| 同じ Skill が複数の場所にある | OpenCode は 1 つしか使わず、どれが使われるかは当てにならない。残す 1 か所を決め、ほかは利用者が削除する |
 | 参照資料やスクリプトに届かない | `skill` ツールの出力にある `Base directory for this skill` を確かめる。`scripts/` などの相対パスは、そこからの相対になる。Agent がプロジェクトのディレクトリで相対パスのまま実行して失敗するなら、基準のディレクトリの絶対パスを使うよう頼む |
 | スクリプトが実行できない | `python3 --version` が 3.10 以上か(Windows は `python`)。`verify_install.py` が、スクリプトを外のディレクトリから実行して、失敗した理由を示す。Agent のシェルの権限(`bash` ツール)が許可されているか |
 | skills ディレクトリに別の `.md` が Skill になる | v2 のソースは、skills ディレクトリの直下の `.md` も Skill として読む。配布物の `INSTALL.md` を、skills ディレクトリに置かない |
@@ -270,8 +270,8 @@ Docker と Singularity は、`~/.hermes` の Skill を bind mount します。SS
 |---|---|
 | Skill が見つからない | `hermes skills list` に出るか。プロファイルを使っているなら、同じ `-p` を付ける。`python3 tools/verify_install.py --scope user --target hermes` が、解決したホームを示す。`hermes profile use` で選んだプロファイルは、`active_profile` に従う。セッションを開き直す |
 | プロジェクトの Skill が出ない | `hermes skills trust` を、そのリポジトリの中で実行したか。プロジェクトの根は、`.git` を持つ最も近い祖先。`skills.project_discovery: false` にしていないか |
-| 同名の Skill が隠れている | 上位の Skill が下位を隠す。同じ階層に内容の違う同名が 2 つあると、曖昧としてエラーになる。`verify_install.py` が重複を示す |
-| `hermes skills install` で入れたら検査が動かない | `data/` と `scripts/kokugo_engine.py` が入らない。`tools/install.py` で入れ直す |
+| 同名の Skill が隠れている | 上位の Skill が下位を隠す。同じ階層に内容の違う同名が 2 つあると、曖昧としてエラーになる。同じ Skill が複数の場所にあるなら、残す 1 か所を決める |
+| `hermes skills install` で入れたら検査が動かない | `data/` と `scripts/kokugo_engine.py` が入らない。`npx skills add -a hermes-agent` か、手動のコピーで入れ直す |
 | 参照資料やスクリプトに届かない | 読み込みメッセージの `[Skill directory: ...]` を確かめる。ターミナルが手元でなければ、その環境の中で、パスが存在するか。複製で入れているか |
 | スクリプトが実行できない | `terminal` のツールセットが有効か(`hermes chat --toolsets` で確かめる)。`python3 --version` が 3.10 以上か。`verify_install.py` が、スクリプトを外のディレクトリから実行して、失敗した理由を示す。モデルが `scripts/` を相対パスで実行して失敗するときは、`-s japanese-readability-editor` を付ける(絶対パスが渡される)。それでも失敗する回がある |
 | 計測やモードの結果が、スクリプトの出力と合わない | モデルが、スクリプトを実行せずに答えた可能性がある。`measure.py` や `verify_preservation.py --strict` を自分で実行して、確かめる |

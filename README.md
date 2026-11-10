@@ -31,51 +31,33 @@
 
 | 入れた方法 | 更新方法 |
 |---|---|
-| `tools/install.py` でコピー | リポジトリを `git pull` し、同じ配置先へ `--on-conflict backup` を付けて再配置する |
-| `tools/install.py --link` | `git pull` で正本を更新する |
+| `npx skills add` | 入れたときと同じコマンドをもう一度実行する(上書きされる) |
+| 手動のコピー・リンク | コピーは、古いフォルダを消してからコピーし直す。リンクは `git pull` で更新する |
+| `tools/install.py`(廃止) | [移行の手順](docs/installation.md#toolsinstallpy-で入れていた場合廃止)で、古いものを消してから `npx skills add` で入れ直す |
 | ZIP・生成物のアップロード | [最新の Release](https://github.com/Mr-Kondo/japanese-readability-editor/releases/latest) の生成物に置き換える |
 | Claude Code のプラグイン | マーケットプレースを更新してから、プラグインを更新する |
 
 ## クイックスタート
 
-### Codex、Claude Code などに入れる
+### Codex、Claude Code、OpenCode、Hermes Agent などに入れる
 
-Python 3.10 以上と Git が必要です。まずリポジトリを取得します。
+Node.js が必要です。`-a` に使う環境を指定します(例: `claude-code`、`codex`、`opencode`、`hermes-agent`)。`-g` はユーザー全体、付けないとプロジェクトに入ります。
+
+```bash
+npx skills add Mr-Kondo/japanese-readability-editor -a claude-code -g
+```
+
+リポジトリを取得している場合は、取得先で `.` を指定して入れられます(隔離したホームで確かめました。GitHub から実際に入れることは、確かめていません)。
 
 ```bash
 git clone https://github.com/Mr-Kondo/japanese-readability-editor.git
 cd japanese-readability-editor
+npx skills add . -a claude-code -g
 ```
 
-Windows では、`python3` を `python` に読み替える場合があります([Python のコマンド名](docs/installation.md#python-のコマンド名))。
+Antigravity のユーザー全体と、Hermes のプロファイルなど、`npx skills` が入れない場所は、手動でコピーします([手順と配置先](docs/installation.md#インストールする))。Python 3.10 以上が、同梱のスクリプトに必要です(Windows では `python3` を `python` に読み替える場合があります。[Python のコマンド名](docs/installation.md#python-のコマンド名))。
 
-使う環境の `--target` を選びます。
-
-| 環境 | `--target` |
-|---|---|
-| Codex、GitHub Copilot、Gemini CLI | `common` |
-| Claude Code | `claude-code` |
-| Antigravity(IDE と CLI) | `antigravity` |
-| OpenCode | `opencode` |
-| Hermes Agent | `hermes` |
-
-次は Codex などの共通配置に入れる例です。`common` を上の表の値に替えてください。複数なら `common,claude-code` のように指定できます。
-
-```bash
-python3 tools/install.py --scope user --target common --dry-run
-```
-
-表示された配置先を確認し、問題がなければ実行します。
-
-```bash
-python3 tools/install.py --scope user --target common
-```
-
-既に入っている場合は、[更新手順](docs/installation.md#更新する)を使います。特定のプロジェクトへの導入や、複数環境にまとめて入れる方法は、[インストールの詳細](docs/installation.md#インストールする)にあります。
-
-### OpenCode、Hermes Agent に入れる
-
-上の手順で `--target opencode` または `--target hermes` を指定します。環境変数やプロファイルによって配置先が変わるため、`--dry-run` の出力を確認してください。既存の共通配置との重複や、プロジェクトへの導入条件は、[環境固有の設定](docs/installation.md#opencode-と-hermes-agent-に入れる)にあります。
+既に入っている場合は、[更新手順](docs/installation.md#更新する)を使います。
 
 ### ChatGPT Work、Claude Cowork、Gemini Apps に入れる
 
@@ -83,12 +65,11 @@ python3 tools/install.py --scope user --target common
 
 ### そのほかの手順
 
-- [特定のプロジェクトに入れる](docs/installation.md#特定のプロジェクトに入れる)
+- [配置先と手動のコピー](docs/installation.md#手動でコピーする)
 - [動作を確認する](docs/installation.md#動作を確認する)
 - [削除する](docs/installation.md#削除する)
 - [Claude Code のプラグインとして入れる](docs/environments.md#プラグインとして入れる)
 - [gh skill（GitHub CLI）で入れる](docs/installation.md#github-cligh-skillで入れる)（v0.15.0 以降。名前だけで入り、`gh skill update` で更新を確かめられます）
-- [npx skills で入れる](docs/installation.md#npx-skills-で入れる)（`npx skills add Mr-Kondo/japanese-readability-editor`）
 
 ## 使い方
 
