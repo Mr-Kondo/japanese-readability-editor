@@ -249,9 +249,10 @@ class CommandLineTest(PackageCase):
         home.mkdir()
         installed = hermes_default_home(home) / "skills" / SKILL_NAME
         shutil.copytree(self.out / "hermes" / SKILL_NAME, installed)
+        for name in ("before.md", "after_split.md"):  # 入力は作業フォルダの下にしか置けない
+            shutil.copy(SKILL_DIR.parent.parent / "tests" / "fixtures" / name, home / name)
         code, out, err = run_script(installed / "scripts" / "verify_preservation.py", "--strict",
-                                    str(SKILL_DIR.parent.parent / "tests" / "fixtures" / "before.md"),
-                                    str(SKILL_DIR.parent.parent / "tests" / "fixtures" / "after_split.md"), cwd=home)
+                                    "before.md", "after_split.md", cwd=home)
         self.assertEqual(code, 0, out + err)
 
     def test_generates_all_artifacts(self):

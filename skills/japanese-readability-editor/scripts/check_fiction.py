@@ -18,10 +18,14 @@ from __future__ import annotations
 import argparse
 from bisect import bisect_right
 import json
+import os
 from pathlib import Path
 import re
 import sys
 from typing import List, Optional, Sequence
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # 同じフォルダの input_guard を読む
+from input_guard import check_readable  # noqa: E402
 
 SCHEMA_VERSION = 1
 EXIT_OK, EXIT_CANDIDATES, EXIT_FAILED = 0, 1, 2
@@ -53,6 +57,8 @@ class Parser(argparse.ArgumentParser):
 
 def read_input(path: str) -> str:
     """改行と BOM を除去・正規化せず UTF-8 として読み込む。"""
+    if path != "-":
+        check_readable(path)
     data = sys.stdin.buffer.read() if path == "-" else Path(path).read_bytes()
     return data.decode("utf-8")
 
@@ -80,6 +86,7 @@ def validate_settings(value: object) -> dict:
 
 
 def read_settings(path: str) -> dict:
+    check_readable(path)
     value = json.loads(Path(path).read_bytes().decode("utf-8-sig"))
     return validate_settings(value)
 

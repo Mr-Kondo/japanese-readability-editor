@@ -26,8 +26,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from typing import List, Optional, Tuple
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # 同じフォルダの input_guard を読む
+from input_guard import check_readable  # noqa: E402
 
 CONTEXT_LENGTH = 20
 
@@ -152,6 +156,7 @@ def count_paragraphs(text: str) -> int:
 def read_file(path: str) -> str:
     if path == "-":
         return sys.stdin.buffer.read().decode("utf-8-sig")
+    check_readable(path)
     with open(path, "rb") as handle:
         return handle.read().decode("utf-8-sig")
 

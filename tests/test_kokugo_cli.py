@@ -8,6 +8,7 @@ import hashlib
 import io
 import json
 import os
+import shutil
 import socket
 import unittest
 from pathlib import Path
@@ -265,9 +266,15 @@ class DeterminismTest(unittest.TestCase):
             self.assertEqual(first, second, extra)
 
     def test_the_working_directory_does_not_change_the_output(self):
-        with temporary_directory() as tmp:
-            cwd = Path(tmp.name if hasattr(tmp, "name") else tmp)
-            self.assertEqual(run_script(SCRIPT, *self.ARGS, "--json", cwd=cwd), run_script(SCRIPT, *self.ARGS, "--json"))
+        # 入力は作業フォルダの下にしか置けない。別々の作業フォルダに同じファイルを置き、相対パスで渡して比べる
+        args = ("official_sample.md", "--profile", "official", "--glossary", "glossary.txt", "--json")
+        results = []
+        for _ in range(2):
+            with temporary_directory() as tmp:
+                for name in ("official_sample.md", "glossary.txt"):
+                    shutil.copy(KOKUGO / name, Path(tmp) / name)
+                results.append(run_script(SCRIPT, *args, cwd=Path(tmp)))
+        self.assertEqual(results[0], results[1])
 
     def test_the_json_has_no_timestamps_or_environment_dependent_values(self):
         import re

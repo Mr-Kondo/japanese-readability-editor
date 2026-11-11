@@ -40,6 +40,9 @@ import unicodedata
 from dataclasses import dataclass, field
 from typing import Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Tuple
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # 同じフォルダの input_guard を読む
+from input_guard import check_readable  # noqa: E402
+
 PARAGRAPH_THRESHOLD = 200
 SENTENCE_THRESHOLD = 46
 SHORT_SENTENCE_THRESHOLD = 20
@@ -631,6 +634,11 @@ def expand_inputs(arguments: Iterable[str]) -> Tuple[List[str], List[str]]:
         if argument == "-":
             add(argument)
         elif os.path.isdir(argument):
+            try:
+                check_readable(argument)
+            except PermissionError as exc:
+                errors.append(str(exc))
+                continue
             for found in _walk_directory(argument):
                 add(found)
         elif os.path.exists(argument):
@@ -649,15 +657,16 @@ def expand_inputs(arguments: Iterable[str]) -> Tuple[List[str], List[str]]:
 
 def _walk_directory(root: str) -> Iterator[str]:
     for current, directories, files in os.walk(root):
-        directories[:] = sorted(d for d in directories if d not in SKIPPED_DIRECTORIES)
+        directories[:] = sorted(d for d in directories if d not in SKIPPED_DIRECTORIES and not d.startswith("."))
         for name in sorted(files):
-            if name.lower().endswith(DIRECTORY_SUFFIXES):
+            if name.lower().endswith(DIRECTORY_SUFFIXES) and not name.startswith("."):
                 yield os.path.join(current, name)
 
 
 def read_text(path: str) -> str:
     if path == "-":
         return sys.stdin.buffer.read().decode("utf-8-sig")
+    check_readable(path)
     with open(path, "rb") as handle:
         return handle.read().decode("utf-8-sig")
 
