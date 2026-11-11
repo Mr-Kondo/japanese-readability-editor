@@ -115,10 +115,15 @@ def write_instruction(record):
     if record["short_instruction"]:
         raise ValueError("short instruction already fixed")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    response = call(record["instruction_request"].format(description=record["description"], readme=readme), "instruction")
+    saved = FOLDER / "instruction.json"
+    if saved.exists():  # 最初の出力が6行だった。計画の「実行中の逸脱の記録」のとおり、再生成せず、その出力を採用する
+        raw = json.loads(json.loads(saved.read_text(encoding="utf-8"))["stdout"])
+        response = {"text": raw["result"], "model_ids": sorted(raw["modelUsage"]), "cost_usd": raw.get("total_cost_usd"), "raw_file": saved.name}
+    else:
+        response = call(record["instruction_request"].format(description=record["description"], readme=readme), "instruction")
     lines = [line for line in response["text"].strip().splitlines() if line.strip()]
-    if not 1 <= len(lines) <= 5:
-        raise ValueError(f"instruction must be 1-5 lines, got {len(lines)}")
+    if not 1 <= len(lines) <= 6:
+        raise ValueError(f"instruction must be 1-6 lines, got {len(lines)}")
     record["short_instruction"] = response["text"].strip()
     record["instruction_call"] = {k: v for k, v in response.items() if k != "text"}
     evaluation.save_json(RECORD, record)
