@@ -1,5 +1,5 @@
 {
-  "status": "prepared",
+  "status": "counted",
   "prepared_at": "2026-11-11T23:10:29.113725+00:00",
   "commit": "33cb051bc2f29385f105b96f55a11076f4c53746",
   "cases": [
@@ -118,5 +118,1053 @@
   "runner_sha256": "d382f05c1a001d1d24e2eb99813bc6910bbd290e6b7d6250aa12ab1213b47bf5",
   "helper_sha256": "9f7711077e2f2dd2a5c5d89cff3f69f782792c31b95605e4767df08f69e79cbd",
   "cases_sha256": "2a58705ec03dc7354166c436734d205658c526787a7ee197e7995fbf8db287e3",
-  "outputs": []
+  "outputs": [
+    {
+      "id": "l001",
+      "case_id": "u01",
+      "group": "target",
+      "repeat": 1,
+      "text": "このツールは、設定ファイルを自動では書き換えません。設定を変更したいときは、利用者が自分で設定ファイルを開き、必要な項目を編集する必要があります。\n\nなお、設定ファイルの場所は、実行するときに画面に表示されるので、確認できます。編集した後にツールを再起動すると、変更した内容が反映されます。再起動しない場合は、変更した内容が反映されませんので、注意が必要です。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "11aefe89a151358576950210235adc27c891a44e3996bc936dfe189f0dfc9ef3",
+      "raw_file": "l001.json",
+      "num_turns": 1,
+      "cost_usd": 0.17898
+    },
+    {
+      "id": "l002",
+      "case_id": "u02",
+      "group": "target",
+      "repeat": 1,
+      "text": "今回の障害は、サーバーの故障が原因ではありませんでした。調査の結果、先週のリリースで追加された定期処理が、想定よりも長い時間をかけて実行されていたことが原因と分かりました。この定期処理の実行中は、データベースへの接続が使い切られてしまい、その結果、画面の表示が非常に遅くなっていました。現在は、この定期処理の実行時間を短くする修正を行い、同様の状況が起きないように対応しています。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "2674b011388720849f40d8a9f80477a82dbf8af31f71d277241529fb5bd5ac5c",
+      "raw_file": "l002.json",
+      "num_turns": 1,
+      "cost_usd": 0.18076199999999998
+    },
+    {
+      "id": "l003",
+      "case_id": "u03",
+      "group": "target",
+      "repeat": 1,
+      "text": "新しい料金プランでは、利用回数に応じた従量課金は行わない。月額の固定料金のみを支払えばよく、追加で請求されることはない。\n\nただし、契約できるアカウントの数には上限が設けられている。上限を超えるアカウントが必要になる場合は、別のプランを選択する必要がある。\n\nプランの変更は、管理画面から行える。新しい料金は、変更した月の翌月から適用される。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "1f89342484034a0e7c110696a11661b5190e4dce51e56da3dbcf700bdf9d3c7f",
+      "raw_file": "l003.json",
+      "num_turns": 1,
+      "cost_usd": 0.179926
+    },
+    {
+      "id": "l004",
+      "case_id": "u04",
+      "group": "target",
+      "repeat": 1,
+      "text": "今回の会議では、予算の増額は決定しなかった。次回の会議までに、各部署が必要となる金額の根拠を整理して提出する。その内容を踏まえて、あらためて増額の可否を検討することになった。\n\nなお、新しい人員の採用は、予算の増額とは関係なく進めることが確認された。そのため、人事部が採用の計画を作成することになっている。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "0681172c5ff368cc6a9f1d6526ad9c04c4a46fa700a72362ef0bb10a2ce785ce",
+      "raw_file": "l004.json",
+      "num_turns": 1,
+      "cost_usd": 0.174784
+    },
+    {
+      "id": "l005",
+      "case_id": "u05",
+      "group": "target",
+      "repeat": 1,
+      "text": "この手順には、データのバックアップを取る作業は含まれていません。バックアップの取り方は別の手順書に記載されています。作業を始める前に、必ずその手順書を参照し、バックアップが取得されていることを確認してください。バックアップがない状態で作業を進めると、万が一問題が起きたときに、元の状態に戻せなくなる可能性があります。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "8dd3f81eeec6851801268d7a7cae6977cb0e7507acdeab6e9df2cbb8555d5406",
+      "raw_file": "l005.json",
+      "num_turns": 1,
+      "cost_usd": 0.174778
+    },
+    {
+      "id": "l006",
+      "case_id": "u06",
+      "group": "target",
+      "repeat": 1,
+      "text": "今回の提案は、既存のシステムを全面的に作り直すものではない。現在の画面と業務の流れはそのまま使い続けながら、データの集計に時間がかかっている部分だけを、新しい仕組みに置き換えることを考えている。この方法をとれば、作り直す場合に比べて、費用と期間の両方を小さく抑えられる見込みである。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "a5c5123a2fddc426f1f6b7768ada7acaaad8c17a1f926ba38c8a4217231a986c",
+      "raw_file": "l006.json",
+      "num_turns": 1,
+      "cost_usd": 0.17778
+    },
+    {
+      "id": "l007",
+      "case_id": "u07",
+      "group": "target",
+      "repeat": 1,
+      "text": "このアプリは、位置情報を常時は取得しません。位置情報が使われるのは、利用者が地図の画面を開いているときだけです。画面を閉じると、取得は停止されます。取得した位置情報は、お客様の端末の中で処理されるだけで、サーバーに送信されることはありません。位置情報の利用は、端末の設定画面から、いつでも許可または拒否を切り替えられます。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "7562bab07cabdf1efc401ea329538e94805eb54c3e7ca8705ee84d97399e9b3b",
+      "raw_file": "l007.json",
+      "num_turns": 1,
+      "cost_usd": 0.18159
+    },
+    {
+      "id": "l008",
+      "case_id": "u08",
+      "group": "target",
+      "repeat": 1,
+      "text": "このキャッシュは、一定の時間が経過しても自動では削除されない。削除されるのは、同じキーに対して新しい値が書き込まれたときと、管理用のコマンドで明示的に削除が指示されたときだけである。\n\nそのため、古い値が残り続けて、メモリの使用量が少しずつ増えていく場合がある。定期的に使用量を確認し、必要に応じて削除の操作を行うことが求められる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "276b79ec6f98d69bd77280e4b7abbccd0073cc54fee8a2ac25db9cee72551022",
+      "raw_file": "l008.json",
+      "num_turns": 1,
+      "cost_usd": 0.18068
+    },
+    {
+      "id": "l009",
+      "case_id": "k1",
+      "group": "kept",
+      "repeat": 1,
+      "text": "今回の改訂で重視したのは、記述の量ではなく、手順の正確さである。そのため、これまで複数の文書に分かれて書かれていた内容を、一つの文書にまとめた。そのうえで、各手順の前提条件を手順ごとに明確に記載するようにした。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "a136a11d7d89c8c3b672084b3c8b7e84aa15dc22f6a2591e536c071a21c12b18",
+      "raw_file": "l009.json",
+      "num_turns": 1,
+      "cost_usd": 0.180868
+    },
+    {
+      "id": "l010",
+      "case_id": "k2",
+      "group": "kept",
+      "repeat": 1,
+      "text": "この指標は、利用者の数ではなく、実際に操作した回数を数えたものである。そのため、同じ利用者が何度も操作した場合は、その回数がそのまま加算される。\n\n集計は毎日午前0時に行われ、結果は管理画面で確認できる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "507b332ce3e275c6a451d989b70e76ac1ef7c98fbc80f38a124036b9f4f90b69",
+      "raw_file": "l010.json",
+      "num_turns": 1,
+      "cost_usd": 0.177602
+    },
+    {
+      "id": "l011",
+      "case_id": "m1",
+      "group": "no_negation",
+      "repeat": 1,
+      "text": "サーバーの定期点検は、毎月の第一水曜日の深夜に行われることになっている。点検中はシステムに一時的に接続できなくなるため、事前にお客様へメールで通知するようにしている。点検が完了した後は、システムの動作を確認してから、通常の運用に戻すことになっている。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "57027b33e500b42481531a4da1ea154e1d6bd689a5cefc2104ad4505ff6d415f",
+      "raw_file": "l011.json",
+      "num_turns": 1,
+      "cost_usd": 0.178868
+    },
+    {
+      "id": "l012",
+      "case_id": "m2",
+      "group": "no_negation",
+      "repeat": 1,
+      "text": "新入社員の研修は、入社した月の初日から二週間行われる。研修では、会社の事業内容や、業務で使うシステムの操作方法を、講義と演習を組み合わせて学ぶ。最終日には、学んだ内容を確認する簡単な試験が実施される。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "ff05ebd0378f5989bcc573e1b4d845502ef0f2ad1c7b41e6dabbd9773f2135e0",
+      "raw_file": "l012.json",
+      "num_turns": 1,
+      "cost_usd": 0.17436400000000002
+    },
+    {
+      "id": "l013",
+      "case_id": "u01",
+      "group": "target",
+      "repeat": 2,
+      "text": "このツールは、設定ファイルを自動では書き換えません。設定を変更したいときは、利用者が自分で設定ファイルを開き、必要な項目を編集する必要があります。\n\nなお、設定ファイルの場所は、実行するときに画面に表示されるので、確認できます。編集した後にツールを再起動すると、変更した内容が反映されます。再起動しない場合は、変更した内容が反映されないので、注意が必要です。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "11aefe89a151358576950210235adc27c891a44e3996bc936dfe189f0dfc9ef3",
+      "raw_file": "l013.json",
+      "num_turns": 1,
+      "cost_usd": 0.0103239
+    },
+    {
+      "id": "l014",
+      "case_id": "u02",
+      "group": "target",
+      "repeat": 2,
+      "text": "今回の障害は、サーバーの故障によるものではありませんでした。調査の結果、先週のリリースで追加された定期処理が、想定よりも長い時間をかけて実行されていたことが原因だと分かりました。この定期処理が実行されている間は、データベースへの接続が使い切られてしまい、その結果、画面の表示が非常に遅くなっていました。現在は、この定期処理の実行時間を短くする修正をし、同様の状況が起きないように対応しています。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "2674b011388720849f40d8a9f80477a82dbf8af31f71d277241529fb5bd5ac5c",
+      "raw_file": "l014.json",
+      "num_turns": 1,
+      "cost_usd": 0.0127057
+    },
+    {
+      "id": "l015",
+      "case_id": "u03",
+      "group": "target",
+      "repeat": 2,
+      "text": "新しい料金プランでは、利用回数に応じた従量課金は行わない。月額の固定料金のみを支払えばよく、追加で請求されることはない。\n\nただし、契約できるアカウントの数には上限が設けられている。上限を超えるアカウントが必要になる場合は、別のプランを選択する必要がある。\n\nプランの変更は、管理画面から行える。変更した月の翌月から、新しい料金が適用される。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "1f89342484034a0e7c110696a11661b5190e4dce51e56da3dbcf700bdf9d3c7f",
+      "raw_file": "l015.json",
+      "num_turns": 1,
+      "cost_usd": 0.011402800000000001
+    },
+    {
+      "id": "l016",
+      "case_id": "u04",
+      "group": "target",
+      "repeat": 2,
+      "text": "今回の会議では、予算の増額は決定しなかった。次回の会議までに、各部署が必要な金額の根拠を整理して提出する。その内容を踏まえて、あらためて増額の可否を検討することになった。\n\nなお、新しい人員の採用は、予算の増額とは関係なく進めることが確認された。そのため、人事部が採用の計画を作成することになっている。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "0681172c5ff368cc6a9f1d6526ad9c04c4a46fa700a72362ef0bb10a2ce785ce",
+      "raw_file": "l016.json",
+      "num_turns": 1,
+      "cost_usd": 0.0056505
+    },
+    {
+      "id": "l017",
+      "case_id": "u05",
+      "group": "target",
+      "repeat": 2,
+      "text": "この手順には、データのバックアップを取る作業は含まれていません。バックアップの方法は別の手順書に記載されています。作業を始める前に、必ずその手順書を参照し、バックアップが取得されていることを確認してください。\n\nバックアップが取得されていない状態で作業を進めると、万が一問題が発生した場合に、元の状態に戻せなくなる可能性があります。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "8dd3f81eeec6851801268d7a7cae6977cb0e7507acdeab6e9df2cbb8555d5406",
+      "raw_file": "l017.json",
+      "num_turns": 1,
+      "cost_usd": 0.005661599999999999
+    },
+    {
+      "id": "l018",
+      "case_id": "u06",
+      "group": "target",
+      "repeat": 2,
+      "text": "今回の提案は、既存のシステムを全面的に作り直すものではない。現在の画面と業務の流れはそのまま使い続けながら、データの集計に時間がかかっている部分だけを、新しい仕組みに置き換えることを考えている。この方法をとると、作り直す場合に比べて、費用と期間の両方を小さく抑えられる見込みである。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "a5c5123a2fddc426f1f6b7768ada7acaaad8c17a1f926ba38c8a4217231a986c",
+      "raw_file": "l018.json",
+      "num_turns": 1,
+      "cost_usd": 0.0110704
+    },
+    {
+      "id": "l019",
+      "case_id": "u07",
+      "group": "target",
+      "repeat": 2,
+      "text": "このアプリは、位置情報を常時は取得しません。位置情報を使うのは、利用者が地図の画面を開いているときだけです。画面を閉じると、取得は停止されます。\n\n取得した位置情報は、お客様の端末の中で処理されるだけで、サーバーに送信されることはありません。\n\n位置情報の利用は、端末の設定画面から、いつでも許可または拒否を切り替えられます。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "7562bab07cabdf1efc401ea329538e94805eb54c3e7ca8705ee84d97399e9b3b",
+      "raw_file": "l019.json",
+      "num_turns": 1,
+      "cost_usd": 0.0057619
+    },
+    {
+      "id": "l020",
+      "case_id": "u08",
+      "group": "target",
+      "repeat": 2,
+      "text": "このキャッシュは、一定の時間が経過しても自動では削除されない。削除されるのは、同じキーに新しい値が書き込まれたときと、管理用のコマンドで明示的に削除が指示されたときだけである。\n\nそのため、古い値が残り続け、メモリの使用量が少しずつ増える場合がある。定期的に使用量を確認し、必要に応じて削除の操作を行うことが求められる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "276b79ec6f98d69bd77280e4b7abbccd0073cc54fee8a2ac25db9cee72551022",
+      "raw_file": "l020.json",
+      "num_turns": 1,
+      "cost_usd": 0.0109424
+    },
+    {
+      "id": "l021",
+      "case_id": "k1",
+      "group": "kept",
+      "repeat": 2,
+      "text": "今回の改訂で重視したのは、記述の量ではなく、手順の正確さである。そのため、これまで複数の文書に分かれて書かれていた内容を、一つの文書にまとめた。そのうえで、各手順の前提条件を手順ごとに明確に記載するようにした。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "a136a11d7d89c8c3b672084b3c8b7e84aa15dc22f6a2591e536c071a21c12b18",
+      "raw_file": "l021.json",
+      "num_turns": 1,
+      "cost_usd": 0.011977100000000001
+    },
+    {
+      "id": "l022",
+      "case_id": "k2",
+      "group": "kept",
+      "repeat": 2,
+      "text": "この指標は、利用者の数ではなく、実際に操作した回数を数えたものである。そのため、同じ利用者が何度も操作した場合は、その回数がそのまま加算される。集計は毎日午前0時に行われ、その結果は管理画面で確認できる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "507b332ce3e275c6a451d989b70e76ac1ef7c98fbc80f38a124036b9f4f90b69",
+      "raw_file": "l022.json",
+      "num_turns": 1,
+      "cost_usd": 0.0093677
+    },
+    {
+      "id": "l023",
+      "case_id": "m1",
+      "group": "no_negation",
+      "repeat": 2,
+      "text": "サーバーの定期点検は、毎月第一水曜日の深夜に行われることになっている。点検中はシステムへの接続が一時的にできなくなるため、事前にお客様へメールで通知するようにしている。点検が完了した後は、システムの動作を確認した上で、通常の運用に戻すことになっている。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "57027b33e500b42481531a4da1ea154e1d6bd689a5cefc2104ad4505ff6d415f",
+      "raw_file": "l023.json",
+      "num_turns": 1,
+      "cost_usd": 0.0105991
+    },
+    {
+      "id": "l024",
+      "case_id": "m2",
+      "group": "no_negation",
+      "repeat": 2,
+      "text": "新入社員の研修は、入社した月の初日から二週間行われる。研修では、会社の事業の内容や、業務で使うシステムの操作方法について、講義と演習を組み合わせて学ぶ。最終日には、学んだ内容を確認する簡単な試験が実施される。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "ff05ebd0378f5989bcc573e1b4d845502ef0f2ad1c7b41e6dabbd9773f2135e0",
+      "raw_file": "l024.json",
+      "num_turns": 1,
+      "cost_usd": 0.005328500000000001
+    },
+    {
+      "id": "l025",
+      "case_id": "u01",
+      "group": "target",
+      "repeat": 3,
+      "text": "このツールは、設定ファイルを自動では書き換えません。設定を変更したいときは、利用者が自分で設定ファイルを開き、必要な項目を編集する必要があります。なお、設定ファイルの場所は、実行するときに画面に表示されるので、確認できます。\n\n編集した後にツールを再起動すると、変更した内容が反映されます。再起動しない場合は、変更した内容が反映されないので、注意が必要です。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "11aefe89a151358576950210235adc27c891a44e3996bc936dfe189f0dfc9ef3",
+      "raw_file": "l025.json",
+      "num_turns": 1,
+      "cost_usd": 0.0100139
+    },
+    {
+      "id": "l026",
+      "case_id": "u02",
+      "group": "target",
+      "repeat": 3,
+      "text": "今回の障害は、サーバーの故障によって発生したものではありませんでした。調査した結果、原因は、先週のリリースで追加された定期処理が、想定よりも長く実行されていたことだと分かりました。\n\nこの定期処理の実行中は、データベースへの接続が使い切られてしまい、その結果、画面の表示が非常に遅くなっていました。\n\n現在は、この定期処理の実行時間を短くする修正を行い、同様の状況が起きないように対応しています。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "2674b011388720849f40d8a9f80477a82dbf8af31f71d277241529fb5bd5ac5c",
+      "raw_file": "l026.json",
+      "num_turns": 1,
+      "cost_usd": 0.011825699999999998
+    },
+    {
+      "id": "l027",
+      "case_id": "u03",
+      "group": "target",
+      "repeat": 3,
+      "text": "新しい料金プランでは、利用回数に応じた従量課金は行わない。支払うのは月額の固定料金のみで、追加で請求されることはない。\n\nただし、契約できるアカウントの数には上限が設けられている。上限を超えるアカウントが必要になる場合は、別のプランを選択する必要がある。\n\nプランの変更は、管理画面から行える。新しい料金は、変更した月の翌月から適用される。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "1f89342484034a0e7c110696a11661b5190e4dce51e56da3dbcf700bdf9d3c7f",
+      "raw_file": "l027.json",
+      "num_turns": 1,
+      "cost_usd": 0.0107428
+    },
+    {
+      "id": "l028",
+      "case_id": "u04",
+      "group": "target",
+      "repeat": 3,
+      "text": "今回の会議では、予算の増額は決定しなかった。次回の会議までに、各部署が必要な金額の根拠を整理して提出する。その内容を踏まえて、あらためて増額の可否を検討することになった。\n\nなお、新しい人員の採用は、予算の増額とは関係なく進めることが確認された。そのため、人事部が採用の計画を作成することになっている。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "0681172c5ff368cc6a9f1d6526ad9c04c4a46fa700a72362ef0bb10a2ce785ce",
+      "raw_file": "l028.json",
+      "num_turns": 1,
+      "cost_usd": 0.0056505
+    },
+    {
+      "id": "l029",
+      "case_id": "u05",
+      "group": "target",
+      "repeat": 3,
+      "text": "この手順には、データのバックアップを取る作業は含まれていません。バックアップの方法は別の手順書に記載されています。作業を始める前に、必ずその手順書を参照し、バックアップが取得されていることを確認してください。\n\nバックアップが取得されていない状態で作業を進めると、万が一問題が発生した場合に、元の状態に戻せなくなる可能性があります。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "8dd3f81eeec6851801268d7a7cae6977cb0e7507acdeab6e9df2cbb8555d5406",
+      "raw_file": "l029.json",
+      "num_turns": 1,
+      "cost_usd": 0.005661599999999999
+    },
+    {
+      "id": "l030",
+      "case_id": "u06",
+      "group": "target",
+      "repeat": 3,
+      "text": "今回の提案は、既存のシステムを全面的に作り直すものではない。現在の画面と業務の流れはそのまま使い続ける。データの集計に時間がかかっている部分だけを、新しい仕組みに置き換えることを考えている。この方法をとれば、作り直す場合に比べて、費用と期間の両方を小さく抑えられる見込みである。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "a5c5123a2fddc426f1f6b7768ada7acaaad8c17a1f926ba38c8a4217231a986c",
+      "raw_file": "l030.json",
+      "num_turns": 1,
+      "cost_usd": 0.0111704
+    },
+    {
+      "id": "l031",
+      "case_id": "u07",
+      "group": "target",
+      "repeat": 3,
+      "text": "このアプリは、位置情報を常時は取得しません。位置情報が使われるのは、利用者が地図の画面を開いているときだけです。画面を閉じると、取得は停止されます。\n\n取得した位置情報は、お客様の端末の中で処理されるだけで、サーバーに送信されることはありません。\n\n位置情報の利用の許可と拒否は、端末の設定画面から、いつでも切り替えられます。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "7562bab07cabdf1efc401ea329538e94805eb54c3e7ca8705ee84d97399e9b3b",
+      "raw_file": "l031.json",
+      "num_turns": 1,
+      "cost_usd": 0.0110819
+    },
+    {
+      "id": "l032",
+      "case_id": "u08",
+      "group": "target",
+      "repeat": 3,
+      "text": "このキャッシュは、一定の時間が経過しても自動では削除されない。削除されるのは、同じキーに新しい値が書き込まれたときと、管理用のコマンドで明示的に削除が指示されたときだけである。\n\nそのため、古い値が残り続け、メモリの使用量が少しずつ増えていく場合がある。定期的に使用量を確認し、必要に応じて削除することが求められる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "276b79ec6f98d69bd77280e4b7abbccd0073cc54fee8a2ac25db9cee72551022",
+      "raw_file": "l032.json",
+      "num_turns": 1,
+      "cost_usd": 0.0108924
+    },
+    {
+      "id": "l033",
+      "case_id": "k1",
+      "group": "kept",
+      "repeat": 3,
+      "text": "今回の改訂で重視したのは、記述の量ではなく、手順の正確さである。そのため、これまで複数の文書に分かれて書かれていた内容を、一つの文書にまとめた。その上で、各手順の前提条件を手順ごとに明確に記載するようにした。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "a136a11d7d89c8c3b672084b3c8b7e84aa15dc22f6a2591e536c071a21c12b18",
+      "raw_file": "l033.json",
+      "num_turns": 1,
+      "cost_usd": 0.0096871
+    },
+    {
+      "id": "l034",
+      "case_id": "k2",
+      "group": "kept",
+      "repeat": 3,
+      "text": "この指標は、利用者の数ではなく、実際に操作した回数を数えたものである。そのため、同じ利用者が何度も操作すると、その回数がそのまま加算される。集計は毎日の午前0時に行われ、その結果は管理画面で確認できる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "507b332ce3e275c6a451d989b70e76ac1ef7c98fbc80f38a124036b9f4f90b69",
+      "raw_file": "l034.json",
+      "num_turns": 1,
+      "cost_usd": 0.008787699999999999
+    },
+    {
+      "id": "l035",
+      "case_id": "m1",
+      "group": "no_negation",
+      "repeat": 3,
+      "text": "サーバーの定期点検は、毎月の第一水曜日の深夜に行われることになっている。点検の間はシステムに一時的に接続できなくなるため、事前にお客様へメールで通知するようにしている。点検が完了したら、システムの動作を確認した上で、通常の運用に戻すことになっている。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "57027b33e500b42481531a4da1ea154e1d6bd689a5cefc2104ad4505ff6d415f",
+      "raw_file": "l035.json",
+      "num_turns": 1,
+      "cost_usd": 0.0093491
+    },
+    {
+      "id": "l036",
+      "case_id": "m2",
+      "group": "no_negation",
+      "repeat": 3,
+      "text": "新入社員の研修は、入社した月の初日から二週間にわたって行われる。研修では、会社の事業の内容や、業務で使用するシステムの操作方法について、講義と演習を組み合わせて学ぶ。最終日には、学んだ内容を確認するための簡単な試験が実施される。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "ff05ebd0378f5989bcc573e1b4d845502ef0f2ad1c7b41e6dabbd9773f2135e0",
+      "raw_file": "l036.json",
+      "num_turns": 1,
+      "cost_usd": 0.005388500000000001
+    }
+  ],
+  "cli_version": "2.1.322 (Claude Code)",
+  "count": {
+    "summary": {
+      "models": [
+        "claude-sonnet-5-5"
+      ],
+      "cost_usd": 2.362,
+      "outputs": 36,
+      "target": {
+        "outputs": 24,
+        "created": 0,
+        "created_and_detected": 0,
+        "lost": 0,
+        "unchanged": 0,
+        "rewritten": 24,
+        "fewer_sentences": 0
+      },
+      "kept": {
+        "outputs": 6,
+        "created": 0,
+        "created_and_detected": 0,
+        "lost": 0,
+        "unchanged": 0,
+        "rewritten": 6,
+        "fewer_sentences": 0
+      },
+      "no_negation": {
+        "outputs": 6,
+        "created": 0,
+        "created_and_detected": 0,
+        "lost": 0,
+        "unchanged": 0,
+        "rewritten": 6,
+        "fewer_sentences": 0
+      }
+    },
+    "rows": [
+      {
+        "id": "l001",
+        "case_id": "u01",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "このツールは、設定ファイルを自動では書き換えません。設定を変更したいときは、利用者が自分で設定ファイルを開き、必要な項目を編集する必要があります。\n\nなお、設定ファイルの場所は、実行するときに画面に表示されるので、確認できます。編集した後にツールを再起動すると、変更した内容が反映されます。再起動しない場合は、変更した内容が反映されませんので、注意が必要です。",
+        "sentences_before": 5,
+        "sentences_after": 5
+      },
+      {
+        "id": "l002",
+        "case_id": "u02",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "今回の障害は、サーバーの故障が原因ではありませんでした。調査の結果、先週のリリースで追加された定期処理が、想定よりも長い時間をかけて実行されていたことが原因と分かりました。この定期処理の実行中は、データベースへの接続が使い切られてしまい、その結果、画面の表示が非常に遅くなっていました。現在は、この定期処理の実行時間を短くする修正を行い、同様の状況が起きないように対応しています。",
+        "sentences_before": 4,
+        "sentences_after": 4
+      },
+      {
+        "id": "l003",
+        "case_id": "u03",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "新しい料金プランでは、利用回数に応じた従量課金は行わない。月額の固定料金のみを支払えばよく、追加で請求されることはない。\n\nただし、契約できるアカウントの数には上限が設けられている。上限を超えるアカウントが必要になる場合は、別のプランを選択する必要がある。\n\nプランの変更は、管理画面から行える。新しい料金は、変更した月の翌月から適用される。",
+        "sentences_before": 4,
+        "sentences_after": 6
+      },
+      {
+        "id": "l004",
+        "case_id": "u04",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "今回の会議では、予算の増額は決定しなかった。次回の会議までに、各部署が必要となる金額の根拠を整理して提出する。その内容を踏まえて、あらためて増額の可否を検討することになった。\n\nなお、新しい人員の採用は、予算の増額とは関係なく進めることが確認された。そのため、人事部が採用の計画を作成することになっている。",
+        "sentences_before": 3,
+        "sentences_after": 5
+      },
+      {
+        "id": "l005",
+        "case_id": "u05",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "この手順には、データのバックアップを取る作業は含まれていません。バックアップの取り方は別の手順書に記載されています。作業を始める前に、必ずその手順書を参照し、バックアップが取得されていることを確認してください。バックアップがない状態で作業を進めると、万が一問題が起きたときに、元の状態に戻せなくなる可能性があります。",
+        "sentences_before": 3,
+        "sentences_after": 4
+      },
+      {
+        "id": "l006",
+        "case_id": "u06",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "今回の提案は、既存のシステムを全面的に作り直すものではない。現在の画面と業務の流れはそのまま使い続けながら、データの集計に時間がかかっている部分だけを、新しい仕組みに置き換えることを考えている。この方法をとれば、作り直す場合に比べて、費用と期間の両方を小さく抑えられる見込みである。",
+        "sentences_before": 3,
+        "sentences_after": 3
+      },
+      {
+        "id": "l007",
+        "case_id": "u07",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "このアプリは、位置情報を常時は取得しません。位置情報が使われるのは、利用者が地図の画面を開いているときだけです。画面を閉じると、取得は停止されます。取得した位置情報は、お客様の端末の中で処理されるだけで、サーバーに送信されることはありません。位置情報の利用は、端末の設定画面から、いつでも許可または拒否を切り替えられます。",
+        "sentences_before": 4,
+        "sentences_after": 5
+      },
+      {
+        "id": "l008",
+        "case_id": "u08",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "このキャッシュは、一定の時間が経過しても自動では削除されない。削除されるのは、同じキーに対して新しい値が書き込まれたときと、管理用のコマンドで明示的に削除が指示されたときだけである。\n\nそのため、古い値が残り続けて、メモリの使用量が少しずつ増えていく場合がある。定期的に使用量を確認し、必要に応じて削除の操作を行うことが求められる。",
+        "sentences_before": 3,
+        "sentences_after": 4
+      },
+      {
+        "id": "l009",
+        "case_id": "k1",
+        "group": "kept",
+        "repeat": 1,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "今回の改訂で重視したのは、記述の量ではなく、手順の正確さである。そのため、これまで複数の文書に分かれて書かれていた内容を、一つの文書にまとめた。そのうえで、各手順の前提条件を手順ごとに明確に記載するようにした。",
+        "sentences_before": 2,
+        "sentences_after": 3
+      },
+      {
+        "id": "l010",
+        "case_id": "k2",
+        "group": "kept",
+        "repeat": 1,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "この指標は、利用者の数ではなく、実際に操作した回数を数えたものである。そのため、同じ利用者が何度も操作した場合は、その回数がそのまま加算される。\n\n集計は毎日午前0時に行われ、結果は管理画面で確認できる。",
+        "sentences_before": 2,
+        "sentences_after": 3
+      },
+      {
+        "id": "l011",
+        "case_id": "m1",
+        "group": "no_negation",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "サーバーの定期点検は、毎月の第一水曜日の深夜に行われることになっている。点検中はシステムに一時的に接続できなくなるため、事前にお客様へメールで通知するようにしている。点検が完了した後は、システムの動作を確認してから、通常の運用に戻すことになっている。",
+        "sentences_before": 3,
+        "sentences_after": 3
+      },
+      {
+        "id": "l012",
+        "case_id": "m2",
+        "group": "no_negation",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "新入社員の研修は、入社した月の初日から二週間行われる。研修では、会社の事業内容や、業務で使うシステムの操作方法を、講義と演習を組み合わせて学ぶ。最終日には、学んだ内容を確認する簡単な試験が実施される。",
+        "sentences_before": 3,
+        "sentences_after": 3
+      },
+      {
+        "id": "l013",
+        "case_id": "u01",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "このツールは、設定ファイルを自動では書き換えません。設定を変更したいときは、利用者が自分で設定ファイルを開き、必要な項目を編集する必要があります。\n\nなお、設定ファイルの場所は、実行するときに画面に表示されるので、確認できます。編集した後にツールを再起動すると、変更した内容が反映されます。再起動しない場合は、変更した内容が反映されないので、注意が必要です。",
+        "sentences_before": 5,
+        "sentences_after": 5
+      },
+      {
+        "id": "l014",
+        "case_id": "u02",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "今回の障害は、サーバーの故障によるものではありませんでした。調査の結果、先週のリリースで追加された定期処理が、想定よりも長い時間をかけて実行されていたことが原因だと分かりました。この定期処理が実行されている間は、データベースへの接続が使い切られてしまい、その結果、画面の表示が非常に遅くなっていました。現在は、この定期処理の実行時間を短くする修正をし、同様の状況が起きないように対応しています。",
+        "sentences_before": 4,
+        "sentences_after": 4
+      },
+      {
+        "id": "l015",
+        "case_id": "u03",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "新しい料金プランでは、利用回数に応じた従量課金は行わない。月額の固定料金のみを支払えばよく、追加で請求されることはない。\n\nただし、契約できるアカウントの数には上限が設けられている。上限を超えるアカウントが必要になる場合は、別のプランを選択する必要がある。\n\nプランの変更は、管理画面から行える。変更した月の翌月から、新しい料金が適用される。",
+        "sentences_before": 4,
+        "sentences_after": 6
+      },
+      {
+        "id": "l016",
+        "case_id": "u04",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "今回の会議では、予算の増額は決定しなかった。次回の会議までに、各部署が必要な金額の根拠を整理して提出する。その内容を踏まえて、あらためて増額の可否を検討することになった。\n\nなお、新しい人員の採用は、予算の増額とは関係なく進めることが確認された。そのため、人事部が採用の計画を作成することになっている。",
+        "sentences_before": 3,
+        "sentences_after": 5
+      },
+      {
+        "id": "l017",
+        "case_id": "u05",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "この手順には、データのバックアップを取る作業は含まれていません。バックアップの方法は別の手順書に記載されています。作業を始める前に、必ずその手順書を参照し、バックアップが取得されていることを確認してください。\n\nバックアップが取得されていない状態で作業を進めると、万が一問題が発生した場合に、元の状態に戻せなくなる可能性があります。",
+        "sentences_before": 3,
+        "sentences_after": 4
+      },
+      {
+        "id": "l018",
+        "case_id": "u06",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "今回の提案は、既存のシステムを全面的に作り直すものではない。現在の画面と業務の流れはそのまま使い続けながら、データの集計に時間がかかっている部分だけを、新しい仕組みに置き換えることを考えている。この方法をとると、作り直す場合に比べて、費用と期間の両方を小さく抑えられる見込みである。",
+        "sentences_before": 3,
+        "sentences_after": 3
+      },
+      {
+        "id": "l019",
+        "case_id": "u07",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "このアプリは、位置情報を常時は取得しません。位置情報を使うのは、利用者が地図の画面を開いているときだけです。画面を閉じると、取得は停止されます。\n\n取得した位置情報は、お客様の端末の中で処理されるだけで、サーバーに送信されることはありません。\n\n位置情報の利用は、端末の設定画面から、いつでも許可または拒否を切り替えられます。",
+        "sentences_before": 4,
+        "sentences_after": 5
+      },
+      {
+        "id": "l020",
+        "case_id": "u08",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "このキャッシュは、一定の時間が経過しても自動では削除されない。削除されるのは、同じキーに新しい値が書き込まれたときと、管理用のコマンドで明示的に削除が指示されたときだけである。\n\nそのため、古い値が残り続け、メモリの使用量が少しずつ増える場合がある。定期的に使用量を確認し、必要に応じて削除の操作を行うことが求められる。",
+        "sentences_before": 3,
+        "sentences_after": 4
+      },
+      {
+        "id": "l021",
+        "case_id": "k1",
+        "group": "kept",
+        "repeat": 2,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "今回の改訂で重視したのは、記述の量ではなく、手順の正確さである。そのため、これまで複数の文書に分かれて書かれていた内容を、一つの文書にまとめた。そのうえで、各手順の前提条件を手順ごとに明確に記載するようにした。",
+        "sentences_before": 2,
+        "sentences_after": 3
+      },
+      {
+        "id": "l022",
+        "case_id": "k2",
+        "group": "kept",
+        "repeat": 2,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "この指標は、利用者の数ではなく、実際に操作した回数を数えたものである。そのため、同じ利用者が何度も操作した場合は、その回数がそのまま加算される。集計は毎日午前0時に行われ、その結果は管理画面で確認できる。",
+        "sentences_before": 2,
+        "sentences_after": 3
+      },
+      {
+        "id": "l023",
+        "case_id": "m1",
+        "group": "no_negation",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "サーバーの定期点検は、毎月第一水曜日の深夜に行われることになっている。点検中はシステムへの接続が一時的にできなくなるため、事前にお客様へメールで通知するようにしている。点検が完了した後は、システムの動作を確認した上で、通常の運用に戻すことになっている。",
+        "sentences_before": 3,
+        "sentences_after": 3
+      },
+      {
+        "id": "l024",
+        "case_id": "m2",
+        "group": "no_negation",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "新入社員の研修は、入社した月の初日から二週間行われる。研修では、会社の事業の内容や、業務で使うシステムの操作方法について、講義と演習を組み合わせて学ぶ。最終日には、学んだ内容を確認する簡単な試験が実施される。",
+        "sentences_before": 3,
+        "sentences_after": 3
+      },
+      {
+        "id": "l025",
+        "case_id": "u01",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "このツールは、設定ファイルを自動では書き換えません。設定を変更したいときは、利用者が自分で設定ファイルを開き、必要な項目を編集する必要があります。なお、設定ファイルの場所は、実行するときに画面に表示されるので、確認できます。\n\n編集した後にツールを再起動すると、変更した内容が反映されます。再起動しない場合は、変更した内容が反映されないので、注意が必要です。",
+        "sentences_before": 5,
+        "sentences_after": 5
+      },
+      {
+        "id": "l026",
+        "case_id": "u02",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "今回の障害は、サーバーの故障によって発生したものではありませんでした。調査した結果、原因は、先週のリリースで追加された定期処理が、想定よりも長く実行されていたことだと分かりました。\n\nこの定期処理の実行中は、データベースへの接続が使い切られてしまい、その結果、画面の表示が非常に遅くなっていました。\n\n現在は、この定期処理の実行時間を短くする修正を行い、同様の状況が起きないように対応しています。",
+        "sentences_before": 4,
+        "sentences_after": 4
+      },
+      {
+        "id": "l027",
+        "case_id": "u03",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "新しい料金プランでは、利用回数に応じた従量課金は行わない。支払うのは月額の固定料金のみで、追加で請求されることはない。\n\nただし、契約できるアカウントの数には上限が設けられている。上限を超えるアカウントが必要になる場合は、別のプランを選択する必要がある。\n\nプランの変更は、管理画面から行える。新しい料金は、変更した月の翌月から適用される。",
+        "sentences_before": 4,
+        "sentences_after": 6
+      },
+      {
+        "id": "l028",
+        "case_id": "u04",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "今回の会議では、予算の増額は決定しなかった。次回の会議までに、各部署が必要な金額の根拠を整理して提出する。その内容を踏まえて、あらためて増額の可否を検討することになった。\n\nなお、新しい人員の採用は、予算の増額とは関係なく進めることが確認された。そのため、人事部が採用の計画を作成することになっている。",
+        "sentences_before": 3,
+        "sentences_after": 5
+      },
+      {
+        "id": "l029",
+        "case_id": "u05",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "この手順には、データのバックアップを取る作業は含まれていません。バックアップの方法は別の手順書に記載されています。作業を始める前に、必ずその手順書を参照し、バックアップが取得されていることを確認してください。\n\nバックアップが取得されていない状態で作業を進めると、万が一問題が発生した場合に、元の状態に戻せなくなる可能性があります。",
+        "sentences_before": 3,
+        "sentences_after": 4
+      },
+      {
+        "id": "l030",
+        "case_id": "u06",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "今回の提案は、既存のシステムを全面的に作り直すものではない。現在の画面と業務の流れはそのまま使い続ける。データの集計に時間がかかっている部分だけを、新しい仕組みに置き換えることを考えている。この方法をとれば、作り直す場合に比べて、費用と期間の両方を小さく抑えられる見込みである。",
+        "sentences_before": 3,
+        "sentences_after": 4
+      },
+      {
+        "id": "l031",
+        "case_id": "u07",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "このアプリは、位置情報を常時は取得しません。位置情報が使われるのは、利用者が地図の画面を開いているときだけです。画面を閉じると、取得は停止されます。\n\n取得した位置情報は、お客様の端末の中で処理されるだけで、サーバーに送信されることはありません。\n\n位置情報の利用の許可と拒否は、端末の設定画面から、いつでも切り替えられます。",
+        "sentences_before": 4,
+        "sentences_after": 5
+      },
+      {
+        "id": "l032",
+        "case_id": "u08",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "このキャッシュは、一定の時間が経過しても自動では削除されない。削除されるのは、同じキーに新しい値が書き込まれたときと、管理用のコマンドで明示的に削除が指示されたときだけである。\n\nそのため、古い値が残り続け、メモリの使用量が少しずつ増えていく場合がある。定期的に使用量を確認し、必要に応じて削除することが求められる。",
+        "sentences_before": 3,
+        "sentences_after": 4
+      },
+      {
+        "id": "l033",
+        "case_id": "k1",
+        "group": "kept",
+        "repeat": 3,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "今回の改訂で重視したのは、記述の量ではなく、手順の正確さである。そのため、これまで複数の文書に分かれて書かれていた内容を、一つの文書にまとめた。その上で、各手順の前提条件を手順ごとに明確に記載するようにした。",
+        "sentences_before": 2,
+        "sentences_after": 3
+      },
+      {
+        "id": "l034",
+        "case_id": "k2",
+        "group": "kept",
+        "repeat": 3,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "この指標は、利用者の数ではなく、実際に操作した回数を数えたものである。そのため、同じ利用者が何度も操作すると、その回数がそのまま加算される。集計は毎日の午前0時に行われ、その結果は管理画面で確認できる。",
+        "sentences_before": 2,
+        "sentences_after": 3
+      },
+      {
+        "id": "l035",
+        "case_id": "m1",
+        "group": "no_negation",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "サーバーの定期点検は、毎月の第一水曜日の深夜に行われることになっている。点検の間はシステムに一時的に接続できなくなるため、事前にお客様へメールで通知するようにしている。点検が完了したら、システムの動作を確認した上で、通常の運用に戻すことになっている。",
+        "sentences_before": 3,
+        "sentences_after": 3
+      },
+      {
+        "id": "l036",
+        "case_id": "m2",
+        "group": "no_negation",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "新入社員の研修は、入社した月の初日から二週間にわたって行われる。研修では、会社の事業の内容や、業務で使用するシステムの操作方法について、講義と演習を組み合わせて学ぶ。最終日には、学んだ内容を確認するための簡単な試験が実施される。",
+        "sentences_before": 3,
+        "sentences_after": 3
+      }
+    ]
+  }
 }
