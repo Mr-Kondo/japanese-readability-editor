@@ -49,6 +49,7 @@ from typing import Dict, List, Optional, Sequence, Tuple
 
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import input_guard  # noqa: E402
 import measure  # noqa: E402  (入力の展開と Markdown 判定を共有する)
 import kokugo_engine as engine  # noqa: E402
 
@@ -66,6 +67,7 @@ def read_input(path: str) -> Tuple[bytes, str]:
     if path == "-":
         data = sys.stdin.buffer.read()
     else:
+        input_guard.check_readable(path)
         with open(path, "rb") as handle:
             data = handle.read()
     return data, data.decode("utf-8-sig")
@@ -174,6 +176,8 @@ def load_glossary(names: Sequence[str]) -> Optional[engine.Glossary]:
     """用語集を読む。読めなければ OSError / UnicodeDecodeError(呼び出し側が終了コード 2 にする)。"""
     if not names:
         return None
+    for name in names:
+        input_guard.check_readable(name)
     return engine.merge_glossaries([engine.parse_glossary(Path(name).read_text(encoding="utf-8")) for name in names])
 
 

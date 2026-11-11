@@ -28,6 +28,7 @@ from typing import Dict, List, Optional
 
 sys.dont_write_bytecode = True
 from feedback_storage import save_report
+from input_guard import check_readable
 
 SCHEMA_VERSION = 1
 KIND = "jre-feedback"
@@ -57,6 +58,7 @@ PATTERNS = (
 
 def read_text(path: str, label: str) -> str:
     try:
+        check_readable(path)
         with open(path, "rb") as handle:
             raw = handle.read(MAX_CHARS * 4 + 1)
         text = raw.decode("utf-8-sig")

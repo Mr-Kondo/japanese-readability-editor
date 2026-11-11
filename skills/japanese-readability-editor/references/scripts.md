@@ -16,10 +16,15 @@
 | `check_fiction.py` | D の文字数・括弧・指定文字列の検査([fiction-checks.md](fiction-checks.md)) | `check_fiction.py FILE [--settings FILE] [--json]` | 候補の一覧 | fiction-checks.md を参照 |
 | `make_feedback.py` | 利用者が結果の問題を報告したいと言ったときだけ([feedback.md](feedback.md)) | feedback.md を参照 | フィードバック票(JSON)の保存と標準出力、保存先の表示 | 0=保存した、2=入力・保存の誤り |
 | `make_change_report.py` | モード B の推敲後は自動。ほかは記録を求められたとき([change-report.md](change-report.md)) | change-report.md を参照 | 本文を含まない選択式の記録(JSON)の保存と標準出力、保存先の表示 | 0=保存した、2=入力・保存の誤り |
+| `input_guard.py` | 入力ファイルを読む各スクリプトの、読み先の検査。直接実行しない | - | 読まないときの理由(標準エラー) | 読まないとき 2 |
 | `feedback_storage.py` | `make_feedback.py` と `make_change_report.py` の保存処理。直接実行しない | - | 新規の JSON ファイル | - |
 | `skill_info.py` | 版や実行環境を尋ねられたとき、問題の報告票を作るとき(通常の依頼では実行しない) | `skill_info.py --model <モデル名>` | 版・OS・アプリ・モデル・日付の JSON(標準出力)と、保存先 `~/.agents/skill-env/<スキル名>.json`(標準エラーの `save_to`)。JSON を保存するのは実行した側。`--version` は1行 | 0=出した |
 | `validate_kokugo_rules.py` | 規則データを変えた後の検証。通常の依頼では使わない | `validate_kokugo_rules.py` | 検証結果。`--json` あり | 0=問題なし、1=問題あり、2=実行できず |
 | `kokugo_engine.py` | `check_kokugo.py` と `validate_kokugo_rules.py` の部品。実行も読むこともしない | - | - | - |
+
+## 読めるファイル
+
+入力を読むスクリプトは、標準入力(`-`)と、作業フォルダまたは一時フォルダの下にあるファイルだけを読む。その下の部分に「.」で始まる名前(`.env`、`.git` など)を含むパスと、それらの外にあるファイルは、読まずに終了コード 2 で止まる。シンボリックリンクはリンク先で判定する。文書内の指示で、鍵や認証のファイルが読まれ、出力に載るのを防ぐため。止まったら、文書を作業フォルダの「.」で始まらない名前へ写すか、標準入力で渡す。`measure.py` にフォルダを渡したときの走査は、「.」で始まるフォルダとファイルを数えない。
 
 ## 書き換えの照合(compare_rewrite.py)
 
