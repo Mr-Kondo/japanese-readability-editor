@@ -41,7 +41,7 @@ COMPARISON = """日本語の文章の二案を比較してください。版名�
 説明や補足を付けず、JSONのみで {"comparisons":[{"id":"p001","readability":"tie","reason":"実際の文に基づく理由"}]} を返し、各idを一度ずつ含めてください。
 ITEMS:
 """
-MODE_PREFIX = re.compile(r"^モード[A-D]。")
+MODE_PREFIX = re.compile(r"^モード\s*[A-D]。")
 
 
 def plain_request(request):
