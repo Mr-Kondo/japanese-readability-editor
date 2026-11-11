@@ -1,5 +1,5 @@
 {
-  "status": "prepared",
+  "status": "counted",
   "prepared_at": "2026-11-11T23:00:44.203206+00:00",
   "commit": "4427d2d51f1b6e31256960c74c0da9e27328ca06",
   "cases": [
@@ -146,5 +146,1287 @@
   "runner_sha256": "25f528452122e8eb72f4c42a33bf9428f2017d7fced16607f2e8039cdd8274d4",
   "helper_sha256": "9f7711077e2f2dd2a5c5d89cff3f69f782792c31b95605e4767df08f69e79cbd",
   "cases_sha256": "cf8a99869b88b1f2f63863545887afa71f028bb31ab0d9806c28f7c4920d542b",
-  "outputs": []
+  "outputs": [
+    {
+      "id": "o001",
+      "case_id": "t01",
+      "group": "target",
+      "repeat": 1,
+      "text": "この機能は、既存のファイルを上書きしない。出力先に同名のファイルがあるときは、連番を付けて別名で保存する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "f9fdc266d7ec52be79a4e26c6db34505508a6c63df3495d933c75d9a096bcb74",
+      "raw_file": "o001.json",
+      "num_turns": 1,
+      "cost_usd": 0.173618
+    },
+    {
+      "id": "o002",
+      "case_id": "t02",
+      "group": "target",
+      "repeat": 1,
+      "text": "初期設定では、通知が無効になっている。設定画面でオンにすると、更新があったときにメールが届く。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "9ed3cdc7c4142ae66436425b358f71992d8ba82f9cdc23fa265b276d366cb262",
+      "raw_file": "o002.json",
+      "num_turns": 1,
+      "cost_usd": 0.17349199999999998
+    },
+    {
+      "id": "o003",
+      "case_id": "t03",
+      "group": "target",
+      "repeat": 1,
+      "text": "この試験は、本番のデータベースに接続しない。テスト用に用意した複製に対して実行する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "41867044ec187a9232daedd9b9c6c9ae9ec59694492fb8b1fd59f05c5e6e19e7",
+      "raw_file": "o003.json",
+      "num_turns": 1,
+      "cost_usd": 0.17454
+    },
+    {
+      "id": "o004",
+      "case_id": "t04",
+      "group": "target",
+      "repeat": 1,
+      "text": "調査の結果、遅延の原因はネットワークではなかった。データベースのロック待ちが長く続いていたことが原因である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "d227176190c75b6f15738144011e3af8c7f595e82d9bc1b48cdc52ce152b00b2",
+      "raw_file": "o004.json",
+      "num_turns": 1,
+      "cost_usd": 0.173556
+    },
+    {
+      "id": "o005",
+      "case_id": "t05",
+      "group": "target",
+      "repeat": 1,
+      "text": "旧バージョンでは、設定ファイルを手で編集する必要はない。画面の指示に従って入力すると、設定が書き込まれる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "203a5941f98cc7d2ce0253fa5d3c8db24ca0b3696d160da1ec45eb4e1ad08da2",
+      "raw_file": "o005.json",
+      "num_turns": 1,
+      "cost_usd": 0.173646
+    },
+    {
+      "id": "o006",
+      "case_id": "t06",
+      "group": "target",
+      "repeat": 1,
+      "text": "今回の変更で、利用者向けの画面は変わらない。内部の集計処理だけが新しくなった。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "da09a75dcb18bd3dbbf36eb2963fd3cbfdb2be6d76b6d051d49a4a26cc9355c4",
+      "raw_file": "o006.json",
+      "num_turns": 1,
+      "cost_usd": 0.173478
+    },
+    {
+      "id": "o007",
+      "case_id": "t07",
+      "group": "target",
+      "repeat": 1,
+      "text": "申請は、郵送では受け付けていない。専用のフォームから提出してもらう。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "cc84f8c3cb885508db9d5a4954ee5967357500edbab1969426da5211cab9837d",
+      "raw_file": "o007.json",
+      "num_turns": 1,
+      "cost_usd": 0.17336600000000002
+    },
+    {
+      "id": "o008",
+      "case_id": "t08",
+      "group": "target",
+      "repeat": 1,
+      "text": "見積もりには、保守費用を含めていない。保守は別の契約として、年額で提示する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "641ffcfcb2d5c8662ff752735fd32f74d84f8516e95e2be4c54ddf9bb12f340a",
+      "raw_file": "o008.json",
+      "num_turns": 1,
+      "cost_usd": 0.173408
+    },
+    {
+      "id": "o009",
+      "case_id": "t09",
+      "group": "target",
+      "repeat": 1,
+      "text": "この指標は、応答の速さを示さない。処理した件数を、一定時間ごとに数えたものである。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "fa26188803c6dd2d344aed7aeaf3ad2694aba53bae535129a231ca8f7e6e27c3",
+      "raw_file": "o009.json",
+      "num_turns": 1,
+      "cost_usd": 0.176464
+    },
+    {
+      "id": "o010",
+      "case_id": "t10",
+      "group": "target",
+      "repeat": 1,
+      "text": "新しい担当者は、すぐにすべての権限を持つわけではない。最初の1か月は閲覧だけを許可し、その後に編集の権限を渡す。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "573b06b7691a00137f904c049365efe061c1c381aa13c193bf528e866c886496",
+      "raw_file": "o010.json",
+      "num_turns": 1,
+      "cost_usd": 0.173744
+    },
+    {
+      "id": "o011",
+      "case_id": "c1",
+      "group": "kept",
+      "repeat": 1,
+      "text": "原因は設定の誤りではなく、手順書が古いことにある。確認のため、改訂履歴を調べた。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "a07b132a80519f68dac66015a639e79b2ccf52a3843ce381e37797a596147f48",
+      "raw_file": "o011.json",
+      "num_turns": 1,
+      "cost_usd": 0.173506
+    },
+    {
+      "id": "o012",
+      "case_id": "c2",
+      "group": "kept",
+      "repeat": 1,
+      "text": "この調査は、速さではなく、正確さを重視した。結果は表にまとめた。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "b8f9f431cb2c7e9af7d9f81ed999f45a056bc5a13f3f142339b1a6ae31d2cd0d",
+      "raw_file": "o012.json",
+      "num_turns": 1,
+      "cost_usd": 0.17336600000000002
+    },
+    {
+      "id": "o013",
+      "case_id": "c3",
+      "group": "kept",
+      "repeat": 1,
+      "text": "今回は一般論ではなく、自分の体験に絞って紹介する。選んだ体験談は3つある。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "efef329c5a179dc7b34066b9f03d39f0a5d8375cb86442c19792bcad33855413",
+      "raw_file": "o013.json",
+      "num_turns": 1,
+      "cost_usd": 0.173478
+    },
+    {
+      "id": "o014",
+      "case_id": "n1",
+      "group": "no_negation",
+      "repeat": 1,
+      "text": "登録が終わると通知が届く。必要なら再確認を求められる。問題がなければ、そのまま使い始められる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "fbcf2111e168a163cd00debf1c5c03ba3cf05a95cef74ec7d886453faa27bd59",
+      "raw_file": "o014.json",
+      "num_turns": 1,
+      "cost_usd": 0.173534
+    },
+    {
+      "id": "o015",
+      "case_id": "n2",
+      "group": "no_negation",
+      "repeat": 1,
+      "text": "サーバーは毎晩2時に再起動する。再起動中は約5分間、接続できなくなる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "7848442eeb12ea45ad03d386713d83249e3559c7132166f3f5354baf6cb3396d",
+      "raw_file": "o015.json",
+      "num_turns": 1,
+      "cost_usd": 0.17345000000000002
+    },
+    {
+      "id": "o016",
+      "case_id": "n3",
+      "group": "no_negation",
+      "repeat": 1,
+      "text": "報告書は月末に提出する。提出前に、上長が内容を確認する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "5d24e72b1666007604c7e47e6c1ab103e0bdd21e941d1c3315c6c5c90d321f3b",
+      "raw_file": "o016.json",
+      "num_turns": 1,
+      "cost_usd": 0.173324
+    },
+    {
+      "id": "o017",
+      "case_id": "t01",
+      "group": "target",
+      "repeat": 2,
+      "text": "この機能は、既存のファイルを上書きしない。出力先に同名のファイルがあるときは、連番を付けて別名で保存する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "f9fdc266d7ec52be79a4e26c6db34505508a6c63df3495d933c75d9a096bcb74",
+      "raw_file": "o017.json",
+      "num_turns": 1,
+      "cost_usd": 0.0048221
+    },
+    {
+      "id": "o018",
+      "case_id": "t02",
+      "group": "target",
+      "repeat": 2,
+      "text": "初期設定では、通知が無効になっている。設定画面でオンにすると、更新があったときにメールが届く。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "9ed3cdc7c4142ae66436425b358f71992d8ba82f9cdc23fa265b276d366cb262",
+      "raw_file": "o018.json",
+      "num_turns": 1,
+      "cost_usd": 0.0047312
+    },
+    {
+      "id": "o019",
+      "case_id": "t03",
+      "group": "target",
+      "repeat": 2,
+      "text": "この試験は、本番のデータベースに接続しない。テスト用に用意した複製に対して実行する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "41867044ec187a9232daedd9b9c6c9ae9ec59694492fb8b1fd59f05c5e6e19e7",
+      "raw_file": "o019.json",
+      "num_turns": 1,
+      "cost_usd": 0.0058809000000000005
+    },
+    {
+      "id": "o020",
+      "case_id": "t04",
+      "group": "target",
+      "repeat": 2,
+      "text": "調査の結果、遅延の原因はネットワークではなかった。データベースのロック待ちが長く続いていた。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "d227176190c75b6f15738144011e3af8c7f595e82d9bc1b48cdc52ce152b00b2",
+      "raw_file": "o020.json",
+      "num_turns": 1,
+      "cost_usd": 0.0047413
+    },
+    {
+      "id": "o021",
+      "case_id": "t05",
+      "group": "target",
+      "repeat": 2,
+      "text": "旧バージョンでは、設定ファイルを手で編集する必要はない。画面の指示に従って入力すると、設定が書き込まれる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "203a5941f98cc7d2ce0253fa5d3c8db24ca0b3696d160da1ec45eb4e1ad08da2",
+      "raw_file": "o021.json",
+      "num_turns": 1,
+      "cost_usd": 0.0048423
+    },
+    {
+      "id": "o022",
+      "case_id": "t06",
+      "group": "target",
+      "repeat": 2,
+      "text": "今回の変更で、利用者向けの画面は変わらない。内部の集計処理だけが新しくなった。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "da09a75dcb18bd3dbbf36eb2963fd3cbfdb2be6d76b6d051d49a4a26cc9355c4",
+      "raw_file": "o022.json",
+      "num_turns": 1,
+      "cost_usd": 0.0047211
+    },
+    {
+      "id": "o023",
+      "case_id": "t07",
+      "group": "target",
+      "repeat": 2,
+      "text": "申請は、郵送では受け付けていない。専用のフォームから提出してもらう。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "cc84f8c3cb885508db9d5a4954ee5967357500edbab1969426da5211cab9837d",
+      "raw_file": "o023.json",
+      "num_turns": 1,
+      "cost_usd": 0.004640300000000001
+    },
+    {
+      "id": "o024",
+      "case_id": "t08",
+      "group": "target",
+      "repeat": 2,
+      "text": "見積もりには、保守費用を含めていない。保守は別の契約とし、年額で提示する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "641ffcfcb2d5c8662ff752735fd32f74d84f8516e95e2be4c54ddf9bb12f340a",
+      "raw_file": "o024.json",
+      "num_turns": 1,
+      "cost_usd": 0.0046806
+    },
+    {
+      "id": "o025",
+      "case_id": "t09",
+      "group": "target",
+      "repeat": 2,
+      "text": "この指標は、応答の速さを示さない。処理した件数を一定時間ごとに数えたものである。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "fa26188803c6dd2d344aed7aeaf3ad2694aba53bae535129a231ca8f7e6e27c3",
+      "raw_file": "o025.json",
+      "num_turns": 1,
+      "cost_usd": 0.009301
+    },
+    {
+      "id": "o026",
+      "case_id": "t10",
+      "group": "target",
+      "repeat": 2,
+      "text": "新しい担当者は、すぐにすべての権限を持つわけではない。最初の1か月は閲覧だけを許可し、その後に編集の権限を渡す。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "573b06b7691a00137f904c049365efe061c1c381aa13c193bf528e866c886496",
+      "raw_file": "o026.json",
+      "num_turns": 1,
+      "cost_usd": 0.004913000000000001
+    },
+    {
+      "id": "o027",
+      "case_id": "c1",
+      "group": "kept",
+      "repeat": 2,
+      "text": "原因は設定の誤りではなく、手順書が古いことにある。確認のため、改訂履歴を調べた。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "a07b132a80519f68dac66015a639e79b2ccf52a3843ce381e37797a596147f48",
+      "raw_file": "o027.json",
+      "num_turns": 1,
+      "cost_usd": 0.0047413
+    },
+    {
+      "id": "o028",
+      "case_id": "c2",
+      "group": "kept",
+      "repeat": 2,
+      "text": "この調査は、速さではなく、正確さを重視した。結果は表にまとめた。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "b8f9f431cb2c7e9af7d9f81ed999f45a056bc5a13f3f142339b1a6ae31d2cd0d",
+      "raw_file": "o028.json",
+      "num_turns": 1,
+      "cost_usd": 0.004640300000000001
+    },
+    {
+      "id": "o029",
+      "case_id": "c3",
+      "group": "kept",
+      "repeat": 2,
+      "text": "今回は一般論ではなく、自分の体験に絞って紹介する。体験談は3つ選んだ。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "efef329c5a179dc7b34066b9f03d39f0a5d8375cb86442c19792bcad33855413",
+      "raw_file": "o029.json",
+      "num_turns": 1,
+      "cost_usd": 0.0047211
+    },
+    {
+      "id": "o030",
+      "case_id": "n1",
+      "group": "no_negation",
+      "repeat": 2,
+      "text": "登録が終わると通知が届く。必要なら再確認を求められる。問題がなければ、そのまま使い始められる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "fbcf2111e168a163cd00debf1c5c03ba3cf05a95cef74ec7d886453faa27bd59",
+      "raw_file": "o030.json",
+      "num_turns": 1,
+      "cost_usd": 0.004761500000000001
+    },
+    {
+      "id": "o031",
+      "case_id": "n2",
+      "group": "no_negation",
+      "repeat": 2,
+      "text": "サーバーは毎晩2時に再起動する。再起動中は約5分間、接続できなくなる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "7848442eeb12ea45ad03d386713d83249e3559c7132166f3f5354baf6cb3396d",
+      "raw_file": "o031.json",
+      "num_turns": 1,
+      "cost_usd": 0.004700900000000001
+    },
+    {
+      "id": "o032",
+      "case_id": "n3",
+      "group": "no_negation",
+      "repeat": 2,
+      "text": "報告書は月末に提出する。提出前に、上長が内容を確認する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "5d24e72b1666007604c7e47e6c1ab103e0bdd21e941d1c3315c6c5c90d321f3b",
+      "raw_file": "o032.json",
+      "num_turns": 1,
+      "cost_usd": 0.0046099999999999995
+    },
+    {
+      "id": "o033",
+      "case_id": "t01",
+      "group": "target",
+      "repeat": 3,
+      "text": "この機能は、既存のファイルを上書きしない。出力先に同名のファイルがあるときは、連番を付けて別名で保存する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "f9fdc266d7ec52be79a4e26c6db34505508a6c63df3495d933c75d9a096bcb74",
+      "raw_file": "o033.json",
+      "num_turns": 1,
+      "cost_usd": 0.0048221
+    },
+    {
+      "id": "o034",
+      "case_id": "t02",
+      "group": "target",
+      "repeat": 3,
+      "text": "初期設定では、通知が無効になっている。設定画面でオンにすると、更新があったときにメールが届く。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "9ed3cdc7c4142ae66436425b358f71992d8ba82f9cdc23fa265b276d366cb262",
+      "raw_file": "o034.json",
+      "num_turns": 1,
+      "cost_usd": 0.0047312
+    },
+    {
+      "id": "o035",
+      "case_id": "t03",
+      "group": "target",
+      "repeat": 3,
+      "text": "この試験は、本番のデータベースに接続しない。テスト用に用意した複製に対して実行する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "41867044ec187a9232daedd9b9c6c9ae9ec59694492fb8b1fd59f05c5e6e19e7",
+      "raw_file": "o035.json",
+      "num_turns": 1,
+      "cost_usd": 0.004700900000000001
+    },
+    {
+      "id": "o036",
+      "case_id": "t04",
+      "group": "target",
+      "repeat": 3,
+      "text": "調査の結果、遅延の原因はネットワークではなかった。データベースのロック待ちが長く続いていたことが原因である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "d227176190c75b6f15738144011e3af8c7f595e82d9bc1b48cdc52ce152b00b2",
+      "raw_file": "o036.json",
+      "num_turns": 1,
+      "cost_usd": 0.0047913
+    },
+    {
+      "id": "o037",
+      "case_id": "t05",
+      "group": "target",
+      "repeat": 3,
+      "text": "旧バージョンでは、設定ファイルを手で編集する必要はない。画面の指示に従って入力すると、設定が書き込まれる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "203a5941f98cc7d2ce0253fa5d3c8db24ca0b3696d160da1ec45eb4e1ad08da2",
+      "raw_file": "o037.json",
+      "num_turns": 1,
+      "cost_usd": 0.0048423
+    },
+    {
+      "id": "o038",
+      "case_id": "t06",
+      "group": "target",
+      "repeat": 3,
+      "text": "今回の変更で、利用者向けの画面は変わらない。内部の集計処理だけが新しくなった。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "da09a75dcb18bd3dbbf36eb2963fd3cbfdb2be6d76b6d051d49a4a26cc9355c4",
+      "raw_file": "o038.json",
+      "num_turns": 1,
+      "cost_usd": 0.0047211
+    },
+    {
+      "id": "o039",
+      "case_id": "t07",
+      "group": "target",
+      "repeat": 3,
+      "text": "申請は、郵送では受け付けていない。専用のフォームから提出してもらう。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "cc84f8c3cb885508db9d5a4954ee5967357500edbab1969426da5211cab9837d",
+      "raw_file": "o039.json",
+      "num_turns": 1,
+      "cost_usd": 0.004640300000000001
+    },
+    {
+      "id": "o040",
+      "case_id": "t08",
+      "group": "target",
+      "repeat": 3,
+      "text": "見積もりには、保守費用を含めていない。保守は別の契約として、年額で提示する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "641ffcfcb2d5c8662ff752735fd32f74d84f8516e95e2be4c54ddf9bb12f340a",
+      "raw_file": "o040.json",
+      "num_turns": 1,
+      "cost_usd": 0.0046706
+    },
+    {
+      "id": "o041",
+      "case_id": "t09",
+      "group": "target",
+      "repeat": 3,
+      "text": "この指標は応答の速さを示さない。処理した件数を一定時間ごとに数えたものである。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "fa26188803c6dd2d344aed7aeaf3ad2694aba53bae535129a231ca8f7e6e27c3",
+      "raw_file": "o041.json",
+      "num_turns": 1,
+      "cost_usd": 0.009011
+    },
+    {
+      "id": "o042",
+      "case_id": "t10",
+      "group": "target",
+      "repeat": 3,
+      "text": "新しい担当者は、すぐにすべての権限を持つわけではない。最初の1か月は閲覧だけを許可し、その後に編集の権限を渡す。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "573b06b7691a00137f904c049365efe061c1c381aa13c193bf528e866c886496",
+      "raw_file": "o042.json",
+      "num_turns": 1,
+      "cost_usd": 0.004913000000000001
+    },
+    {
+      "id": "o043",
+      "case_id": "c1",
+      "group": "kept",
+      "repeat": 3,
+      "text": "原因は設定の誤りではなく、手順書が古いことにある。確認のため、改訂履歴を調べた。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "a07b132a80519f68dac66015a639e79b2ccf52a3843ce381e37797a596147f48",
+      "raw_file": "o043.json",
+      "num_turns": 1,
+      "cost_usd": 0.0047413
+    },
+    {
+      "id": "o044",
+      "case_id": "c2",
+      "group": "kept",
+      "repeat": 3,
+      "text": "この調査は、速さではなく、正確さを重視した。結果は表にまとめた。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "b8f9f431cb2c7e9af7d9f81ed999f45a056bc5a13f3f142339b1a6ae31d2cd0d",
+      "raw_file": "o044.json",
+      "num_turns": 1,
+      "cost_usd": 0.004640300000000001
+    },
+    {
+      "id": "o045",
+      "case_id": "c3",
+      "group": "kept",
+      "repeat": 3,
+      "text": "今回は一般論ではなく、自分の体験に絞って紹介する。体験談は3つ選んだ。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "efef329c5a179dc7b34066b9f03d39f0a5d8375cb86442c19792bcad33855413",
+      "raw_file": "o045.json",
+      "num_turns": 1,
+      "cost_usd": 0.0047211
+    },
+    {
+      "id": "o046",
+      "case_id": "n1",
+      "group": "no_negation",
+      "repeat": 3,
+      "text": "登録が終わると通知が届く。必要なら再確認を求められる。問題がなければ、そのまま使い始められる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "fbcf2111e168a163cd00debf1c5c03ba3cf05a95cef74ec7d886453faa27bd59",
+      "raw_file": "o046.json",
+      "num_turns": 1,
+      "cost_usd": 0.004761500000000001
+    },
+    {
+      "id": "o047",
+      "case_id": "n2",
+      "group": "no_negation",
+      "repeat": 3,
+      "text": "サーバーは毎晩2時に再起動する。再起動中は約5分間、接続できなくなる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "7848442eeb12ea45ad03d386713d83249e3559c7132166f3f5354baf6cb3396d",
+      "raw_file": "o047.json",
+      "num_turns": 1,
+      "cost_usd": 0.004700900000000001
+    },
+    {
+      "id": "o048",
+      "case_id": "n3",
+      "group": "no_negation",
+      "repeat": 3,
+      "text": "報告書は月末に提出する。提出前に、上長が内容を確認する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "5d24e72b1666007604c7e47e6c1ab103e0bdd21e941d1c3315c6c5c90d321f3b",
+      "raw_file": "o048.json",
+      "num_turns": 1,
+      "cost_usd": 0.0046099999999999995
+    }
+  ],
+  "cli_version": "2.1.322 (Claude Code)",
+  "count": {
+    "summary": {
+      "models": [
+        "claude-sonnet-5-5"
+      ],
+      "cost_usd": 2.941,
+      "outputs": 48,
+      "target": {
+        "outputs": 30,
+        "created": 0,
+        "created_and_detected": 0,
+        "lost": 0,
+        "unchanged": 25
+      },
+      "kept": {
+        "outputs": 9,
+        "created": 0,
+        "created_and_detected": 0,
+        "lost": 0,
+        "unchanged": 8
+      },
+      "no_negation": {
+        "outputs": 9,
+        "created": 0,
+        "created_and_detected": 0,
+        "lost": 0,
+        "unchanged": 9
+      }
+    },
+    "rows": [
+      {
+        "id": "o001",
+        "case_id": "t01",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "この機能は、既存のファイルを上書きしない。出力先に同名のファイルがあるときは、連番を付けて別名で保存する。"
+      },
+      {
+        "id": "o002",
+        "case_id": "t02",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "初期設定では、通知が無効になっている。設定画面でオンにすると、更新があったときにメールが届く。"
+      },
+      {
+        "id": "o003",
+        "case_id": "t03",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "この試験は、本番のデータベースに接続しない。テスト用に用意した複製に対して実行する。"
+      },
+      {
+        "id": "o004",
+        "case_id": "t04",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "調査の結果、遅延の原因はネットワークではなかった。データベースのロック待ちが長く続いていたことが原因である。"
+      },
+      {
+        "id": "o005",
+        "case_id": "t05",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "旧バージョンでは、設定ファイルを手で編集する必要はない。画面の指示に従って入力すると、設定が書き込まれる。"
+      },
+      {
+        "id": "o006",
+        "case_id": "t06",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "今回の変更で、利用者向けの画面は変わらない。内部の集計処理だけが新しくなった。"
+      },
+      {
+        "id": "o007",
+        "case_id": "t07",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "申請は、郵送では受け付けていない。専用のフォームから提出してもらう。"
+      },
+      {
+        "id": "o008",
+        "case_id": "t08",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "見積もりには、保守費用を含めていない。保守は別の契約として、年額で提示する。"
+      },
+      {
+        "id": "o009",
+        "case_id": "t09",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "この指標は、応答の速さを示さない。処理した件数を、一定時間ごとに数えたものである。"
+      },
+      {
+        "id": "o010",
+        "case_id": "t10",
+        "group": "target",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "新しい担当者は、すぐにすべての権限を持つわけではない。最初の1か月は閲覧だけを許可し、その後に編集の権限を渡す。"
+      },
+      {
+        "id": "o011",
+        "case_id": "c1",
+        "group": "kept",
+        "repeat": 1,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "原因は設定の誤りではなく、手順書が古いことにある。確認のため、改訂履歴を調べた。"
+      },
+      {
+        "id": "o012",
+        "case_id": "c2",
+        "group": "kept",
+        "repeat": 1,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "この調査は、速さではなく、正確さを重視した。結果は表にまとめた。"
+      },
+      {
+        "id": "o013",
+        "case_id": "c3",
+        "group": "kept",
+        "repeat": 1,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "今回は一般論ではなく、自分の体験に絞って紹介する。選んだ体験談は3つある。"
+      },
+      {
+        "id": "o014",
+        "case_id": "n1",
+        "group": "no_negation",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "登録が終わると通知が届く。必要なら再確認を求められる。問題がなければ、そのまま使い始められる。"
+      },
+      {
+        "id": "o015",
+        "case_id": "n2",
+        "group": "no_negation",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "サーバーは毎晩2時に再起動する。再起動中は約5分間、接続できなくなる。"
+      },
+      {
+        "id": "o016",
+        "case_id": "n3",
+        "group": "no_negation",
+        "repeat": 1,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "報告書は月末に提出する。提出前に、上長が内容を確認する。"
+      },
+      {
+        "id": "o017",
+        "case_id": "t01",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "この機能は、既存のファイルを上書きしない。出力先に同名のファイルがあるときは、連番を付けて別名で保存する。"
+      },
+      {
+        "id": "o018",
+        "case_id": "t02",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "初期設定では、通知が無効になっている。設定画面でオンにすると、更新があったときにメールが届く。"
+      },
+      {
+        "id": "o019",
+        "case_id": "t03",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "この試験は、本番のデータベースに接続しない。テスト用に用意した複製に対して実行する。"
+      },
+      {
+        "id": "o020",
+        "case_id": "t04",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "調査の結果、遅延の原因はネットワークではなかった。データベースのロック待ちが長く続いていた。"
+      },
+      {
+        "id": "o021",
+        "case_id": "t05",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "旧バージョンでは、設定ファイルを手で編集する必要はない。画面の指示に従って入力すると、設定が書き込まれる。"
+      },
+      {
+        "id": "o022",
+        "case_id": "t06",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "今回の変更で、利用者向けの画面は変わらない。内部の集計処理だけが新しくなった。"
+      },
+      {
+        "id": "o023",
+        "case_id": "t07",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "申請は、郵送では受け付けていない。専用のフォームから提出してもらう。"
+      },
+      {
+        "id": "o024",
+        "case_id": "t08",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "見積もりには、保守費用を含めていない。保守は別の契約とし、年額で提示する。"
+      },
+      {
+        "id": "o025",
+        "case_id": "t09",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "この指標は、応答の速さを示さない。処理した件数を一定時間ごとに数えたものである。"
+      },
+      {
+        "id": "o026",
+        "case_id": "t10",
+        "group": "target",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "新しい担当者は、すぐにすべての権限を持つわけではない。最初の1か月は閲覧だけを許可し、その後に編集の権限を渡す。"
+      },
+      {
+        "id": "o027",
+        "case_id": "c1",
+        "group": "kept",
+        "repeat": 2,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "原因は設定の誤りではなく、手順書が古いことにある。確認のため、改訂履歴を調べた。"
+      },
+      {
+        "id": "o028",
+        "case_id": "c2",
+        "group": "kept",
+        "repeat": 2,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "この調査は、速さではなく、正確さを重視した。結果は表にまとめた。"
+      },
+      {
+        "id": "o029",
+        "case_id": "c3",
+        "group": "kept",
+        "repeat": 2,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "今回は一般論ではなく、自分の体験に絞って紹介する。体験談は3つ選んだ。"
+      },
+      {
+        "id": "o030",
+        "case_id": "n1",
+        "group": "no_negation",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "登録が終わると通知が届く。必要なら再確認を求められる。問題がなければ、そのまま使い始められる。"
+      },
+      {
+        "id": "o031",
+        "case_id": "n2",
+        "group": "no_negation",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "サーバーは毎晩2時に再起動する。再起動中は約5分間、接続できなくなる。"
+      },
+      {
+        "id": "o032",
+        "case_id": "n3",
+        "group": "no_negation",
+        "repeat": 2,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "報告書は月末に提出する。提出前に、上長が内容を確認する。"
+      },
+      {
+        "id": "o033",
+        "case_id": "t01",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "この機能は、既存のファイルを上書きしない。出力先に同名のファイルがあるときは、連番を付けて別名で保存する。"
+      },
+      {
+        "id": "o034",
+        "case_id": "t02",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "初期設定では、通知が無効になっている。設定画面でオンにすると、更新があったときにメールが届く。"
+      },
+      {
+        "id": "o035",
+        "case_id": "t03",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "この試験は、本番のデータベースに接続しない。テスト用に用意した複製に対して実行する。"
+      },
+      {
+        "id": "o036",
+        "case_id": "t04",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "調査の結果、遅延の原因はネットワークではなかった。データベースのロック待ちが長く続いていたことが原因である。"
+      },
+      {
+        "id": "o037",
+        "case_id": "t05",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "旧バージョンでは、設定ファイルを手で編集する必要はない。画面の指示に従って入力すると、設定が書き込まれる。"
+      },
+      {
+        "id": "o038",
+        "case_id": "t06",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "今回の変更で、利用者向けの画面は変わらない。内部の集計処理だけが新しくなった。"
+      },
+      {
+        "id": "o039",
+        "case_id": "t07",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "申請は、郵送では受け付けていない。専用のフォームから提出してもらう。"
+      },
+      {
+        "id": "o040",
+        "case_id": "t08",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "見積もりには、保守費用を含めていない。保守は別の契約として、年額で提示する。"
+      },
+      {
+        "id": "o041",
+        "case_id": "t09",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": false,
+        "after": "この指標は応答の速さを示さない。処理した件数を一定時間ごとに数えたものである。"
+      },
+      {
+        "id": "o042",
+        "case_id": "t10",
+        "group": "target",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "新しい担当者は、すぐにすべての権限を持つわけではない。最初の1か月は閲覧だけを許可し、その後に編集の権限を渡す。"
+      },
+      {
+        "id": "o043",
+        "case_id": "c1",
+        "group": "kept",
+        "repeat": 3,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "原因は設定の誤りではなく、手順書が古いことにある。確認のため、改訂履歴を調べた。"
+      },
+      {
+        "id": "o044",
+        "case_id": "c2",
+        "group": "kept",
+        "repeat": 3,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "この調査は、速さではなく、正確さを重視した。結果は表にまとめた。"
+      },
+      {
+        "id": "o045",
+        "case_id": "c3",
+        "group": "kept",
+        "repeat": 3,
+        "before_hits": 1,
+        "after_hits": 1,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "今回は一般論ではなく、自分の体験に絞って紹介する。体験談は3つ選んだ。"
+      },
+      {
+        "id": "o046",
+        "case_id": "n1",
+        "group": "no_negation",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "登録が終わると通知が届く。必要なら再確認を求められる。問題がなければ、そのまま使い始められる。"
+      },
+      {
+        "id": "o047",
+        "case_id": "n2",
+        "group": "no_negation",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "サーバーは毎晩2時に再起動する。再起動中は約5分間、接続できなくなる。"
+      },
+      {
+        "id": "o048",
+        "case_id": "n3",
+        "group": "no_negation",
+        "repeat": 3,
+        "before_hits": 0,
+        "after_hits": 0,
+        "created": false,
+        "lost": false,
+        "unchanged": true,
+        "after": "報告書は月末に提出する。提出前に、上長が内容を確認する。"
+      }
+    ]
+  }
 }
