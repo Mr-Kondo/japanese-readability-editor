@@ -24,6 +24,8 @@ Ragas の評価器を調べるための[人工の校正ケース](ragas-calibrat
 
 節・項で伝える内容を一つに絞る規則の、旧版と候補版の比較は、[自作11ケース](section-single-message-cases.json)と[結果（見送り）](section-single-message-result.md)を参照する。規則は足していない。実行記録は[section-single-message-run/](section-single-message-run/)にある。
 
+OPQ（目標・問題・疑問）から結論を決める規則の、旧版と候補版の比較は、[実験1の11ケース](opq-cases.json)、[実験2の15ケース](opq2-cases.json)、[結果（見送り）](opq-result.md)を参照する。冒頭配置の効果は観測できたが、意味保持の事前指標を満たさず、規則は足していない。実行記録は[opq-run/](opq-run/)と[opq2-run/](opq2-run/)にある。
+
 ## 小説モード
 
 [fiction-cases.json](fiction-cases.json) は24件の自作入力、期待する操作、守る事実、禁止する変更、評価方法を持つ。covers は18の必須観点に対応する。公開小説の本文は使っていない。開発資料であり実行時の依存ではない。
