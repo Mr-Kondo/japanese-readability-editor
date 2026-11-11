@@ -22,6 +22,8 @@ Ragas の評価器を調べるための[人工の校正ケース](ragas-calibrat
 
 さらに広い文章での確認は、[未使用文書による追加評価](readability-generalization.md)を使う。未使用16文書を1件ずつ3回生成し、採点点検用12項目を混ぜる。[実行ツール](../tools/evaluate_readability.py)は既定では準備だけを行い、`--execute`がある場合だけ外部Claudeを呼ぶ。[準備済みの入力・指示](readability-generalization-plan/run.json)と[実施状況](readability-generalization-result.md)は、モデルによる検証結果と区別する。
 
+節・項で伝える内容を一つに絞る規則の、旧版と候補版の比較は、[自作11ケース](section-single-message-cases.json)と[結果（見送り）](section-single-message-result.md)を参照する。規則は足していない。実行記録は[section-single-message-run/](section-single-message-run/)にある。
+
 ## 小説モード
 
 [fiction-cases.json](fiction-cases.json) は24件の自作入力、期待する操作、守る事実、禁止する変更、評価方法を持つ。covers は18の必須観点に対応する。公開小説の本文は使っていない。開発資料であり実行時の依存ではない。
