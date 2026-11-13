@@ -1,5 +1,5 @@
 {
-  "status": "prepared",
+  "status": "counted",
   "prepared_at": "2026-11-13T16:23:06.212127+00:00",
   "base_commit": "82d81ad2fb1c9ea853c7890fba2d803f9c8691fe",
   "commit": "363e3424457acd85450b2204ef0b8434074813f7",
@@ -206,5 +206,1739 @@
   "runner_sha256": "2151d3509fb8a1ab60d58a75ca9527c1ea04287b201fe0adf8510663a28b4ec9",
   "helper_sha256": "9f7711077e2f2dd2a5c5d89cff3f69f782792c31b95605e4767df08f69e79cbd",
   "cases_sha256": "c2e3daf05b58e84febf9af6d37d275ac4d37db8e141fd7f640cbafbb7f1a7bec",
-  "outputs": []
+  "outputs": [
+    {
+      "id": "e001",
+      "case_id": "h01",
+      "group": "split",
+      "version": "base",
+      "repeat": 1,
+      "text": "## ログと設定について\n\nログは、アプリの動作を記録するファイルである。保存先は `logs/` で、7日を過ぎた分は自動で削除される。\n\n設定は、`config.toml` に書く。起動時に1回だけ読み込まれるので、変更したときは再起動が必要である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "1fa52792b7c8f7a849f0e08c6f14e0db7512aabbbe9ddaa6e3131bb264629f63",
+      "raw_file": "e001.json",
+      "num_turns": 1,
+      "cost_usd": 0.177222
+    },
+    {
+      "id": "e002",
+      "case_id": "h01",
+      "group": "split",
+      "version": "cand",
+      "repeat": 1,
+      "text": "## ログについて\n\nログは、アプリの動作を記録するファイルである。保存先は `logs/` で、7日を過ぎた分は自動で削除される。\n\n## 設定について\n\n設定は、`config.toml` に書く。起動時に1回だけ読み込まれるので、変更したときは再起動が必要である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "588c4a68c3d0f4ffb5df83491d19480b2236d56c0c1e37257abfddf831045caf",
+      "raw_file": "e002.json",
+      "num_turns": 1,
+      "cost_usd": 0.18147
+    },
+    {
+      "id": "e003",
+      "case_id": "h02",
+      "group": "split",
+      "version": "base",
+      "repeat": 1,
+      "text": "## 1. 勤怠システムの使い方\n\nこの文書は、社内の勤怠システムの使い方を説明する。\n\n## 2. 打刻と休暇申請について\n\n打刻は、出社時と退社時に画面のボタンを押して行う。押し忘れた場合は、翌営業日までに上長へ連絡する。\n\n休暇申請は、申請画面で日付と理由を入力して行う。3日以上の休暇は、2週間前までに出す。\n\n## 3. 不明な点の問い合わせ先\n\n不明な点は、人事部の窓口(内線 4120)に連絡する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "eb565d12ca1bb85ae6df36451bec4180a7872c99e7332b0405657ae6b32d3506",
+      "raw_file": "e003.json",
+      "num_turns": 1,
+      "cost_usd": 0.180026
+    },
+    {
+      "id": "e004",
+      "case_id": "h02",
+      "group": "split",
+      "version": "cand",
+      "repeat": 1,
+      "text": "## 1. 概要\n\nこの文書は、社内の勤怠システムの使い方を説明する。\n\n## 2. 打刻について\n\n打刻は、出社時と退社時に画面のボタンを押して行う。押し忘れた場合は、翌営業日までに上長へ連絡する。\n\n## 3. 休暇申請について\n\n休暇申請は、申請画面で日付と理由を入力して行う。3日以上の休暇は、2週間前までに出す。\n\n## 4. 問い合わせ\n\n不明な点は、人事部の窓口(内線 4120)に連絡する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "d581e02edcc16a493275041540a6e05f4c954160a47e89a297e69166374ae96f",
+      "raw_file": "e004.json",
+      "num_turns": 1,
+      "cost_usd": 0.182344
+    },
+    {
+      "id": "e005",
+      "case_id": "h03",
+      "group": "split",
+      "version": "base",
+      "repeat": 1,
+      "text": "## 予約とキャンセルについて\n\n予約は、利用日の30日前から受け付ける。予約の変更は、1回だけできる。予約の確認メールは、申し込みの直後に届く。\n\nキャンセルは、利用日の3日前までなら無料である。キャンセルが前日になると、料金の50%がかかる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "551da7c90a516b056e9bc96c950261585ea05ac93cbed2fbcedb48dfa09f286f",
+      "raw_file": "e005.json",
+      "num_turns": 1,
+      "cost_usd": 0.178372
+    },
+    {
+      "id": "e006",
+      "case_id": "h03",
+      "group": "split",
+      "version": "cand",
+      "repeat": 1,
+      "text": "## 予約について\n\n予約は、利用日の30日前から受け付ける。予約の変更は、1回だけできる。予約の確認メールは、申し込みの直後に届く。\n\n## キャンセルについて\n\nキャンセルは、利用日の3日前までなら無料である。キャンセルが前日になると、料金の50%がかかる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "3ef6fbbb52cf4692f4312b6f2ed5cc18fce594da9d259d2f39b75914a8a9206b",
+      "raw_file": "e006.json",
+      "num_turns": 1,
+      "cost_usd": 0.18442
+    },
+    {
+      "id": "e007",
+      "case_id": "h04",
+      "group": "keep_body",
+      "version": "base",
+      "repeat": 1,
+      "text": "## 有料プランと無料プランの違いについて\n\n無料プランは、保存できるファイルが5件までで、サポートはメールだけである。有料プランは、保存できるファイルが無制限で、電話でも問い合わせられる。そのため、複数の案件を扱う人は有料プランが向く。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "6306482ea2b7f54a0ac524ca4119514fc9acadf2a31be925f14b98d2e77754d4",
+      "raw_file": "e007.json",
+      "num_turns": 1,
+      "cost_usd": 0.176484
+    },
+    {
+      "id": "e008",
+      "case_id": "h04",
+      "group": "keep_body",
+      "version": "cand",
+      "repeat": 1,
+      "text": "## 有料プランと無料プランの違いについて\n\n無料プランは、保存できるファイルが5件までで、サポートはメールだけである。有料プランは、保存できるファイルが無制限で、電話でも問い合わせられる。そのため、複数の案件を扱う人は有料プランが向く。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "c6346ffd22bb015b692c0a41b7855a9774d87639cd18094b49bbcdb2b8729a94",
+      "raw_file": "e008.json",
+      "num_turns": 1,
+      "cost_usd": 0.181892
+    },
+    {
+      "id": "e009",
+      "case_id": "h05",
+      "group": "keep_body",
+      "version": "base",
+      "repeat": 1,
+      "text": "## CSVとJSONの使い分け\n\n人が表計算ソフトで開くなら、CSVを使う。入れ子の構造を持つデータや、他のプログラムに渡すデータは、JSONを使う。迷ったときは、受け取る側が何で読むかで決める。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "cf899a9000cbe649545987195bf808d2aff8b8a227a236bea5ae4704d2eb7b5a",
+      "raw_file": "e009.json",
+      "num_turns": 1,
+      "cost_usd": 0.176464
+    },
+    {
+      "id": "e010",
+      "case_id": "h05",
+      "group": "keep_body",
+      "version": "cand",
+      "repeat": 1,
+      "text": "## CSVとJSONの使い分け\n\n人が表計算ソフトで開くなら、CSVを使う。入れ子の構造を持つデータや、他のプログラムに渡すデータは、JSONを使う。迷ったときは、受け取る側が何で読むかで決める。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "7772cd21d4650cb0ffdea3c9812b70cad4f78ea40143b8af0cb55ca8987f0e77",
+      "raw_file": "e010.json",
+      "num_turns": 1,
+      "cost_usd": 0.181312
+    },
+    {
+      "id": "e011",
+      "case_id": "h06",
+      "group": "keep_body",
+      "version": "base",
+      "repeat": 1,
+      "text": "## 検索と置換について\n\n編集メニューの「検索と置換」を開くと、探す語と、置き換える語を入れる欄が表示される。「すべて置換」を押すと、一致した箇所がまとめて置き換わる。置換は元に戻せるので、まず試してよい。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "99e051b97570753d4a68c7c6329d1dd898ed78be257cbb6f3de5ad15a35f98ab",
+      "raw_file": "e011.json",
+      "num_turns": 1,
+      "cost_usd": 0.176694
+    },
+    {
+      "id": "e012",
+      "case_id": "h06",
+      "group": "keep_body",
+      "version": "cand",
+      "repeat": 1,
+      "text": "## 検索と置換について\n\n編集メニューの「検索と置換」を開くと、探す語と、置き換える語を入れる欄が表示される。「すべて置換」を押すと、一致した箇所がまとめて置き換わる。置換は元に戻せるので、まず試してよい。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "5f1847864263d820fb74f43ef4165349e39a52b047ee3e0b2899d8cb7d173d96",
+      "raw_file": "e012.json",
+      "num_turns": 1,
+      "cost_usd": 0.18204199999999998
+    },
+    {
+      "id": "e013",
+      "case_id": "h07",
+      "group": "request",
+      "version": "base",
+      "repeat": 1,
+      "text": "## 費用と日程について\n\n費用は1人あたり3万円で、宿泊代と食事代を含む。\n\n申し込みの締め切りは5月20日である。締め切り後の取り消しには、費用の半額がかかる。\n\n日程は、6月10日から12日までの3日間である。初日は午後1時に現地へ集合し、解散は最終日の午後4時である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "0985e6d7b52c35752de833710fa40f5b69639bc621c4c9574a9f9cc8f5d22022",
+      "raw_file": "e013.json",
+      "num_turns": 1,
+      "cost_usd": 0.178984
+    },
+    {
+      "id": "e014",
+      "case_id": "h07",
+      "group": "request",
+      "version": "cand",
+      "repeat": 1,
+      "text": "## 費用と日程について\n\n費用は1人あたり3万円で、宿泊代と食事代を含む。申し込みの締め切りは5月20日である。締め切り後の取り消しには、費用の半額がかかる。\n\n日程は6月10日から12日までの3日間である。初日は午後1時に現地へ集合する。解散は最終日の午後4時である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "42c496db2f3f6eae14d7ad92b8dcd78f3fdcd321330a685387c826d1becd9103",
+      "raw_file": "e014.json",
+      "num_turns": 1,
+      "cost_usd": 0.183682
+    },
+    {
+      "id": "e015",
+      "case_id": "h08",
+      "group": "request",
+      "version": "base",
+      "repeat": 1,
+      "text": "## 設置と保守について\n\n設置場所は、直射日光の当たらない、風通しのよい所にする。電源は、専用のコンセントから取る。\n\n保守は、半年に1回、フィルターを掃除して行う。フィルターが汚れたままだと、冷却の能力が下がる。交換は、2年に1回の目安である。\n```",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "f400eb94272e464c56e207b37467038a1947b553728eb0e55d7a2df1f030937a",
+      "raw_file": "e015.json",
+      "num_turns": 1,
+      "cost_usd": 0.17449800000000001
+    },
+    {
+      "id": "e016",
+      "case_id": "h08",
+      "group": "request",
+      "version": "cand",
+      "repeat": 1,
+      "text": "## 設置と保守について\n\n設置場所は、直射日光の当たらない、風通しのよい所にする。電源は、専用のコンセントから取る。\n\n保守は、半年に1回、フィルターを掃除して行う。フィルターが汚れたままだと、冷却の能力が下がる。交換は、2年に1回の目安である。\n\n---\n補足: モード C のため、文言と見出しは変えていません。見出し「設置と保守について」は、本文が設置と保守を別々に書いているので、モード B なら分ける候補です。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "ecad21172e9481fad582eb7a2b798be4ffe7a7bb84d6a0bdb2816c4d0c415650",
+      "raw_file": "e016.json",
+      "num_turns": 1,
+      "cost_usd": 0.184886
+    },
+    {
+      "id": "e017",
+      "case_id": "h09",
+      "group": "vague",
+      "version": "base",
+      "repeat": 1,
+      "text": "## 親ジョブと子ジョブの関係\n\n親ジョブは、複数の子ジョブをまとめて起動する。子ジョブのどれかが失敗すると、親ジョブも失敗として終了する。親ジョブを停止すると、動いている子ジョブもすべて停止する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "2e910c9e7fbb0da1579ab138fdc413330c61a0ced68a93aeae0ecc386480c22a",
+      "raw_file": "e017.json",
+      "num_turns": 1,
+      "cost_usd": 0.174432
+    },
+    {
+      "id": "e018",
+      "case_id": "h09",
+      "group": "vague",
+      "version": "cand",
+      "repeat": 1,
+      "text": "## 親ジョブと子ジョブの関係について\n\n親ジョブは、複数の子ジョブをまとめて起動する。子ジョブのどれかが失敗すると、親ジョブも失敗として終了する。親ジョブを停止すると、動いている子ジョブもすべて停止する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "0aa5f5ae9ecd937f46a07d6bb02c0507433ebe99ff6d7375eb04be391a0a0dd2",
+      "raw_file": "e018.json",
+      "num_turns": 1,
+      "cost_usd": 0.18638000000000002
+    },
+    {
+      "id": "e019",
+      "case_id": "h01",
+      "group": "split",
+      "version": "base",
+      "repeat": 2,
+      "text": "## ログと設定について\n\nログは、アプリの動作を記録するファイルである。保存先は `logs/` で、7日を過ぎた分は自動で削除される。\n\n設定は、`config.toml` に書く。起動時に1回だけ読み込まれるので、変更したときは再起動が必要である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "1fa52792b7c8f7a849f0e08c6f14e0db7512aabbbe9ddaa6e3131bb264629f63",
+      "raw_file": "e019.json",
+      "num_turns": 1,
+      "cost_usd": 0.0053577
+    },
+    {
+      "id": "e020",
+      "case_id": "h01",
+      "group": "split",
+      "version": "cand",
+      "repeat": 2,
+      "text": "## ログについて\n\nログは、アプリの動作を記録するファイルである。保存先は `logs/` で、7日を過ぎた分は自動で削除される。\n\n## 設定について\n\n設定は、`config.toml` に書く。起動時に1回だけ読み込まれるので、変更したときは再起動が必要である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "588c4a68c3d0f4ffb5df83491d19480b2236d56c0c1e37257abfddf831045caf",
+      "raw_file": "e020.json",
+      "num_turns": 1,
+      "cost_usd": 0.006858899999999999
+    },
+    {
+      "id": "e021",
+      "case_id": "h02",
+      "group": "split",
+      "version": "base",
+      "repeat": 2,
+      "text": "## 1. この文書の目的\n\nこの文書は、社内の勤怠システムの使い方を説明する。\n\n## 2. 打刻と休暇申請の方法\n\n打刻は、出社時と退社時に画面のボタンを押して行う。押し忘れた場合は、翌営業日までに上長へ連絡する。\n\n休暇申請は、申請画面で日付と理由を入力して行う。3日以上の休暇は、2週間前までに出す。\n\n## 3. 不明な点の問い合わせ先\n\n不明な点は、人事部の窓口(内線 4120)に連絡する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "eb565d12ca1bb85ae6df36451bec4180a7872c99e7332b0405657ae6b32d3506",
+      "raw_file": "e021.json",
+      "num_turns": 1,
+      "cost_usd": 0.0107873
+    },
+    {
+      "id": "e022",
+      "case_id": "h02",
+      "group": "split",
+      "version": "cand",
+      "repeat": 2,
+      "text": "## 1. 勤怠システムの使い方\n\nこの文書は、社内の勤怠システムの使い方を説明する。\n\n## 2. 打刻について\n\n打刻は、出社時と退社時に画面のボタンを押して行う。押し忘れた場合は、翌営業日までに上長へ連絡する。\n\n## 3. 休暇申請について\n\n休暇申請は、申請画面で日付と理由を入力して行う。3日以上の休暇は、2週間前までに出す。\n\n## 4. 不明な点の問い合わせ先\n\n不明な点は、人事部の窓口(内線 4120)に連絡する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "d581e02edcc16a493275041540a6e05f4c954160a47e89a297e69166374ae96f",
+      "raw_file": "e022.json",
+      "num_turns": 1,
+      "cost_usd": 0.010908500000000002
+    },
+    {
+      "id": "e023",
+      "case_id": "h03",
+      "group": "split",
+      "version": "base",
+      "repeat": 2,
+      "text": "## 予約・変更・キャンセルの条件\n\n予約は、利用日の30日前から受け付ける。予約の確認メールは、申し込みの直後に届く。予約の変更は、1回だけできる。\n\nキャンセルは、利用日の3日前までなら無料である。キャンセルが前日になると、料金の50%がかかる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "551da7c90a516b056e9bc96c950261585ea05ac93cbed2fbcedb48dfa09f286f",
+      "raw_file": "e023.json",
+      "num_turns": 1,
+      "cost_usd": 0.0101482
+    },
+    {
+      "id": "e024",
+      "case_id": "h03",
+      "group": "split",
+      "version": "cand",
+      "repeat": 2,
+      "text": "## 予約について\n\n予約は、利用日の30日前から受け付ける。予約の変更は、1回だけできる。予約の確認メールは、申し込みの直後に届く。\n\n## キャンセルについて\n\nキャンセルは、利用日の3日前までなら無料である。キャンセルが前日になると、料金の50%がかかる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "3ef6fbbb52cf4692f4312b6f2ed5cc18fce594da9d259d2f39b75914a8a9206b",
+      "raw_file": "e024.json",
+      "num_turns": 1,
+      "cost_usd": 0.0087794
+    },
+    {
+      "id": "e025",
+      "case_id": "h04",
+      "group": "keep_body",
+      "version": "base",
+      "repeat": 2,
+      "text": "## 有料プランと無料プランの違いについて\n\n無料プランは、保存できるファイルが5件までで、サポートはメールだけである。有料プランは、保存できるファイルが無制限で、電話でも問い合わせられる。そのため、複数の案件を扱う人は有料プランが向く。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "6306482ea2b7f54a0ac524ca4119514fc9acadf2a31be925f14b98d2e77754d4",
+      "raw_file": "e025.json",
+      "num_turns": 1,
+      "cost_usd": 0.0071975
+    },
+    {
+      "id": "e026",
+      "case_id": "h04",
+      "group": "keep_body",
+      "version": "cand",
+      "repeat": 2,
+      "text": "## 有料プランと無料プランの違いについて\n\n無料プランは、保存できるファイルが5件までで、サポートはメールだけである。有料プランは、保存できるファイルが無制限で、電話でも問い合わせられる。そのため、複数の案件を扱う人は有料プランが向く。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "c6346ffd22bb015b692c0a41b7855a9774d87639cd18094b49bbcdb2b8729a94",
+      "raw_file": "e026.json",
+      "num_turns": 1,
+      "cost_usd": 0.007178700000000001
+    },
+    {
+      "id": "e027",
+      "case_id": "h05",
+      "group": "keep_body",
+      "version": "base",
+      "repeat": 2,
+      "text": "## CSVとJSONの使い分け\n\n人が表計算ソフトで開くなら、CSVを使う。入れ子になったデータや、他のプログラムに渡すデータは、JSONを使う。迷ったときは、受け取る側が何で読むかで決める。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "cf899a9000cbe649545987195bf808d2aff8b8a227a236bea5ae4704d2eb7b5a",
+      "raw_file": "e027.json",
+      "num_turns": 1,
+      "cost_usd": 0.009066999999999999
+    },
+    {
+      "id": "e028",
+      "case_id": "h05",
+      "group": "keep_body",
+      "version": "cand",
+      "repeat": 2,
+      "text": "## CSVとJSONの使い分け\n\n人が表計算ソフトで開くなら、CSVを使う。入れ子の構造を持つデータや、他のプログラムに渡すデータは、JSONを使う。迷ったときは、受け取る側が何で読むかで決める。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "7772cd21d4650cb0ffdea3c9812b70cad4f78ea40143b8af0cb55ca8987f0e77",
+      "raw_file": "e028.json",
+      "num_turns": 1,
+      "cost_usd": 0.0078482
+    },
+    {
+      "id": "e029",
+      "case_id": "h06",
+      "group": "keep_body",
+      "version": "base",
+      "repeat": 2,
+      "text": "## 検索と置換について\n\n編集メニューの「検索と置換」を開くと、探す語と、置き換える語を入れる欄が表示される。「すべて置換」を押すと、一致した箇所がまとめて置き換わる。置換は元に戻せるので、まず試してよい。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "99e051b97570753d4a68c7c6329d1dd898ed78be257cbb6f3de5ad15a35f98ab",
+      "raw_file": "e029.json",
+      "num_turns": 1,
+      "cost_usd": 0.007807
+    },
+    {
+      "id": "e030",
+      "case_id": "h06",
+      "group": "keep_body",
+      "version": "cand",
+      "repeat": 2,
+      "text": "## 検索と置換について\n\n編集メニューの「検索と置換」を開くと、探す語と置き換える語を入れる欄が表示される。「すべて置換」を押すと、一致した箇所がまとめて置き換わる。置換は元に戻せるので、まず試してよい。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "5f1847864263d820fb74f43ef4165349e39a52b047ee3e0b2899d8cb7d173d96",
+      "raw_file": "e030.json",
+      "num_turns": 1,
+      "cost_usd": 0.0095382
+    },
+    {
+      "id": "e031",
+      "case_id": "h07",
+      "group": "request",
+      "version": "base",
+      "repeat": 2,
+      "text": "## 費用と日程について\n\n費用は1人あたり3万円で、宿泊代と食事代を含む。申し込みの締め切りは5月20日である。締め切り後の取り消しには、費用の半額がかかる。\n\n日程は6月10日から12日までの3日間である。初日は午後1時に現地へ集合する。解散は最終日の午後4時である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "0985e6d7b52c35752de833710fa40f5b69639bc621c4c9574a9f9cc8f5d22022",
+      "raw_file": "e031.json",
+      "num_turns": 1,
+      "cost_usd": 0.009241
+    },
+    {
+      "id": "e032",
+      "case_id": "h07",
+      "group": "request",
+      "version": "cand",
+      "repeat": 2,
+      "text": "## 費用と日程について\n\n費用は1人あたり3万円で、宿泊代と食事代を含む。申し込みの締め切りは5月20日である。締め切り後の取り消しには、費用の半額がかかる。\n\n日程は、6月10日から12日までの3日間である。初日は午後1時に現地へ集合する。解散は最終日の午後4時である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "42c496db2f3f6eae14d7ad92b8dcd78f3fdcd321330a685387c826d1becd9103",
+      "raw_file": "e032.json",
+      "num_turns": 1,
+      "cost_usd": 0.0101522
+    },
+    {
+      "id": "e033",
+      "case_id": "h08",
+      "group": "request",
+      "version": "base",
+      "repeat": 2,
+      "text": "## 設置と保守について\n\n設置場所は、直射日光の当たらない、風通しのよい所にする。電源は、専用のコンセントから取る。\n\n保守は、半年に1回、フィルターを掃除して行う。フィルターが汚れたままだと、冷却の能力が下がる。交換は、2年に1回の目安である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "f400eb94272e464c56e207b37467038a1947b553728eb0e55d7a2df1f030937a",
+      "raw_file": "e033.json",
+      "num_turns": 1,
+      "cost_usd": 0.0069471
+    },
+    {
+      "id": "e034",
+      "case_id": "h08",
+      "group": "request",
+      "version": "cand",
+      "repeat": 2,
+      "text": "## 設置と保守について\n\n設置場所は、直射日光の当たらない、風通しのよい所にする。電源は、専用のコンセントから取る。\n\n保守は、半年に1回、フィルターを掃除して行う。フィルターが汚れたままだと、冷却の能力が下がる。交換は、2年に1回の目安である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "ecad21172e9481fad582eb7a2b798be4ffe7a7bb84d6a0bdb2816c4d0c415650",
+      "raw_file": "e034.json",
+      "num_turns": 1,
+      "cost_usd": 0.008468299999999998
+    },
+    {
+      "id": "e035",
+      "case_id": "h09",
+      "group": "vague",
+      "version": "base",
+      "repeat": 2,
+      "text": "## 親ジョブと子ジョブの関係\n\n親ジョブは、複数の子ジョブをまとめて起動する。子ジョブのどれかが失敗すると、親ジョブも失敗として終了する。親ジョブを停止すると、動いている子ジョブもすべて停止する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "2e910c9e7fbb0da1579ab138fdc413330c61a0ced68a93aeae0ecc386480c22a",
+      "raw_file": "e035.json",
+      "num_turns": 1,
+      "cost_usd": 0.005339700000000001
+    },
+    {
+      "id": "e036",
+      "case_id": "h09",
+      "group": "vague",
+      "version": "cand",
+      "repeat": 2,
+      "text": "## 親ジョブと子ジョブの関係について\n\n親ジョブは、複数の子ジョブをまとめて起動する。子ジョブのどれかが失敗すると、親ジョブも失敗として終了する。親ジョブを停止すると、動いている子ジョブもすべて停止する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "0aa5f5ae9ecd937f46a07d6bb02c0507433ebe99ff6d7375eb04be391a0a0dd2",
+      "raw_file": "e036.json",
+      "num_turns": 1,
+      "cost_usd": 0.0111809
+    },
+    {
+      "id": "e037",
+      "case_id": "h01",
+      "group": "split",
+      "version": "base",
+      "repeat": 3,
+      "text": "## ログと設定について\n\nログは、アプリの動作を記録するファイルである。保存先は `logs/` で、7日を過ぎた分は自動で削除される。\n\n設定は、`config.toml` に書く。起動時に1回だけ読み込まれるので、変更したときは再起動が必要である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "1fa52792b7c8f7a849f0e08c6f14e0db7512aabbbe9ddaa6e3131bb264629f63",
+      "raw_file": "e037.json",
+      "num_turns": 1,
+      "cost_usd": 0.0076477
+    },
+    {
+      "id": "e038",
+      "case_id": "h01",
+      "group": "split",
+      "version": "cand",
+      "repeat": 3,
+      "text": "## ログについて\n\nログは、アプリの動作を記録するファイルである。保存先は `logs/` で、7日を過ぎた分は自動で削除される。\n\n## 設定について\n\n設定は、`config.toml` に書く。起動時に1回だけ読み込まれるので、変更したときは再起動が必要である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "588c4a68c3d0f4ffb5df83491d19480b2236d56c0c1e37257abfddf831045caf",
+      "raw_file": "e038.json",
+      "num_turns": 1,
+      "cost_usd": 0.007038899999999999
+    },
+    {
+      "id": "e039",
+      "case_id": "h02",
+      "group": "split",
+      "version": "base",
+      "repeat": 3,
+      "text": "## 1. 勤怠システムの使い方の説明\n\nこの文書は、社内の勤怠システムの使い方を説明する。\n\n## 2. 打刻と休暇申請の方法\n\n打刻は、出社時と退社時に画面のボタンを押して行う。押し忘れた場合は、翌営業日までに上長へ連絡する。\n\n休暇申請は、申請画面で日付と理由を入力して行う。3日以上の休暇は、2週間前までに出す。\n\n## 3. 不明な点の問い合わせ先\n\n不明な点は、人事部の窓口(内線 4120)に連絡する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "eb565d12ca1bb85ae6df36451bec4180a7872c99e7332b0405657ae6b32d3506",
+      "raw_file": "e039.json",
+      "num_turns": 1,
+      "cost_usd": 0.0105273
+    },
+    {
+      "id": "e040",
+      "case_id": "h02",
+      "group": "split",
+      "version": "cand",
+      "repeat": 3,
+      "text": "## 1. 概要\n\nこの文書は、社内の勤怠システムの使い方を説明する。\n\n## 2. 打刻について\n\n打刻は、出社時と退社時に画面のボタンを押して行う。押し忘れた場合は、翌営業日までに上長へ連絡する。\n\n## 3. 休暇申請について\n\n休暇申請は、申請画面で日付と理由を入力して行う。3日以上の休暇は、2週間前までに出す。\n\n## 4. 問い合わせ\n\n不明な点は、人事部の窓口(内線 4120)に連絡する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "d581e02edcc16a493275041540a6e05f4c954160a47e89a297e69166374ae96f",
+      "raw_file": "e040.json",
+      "num_turns": 1,
+      "cost_usd": 0.0082585
+    },
+    {
+      "id": "e041",
+      "case_id": "h03",
+      "group": "split",
+      "version": "base",
+      "repeat": 3,
+      "text": "## 予約とキャンセルについて\n\n予約は、利用日の30日前から受け付ける。予約の確認メールは、申し込みの直後に届く。予約の変更は、1回だけできる。\n\nキャンセルは、利用日の3日前までなら無料である。前日のキャンセルでは、料金の50%がかかる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "551da7c90a516b056e9bc96c950261585ea05ac93cbed2fbcedb48dfa09f286f",
+      "raw_file": "e041.json",
+      "num_turns": 1,
+      "cost_usd": 0.0110382
+    },
+    {
+      "id": "e042",
+      "case_id": "h03",
+      "group": "split",
+      "version": "cand",
+      "repeat": 3,
+      "text": "## 予約について\n\n予約は、利用日の30日前から受け付ける。予約の変更は、1回だけできる。予約の確認メールは、申し込みの直後に届く。\n\n## キャンセルについて\n\nキャンセルは、利用日の3日前までなら無料である。キャンセルが前日になると、料金の50%がかかる。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "3ef6fbbb52cf4692f4312b6f2ed5cc18fce594da9d259d2f39b75914a8a9206b",
+      "raw_file": "e042.json",
+      "num_turns": 1,
+      "cost_usd": 0.0104694
+    },
+    {
+      "id": "e043",
+      "case_id": "h04",
+      "group": "keep_body",
+      "version": "base",
+      "repeat": 3,
+      "text": "## 有料プランと無料プランの違いについて\n\n無料プランは、保存できるファイルが5件までで、サポートはメールだけである。有料プランは、保存できるファイルが無制限で、電話でも問い合わせられる。そのため、複数の案件を扱う人は有料プランが向く。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "6306482ea2b7f54a0ac524ca4119514fc9acadf2a31be925f14b98d2e77754d4",
+      "raw_file": "e043.json",
+      "num_turns": 1,
+      "cost_usd": 0.0080175
+    },
+    {
+      "id": "e044",
+      "case_id": "h04",
+      "group": "keep_body",
+      "version": "cand",
+      "repeat": 3,
+      "text": "## 有料プランと無料プランの違い\n\n無料プランは、保存できるファイルが5件までで、サポートはメールだけである。有料プランは、保存できるファイルが無制限で、電話でも問い合わせられる。そのため、複数の案件を扱う人は有料プランが向く。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "c6346ffd22bb015b692c0a41b7855a9774d87639cd18094b49bbcdb2b8729a94",
+      "raw_file": "e044.json",
+      "num_turns": 1,
+      "cost_usd": 0.0068787000000000015
+    },
+    {
+      "id": "e045",
+      "case_id": "h05",
+      "group": "keep_body",
+      "version": "base",
+      "repeat": 3,
+      "text": "## CSVとJSONの使い分け\n\n人が表計算ソフトで開くなら、CSVを使う。入れ子の構造になっているデータや、他のプログラムに渡すデータは、JSONを使う。迷ったときは、受け取る側が何で読むかで決める。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "cf899a9000cbe649545987195bf808d2aff8b8a227a236bea5ae4704d2eb7b5a",
+      "raw_file": "e045.json",
+      "num_turns": 1,
+      "cost_usd": 0.007847
+    },
+    {
+      "id": "e046",
+      "case_id": "h05",
+      "group": "keep_body",
+      "version": "cand",
+      "repeat": 3,
+      "text": "## CSVとJSONの使い分け\n\n人が表計算ソフトで開くなら、CSVを使う。入れ子の構造を持つデータや、他のプログラムに渡すデータは、JSONを使う。迷ったときは、受け取る側が何で読むかで決める。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "7772cd21d4650cb0ffdea3c9812b70cad4f78ea40143b8af0cb55ca8987f0e77",
+      "raw_file": "e046.json",
+      "num_turns": 1,
+      "cost_usd": 0.0073382000000000005
+    },
+    {
+      "id": "e047",
+      "case_id": "h06",
+      "group": "keep_body",
+      "version": "base",
+      "repeat": 3,
+      "text": "## 検索と置換について\n\n編集メニューの「検索と置換」を開くと、探す語と、置き換える語を入れる欄が表示される。「すべて置換」を押すと、一致した箇所がまとめて置き換わる。置換は元に戻せるので、まず試してよい。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "99e051b97570753d4a68c7c6329d1dd898ed78be257cbb6f3de5ad15a35f98ab",
+      "raw_file": "e047.json",
+      "num_turns": 1,
+      "cost_usd": 0.007627
+    },
+    {
+      "id": "e048",
+      "case_id": "h06",
+      "group": "keep_body",
+      "version": "cand",
+      "repeat": 3,
+      "text": "## 検索と置換について\n\n編集メニューの「検索と置換」を開くと、探す語と、置き換える語を入れる欄が表示される。「すべて置換」を押すと、一致した箇所がまとめて置き換わる。置換は元に戻せるので、まず試してよい。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "5f1847864263d820fb74f43ef4165349e39a52b047ee3e0b2899d8cb7d173d96",
+      "raw_file": "e048.json",
+      "num_turns": 1,
+      "cost_usd": 0.0103082
+    },
+    {
+      "id": "e049",
+      "case_id": "h07",
+      "group": "request",
+      "version": "base",
+      "repeat": 3,
+      "text": "## 費用と日程について\n\n費用は1人あたり3万円で、宿泊代と食事代を含む。\n\n申し込みの締め切りは5月20日である。締め切り後に取り消す場合は、費用の半額がかかる。\n\n日程は6月10日から12日までの3日間である。初日は午後1時に現地へ集合し、解散は最終日の午後4時である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "0985e6d7b52c35752de833710fa40f5b69639bc621c4c9574a9f9cc8f5d22022",
+      "raw_file": "e049.json",
+      "num_turns": 1,
+      "cost_usd": 0.009590999999999999
+    },
+    {
+      "id": "e050",
+      "case_id": "h07",
+      "group": "request",
+      "version": "cand",
+      "repeat": 3,
+      "text": "## 費用と日程について\n\n費用は1人あたり3万円で、宿泊代と食事代を含む。申し込みの締め切りは5月20日である。締め切り後の取り消しには、費用の半額がかかる。\n\n日程は、6月10日から12日までの3日間である。初日は午後1時に現地へ集合し、解散は最終日の午後4時である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "42c496db2f3f6eae14d7ad92b8dcd78f3fdcd321330a685387c826d1becd9103",
+      "raw_file": "e050.json",
+      "num_turns": 1,
+      "cost_usd": 0.0107822
+    },
+    {
+      "id": "e051",
+      "case_id": "h08",
+      "group": "request",
+      "version": "base",
+      "repeat": 3,
+      "text": "## 設置と保守について\n\n設置場所は、直射日光の当たらない、風通しのよい所にする。電源は、専用のコンセントから取る。\n\n保守は、半年に1回、フィルターを掃除して行う。フィルターが汚れたままだと、冷却の能力が下がる。交換は、2年に1回の目安である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "f400eb94272e464c56e207b37467038a1947b553728eb0e55d7a2df1f030937a",
+      "raw_file": "e051.json",
+      "num_turns": 1,
+      "cost_usd": 0.0085671
+    },
+    {
+      "id": "e052",
+      "case_id": "h08",
+      "group": "request",
+      "version": "cand",
+      "repeat": 3,
+      "text": "## 設置と保守について\n\n設置場所は、直射日光の当たらない、風通しのよい所にする。電源は、専用のコンセントから取る。\n\n保守は、半年に1回、フィルターを掃除して行う。フィルターが汚れたままだと、冷却の能力が下がる。交換は、2年に1回の目安である。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "ecad21172e9481fad582eb7a2b798be4ffe7a7bb84d6a0bdb2816c4d0c415650",
+      "raw_file": "e052.json",
+      "num_turns": 1,
+      "cost_usd": 0.008458299999999998
+    },
+    {
+      "id": "e053",
+      "case_id": "h09",
+      "group": "vague",
+      "version": "base",
+      "repeat": 3,
+      "text": "## 親ジョブと子ジョブの関係\n\n親ジョブは、複数の子ジョブをまとめて起動する。子ジョブのどれかが失敗すると、親ジョブも失敗として終了する。親ジョブを停止すると、動いている子ジョブもすべて停止する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "2e910c9e7fbb0da1579ab138fdc413330c61a0ced68a93aeae0ecc386480c22a",
+      "raw_file": "e053.json",
+      "num_turns": 1,
+      "cost_usd": 0.005339700000000001
+    },
+    {
+      "id": "e054",
+      "case_id": "h09",
+      "group": "vague",
+      "version": "cand",
+      "repeat": 3,
+      "text": "## 親ジョブと子ジョブの関係について\n\n親ジョブと子ジョブは、起動、失敗、停止の面で結びついている。親ジョブは、複数の子ジョブをまとめて起動する。子ジョブのどれかが失敗すると、親ジョブも失敗として終了する。親ジョブを停止すると、動いている子ジョブもすべて停止する。",
+      "model_ids": [
+        "claude-sonnet-5-5"
+      ],
+      "prompt_sha256": "0aa5f5ae9ecd937f46a07d6bb02c0507433ebe99ff6d7375eb04be391a0a0dd2",
+      "raw_file": "e054.json",
+      "num_turns": 1,
+      "cost_usd": 0.013210900000000001
+    }
+  ],
+  "cli_version": "2.1.323 (Claude Code)",
+  "count": {
+    "summary": {
+      "models": [
+        "claude-sonnet-5-5"
+      ],
+      "cost_usd": 3.553,
+      "outputs": 54,
+      "base": {
+        "split_group_split": 0,
+        "split_group_outputs": 9,
+        "split_group_numbering_ok": 3,
+        "keep_body_split": 0,
+        "keep_body_outputs": 9,
+        "request_headings_unchanged": 6,
+        "request_outputs": 6,
+        "modec_chars_unchanged": 2,
+        "vague_split": 0,
+        "vague_outputs": 3,
+        "outputs_with_keep_missing": 0
+      },
+      "cand": {
+        "split_group_split": 9,
+        "split_group_outputs": 9,
+        "split_group_numbering_ok": 3,
+        "keep_body_split": 0,
+        "keep_body_outputs": 9,
+        "request_headings_unchanged": 6,
+        "request_outputs": 6,
+        "modec_chars_unchanged": 2,
+        "vague_split": 0,
+        "vague_outputs": 3,
+        "outputs_with_keep_missing": 0
+      }
+    },
+    "rows": [
+      {
+        "id": "e001",
+        "case_id": "h01",
+        "group": "split",
+        "version": "base",
+        "repeat": 1,
+        "headings": [
+          "ログと設定について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## ログと設定について\n\nログは、アプリの動作を記録するファイルである。保存先は `logs/` で、7日を過ぎた分は自動で削除される。\n\n設定は、`config.toml` に書く。起動時に1回だけ読み込まれるので、変更したときは再起動が必要である。"
+      },
+      {
+        "id": "e002",
+        "case_id": "h01",
+        "group": "split",
+        "version": "cand",
+        "repeat": 1,
+        "headings": [
+          "ログについて",
+          "設定について"
+        ],
+        "state": "split",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## ログについて\n\nログは、アプリの動作を記録するファイルである。保存先は `logs/` で、7日を過ぎた分は自動で削除される。\n\n## 設定について\n\n設定は、`config.toml` に書く。起動時に1回だけ読み込まれるので、変更したときは再起動が必要である。"
+      },
+      {
+        "id": "e003",
+        "case_id": "h02",
+        "group": "split",
+        "version": "base",
+        "repeat": 1,
+        "headings": [
+          "1. 勤怠システムの使い方",
+          "2. 打刻と休暇申請について",
+          "3. 不明な点の問い合わせ先"
+        ],
+        "state": "kept",
+        "headings_unchanged": false,
+        "numbering_ok": true,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 1. 勤怠システムの使い方\n\nこの文書は、社内の勤怠システムの使い方を説明する。\n\n## 2. 打刻と休暇申請について\n\n打刻は、出社時と退社時に画面のボタンを押して行う。押し忘れた場合は、翌営業日までに上長へ連絡する。\n\n休暇申請は、申請画面で日付と理由を入力して行う。3日以上の休暇は、2週間前までに出す。\n\n## 3. 不明な点の問い合わせ先\n\n不明な点は、人事部の窓口(内線 4120)に連絡する。"
+      },
+      {
+        "id": "e004",
+        "case_id": "h02",
+        "group": "split",
+        "version": "cand",
+        "repeat": 1,
+        "headings": [
+          "1. 概要",
+          "2. 打刻について",
+          "3. 休暇申請について",
+          "4. 問い合わせ"
+        ],
+        "state": "split",
+        "headings_unchanged": false,
+        "numbering_ok": true,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 1. 概要\n\nこの文書は、社内の勤怠システムの使い方を説明する。\n\n## 2. 打刻について\n\n打刻は、出社時と退社時に画面のボタンを押して行う。押し忘れた場合は、翌営業日までに上長へ連絡する。\n\n## 3. 休暇申請について\n\n休暇申請は、申請画面で日付と理由を入力して行う。3日以上の休暇は、2週間前までに出す。\n\n## 4. 問い合わせ\n\n不明な点は、人事部の窓口(内線 4120)に連絡する。"
+      },
+      {
+        "id": "e005",
+        "case_id": "h03",
+        "group": "split",
+        "version": "base",
+        "repeat": 1,
+        "headings": [
+          "予約とキャンセルについて"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 予約とキャンセルについて\n\n予約は、利用日の30日前から受け付ける。予約の変更は、1回だけできる。予約の確認メールは、申し込みの直後に届く。\n\nキャンセルは、利用日の3日前までなら無料である。キャンセルが前日になると、料金の50%がかかる。"
+      },
+      {
+        "id": "e006",
+        "case_id": "h03",
+        "group": "split",
+        "version": "cand",
+        "repeat": 1,
+        "headings": [
+          "予約について",
+          "キャンセルについて"
+        ],
+        "state": "split",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 予約について\n\n予約は、利用日の30日前から受け付ける。予約の変更は、1回だけできる。予約の確認メールは、申し込みの直後に届く。\n\n## キャンセルについて\n\nキャンセルは、利用日の3日前までなら無料である。キャンセルが前日になると、料金の50%がかかる。"
+      },
+      {
+        "id": "e007",
+        "case_id": "h04",
+        "group": "keep_body",
+        "version": "base",
+        "repeat": 1,
+        "headings": [
+          "有料プランと無料プランの違いについて"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## 有料プランと無料プランの違いについて\n\n無料プランは、保存できるファイルが5件までで、サポートはメールだけである。有料プランは、保存できるファイルが無制限で、電話でも問い合わせられる。そのため、複数の案件を扱う人は有料プランが向く。"
+      },
+      {
+        "id": "e008",
+        "case_id": "h04",
+        "group": "keep_body",
+        "version": "cand",
+        "repeat": 1,
+        "headings": [
+          "有料プランと無料プランの違いについて"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## 有料プランと無料プランの違いについて\n\n無料プランは、保存できるファイルが5件までで、サポートはメールだけである。有料プランは、保存できるファイルが無制限で、電話でも問い合わせられる。そのため、複数の案件を扱う人は有料プランが向く。"
+      },
+      {
+        "id": "e009",
+        "case_id": "h05",
+        "group": "keep_body",
+        "version": "base",
+        "repeat": 1,
+        "headings": [
+          "CSVとJSONの使い分け"
+        ],
+        "state": "kept",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## CSVとJSONの使い分け\n\n人が表計算ソフトで開くなら、CSVを使う。入れ子の構造を持つデータや、他のプログラムに渡すデータは、JSONを使う。迷ったときは、受け取る側が何で読むかで決める。"
+      },
+      {
+        "id": "e010",
+        "case_id": "h05",
+        "group": "keep_body",
+        "version": "cand",
+        "repeat": 1,
+        "headings": [
+          "CSVとJSONの使い分け"
+        ],
+        "state": "kept",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## CSVとJSONの使い分け\n\n人が表計算ソフトで開くなら、CSVを使う。入れ子の構造を持つデータや、他のプログラムに渡すデータは、JSONを使う。迷ったときは、受け取る側が何で読むかで決める。"
+      },
+      {
+        "id": "e011",
+        "case_id": "h06",
+        "group": "keep_body",
+        "version": "base",
+        "repeat": 1,
+        "headings": [
+          "検索と置換について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## 検索と置換について\n\n編集メニューの「検索と置換」を開くと、探す語と、置き換える語を入れる欄が表示される。「すべて置換」を押すと、一致した箇所がまとめて置き換わる。置換は元に戻せるので、まず試してよい。"
+      },
+      {
+        "id": "e012",
+        "case_id": "h06",
+        "group": "keep_body",
+        "version": "cand",
+        "repeat": 1,
+        "headings": [
+          "検索と置換について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## 検索と置換について\n\n編集メニューの「検索と置換」を開くと、探す語と、置き換える語を入れる欄が表示される。「すべて置換」を押すと、一致した箇所がまとめて置き換わる。置換は元に戻せるので、まず試してよい。"
+      },
+      {
+        "id": "e013",
+        "case_id": "h07",
+        "group": "request",
+        "version": "base",
+        "repeat": 1,
+        "headings": [
+          "費用と日程について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 費用と日程について\n\n費用は1人あたり3万円で、宿泊代と食事代を含む。\n\n申し込みの締め切りは5月20日である。締め切り後の取り消しには、費用の半額がかかる。\n\n日程は、6月10日から12日までの3日間である。初日は午後1時に現地へ集合し、解散は最終日の午後4時である。"
+      },
+      {
+        "id": "e014",
+        "case_id": "h07",
+        "group": "request",
+        "version": "cand",
+        "repeat": 1,
+        "headings": [
+          "費用と日程について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 費用と日程について\n\n費用は1人あたり3万円で、宿泊代と食事代を含む。申し込みの締め切りは5月20日である。締め切り後の取り消しには、費用の半額がかかる。\n\n日程は6月10日から12日までの3日間である。初日は午後1時に現地へ集合する。解散は最終日の午後4時である。"
+      },
+      {
+        "id": "e015",
+        "case_id": "h08",
+        "group": "request",
+        "version": "base",
+        "repeat": 1,
+        "headings": [
+          "設置と保守について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 設置と保守について\n\n設置場所は、直射日光の当たらない、風通しのよい所にする。電源は、専用のコンセントから取る。\n\n保守は、半年に1回、フィルターを掃除して行う。フィルターが汚れたままだと、冷却の能力が下がる。交換は、2年に1回の目安である。\n```"
+      },
+      {
+        "id": "e016",
+        "case_id": "h08",
+        "group": "request",
+        "version": "cand",
+        "repeat": 1,
+        "headings": [
+          "設置と保守について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 設置と保守について\n\n設置場所は、直射日光の当たらない、風通しのよい所にする。電源は、専用のコンセントから取る。\n\n保守は、半年に1回、フィルターを掃除して行う。フィルターが汚れたままだと、冷却の能力が下がる。交換は、2年に1回の目安である。\n\n---\n補足: モード C のため、文言と見出しは変えていません。見出し「設置と保守について」は、本文が設置と保守を別々に書いているので、モード B なら分ける候補です。"
+      },
+      {
+        "id": "e017",
+        "case_id": "h09",
+        "group": "vague",
+        "version": "base",
+        "repeat": 1,
+        "headings": [
+          "親ジョブと子ジョブの関係"
+        ],
+        "state": "kept",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 親ジョブと子ジョブの関係\n\n親ジョブは、複数の子ジョブをまとめて起動する。子ジョブのどれかが失敗すると、親ジョブも失敗として終了する。親ジョブを停止すると、動いている子ジョブもすべて停止する。"
+      },
+      {
+        "id": "e018",
+        "case_id": "h09",
+        "group": "vague",
+        "version": "cand",
+        "repeat": 1,
+        "headings": [
+          "親ジョブと子ジョブの関係について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 親ジョブと子ジョブの関係について\n\n親ジョブは、複数の子ジョブをまとめて起動する。子ジョブのどれかが失敗すると、親ジョブも失敗として終了する。親ジョブを停止すると、動いている子ジョブもすべて停止する。"
+      },
+      {
+        "id": "e019",
+        "case_id": "h01",
+        "group": "split",
+        "version": "base",
+        "repeat": 2,
+        "headings": [
+          "ログと設定について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## ログと設定について\n\nログは、アプリの動作を記録するファイルである。保存先は `logs/` で、7日を過ぎた分は自動で削除される。\n\n設定は、`config.toml` に書く。起動時に1回だけ読み込まれるので、変更したときは再起動が必要である。"
+      },
+      {
+        "id": "e020",
+        "case_id": "h01",
+        "group": "split",
+        "version": "cand",
+        "repeat": 2,
+        "headings": [
+          "ログについて",
+          "設定について"
+        ],
+        "state": "split",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## ログについて\n\nログは、アプリの動作を記録するファイルである。保存先は `logs/` で、7日を過ぎた分は自動で削除される。\n\n## 設定について\n\n設定は、`config.toml` に書く。起動時に1回だけ読み込まれるので、変更したときは再起動が必要である。"
+      },
+      {
+        "id": "e021",
+        "case_id": "h02",
+        "group": "split",
+        "version": "base",
+        "repeat": 2,
+        "headings": [
+          "1. この文書の目的",
+          "2. 打刻と休暇申請の方法",
+          "3. 不明な点の問い合わせ先"
+        ],
+        "state": "kept",
+        "headings_unchanged": false,
+        "numbering_ok": true,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 1. この文書の目的\n\nこの文書は、社内の勤怠システムの使い方を説明する。\n\n## 2. 打刻と休暇申請の方法\n\n打刻は、出社時と退社時に画面のボタンを押して行う。押し忘れた場合は、翌営業日までに上長へ連絡する。\n\n休暇申請は、申請画面で日付と理由を入力して行う。3日以上の休暇は、2週間前までに出す。\n\n## 3. 不明な点の問い合わせ先\n\n不明な点は、人事部の窓口(内線 4120)に連絡する。"
+      },
+      {
+        "id": "e022",
+        "case_id": "h02",
+        "group": "split",
+        "version": "cand",
+        "repeat": 2,
+        "headings": [
+          "1. 勤怠システムの使い方",
+          "2. 打刻について",
+          "3. 休暇申請について",
+          "4. 不明な点の問い合わせ先"
+        ],
+        "state": "split",
+        "headings_unchanged": false,
+        "numbering_ok": true,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 1. 勤怠システムの使い方\n\nこの文書は、社内の勤怠システムの使い方を説明する。\n\n## 2. 打刻について\n\n打刻は、出社時と退社時に画面のボタンを押して行う。押し忘れた場合は、翌営業日までに上長へ連絡する。\n\n## 3. 休暇申請について\n\n休暇申請は、申請画面で日付と理由を入力して行う。3日以上の休暇は、2週間前までに出す。\n\n## 4. 不明な点の問い合わせ先\n\n不明な点は、人事部の窓口(内線 4120)に連絡する。"
+      },
+      {
+        "id": "e023",
+        "case_id": "h03",
+        "group": "split",
+        "version": "base",
+        "repeat": 2,
+        "headings": [
+          "予約・変更・キャンセルの条件"
+        ],
+        "state": "kept",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 予約・変更・キャンセルの条件\n\n予約は、利用日の30日前から受け付ける。予約の確認メールは、申し込みの直後に届く。予約の変更は、1回だけできる。\n\nキャンセルは、利用日の3日前までなら無料である。キャンセルが前日になると、料金の50%がかかる。"
+      },
+      {
+        "id": "e024",
+        "case_id": "h03",
+        "group": "split",
+        "version": "cand",
+        "repeat": 2,
+        "headings": [
+          "予約について",
+          "キャンセルについて"
+        ],
+        "state": "split",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 予約について\n\n予約は、利用日の30日前から受け付ける。予約の変更は、1回だけできる。予約の確認メールは、申し込みの直後に届く。\n\n## キャンセルについて\n\nキャンセルは、利用日の3日前までなら無料である。キャンセルが前日になると、料金の50%がかかる。"
+      },
+      {
+        "id": "e025",
+        "case_id": "h04",
+        "group": "keep_body",
+        "version": "base",
+        "repeat": 2,
+        "headings": [
+          "有料プランと無料プランの違いについて"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## 有料プランと無料プランの違いについて\n\n無料プランは、保存できるファイルが5件までで、サポートはメールだけである。有料プランは、保存できるファイルが無制限で、電話でも問い合わせられる。そのため、複数の案件を扱う人は有料プランが向く。"
+      },
+      {
+        "id": "e026",
+        "case_id": "h04",
+        "group": "keep_body",
+        "version": "cand",
+        "repeat": 2,
+        "headings": [
+          "有料プランと無料プランの違いについて"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## 有料プランと無料プランの違いについて\n\n無料プランは、保存できるファイルが5件までで、サポートはメールだけである。有料プランは、保存できるファイルが無制限で、電話でも問い合わせられる。そのため、複数の案件を扱う人は有料プランが向く。"
+      },
+      {
+        "id": "e027",
+        "case_id": "h05",
+        "group": "keep_body",
+        "version": "base",
+        "repeat": 2,
+        "headings": [
+          "CSVとJSONの使い分け"
+        ],
+        "state": "kept",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## CSVとJSONの使い分け\n\n人が表計算ソフトで開くなら、CSVを使う。入れ子になったデータや、他のプログラムに渡すデータは、JSONを使う。迷ったときは、受け取る側が何で読むかで決める。"
+      },
+      {
+        "id": "e028",
+        "case_id": "h05",
+        "group": "keep_body",
+        "version": "cand",
+        "repeat": 2,
+        "headings": [
+          "CSVとJSONの使い分け"
+        ],
+        "state": "kept",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## CSVとJSONの使い分け\n\n人が表計算ソフトで開くなら、CSVを使う。入れ子の構造を持つデータや、他のプログラムに渡すデータは、JSONを使う。迷ったときは、受け取る側が何で読むかで決める。"
+      },
+      {
+        "id": "e029",
+        "case_id": "h06",
+        "group": "keep_body",
+        "version": "base",
+        "repeat": 2,
+        "headings": [
+          "検索と置換について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## 検索と置換について\n\n編集メニューの「検索と置換」を開くと、探す語と、置き換える語を入れる欄が表示される。「すべて置換」を押すと、一致した箇所がまとめて置き換わる。置換は元に戻せるので、まず試してよい。"
+      },
+      {
+        "id": "e030",
+        "case_id": "h06",
+        "group": "keep_body",
+        "version": "cand",
+        "repeat": 2,
+        "headings": [
+          "検索と置換について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 検索と置換について\n\n編集メニューの「検索と置換」を開くと、探す語と置き換える語を入れる欄が表示される。「すべて置換」を押すと、一致した箇所がまとめて置き換わる。置換は元に戻せるので、まず試してよい。"
+      },
+      {
+        "id": "e031",
+        "case_id": "h07",
+        "group": "request",
+        "version": "base",
+        "repeat": 2,
+        "headings": [
+          "費用と日程について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 費用と日程について\n\n費用は1人あたり3万円で、宿泊代と食事代を含む。申し込みの締め切りは5月20日である。締め切り後の取り消しには、費用の半額がかかる。\n\n日程は6月10日から12日までの3日間である。初日は午後1時に現地へ集合する。解散は最終日の午後4時である。"
+      },
+      {
+        "id": "e032",
+        "case_id": "h07",
+        "group": "request",
+        "version": "cand",
+        "repeat": 2,
+        "headings": [
+          "費用と日程について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 費用と日程について\n\n費用は1人あたり3万円で、宿泊代と食事代を含む。申し込みの締め切りは5月20日である。締め切り後の取り消しには、費用の半額がかかる。\n\n日程は、6月10日から12日までの3日間である。初日は午後1時に現地へ集合する。解散は最終日の午後4時である。"
+      },
+      {
+        "id": "e033",
+        "case_id": "h08",
+        "group": "request",
+        "version": "base",
+        "repeat": 2,
+        "headings": [
+          "設置と保守について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## 設置と保守について\n\n設置場所は、直射日光の当たらない、風通しのよい所にする。電源は、専用のコンセントから取る。\n\n保守は、半年に1回、フィルターを掃除して行う。フィルターが汚れたままだと、冷却の能力が下がる。交換は、2年に1回の目安である。"
+      },
+      {
+        "id": "e034",
+        "case_id": "h08",
+        "group": "request",
+        "version": "cand",
+        "repeat": 2,
+        "headings": [
+          "設置と保守について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## 設置と保守について\n\n設置場所は、直射日光の当たらない、風通しのよい所にする。電源は、専用のコンセントから取る。\n\n保守は、半年に1回、フィルターを掃除して行う。フィルターが汚れたままだと、冷却の能力が下がる。交換は、2年に1回の目安である。"
+      },
+      {
+        "id": "e035",
+        "case_id": "h09",
+        "group": "vague",
+        "version": "base",
+        "repeat": 2,
+        "headings": [
+          "親ジョブと子ジョブの関係"
+        ],
+        "state": "kept",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 親ジョブと子ジョブの関係\n\n親ジョブは、複数の子ジョブをまとめて起動する。子ジョブのどれかが失敗すると、親ジョブも失敗として終了する。親ジョブを停止すると、動いている子ジョブもすべて停止する。"
+      },
+      {
+        "id": "e036",
+        "case_id": "h09",
+        "group": "vague",
+        "version": "cand",
+        "repeat": 2,
+        "headings": [
+          "親ジョブと子ジョブの関係について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 親ジョブと子ジョブの関係について\n\n親ジョブは、複数の子ジョブをまとめて起動する。子ジョブのどれかが失敗すると、親ジョブも失敗として終了する。親ジョブを停止すると、動いている子ジョブもすべて停止する。"
+      },
+      {
+        "id": "e037",
+        "case_id": "h01",
+        "group": "split",
+        "version": "base",
+        "repeat": 3,
+        "headings": [
+          "ログと設定について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## ログと設定について\n\nログは、アプリの動作を記録するファイルである。保存先は `logs/` で、7日を過ぎた分は自動で削除される。\n\n設定は、`config.toml` に書く。起動時に1回だけ読み込まれるので、変更したときは再起動が必要である。"
+      },
+      {
+        "id": "e038",
+        "case_id": "h01",
+        "group": "split",
+        "version": "cand",
+        "repeat": 3,
+        "headings": [
+          "ログについて",
+          "設定について"
+        ],
+        "state": "split",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## ログについて\n\nログは、アプリの動作を記録するファイルである。保存先は `logs/` で、7日を過ぎた分は自動で削除される。\n\n## 設定について\n\n設定は、`config.toml` に書く。起動時に1回だけ読み込まれるので、変更したときは再起動が必要である。"
+      },
+      {
+        "id": "e039",
+        "case_id": "h02",
+        "group": "split",
+        "version": "base",
+        "repeat": 3,
+        "headings": [
+          "1. 勤怠システムの使い方の説明",
+          "2. 打刻と休暇申請の方法",
+          "3. 不明な点の問い合わせ先"
+        ],
+        "state": "kept",
+        "headings_unchanged": false,
+        "numbering_ok": true,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 1. 勤怠システムの使い方の説明\n\nこの文書は、社内の勤怠システムの使い方を説明する。\n\n## 2. 打刻と休暇申請の方法\n\n打刻は、出社時と退社時に画面のボタンを押して行う。押し忘れた場合は、翌営業日までに上長へ連絡する。\n\n休暇申請は、申請画面で日付と理由を入力して行う。3日以上の休暇は、2週間前までに出す。\n\n## 3. 不明な点の問い合わせ先\n\n不明な点は、人事部の窓口(内線 4120)に連絡する。"
+      },
+      {
+        "id": "e040",
+        "case_id": "h02",
+        "group": "split",
+        "version": "cand",
+        "repeat": 3,
+        "headings": [
+          "1. 概要",
+          "2. 打刻について",
+          "3. 休暇申請について",
+          "4. 問い合わせ"
+        ],
+        "state": "split",
+        "headings_unchanged": false,
+        "numbering_ok": true,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 1. 概要\n\nこの文書は、社内の勤怠システムの使い方を説明する。\n\n## 2. 打刻について\n\n打刻は、出社時と退社時に画面のボタンを押して行う。押し忘れた場合は、翌営業日までに上長へ連絡する。\n\n## 3. 休暇申請について\n\n休暇申請は、申請画面で日付と理由を入力して行う。3日以上の休暇は、2週間前までに出す。\n\n## 4. 問い合わせ\n\n不明な点は、人事部の窓口(内線 4120)に連絡する。"
+      },
+      {
+        "id": "e041",
+        "case_id": "h03",
+        "group": "split",
+        "version": "base",
+        "repeat": 3,
+        "headings": [
+          "予約とキャンセルについて"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 予約とキャンセルについて\n\n予約は、利用日の30日前から受け付ける。予約の確認メールは、申し込みの直後に届く。予約の変更は、1回だけできる。\n\nキャンセルは、利用日の3日前までなら無料である。前日のキャンセルでは、料金の50%がかかる。"
+      },
+      {
+        "id": "e042",
+        "case_id": "h03",
+        "group": "split",
+        "version": "cand",
+        "repeat": 3,
+        "headings": [
+          "予約について",
+          "キャンセルについて"
+        ],
+        "state": "split",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 予約について\n\n予約は、利用日の30日前から受け付ける。予約の変更は、1回だけできる。予約の確認メールは、申し込みの直後に届く。\n\n## キャンセルについて\n\nキャンセルは、利用日の3日前までなら無料である。キャンセルが前日になると、料金の50%がかかる。"
+      },
+      {
+        "id": "e043",
+        "case_id": "h04",
+        "group": "keep_body",
+        "version": "base",
+        "repeat": 3,
+        "headings": [
+          "有料プランと無料プランの違いについて"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## 有料プランと無料プランの違いについて\n\n無料プランは、保存できるファイルが5件までで、サポートはメールだけである。有料プランは、保存できるファイルが無制限で、電話でも問い合わせられる。そのため、複数の案件を扱う人は有料プランが向く。"
+      },
+      {
+        "id": "e044",
+        "case_id": "h04",
+        "group": "keep_body",
+        "version": "cand",
+        "repeat": 3,
+        "headings": [
+          "有料プランと無料プランの違い"
+        ],
+        "state": "kept",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 有料プランと無料プランの違い\n\n無料プランは、保存できるファイルが5件までで、サポートはメールだけである。有料プランは、保存できるファイルが無制限で、電話でも問い合わせられる。そのため、複数の案件を扱う人は有料プランが向く。"
+      },
+      {
+        "id": "e045",
+        "case_id": "h05",
+        "group": "keep_body",
+        "version": "base",
+        "repeat": 3,
+        "headings": [
+          "CSVとJSONの使い分け"
+        ],
+        "state": "kept",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## CSVとJSONの使い分け\n\n人が表計算ソフトで開くなら、CSVを使う。入れ子の構造になっているデータや、他のプログラムに渡すデータは、JSONを使う。迷ったときは、受け取る側が何で読むかで決める。"
+      },
+      {
+        "id": "e046",
+        "case_id": "h05",
+        "group": "keep_body",
+        "version": "cand",
+        "repeat": 3,
+        "headings": [
+          "CSVとJSONの使い分け"
+        ],
+        "state": "kept",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## CSVとJSONの使い分け\n\n人が表計算ソフトで開くなら、CSVを使う。入れ子の構造を持つデータや、他のプログラムに渡すデータは、JSONを使う。迷ったときは、受け取る側が何で読むかで決める。"
+      },
+      {
+        "id": "e047",
+        "case_id": "h06",
+        "group": "keep_body",
+        "version": "base",
+        "repeat": 3,
+        "headings": [
+          "検索と置換について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## 検索と置換について\n\n編集メニューの「検索と置換」を開くと、探す語と、置き換える語を入れる欄が表示される。「すべて置換」を押すと、一致した箇所がまとめて置き換わる。置換は元に戻せるので、まず試してよい。"
+      },
+      {
+        "id": "e048",
+        "case_id": "h06",
+        "group": "keep_body",
+        "version": "cand",
+        "repeat": 3,
+        "headings": [
+          "検索と置換について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## 検索と置換について\n\n編集メニューの「検索と置換」を開くと、探す語と、置き換える語を入れる欄が表示される。「すべて置換」を押すと、一致した箇所がまとめて置き換わる。置換は元に戻せるので、まず試してよい。"
+      },
+      {
+        "id": "e049",
+        "case_id": "h07",
+        "group": "request",
+        "version": "base",
+        "repeat": 3,
+        "headings": [
+          "費用と日程について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 費用と日程について\n\n費用は1人あたり3万円で、宿泊代と食事代を含む。\n\n申し込みの締め切りは5月20日である。締め切り後に取り消す場合は、費用の半額がかかる。\n\n日程は6月10日から12日までの3日間である。初日は午後1時に現地へ集合し、解散は最終日の午後4時である。"
+      },
+      {
+        "id": "e050",
+        "case_id": "h07",
+        "group": "request",
+        "version": "cand",
+        "repeat": 3,
+        "headings": [
+          "費用と日程について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 費用と日程について\n\n費用は1人あたり3万円で、宿泊代と食事代を含む。申し込みの締め切りは5月20日である。締め切り後の取り消しには、費用の半額がかかる。\n\n日程は、6月10日から12日までの3日間である。初日は午後1時に現地へ集合し、解散は最終日の午後4時である。"
+      },
+      {
+        "id": "e051",
+        "case_id": "h08",
+        "group": "request",
+        "version": "base",
+        "repeat": 3,
+        "headings": [
+          "設置と保守について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## 設置と保守について\n\n設置場所は、直射日光の当たらない、風通しのよい所にする。電源は、専用のコンセントから取る。\n\n保守は、半年に1回、フィルターを掃除して行う。フィルターが汚れたままだと、冷却の能力が下がる。交換は、2年に1回の目安である。"
+      },
+      {
+        "id": "e052",
+        "case_id": "h08",
+        "group": "request",
+        "version": "cand",
+        "repeat": 3,
+        "headings": [
+          "設置と保守について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": true,
+        "after": "## 設置と保守について\n\n設置場所は、直射日光の当たらない、風通しのよい所にする。電源は、専用のコンセントから取る。\n\n保守は、半年に1回、フィルターを掃除して行う。フィルターが汚れたままだと、冷却の能力が下がる。交換は、2年に1回の目安である。"
+      },
+      {
+        "id": "e053",
+        "case_id": "h09",
+        "group": "vague",
+        "version": "base",
+        "repeat": 3,
+        "headings": [
+          "親ジョブと子ジョブの関係"
+        ],
+        "state": "kept",
+        "headings_unchanged": false,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 親ジョブと子ジョブの関係\n\n親ジョブは、複数の子ジョブをまとめて起動する。子ジョブのどれかが失敗すると、親ジョブも失敗として終了する。親ジョブを停止すると、動いている子ジョブもすべて停止する。"
+      },
+      {
+        "id": "e054",
+        "case_id": "h09",
+        "group": "vague",
+        "version": "cand",
+        "repeat": 3,
+        "headings": [
+          "親ジョブと子ジョブの関係について"
+        ],
+        "state": "kept",
+        "headings_unchanged": true,
+        "numbering_ok": null,
+        "keep_missing": [],
+        "chars_unchanged": false,
+        "after": "## 親ジョブと子ジョブの関係について\n\n親ジョブと子ジョブは、起動、失敗、停止の面で結びついている。親ジョブは、複数の子ジョブをまとめて起動する。子ジョブのどれかが失敗すると、親ジョブも失敗として終了する。親ジョブを停止すると、動いている子ジョブもすべて停止する。"
+      }
+    ]
+  }
 }
