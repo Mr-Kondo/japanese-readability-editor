@@ -90,8 +90,10 @@ Codex は、プラグインを `~/.codex/plugins/cache/japanese-readability-edit
 ```bash
 CACHE=~/.codex/plugins/cache/japanese-readability-editor/japanese-readability-editor/local
 SRC=~/.agents/skills/japanese-readability-editor   # 更新元の Skill のフォルダ
-mkdir -p ~/.codex/backups && test -d "$CACHE" && cp -R "$CACHE" ~/.codex/backups/japanese-readability-editor.bak-$(date +%Y%m%d%H%M%S)-plugin-cache
-test -f "$SRC/SKILL.md" && test -d "$CACHE/skills/japanese-readability-editor" && rsync -a --delete --exclude __pycache__ "$SRC/" "$CACHE/skills/japanese-readability-editor/"
+BACKUP=~/.codex/backups/japanese-readability-editor.bak-$(date +%Y%m%d%H%M%S)-plugin-cache
+mkdir -p ~/.codex/backups && test -d "$CACHE" && cp -R "$CACHE" "$BACKUP" && \
+test -f "$BACKUP/skills/japanese-readability-editor/SKILL.md" && test -f "$SRC/SKILL.md" && \
+rsync -a --delete --exclude __pycache__ "$SRC/" "$CACHE/skills/japanese-readability-editor/"
 diff -r -x __pycache__ "$SRC" "$CACHE/skills/japanese-readability-editor" && echo 一致
 python3 tools/verify_install.py --dest "$CACHE/skills" --no-source   # リポジトリのフォルダで実行
 ```
@@ -104,7 +106,7 @@ python3 tools/verify_install.py --dest "$CACHE/skills" --no-source   # リポジ
 - Codex が、あとでプラグインを入れ直したときに、キャッシュを上書きする挙動。
 - Windows と Linux での手順。
 
-`rsync --delete` は、`SRC` が空や誤りのときに、置き換え先のファイルを消します。手順の `test` で、更新元に `SKILL.md` があることを確かめてから実行します。
+`rsync --delete` は、`SRC` が空や誤りのときに、置き換え先のファイルを消します。手順は、退避と置き換えを `&&` でつないでいます。退避に失敗したとき、退避に `SKILL.md` がないとき、更新元に `SKILL.md` がないときは、置き換えません。
 
 ### gh skill で入れた場合
 
