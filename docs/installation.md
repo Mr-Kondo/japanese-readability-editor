@@ -98,11 +98,11 @@ diff -r -x __pycache__ "$SRC" "$CACHE/skills/japanese-readability-editor" && ech
 python3 tools/verify_install.py --dest "$CACHE/skills" --no-source   # リポジトリのフォルダで実行
 ```
 
-2026-11-14 に、キャッシュの Skill を 0.21.3 から 0.24.0 に置き換えました。更新元との `diff -r` は一致し、`verify_install.py` は 0 エラーでした。複製の中のそのほかのファイル(`evals/` など)は、更新していません。
+2026-11-14 に、キャッシュの Skill を 0.21.3 から 0.24.0 に置き換えました。更新元との `diff -r` は一致し、`verify_install.py` は 0 エラーでした。複製の中のそのほかのファイル(`evals/` など)は、更新していません。その後、同じキャッシュの `VERSION` は 0.24.1 になっています(2026-11-14 に確認。その時点の版は、更新元の `skills/japanese-readability-editor/VERSION` で確かめます)。
 
 次の点は、確かめていません。
 
-- Codex を起動して、読み込まれる版が 0.24.0 であること。
+- Codex を起動して、読み込まれる版が、更新元の `skills/japanese-readability-editor/VERSION` と同じであること。
 - Codex が、あとでプラグインを入れ直したときに、キャッシュを上書きする挙動。
 - Windows と Linux での手順。
 
