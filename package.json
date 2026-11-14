@@ -1,0 +1,14 @@
+{
+  "name": "japanese-readability-editor-docs-tools",
+  "private": true,
+  "description": "Markdown の整形・校正用の開発ツール。配布物ではない。使い方は docs/development.md。",
+  "scripts": {
+    "lint:md": "sh tools/lint_md.sh"
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "0.24.1",
+    "prettier": "3.10.1",
+    "textlint": "15.8.0",
+    "textlint-rule-preset-ja-technical-writing": "12.0.2"
+  }
+}

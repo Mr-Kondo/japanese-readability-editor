@@ -1,0 +1,6 @@
+rules:
+  preset-ja-technical-writing:
+    # 見出しや短い箇条書きを句点なしで書く、この文書の書き方に合わせて無効にする。
+    # この規則のオプションには、見出しと箇条書きだけを除く設定がない(forceAppendPeriod は --fix の挙動だけ)。
+    # 無効にすると、段落の句点の抜けも拾えなくなる。段落は、目で確かめる。
+    ja-no-mixed-period: false

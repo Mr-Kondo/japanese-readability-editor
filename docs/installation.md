@@ -76,16 +76,16 @@ claude plugin update japanese-readability-editor@japanese-readability-editor
 
 ### Codex のプラグインで入れた場合
 
-Codex に、このリポジトリをローカルのマーケットプレースとして登録した場合の手順です。`codex plugin marketplace list` に `japanese-readability-editor` があり、`codex plugin list` の `VERSION` が `local` と表示されます。macOS の Codex CLI 0.164.0 で、キャッシュを同期しました(2026-11-14)。
+Codex に、このリポジトリをローカルのマーケットプレースとして登録した場合の手順です。登録していると、`codex plugin marketplace list` に `japanese-readability-editor` が出ます。`codex plugin list` の `VERSION` は `local` と表示されます。macOS の Codex CLI 0.164.0 で、キャッシュを同期しました(2026-11-14)。
 
-Codex は、プラグインを `~/.codex/plugins/cache/japanese-readability-editor/japanese-readability-editor/local/` に複製して使います。この複製は、リポジトリ全体の `git clone` で、`skills/` の中に、以前の手作業の変更が残っていました。`.claude-plugin/plugin.json` の `skills` が `./skills/` を指すので、Skill は、複製の中の `skills/japanese-readability-editor/` に置きます。
+Codex は、プラグインを `~/.codex/plugins/cache/japanese-readability-editor/japanese-readability-editor/local/` に複製して使います。この複製は、リポジトリ全体の `git clone` です。`skills/` の中に、以前の手作業の変更が残っていました。`.claude-plugin/plugin.json` の `skills` が `./skills/` を指します。そこで、Skill は、複製の中の `skills/japanese-readability-editor/` に置きます。
 
 `codex plugin marketplace upgrade` は、Git のマーケットプレースだけを更新します(`codex plugin marketplace --help` の説明)。ローカルのマーケットプレースでは、確かめていません。`codex plugin remove` は、キャッシュを削除します(`codex plugin remove --help` の説明)。`codex plugin add` で入れ直したとき、リポジトリの未コミットの変更が複製に入るかは、確かめていません。そこで、キャッシュの Skill のフォルダだけを、次の手順で置き換えました。
 
-1. 更新元を用意します。リポジトリに未コミットの変更があるときは、作業ツリーを使わず、マージ後のコミットを書き出します(例: `git archive <コミット> | tar -x -C <空のフォルダ>`)。その場合、手順の `SRC` は、書き出した先の `skills/japanese-readability-editor` にします。`npx skills add` で更新した `~/.agents/skills/japanese-readability-editor/` も使えます。
-2. キャッシュの全体を退避します。
-3. キャッシュの Skill のフォルダを、更新元で置き換えます。
-4. 更新元と一致することと、検証の結果を確かめます([配置した Skill を検証する](#配置した-skill-を検証する))。
+1. 更新元を用意する。リポジトリに未コミットの変更があるときは、作業ツリーを使わず、マージ後のコミットを書き出す(例: `git archive <コミット> | tar -x -C <空のフォルダ>`)。その場合、手順の `SRC` は、書き出した先の `skills/japanese-readability-editor` にする。`npx skills add` で更新した `~/.agents/skills/japanese-readability-editor/` も使える。
+2. キャッシュの全体を退避する。
+3. キャッシュの Skill のフォルダを、更新元で置き換える。
+4. 更新元と一致することと、検証の結果を確かめる([配置した Skill を検証する](#配置した-skill-を検証する))。
 
 ```bash
 CACHE=~/.codex/plugins/cache/japanese-readability-editor/japanese-readability-editor/local

@@ -140,6 +140,25 @@ python3 tools/check_all.py
 
 frontmatter は、どのエージェントの解析器でも読める、保守的な YAML の部分集合に限ります。値は1行で書き、値の中の `: ` と ` #` は避けます。
 
+## Markdown の整形と校正
+
+文書(README、`docs/`、Skill の参照など)の整形と校正には、Prettier、markdownlint-cli2、textlint を使います。textlint のルールは `textlint-rule-preset-ja-technical-writing` です。配布物には入りません。Node.js が必要です(Node 22 で確かめました)。
+
+```bash
+npm ci
+npm run lint:md -- docs/development.md
+```
+
+- `npm ci` は初回だけ実行する。`node_modules/` は追跡しない。
+- `npm run lint:md -- <ファイル>...` は、Prettier(整形の確認)、markdownlint-cli2(文法)、textlint(日本語の校正)の順に、すべて実行する。
+- 1つが失敗しても残りを実行し、どれかが失敗すれば終了コード 1 を返す。ファイルを渡さないときは、終了コード 2 を返す。自動修正はしない。
+- 設定は `.prettierrc`、`.markdownlint-cli2.jsonc`、`.textlintrc.yml` にある。
+- 無効にした規則は、`MD013`(長い行)、`MD060`(表の整形)、`ja-no-mixed-period`(句点なしの見出しと箇条書き)である。理由は、設定のコメントに書いた。
+- 触った文書にだけ実行する。リポジトリ全体への一括整形と、CI への組み込みは、していない。既存の文書には、整形や校正の指摘が残っている。
+- 自動修正(`prettier --write`、`markdownlint-cli2 --fix`、`textlint --fix`)は、対象を絞って使う。意味・数値・コード・引用が変わっていないことを、差分で確かめる。
+- Skill の例の「修正前」の文章は、直す対象の問題をわざと含む。校正の指摘を直さない。
+- 実行した結果と、直さずに残した指摘(理由つき)は、PR か Issue に書く。
+
 ## テスト
 
 ```bash

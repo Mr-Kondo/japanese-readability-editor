@@ -20,3 +20,6 @@ __pycache__/
 
 # Local feedback files
 /feedback/
+
+# Markdown 校正ツール(package.json)の導入先
+/node_modules/
