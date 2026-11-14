@@ -33,7 +33,6 @@
 |---|---|
 | `npx skills add` | 入れたときと同じコマンドをもう一度実行する(上書きされる) |
 | 手動のコピー・リンク | コピーは、古いフォルダを消してからコピーし直す。リンクは `git pull` で更新する |
-| `tools/install.py`(廃止) | [移行の手順](docs/installation.md#toolsinstallpy-で入れていた場合廃止)で、古いものを消してから `npx skills add` で入れ直す |
 | ZIP・生成物のアップロード | [最新の Release](https://github.com/Mr-Kondo/japanese-readability-editor/releases/latest) の生成物に置き換える |
 | Claude Code のプラグイン | マーケットプレースを更新してから、プラグインを更新する |
 
