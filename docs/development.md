@@ -69,7 +69,7 @@ japanese-readability-editor/
 | `tools/check_all.py` | 検証とテストをまとめて実行する。内容は「[検証](#検証)」 |
 | 評価用のツール | `review_readability.py`、`compare_readability.py`、`comprehension_readability.py`、`statistics_readability.py`、`feedback_readability.py`、`evaluate_readability.py`、`ragas_readability.py`、`validate_public_corpus.py`、`measure_skill_tokens.py`(Skill を入れた隔離プロジェクトで `claude -p` を流し、トークンとスクリプトの実行を記録する。[計測の記録](validation/skill-token-usage-2026-10-19.md))、`extract_*_text.py`(と画面テンプレートの `*.html`)。文書は冒頭の表にある。Skill の外にあり、配布物には入らない |
 | `.claude-plugin/` | Claude Code のプラグインとして入れるための定義。`skills/` を指すだけで、Skill は複製しない |
-| `.github/workflows/` | CI(検証、テスト、パッケージ生成)、タグを push したときの Release、週に1回の参考先の更新確認(`upstream-watch.yml`。追跡 Issue を作るだけで、リポジトリは書き換えない) |
+| `.github/workflows/` | CI(検証、テスト、パッケージ生成)、`main` の VERSION が変わったときの Release(タグと Release を作る。手動の再実行もできる)、週に1回の参考先の更新確認(`upstream-watch.yml`。追跡 Issue を作るだけで、リポジトリは書き換えない) |
 
 ## パッケージ生成
 
