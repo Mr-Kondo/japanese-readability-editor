@@ -1,5 +1,6 @@
-"""SKILL.md の分量と、参照先の節が残っていることの回帰テスト。文言の一致は見ない(推敲の質は evals で測る)。"""
+"""SKILL.md の分量と、参照先の節が残っていることの回帰テスト。文言の一致は見ない(推敲の質は evals で測る)。例集の目次と見出しの題名の一致だけは見る。"""
 
+import re
 import unittest
 
 from helpers import SKILL_DIR
@@ -41,6 +42,15 @@ class ReferencesAreNavigableTest(unittest.TestCase):
                 text = path.read_text(encoding="utf-8")
                 if len(text.splitlines()) > TOC_FROM_LINES:
                     self.assertIn("\n## 目次\n", text, path.name)
+
+
+class ExamplesTableOfContentsTest(unittest.TestCase):
+    def test_every_numbered_example_is_listed(self):
+        text = re.sub(r"^```.*?^```", "\n", read("assets/examples.md"), flags=re.S | re.M)  # 例の中の見出しは数えない
+        toc = text.split("\n## 目次\n")[1].split("\n## ")[0]
+        headings = re.findall(r"^## (\d+\. .+)$", text, re.M)
+        self.assertEqual(re.findall(r"^- (\d+\. .+)$", toc, re.M), headings)
+        self.assertEqual([int(h.split(".")[0]) for h in headings], list(range(1, len(headings) + 1)))
 
 
 class ReferencesStayConsistentTest(unittest.TestCase):
