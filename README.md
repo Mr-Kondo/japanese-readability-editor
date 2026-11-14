@@ -2,12 +2,12 @@
 
 生成AIが出力する日本語や、既存の日本語文書を、意味・精度・必要な情報量を保ったまま読みやすくする Agent Skill です。
 
-一つの共通 `SKILL.md` を正本にします。次の環境で使えます。
+1つの共通 `SKILL.md` を正本にします。次の環境で使えます。
 
 - Codex、Claude Code、GitHub Copilot
 - Gemini CLI、Antigravity(IDE と CLI)
 - ChatGPT Work、Claude Cowork、Gemini Apps
-- OpenCode、Hermes Agent(モデルを介したスクリプトの実行とモード指定は、確かめた範囲が限られる。[注意](#注意))
+- OpenCode、Hermes Agent(モデルを介したスクリプトの実行とモード指定は、確かめた範囲が限られます。[注意](#注意))
 
 環境ごとの差は、配置先、ZIP、生成物、ドキュメントで吸収します。Skill 本文の複製はありません。
 
@@ -21,13 +21,13 @@
 - 冗長、直訳調、翻訳調の比喩、抽象的な言い回し、AI特有の決めぜりふ、内容のない結び
 - 国語の表記・用法の基準(文化庁の常用漢字表、現代仮名遣い、送り仮名の付け方、外来語の表記、公用文作成の考え方など)に照らした表記の確認
 
-目的は、日本語を短くすることではありません。数値、条件、例外、因果関係、主体、固有名詞、技術用語、API名、コマンド、コード、URL、引用、出典を、読みやすさのために削ったり簡略化したりしません。依頼で指定された見出しの形やまとめの節を保ち、推敲で追加した読点にも構造上の理由があるかを確かめます。
+目的は、日本語を短くすることではありません。数値、条件、例外、因果関係、主体、固有名詞、技術用語、API名、コマンド、コード、URL、引用、出典を、読みやすさのために削ったり簡略化したりしません。依頼で指定された見出しの形やまとめの節は保ちます。推敲で追加した読点にも、構造上の理由があるかを確かめます。
 
 ## 更新する
 
 入れた方法に合わせて、[更新手順](docs/installation.md#更新する)を選んでください。
 
-開発時の知見を次の更新に使うための[知識索引の試行は完了](adr/2026-11-02-conclude-update-knowledge-pilot.md)しました。索引は任意の手動探索用に残し、効果と維持費の根拠が不足するため提案機能への自動接続は採用しません。実行用スキルと配布方法は従来どおりです。
+開発時の知見を次の更新に使うための[知識索引の試行は完了](adr/2026-11-02-conclude-update-knowledge-pilot.md)しました。索引は任意の手動探索用に残します。効果と維持費の根拠が不足するため、提案機能への自動接続は採用しません。実行用スキルと配布方法は従来どおりです。
 
 | 入れた方法 | 更新方法 |
 |---|---|
@@ -46,7 +46,7 @@ Node.js が必要です。`-a` に使う環境を指定します(例: `claude-co
 npx skills add Mr-Kondo/japanese-readability-editor -a claude-code -g
 ```
 
-リポジトリを取得している場合は、取得先で `.` を指定して入れられます(隔離したホームで確かめました。GitHub から実際に入れることは、確かめていません)。
+リポジトリを取得している場合は、取得先で `.` を指定して入れられます。隔離したホームで確かめました。GitHub から実際に入れることは、確かめていません。
 
 ```bash
 git clone https://github.com/Mr-Kondo/japanese-readability-editor.git
@@ -54,7 +54,7 @@ cd japanese-readability-editor
 npx skills add . -a claude-code -g
 ```
 
-Antigravity のユーザー全体と、Hermes のプロファイルなど、`npx skills` が入れない場所は、手動でコピーします([手順と配置先](docs/installation.md#インストールする))。Python 3.10 以上が、同梱のスクリプトに必要です(Windows では `python3` を `python` に読み替える場合があります。[Python のコマンド名](docs/installation.md#python-のコマンド名))。
+Antigravity のユーザー全体と、Hermes のプロファイルなど、`npx skills` が入れない場所は、手動でコピーします([手順と配置先](docs/installation.md#インストールする))。同梱のスクリプトには、Python 3.10 以上が必要です(Windows では `python3` を `python` に読み替える場合があります。[Python のコマンド名](docs/installation.md#python-のコマンド名))。
 
 リポジトリから入れた場合は、`git pull` で更新してから、同じコマンドをもう一度実行します。既に入っている場合は、[更新手順](docs/installation.md#更新する)を使います。
 
@@ -68,13 +68,13 @@ Antigravity のユーザー全体と、Hermes のプロファイルなど、`npx
 - [動作を確認する](docs/installation.md#動作を確認する)
 - [削除する](docs/installation.md#削除する)
 - [Claude Code のプラグインとして入れる](docs/environments.md#プラグインとして入れる)
-- [gh skill（GitHub CLI）で入れる](docs/installation.md#github-cligh-skillで入れる)（v0.15.0 以降。名前だけで入り、`gh skill update` で更新を確かめられます）
+- [gh skill(GitHub CLI)で入れる](docs/installation.md#github-cligh-skillで入れる)(v0.15.0 以降。名前だけで入り、`gh skill update` で更新を確かめられます)
 
 ## 使い方
 
 コピーして使える依頼例と、結果を確認する手順は、[実践ガイド](docs/user-guide.md)にあります。
 
-対応環境では、依頼の内容と `description` に基づいて Skill が自動で選ばれる場合があります。自動起動の有無や動作は環境によって異なります。Skill を指定したいときは、下の方法で明示的に呼び出してください。各環境での確認範囲は、[環境別の対応](docs/environments.md)を参照してください。
+対応環境では、依頼の内容と `description` に基づいて Skill が自動で選ばれる場合があります。自動起動の有無や動作は環境によって異なります。Skill を指定したいときは、下の表の方法で明示的に呼び出してください。各環境での確認範囲は、[環境別の対応](docs/environments.md)を参照してください。
 
 | 環境 | 明示的に呼ぶ方法 |
 |---|---|
@@ -108,7 +108,7 @@ Antigravity のユーザー全体と、Hermes のプロファイルなど、`npx
 | C. Paragraph-only | `モード C`、`paragraph-only モードで` |
 | D. 小説モード | `モード D`、`小説モード`、`fiction mode` |
 
-Skill を呼ぶ名前と同じメッセージに書きます。確かめたのは、呼び出しと同じ行に書く形です。`$japanese-readability-editor` の部分は、上の表の、使う環境の呼び方に替えてください。
+指定は、Skill を呼び出すのと同じメッセージに書きます。確かめたのは、呼び出しと同じ行に書く形です。次の例の `$japanese-readability-editor` の部分は、前の「明示的に呼ぶ方法」の表にある、使う環境の呼び方に替えてください。
 
 ```text
 $japanese-readability-editor モード C
@@ -144,7 +144,14 @@ japanese-readability-editor を paragraph-only モードで適用。
 - 「小説モードで批評だけ。本文は書き換えないで」
 - 「モードC。この小説は文言を変えず、改行だけ加えて」
 
-小説には短文化・比喩の説明化・時制統一を一律に適用しません。通常 `draft`/`continue`/`revise` は完成本文だけ、`critique` は本文を変えない批評です。指定の扱い(小説という語だけでは D にしない、操作が不明なら最小変更の `revise` など)は[使い方の詳細](docs/usage.md#小説モード-d)にあります。[小説の契約](skills/japanese-readability-editor/references/fiction-writing.md)、任意の [文脈メモ](skills/japanese-readability-editor/assets/fiction-context-template.md)、[補助検査](skills/japanese-readability-editor/references/fiction-checks.md)、[設計参考と限界](docs/fiction-design.md)を参照できます。
+小説には、短文化・比喩の説明化・時制統一を一律に適用しません。通常、`draft`/`continue`/`revise` は完成した本文だけを返します。`critique` は、本文を変えない批評を返します。
+
+指定の扱い(小説という語だけでは D にしない、操作が不明なら最小変更の `revise` など)は、[使い方の詳細](docs/usage.md#小説モード-d)にあります。次の資料も参照できます。
+
+- [小説の契約](skills/japanese-readability-editor/references/fiction-writing.md)
+- 任意の[文脈メモ](skills/japanese-readability-editor/assets/fiction-context-template.md)
+- [補助検査](skills/japanese-readability-editor/references/fiction-checks.md)
+- [設計参考と限界](docs/fiction-design.md)
 
 D のモデル挙動・評価の実施範囲は [評価ケース](evals/README.md)に記録します。既存製品の確認記録を、D の検証結果としては扱いません。
 
@@ -156,12 +163,12 @@ D のモデル挙動・評価の実施範囲は [評価ケース](evals/README.m
 
 ## 注意
 
-- 国語の表記の検査は、規則に登録した語・表記を探すだけです。『指摘なし』は『規則に違反していない』ことを意味しません([限界](docs/kokugo.md#検査していないもの限界))。
+- 国語の表記の検査は、規則に登録した語・表記を探すだけです。「指摘なし」は「規則に違反していない」ことを意味しません([限界](docs/kokugo.md#検査していないもの限界))。
 - Skill は文章の意味を検証しません。意味の保存を保証するのは、Agent の判断と、利用者の確認です。返ってきた文章は、元の文と突き合わせて確認してください。
 - ChatGPT での実機確認では、二重否定の意味の反転、残余の条件の言い換え、文体の変更が起きました。`SKILL.md` に対策を入れましたが、誤りを完全には防げません。
 - ChatGPT の暗黙起動は、実測では不安定でした。確実に使うには、`@` で指定してください([実測](docs/chatgpt-implicit-invocation.md))。
-- モードの指定は、Skill の指示です。環境の機能による強制ではなく、守られるかどうかは、環境とモデルによります。Codex(Medium)では、貼り付けた文章の中の「モード C」を、指定と取り違える回がありました。Antigravity、Claude Cowork、Gemini CLI、Gemini Apps では、確かめていません([動作の確認](docs/usage.md#動作の確認))。
-- Claude のアプリでは、モデルによって結果が違いました。Haiku 4.5 では、Skill を読み込んでも、文体を敬体に変えるなど、規則が守られない回がありました。回数は少なく、確かめた Skill は古い版です。モデルごとの結果は、[モデルを選ぶ](docs/environments.md#モデルを選ぶ)にあります。
+- モードの指定は Skill の指示であり、環境の機能による強制ではありません。守られるかどうかは、環境とモデルによります。Codex(Medium)では、貼り付けた文章の中の「モード C」を、指定と取り違える回がありました。Antigravity、Claude Cowork、Gemini CLI、Gemini Apps では、確かめていません([動作の確認](docs/usage.md#動作の確認))。
+- Claude のアプリでは、モデルによって結果が違いました。Haiku 4.5 では、Skill を読み込んでも、文体を敬体に変えるなど、規則が守られない回がありました。確かめた回数は少なく、対象の Skill は古い版です。モデルごとの結果は、[モデルを選ぶ](docs/environments.md#モデルを選ぶ)にあります。
 - OpenCode と Hermes Agent は、手元のローカルモデルでしか確かめていません。Skill の発見と読み込みは動きましたが、スクリプトが動かない回と、モード C が守られない回がありました。ホスト型の主要モデルは未確認です([確認の記録](docs/opencode-hermes-checks.md))。
 - 各製品の仕様は、[環境別の対応](docs/environments.md)に書いた確認日以降に変わる可能性があります。確認できなかった項目は、同じ文書で「未確認」としています。
 
