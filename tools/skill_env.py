@@ -358,7 +358,7 @@ def resolve_destinations(scope: str, targets: List[str], workspace: Path, home: 
 
 
 def add_location_arguments(parser: argparse.ArgumentParser) -> None:
-    """配置先を決める引数。uninstall.py と verify_install.py と共有する。"""
+    """配置先を決める引数。verify_install.py が使う。"""
     parser.add_argument("--scope", choices=("workspace", "user"), default=None,
                         help="対象にする配置先。workspace はプロジェクト内、user はホームディレクトリ内。--dest を使わないときは必須")
     parser.add_argument("--target", action="append", metavar="TARGET",
