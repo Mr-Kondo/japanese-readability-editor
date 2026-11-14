@@ -74,6 +74,38 @@ claude plugin update japanese-readability-editor@japanese-readability-editor
 
 プラグインの版は、コミットの短いハッシュで表示されます。`claude plugin list` の `Version` で確かめられます。
 
+### Codex のプラグインで入れた場合
+
+Codex に、このリポジトリをローカルのマーケットプレースとして登録した場合の手順です。`codex plugin marketplace list` に `japanese-readability-editor` があり、`codex plugin list` の `VERSION` が `local` と表示されます。macOS の Codex CLI 0.164.0 で、キャッシュを同期しました(2026-11-14)。
+
+Codex は、プラグインを `~/.codex/plugins/cache/japanese-readability-editor/japanese-readability-editor/local/` に複製して使います。この複製は、リポジトリ全体の `git clone` で、`skills/` の中に、以前の手作業の変更が残っていました。`.claude-plugin/plugin.json` の `skills` が `./skills/` を指すので、Skill は、複製の中の `skills/japanese-readability-editor/` に置きます。
+
+`codex plugin marketplace upgrade` は、Git のマーケットプレースだけを更新します(`codex plugin marketplace --help` の説明)。ローカルのマーケットプレースでは、確かめていません。`codex plugin remove` は、キャッシュを削除します(`codex plugin remove --help` の説明)。`codex plugin add` で入れ直したとき、リポジトリの未コミットの変更が複製に入るかは、確かめていません。そこで、キャッシュの Skill のフォルダだけを、次の手順で置き換えました。
+
+1. 更新元を用意します。リポジトリに未コミットの変更があるときは、作業ツリーを使わず、マージ後のコミットを書き出します(例: `git archive <コミット> | tar -x -C <空のフォルダ>`)。その場合、手順の `SRC` は、書き出した先の `skills/japanese-readability-editor` にします。`npx skills add` で更新した `~/.agents/skills/japanese-readability-editor/` も使えます。
+2. キャッシュの全体を退避します。
+3. キャッシュの Skill のフォルダを、更新元で置き換えます。
+4. 更新元と一致することと、検証の結果を確かめます([配置した Skill を検証する](#配置した-skill-を検証する))。
+
+```bash
+CACHE=~/.codex/plugins/cache/japanese-readability-editor/japanese-readability-editor/local
+SRC=~/.agents/skills/japanese-readability-editor   # 更新元の Skill のフォルダ
+mkdir -p ~/.codex/backups && test -d "$CACHE" && cp -R "$CACHE" ~/.codex/backups/japanese-readability-editor.bak-$(date +%Y%m%d%H%M%S)-plugin-cache
+test -f "$SRC/SKILL.md" && test -d "$CACHE/skills/japanese-readability-editor" && rsync -a --delete --exclude __pycache__ "$SRC/" "$CACHE/skills/japanese-readability-editor/"
+diff -r -x __pycache__ "$SRC" "$CACHE/skills/japanese-readability-editor" && echo 一致
+python3 tools/verify_install.py --dest "$CACHE/skills" --no-source   # リポジトリのフォルダで実行
+```
+
+2026-11-14 に、キャッシュの Skill を 0.21.3 から 0.24.0 に置き換えました。更新元との `diff -r` は一致し、`verify_install.py` は 0 エラーでした。複製の中のそのほかのファイル(`evals/` など)は、更新していません。
+
+次の点は、確かめていません。
+
+- Codex を起動して、読み込まれる版が 0.24.0 であること。
+- Codex が、あとでプラグインを入れ直したときに、キャッシュを上書きする挙動。
+- Windows と Linux での手順。
+
+`rsync --delete` は、`SRC` が空や誤りのときに、置き換え先のファイルを消します。手順の `test` で、更新元に `SKILL.md` があることを確かめてから実行します。
+
 ### gh skill で入れた場合
 
 v0.15.0 以降（`skills/` の配置）で入れたものは、`gh skill update` で更新を確かめられます。入れ先を `--dir` で指定したときは、`gh skill update --dry-run --dir <入れ先>` で確かめます。
