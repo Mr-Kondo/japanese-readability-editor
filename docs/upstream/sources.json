@@ -19,10 +19,10 @@
         ]
       },
       "reviewed": {
-        "ref": "v3.0.1",
-        "sha": "b9a69a3791dd7d3c063ed963bc4a408e515f6288",
-        "at": "2026-11-11T10:46:02Z",
-        "review": "docs/upstream/reviews/yomiyasu-v3.0.1.md"
+        "ref": "v3.1.0",
+        "sha": "db78b9bc5e868549b517a037df7a4d1c93edac23",
+        "at": "2026-11-12T00:28:31Z",
+        "review": "docs/upstream/reviews/yomiyasu-v3.1.0.md"
       },
       "adopted": [
         "書き換えで保つものとしての比重・言い切りの強さ・文の働き",
@@ -150,10 +150,10 @@
         ]
       },
       "reviewed": {
-        "ref": "225a6f3",
-        "sha": "225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8",
-        "at": "2026-10-15T15:00:00Z",
-        "review": null
+        "ref": "v4.0.0",
+        "sha": "b48c832f0f809c1b5658edbb838c2521b72f2413",
+        "at": "2026-11-10T01:34:24Z",
+        "review": "docs/upstream/reviews/humanizer-v4.0.0.md"
       },
       "adopted": [
         "語の数より、文章の中での働きを見る点(不要な対比、反復する結び、誇張、装飾の類型化)",
@@ -246,10 +246,10 @@
         ]
       },
       "reviewed": {
-        "ref": "v0.25.0",
-        "sha": "74dd2f92dd757d4b262085bddccb09ed5a4281d1",
-        "at": "2026-11-12T07:38:02Z",
-        "review": "docs/upstream/reviews/story-skills-v0.25.0.md"
+        "ref": "33085cc",
+        "sha": "33085ccc3ceb94a6ff9362cf499091123cdfb30d",
+        "at": "2026-11-14T04:51:06Z",
+        "review": "docs/upstream/reviews/story-skills-33085cc.md"
       },
       "adopted": [
         "chapter-writing・voice-style・revision-continuity・line-editing の責務分離。設定・文体・整合性を区別する考え方"
