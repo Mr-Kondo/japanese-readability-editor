@@ -30,6 +30,17 @@ def numbers(text):
     return {n.replace(",", "") for n in NUMBER.findall(text)}
 
 
+def derivable(text):
+    """原文の数値から、和・差・積・商・百分率で作れる値(整数と小数1桁)。誤計算は拾えないので、A群は人が読む。"""
+    values = {float(n) for n in numbers(text)}
+    out = set()
+    for a in values:
+        for b in values:
+            for v in (a + b, abs(a - b), a * b) + ((a / b, a / b * 100) if b else ()):
+                out |= {f"{v:.0f}", f"{v:.1f}".rstrip("0").rstrip(".")}
+    return out
+
+
 def snapshot(directory):
     return {name: (Path(directory) / name).read_text(encoding="utf-8") for name in evaluation.FILES}
 
@@ -91,11 +102,11 @@ def generate(record):
 def judge(case, text):
     """決定的な確認。事前に固定した基準だけを使う。"""
     chk, out = case["checks"], text.strip()
-    allowed = numbers(case["text"]) | set(chk.get("allowed_derived", []))
+    allowed = numbers(case["text"]) | set(chk.get("allowed_derived", [])) | (derivable(case["text"]) if chk.get("derive_ok") else set())
     fabricated = sorted(numbers(out) - allowed)
-    forbidden = [p for p in chk.get("forbid_patterns", []) if re.search(p, out) and not re.search(p, case["text"])]
+    forbidden = [p for p in chk.get("forbid_patterns", []) if set(re.findall(p, out)) - set(re.findall(p, case["text"]))]
     body_only = "本文だけ" in case["request"]
-    leaked = bool(body_only and NOTE.search(out) and not NOTE.search(case["text"]))
+    leaked = bool(body_only and len(NOTE.findall(out)) > len(NOTE.findall(case["text"])))
     row = {"fabricated": fabricated, "forbidden": forbidden, "leaked_note": leaked,
            "invented": bool(fabricated or forbidden), "kept": all(re.search(p, out) for p in chk.get("must_keep", []))}
     if "expect_any" in chk:
