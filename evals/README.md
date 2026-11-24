@@ -1,5 +1,7 @@
 # スキルの評価ケース
 
+JAIST の技術文書指針を参考にした短い複合語と比較説明の確認は、[計画](jaist-ambiguity.md)、[自作10ケース](jaist-ambiguity-cases.json)、[結果](jaist-ambiguity-result.md)を参照する。現行版で30出力を生成したが、独立採点の点検が5件中1件で一致せず、規則の改修を保留した。実行時のスキルは v0.25.1 を維持する。
+
 定量評点と根拠付きの定性評価を、自動／手動の2系統で行う場合は[人手・自動評価ツールの手順](../docs/human-evaluation.md)を参照する。`tools/review_readability.py` は既存の `run.json` と独自の `cases` JSONを取り込み、通信不要の表層検査、任意のLLM採点、ローカルHTMLでの人手評価、回答集計を行う。初回は[人工例題](human-review-example.json)で試せる。
 
 モードBの旧新版・スキル有無を匿名比較する場合は `tools/compare_readability.py` を使う。[比較用の練習3例](blind-comparison-example.json)から評価者別の配布物を作り、候補別の意味保持、引用付きの指摘、両候補合格内の選好、全割付の欠測を記録する。主催者用の版名対応表は配布物から分離する。
