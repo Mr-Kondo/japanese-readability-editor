@@ -174,6 +174,8 @@ D のモデル挙動・評価の実施範囲は [評価ケース](evals/README.m
 
 ## ドキュメント
 
+過去の設計判断を調べるときは、まず [ADR の索引](adr/index.md)を開いてください。ローカルに保存した評価・レビュー・引き継ぎの記録は、手元の `feedback/index.md` から探せます。
+
 | ファイル | 内容 |
 |---|---|
 | [docs/installation.md](docs/installation.md) | インストール、配置先、OpenCode と Hermes Agent の導入と検証、SudachiPy の入れ方、更新、削除 |
