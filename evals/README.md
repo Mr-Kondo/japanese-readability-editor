@@ -2,7 +2,7 @@
 
 JAIST の技術文書指針を参考にした短い複合語と比較説明の確認は、[計画](jaist-ambiguity.md)、[自作10ケース](jaist-ambiguity-cases.json)、[結果](jaist-ambiguity-result.md)を参照する。現行版で30出力を生成したが、独立採点の点検が5件中1件で一致せず、規則の改修を保留した。実行時のスキルは v0.25.1 を維持する。
 
-確認応答を短くする追加試行は、[計画](jaist-ambiguity2.md)、[自作10ケースと点検7件](jaist-ambiguity2-cases.json)、[比較結果](jaist-ambiguity2-result.md)を参照する。対象12出力の文字数の中央値は約83%減ったが、1件が事前の上限を超えたため候補を採用しなかった。
+確認応答を短くする追加試行は、[計画](jaist-ambiguity2.md)、[自作10ケースと点検7件](jaist-ambiguity2-cases.json)、[比較結果](jaist-ambiguity2-result.md)を参照する。単純な確認4ケースの12出力は、文字数の中央値が約83%減ったが、1件が事前の上限を超えたため候補を採用しなかった。
 
 未使用の文構造・模擬会話・利用者提供文の追加確認は、[計画](jaist-ambiguity3.md)、[固定ケース](jaist-ambiguity3-cases.json)、[結果](jaist-ambiguity3-result.md)を参照する。短縮は別の文構造でも観測したが、意味のずれと依頼条件の逸脱が残った。採点点検も19/20一致で条件未達のため、品質の確定判定を保留し、不採用を維持した。
 
