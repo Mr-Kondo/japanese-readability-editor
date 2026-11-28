@@ -36,15 +36,15 @@ The plan, counting rules and decision rules live only in `evals/assignment-swap.
 
 ## Roles
 
-| Role                     | Who                     | Work                                                                                    |
-| ------------------------ | ----------------------- | --------------------------------------------------------------------------------------- |
-| Coordinator and decision | Sonnet 5.5 (this agent) | Plan, cases, decision rules, reading flagged outputs, adopt or decline, rule wording    |
-| Repository search        | `search` (Haiku 5.5)    | Done: not needed beyond the greps already run                                           |
-| Run                      | Haiku 5.5 subagent      | Run `--generate` and `--count`; it does not change cases or rules, and does not label  |
-| Consistency check        | `audit` (Haiku 5.5)     | Read-only: counts, links, and the result file against the run records, per commit       |
-| Overview review          | Codex                   | Drift from the Issue, excess structure, whether the plan can show an effect at all      |
-| Detail review            | Antigravity             | Cases, regexes, counting, and the decision rules                                        |
-| Final check              | `advisor` (Opus 5.5)    | Integrated diff before the PR                                                           |
+| Role                     | Who                     | Work                                                                                  |
+| ------------------------ | ----------------------- | ------------------------------------------------------------------------------------- |
+| Coordinator and decision | Sonnet 5.5 (this agent) | Plan, cases, decision rules, reading flagged outputs, adopt or decline, rule wording  |
+| Repository search        | `search` (Haiku 5.5)    | Done: not needed beyond the greps already run                                         |
+| Run                      | Haiku 5.5 subagent      | Run `--generate` and `--count`; it does not change cases or rules, and does not label |
+| Consistency check        | `audit` (Haiku 5.5)     | Read-only: counts, links, and the result file against the run records, per commit     |
+| Overview review          | Codex                   | Drift from the Issue, excess structure, whether the plan can show an effect at all    |
+| Detail review            | Antigravity             | Cases, regexes, counting, and the decision rules                                      |
+| Final check              | `advisor` (Opus 5.5)    | Integrated diff before the PR                                                         |
 
 Delegation happens only after approval. Haiku does not decide cases, counting, or the adopt or decline outcome.
 
