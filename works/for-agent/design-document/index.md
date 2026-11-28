@@ -25,3 +25,5 @@
 | 2026-11-02 | [知識索引の試行計画](001-knowledge-index/pilot-plan-adr.md)           | `superseded` | スキル更新の知見を少数のページにまとめて試す計画。最終判断は[試行終了の ADR](001-knowledge-index/conclude-pilot-adr.md)を参照。 |
 
 ADR を追加したときや、状態・後継が変わったときは、この表も更新します。
+
+`003-structure-rules/` の `opq-analysis-adr.md` と `opq-reeval-adr.md` は、`evals/` の runner がハッシュで照合するため、本文を変えていません。そのため、本文中の相対リンクは旧位置（`adr/`）のままで、現在は解決しません。

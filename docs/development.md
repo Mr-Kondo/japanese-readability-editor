@@ -27,7 +27,7 @@ japanese-readability-editor/
 ├── tests/
 ├── evals/                                  # モデルを使う評価の入力と結果
 ├── docs/                                   # 詳しい説明と実測の記録
-├── works/                                  # 開発文書。正本は works/for-agent/（英語）。設計時の調査の記録もここへ移動済み
+├── works/                                  # 開発文書。正本は works/for-agent/（現在は日本語のまま、英訳待ち）。設計時の調査の記録もここへ移動済み
 ├── .claude-plugin/                         # Claude Code プラグインの定義(正本を指すだけ)
 ├── .github/workflows/                      # CI、Release、参考先の更新確認(週1回)
 ├── LICENSE                                 # MIT
