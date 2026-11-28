@@ -56,7 +56,7 @@ Final overview: Claude Code; final detail: Antigravity. Both returned PASS with 
 Independent coverage and AST checks pass. Exact body comparisons permit only the URL mapping,
 two public-counterpart disclaimers, and three link-label clarifications.
 The original list structure is preserved. Prettier and markdownlint pass.
-The Japanese textlint preset reports 190 advisory findings in English prose; no automatic prose fixes were applied.
+The Japanese textlint preset reports 192 advisory findings in English prose; no automatic prose fixes were applied.
 The post-merge Issue checklist is authoritative for the remaining delivery steps.
 The original translation plan and its historical execution log follow below.
 
