@@ -1,6 +1,6 @@
 # 節で一つのメッセージに絞る規則の比較結果（見送り）
 
-仮説・成功指標・撤退条件は [ADR](../adr/2026-11-11-section-single-message.md) に、実行前に書いた（ADR の本文のハッシュは実行記録に残していない。指標を後から動かしていないことは、記録だけでは第三者が確かめられない。結果の節の追記以外は、実行後に変えていない、という作業者の申告である）。ケースは [自作11ケース](section-single-message-cases.json)、実行記録と生の出力は [section-single-message-run/](section-single-message-run/) にある（`runner.py` が準備・生成・集計を行う）。
+仮説・成功指標・撤退条件は [ADR](../works/for-agent/design-document/003-structure-rules/section-single-message-adr.md) に、実行前に書いた（ADR の本文のハッシュは実行記録に残していない。指標を後から動かしていないことは、記録だけでは第三者が確かめられない。結果の節の追記以外は、実行後に変えていない、という作業者の申告である）。ケースは [自作11ケース](section-single-message-cases.json)、実行記録と生の出力は [section-single-message-run/](section-single-message-run/) にある（`runner.py` が準備・生成・集計を行う）。
 
 ## 結論
 

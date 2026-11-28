@@ -39,7 +39,7 @@ cp -R skills/japanese-readability-editor ~/.claude/skills/
 
 ### tools/install.py で入れていた場合(廃止)
 
-`tools/install.py` と `tools/uninstall.py` は、廃止しました([ADR](../adr/2026-11-10-remove-install-py.md))。`install.py` で入れたものは、`npx skills` では消えません。古い複製やリンクを削除してから、`npx skills add` で入れ直してください。同じ Skill が2か所にあると、環境によっては片方しか使われません。
+`tools/install.py` と `tools/uninstall.py` は、廃止しました([ADR](../works/for-agent/design-document/002-installer/remove-install-py-adr.md))。`install.py` で入れたものは、`npx skills` では消えません。古い複製やリンクを削除してから、`npx skills add` で入れ直してください。同じ Skill が2か所にあると、環境によっては片方しか使われません。
 
 ```bash
 rm -r ~/.agents/skills/japanese-readability-editor ~/.claude/skills/japanese-readability-editor

@@ -58,7 +58,7 @@ H4: 意味・数値・コードの保持が悪化しない。
 
 ## 検証の設計
 
-- 評価集合: [自作11ケース](../evals/section-single-message-cases.json)。分けてよい節 split（s01,s02,s03,s11 を主、s04 を別掲）、分けない control（s05,s06,s07）、Paragraph-only（s08）、見出し固定の指定（s09）、新規生成の判定のみ（s10）。意味保持の採点者の校正には、既存の12対照を借りる。
+- 評価集合: [自作11ケース](../../../../evals/section-single-message-cases.json)。分けてよい節 split（s01,s02,s03,s11 を主、s04 を別掲）、分けない control（s05,s06,s07）、Paragraph-only（s08）、見出し固定の指定（s09）、新規生成の判定のみ（s10）。意味保持の採点者の校正には、既存の12対照を借りる。
 - 旧版: main の 355a42e（v0.22.0）。候補版: `readability-rules.md` に小節を足したもの。`SKILL.md` と `examples.md` は同一。
 - 生成: 各ケース×各版×3回。`sonnet / medium`、ツールなし、新しい文脈（`tools/evaluate_readability.py` と同じ呼び出し）。
 - 決定的な確認: 見出し行の数と文言の変化、Paragraph-only の空白除去後の一致、見出し固定の一致。
@@ -90,7 +90,7 @@ H4: 意味・数値・コードの保持が悪化しない。
 
 ## 結果
 
-**決定: 案C（見送り）。規則は足さない。** 詳細は [結果](../evals/section-single-message-result.md)。
+**決定: 案C（見送り）。規則は足さない。** 詳細は [結果](../../../../evals/section-single-message-result.md)。
 
 - 旧版は天井ではなかった（主4ケース12出力で見出しを増やしたのは0件）。そのため候補版を生成して比べた。
 - 候補版も、主4ケース12出力で0件。指標2（差3件以上）は未達。

@@ -7,7 +7,7 @@
 | 文書 | 内容 |
 |---|---|
 | [文章評価ツール](human-evaluation.md) | 定量・定性評価、自動／手動検証、モードBの匿名二候補比較。`tools/review_readability.py`、`compare_readability.py`、`comprehension_readability.py`、`statistics_readability.py`、`feedback_readability.py` |
-| [公開文書による評価データ整備の計画](public-document-evaluation.md) | 出典・利用条件・分割の台帳を検査する `tools/validate_public_corpus.py`。文書群ごとの手順は `public-documents-*.md` |
+| [公開文書による評価データ整備の計画](../works/for-agent/implementation-plan/002-public-document-corpus.md) | 出典・利用条件・分割の台帳を検査する `tools/validate_public_corpus.py`。文書群ごとの手順は `public-documents-*.md` |
 | [Ragas による自動評価](ragas-evaluation.md) | 任意依存の自動評価 `tools/ragas_readability.py` |
 | [評価ケースと記録](../evals/README.md) | モデルを使う評価の入力と結果。`tools/evaluate_readability.py` が使う |
 | [利用者のフィードバック](feedback.md)、[参考にしたリポジトリの更新確認](upstream-watch.md) | `tools/feedback_loop.py`、`tools/upstream_watch.py` の手順と限界 |
@@ -27,7 +27,7 @@ japanese-readability-editor/
 ├── tests/
 ├── evals/                                  # モデルを使う評価の入力と結果
 ├── docs/                                   # 詳しい説明と実測の記録
-├── reports/、research_notes/               # 設計時の調査の記録(2026-10-16。リンクは当時の絶対パスのまま)
+├── works/                                  # 開発文書。正本は works/for-agent/（英語）。設計時の調査の記録もここへ移動済み
 ├── .claude-plugin/                         # Claude Code プラグインの定義(正本を指すだけ)
 ├── .github/workflows/                      # CI、Release、参考先の更新確認(週1回)
 ├── LICENSE                                 # MIT
@@ -113,7 +113,7 @@ main の `skills/japanese-readability-editor/VERSION` が変わると、Actions 
 
 D の正本は共通 `SKILL.md` と `references/fiction-writing.md`、`references/fiction-checks.md`、`assets/fiction-examples.md`、任意の `assets/fiction-context-template.md`、読み取り専用 `scripts/check_fiction.py` です。詳細を参照へ分け、製品固有 API を必須依存にしません。文化庁の規則データと既存 CLI の既定値は変更しません。
 
-`evals/fiction-cases.json` はモデル挙動の評価入力と観点です。構造テスト・キーワード検査だけではモデルの実行証拠になりません。[評価手順と実施範囲](../evals/README.md)、[設計参考・採否・限界](fiction-design.md)を参照してください。
+`evals/fiction-cases.json` はモデル挙動の評価入力と観点です。構造テスト・キーワード検査だけではモデルの実行証拠になりません。[評価手順と実施範囲](../evals/README.md)、[設計参考・採否・限界](../works/for-agent/design-document/006-fiction-mode/design-references-document.md)を参照してください。
 
 配布 ZIP と OpenCode/Hermes 向けフォルダは追加ファイルも正本から複製します。Gemini Apps のフォルダは従来どおり scripts/data を除き、貼付用指示にも D の契約を埋め込みます。新規 evals は開発資料なので Skill の必須依存にはしません。
 

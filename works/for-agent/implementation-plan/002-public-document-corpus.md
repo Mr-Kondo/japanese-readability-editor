@@ -6,11 +6,11 @@ Issue #38 の確定事項です。公開された実文書で、意味を保っ�
 
 | 優先 | 文書群 | Issue | 状態 |
 |---|---|---|---|
-| P0 | デジタル庁（手順・責任・要件） | #40、[文書群の手順](public-documents-digital-agency.md) | 原本取得済み。候補11件・採用0件（人の確認待ち） |
-| P0 | Python日本語文書 | #41、[文書群の手順](public-documents-python.md) | 原本取得済み。候補18件・採用0件（人の確認待ち） |
-| P0 | Kubernetes日本語文書 | #42、[文書群の手順](public-documents-kubernetes.md) | 原本取得済み。候補25件・採用0件（人の確認待ち） |
-| P0 | 青空文庫の随筆（補助群） | #39、[文書群の手順](public-documents-aozora.md) | 原本取得済み。候補21件・採用0件（人の確認待ち） |
-| P1 | IPAのOSS・OSPO資料 | #43、[文書群の手順](public-documents-ipa.md) | スターターキットのみ取得済み（PDF は未収集）。候補18件・採用0件（人の確認待ち） |
+| P0 | デジタル庁（手順・責任・要件） | #40、[文書群の手順](../../../docs/public-documents-digital-agency.md) | 原本取得済み。候補11件・採用0件（人の確認待ち） |
+| P0 | Python日本語文書 | #41、[文書群の手順](../../../docs/public-documents-python.md) | 原本取得済み。候補18件・採用0件（人の確認待ち） |
+| P0 | Kubernetes日本語文書 | #42、[文書群の手順](../../../docs/public-documents-kubernetes.md) | 原本取得済み。候補25件・採用0件（人の確認待ち） |
+| P0 | 青空文庫の随筆（補助群） | #39、[文書群の手順](../../../docs/public-documents-aozora.md) | 原本取得済み。候補21件・採用0件（人の確認待ち） |
+| P1 | IPAのOSS・OSPO資料 | #43、[文書群の手順](../../../docs/public-documents-ipa.md) | スターターキットのみ取得済み（PDF は未収集）。候補18件・採用0件（人の確認待ち） |
 | P1 | 評価結果に基づくスキル改良 | #44 | 本データの整備後 |
 | P0 | Ragas等の自動指標の校正 | #45 | 別計画 |
 
@@ -104,7 +104,7 @@ Issue #38 の確定事項です。公開された実文書で、意味を保っ�
    python3 tools/validate_public_corpus.py --manifest evals/public-documents/manifest.json --cases comprehension.json --split tuning --document-id-by excerpt
    ```
 
-5. 以降は[文章評価ツール](human-evaluation.md)の手順に従う。
+5. 以降は[文章評価ツール](../../../docs/human-evaluation.md)の手順に従う。
 
 検証ツールの終了コードは `0=合格`、`1=台帳または cases に不備`、`2=入力を読めない`。検査するのは形式と整合性だけです。保持要件の意味、利用条件の解釈、抜粋と原本の一致、理解問題の正解は人が確認します。
 
@@ -115,10 +115,10 @@ Issue #38 の確定事項です。公開された実文書で、意味を保っ�
 ## 現在の状態
 
 - 共通の台帳形式、検証ツール、docx・HTML・Markdown の抽出器、全5群の文書群手順を用意した。
-- デジタル庁（#40）は原本5文書を取得し、候補11件・除外6件を台帳に記録した。保持要件・理解問題は草案で、**人の確認と採用は0件**。詳細は[文書群の手順](public-documents-digital-agency.md#状態2026-10-16-時点)。
-- Python（#41）は原本4ページを取得し、候補18件・除外4件を台帳に記録した。採用は0件。詳細は[文書群の手順](public-documents-python.md)。
-- Kubernetes（#42）は原本4ページを取得し、候補25件・除外5件を台帳に記録した。採用は0件。詳細は[文書群の手順](public-documents-kubernetes.md)。
-- 青空文庫（#39）は随筆5作品を取得し、候補21件・除外5件を台帳に記録した。採用は0件。詳細は[文書群の手順](public-documents-aozora.md)。
-- IPA（#43）はOSPOスターターキット（Markdown、CC0）9ファイルを取得し、候補18件・除外6件を台帳に記録した。PDF 資料は未収集。採用は0件。詳細は[文書群の手順](public-documents-ipa.md)。
+- デジタル庁（#40）は原本5文書を取得し、候補11件・除外6件を台帳に記録した。保持要件・理解問題は草案で、**人の確認と採用は0件**。詳細は[文書群の手順](../../../docs/public-documents-digital-agency.md#状態2026-10-16-時点)。
+- Python（#41）は原本4ページを取得し、候補18件・除外4件を台帳に記録した。採用は0件。詳細は[文書群の手順](../../../docs/public-documents-python.md)。
+- Kubernetes（#42）は原本4ページを取得し、候補25件・除外5件を台帳に記録した。採用は0件。詳細は[文書群の手順](../../../docs/public-documents-kubernetes.md)。
+- 青空文庫（#39）は随筆5作品を取得し、候補21件・除外5件を台帳に記録した。採用は0件。詳細は[文書群の手順](../../../docs/public-documents-aozora.md)。
+- IPA（#43）はOSPOスターターキット（Markdown、CC0）9ファイルを取得し、候補18件・除外6件を台帳に記録した。PDF 資料は未収集。採用は0件。詳細は[文書群の手順](../../../docs/public-documents-ipa.md)。
 - 全5群の候補は合計93件（デジタル庁11、Python 18、Kubernetes 25、青空文庫21、IPA 18）。保持要件と理解問題は assistant の草案で、人の確認を経た採用は0件。
 - 生成・評価・自動指標（#45）は未実施。効果は未測定。

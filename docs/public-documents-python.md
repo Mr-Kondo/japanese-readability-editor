@@ -1,6 +1,6 @@
 # Python 日本語ドキュメントによる評価データ（P0）
 
-Issue #41。共通の方針は[公開文書による評価データ整備の計画](public-document-evaluation.md)に従います。ここでは文書群に固有の選び方と保持条件、現在の整備状況を記録します。効果は未測定です。
+Issue #41。共通の方針は[公開文書による評価データ整備の計画](../works/for-agent/implementation-plan/002-public-document-corpus.md)に従います。ここでは文書群に固有の選び方と保持条件、現在の整備状況を記録します。効果は未測定です。
 
 ## 状態（2026-10-17 時点）
 
@@ -90,7 +90,7 @@ python3 tools/validate_public_corpus.py --manifest evals/public-documents/manife
 ## 評価の設定
 
 - モードBを明示し、対象読者は生成前に決めて `audience` に書く。`request` も固定する。**対象読者・依頼は未決定。**
-- 比較・統計用の `document_id` は台帳の `source_id`、理解問題用は抜粋IDにする（[接続の制約](public-document-evaluation.md#既存ツールとの接続)）。
+- 比較・統計用の `document_id` は台帳の `source_id`、理解問題用は抜粋IDにする（[接続の制約](../works/for-agent/implementation-plan/002-public-document-corpus.md#既存ツールとの接続)）。
 - 技術文書群として独立に集計する。他の文書群や青空文庫と合算しない。
 - 理解問題は抜粋の記述から答える形にし、一般的な Python の知識だけで正解できる問いに偏らせない。ただし、選択肢の妥当性と正解は人が原文と照合する。
 - 技術内容の現行最新版との一致は評価しない。文書の採用は、現行最新版であることの保証ではない。
@@ -102,7 +102,7 @@ python3 tools/validate_public_corpus.py --manifest evals/public-documents/manife
 3. `preserve` の各項目と `questions` を原文と照合し、`confirmed_by`・`reason`、`verified_by`・`verification_reason` を記入する。修正や削除をしてよい。
 4. `pys-no-recoverable-password` を変更不要の対照例にしてよいか判断し、`no_change_reason` を確定する。
 5. 採用するものの `status` を `adopted` に変える。`--readiness` の出力が空になるまで繰り返す。
-6. 対象読者・依頼を決め、`cases` JSON を作って[計画の手順](public-document-evaluation.md#手順)に進む。
+6. 対象読者・依頼を決め、`cases` JSON を作って[計画の手順](../works/for-agent/implementation-plan/002-public-document-corpus.md#手順)に進む。
 
 ## 未実施
 

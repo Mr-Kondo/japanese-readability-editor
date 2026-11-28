@@ -9,7 +9,7 @@ supersedes: 2026-11-02-pilot-update-knowledge-index.md
 
 ## 文脈
 
-[当初のADR](2026-11-02-pilot-update-knowledge-index.md)の少数索引試行を、[Issue #144](https://github.com/Mr-Kondo/japanese-readability-editor/issues/144)、[Issue #146](https://github.com/Mr-Kondo/japanese-readability-editor/issues/146)、[Issue #148](https://github.com/Mr-Kondo/japanese-readability-editor/issues/148)で比較した。利用者の「最後まで進めて」に従い、試行を保留のまま増やさず、現時点の採否を決める。
+[当初のADR](pilot-plan-adr.md)の少数索引試行を、[Issue #144](https://github.com/Mr-Kondo/japanese-readability-editor/issues/144)、[Issue #146](https://github.com/Mr-Kondo/japanese-readability-editor/issues/146)、[Issue #148](https://github.com/Mr-Kondo/japanese-readability-editor/issues/148)で比較した。利用者の「最後まで進めて」に従い、試行を保留のまま増やさず、現時点の採否を決める。
 
 WikiSkillの、実行記録・再利用できる知見・実行用スキルを分ける考え方は、既存の確認・集約・提案・前後比較を補う候補である。一方、索引の有用性と実行用スキルの品質改善は別の主張である。
 
@@ -60,11 +60,11 @@ Antigravity `gemini-4-argon-medium`の静的レビューは、追加4回の集�
 
 ## 根拠への入口
 
-- [意味保持の修正評価（D1）](../evals/readability-preservation-result.md)
-- [追加評価（D2）](../evals/readability-generalization-result.md)
-- [具体化評価（D3）](../evals/concretization-result.md)
-- [上流の採否（D4）](../docs/upstream/reviews/natural-japanese-v1.6.0.md)
-- [意味確認（D5）](../evals/meaning-confirmation-result.md)
-- [文の働きと挨拶等（D6）](../evals/sentence-kind-residue-result.md)
+- [意味保持の修正評価（D1）](../../../../evals/readability-preservation-result.md)
+- [追加評価（D2）](../../../../evals/readability-generalization-result.md)
+- [具体化評価（D3）](../../../../evals/concretization-result.md)
+- [上流の採否（D4）](../../../../docs/upstream/reviews/natural-japanese-v1.6.0.md)
+- [意味確認（D5）](../../../../evals/meaning-confirmation-result.md)
+- [文の働きと挨拶等（D6）](../../../../evals/sentence-kind-residue-result.md)
 
 論文や紹介記事の成績を、このリポジトリでの効果の根拠にはしていない。
