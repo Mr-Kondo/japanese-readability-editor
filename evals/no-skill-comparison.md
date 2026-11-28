@@ -33,7 +33,7 @@
 - **意味保持で優位**: skill の fail の数が none と short の両方より少なく、skill の fail と uncertain の合計が両方以下。
 - **読みやすさで優位**: skill 対 none と skill 対 short の両方で、skill の勝ちが負けより多い。
 - どちらも満たさない項目は、「優位とは言えない」と書く。差の大小は、件数をそのまま並べる。統計的な有意差は主張しない。
-- 結果が「意味保持で優位、読みやすさで優位とは言えない」なら、README と `works/for-agent/design-document/005-readability-principles/design-principles-document.md` に、その範囲を書く。それ以外の結果でも、測った範囲を超える書き方がないかを確かめる。
+- 結果が「意味保持で優位、読みやすさで優位とは言えない」なら、README と `docs/design.md` に、その範囲を書く。それ以外の結果でも、測った範囲を超える書き方がないかを確かめる。
 - この Issue では、スキルの規則を変えない。規則の変更が必要になったら、別の Issue にする。
 
 ## 有効にする条件

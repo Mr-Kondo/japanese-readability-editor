@@ -1,6 +1,6 @@
-現在地: 移動・書き換え・新規作成・audit検査は完了。残りは外部レビュー（俯瞰・詳細）と advisor の最終確認。
-次の項目: Codex・Antigravity への俯瞰・詳細レビュー依頼（割当は乱数）。
-未解決の指摘: run.json の adr_sha256 が移行前から現在のどの ADR とも一致しない。opq の ADR 2件は本文不変のため相対リンク7件が壊れたまま。テスト2件（test_input_guard）は移行前から失敗。for-agent は英訳待ち。
+現在地: 移動・書き換え・audit・外部レビュー（俯瞰・詳細）・advisor 確認まで完了。残りは PR の作成と自動マージ。
+次の項目: PR 作成、CI 通過、マージ、ブランチとワークツリーの片付け。
+未解決の指摘: run.json の adr_sha256 が移行前から不一致。opq の ADR 2件の相対リンク7件が切れたまま。テスト2件（test_input_guard）は移行前から失敗。for-agent は英訳待ち。
 
 # チェックリスト: works/ への移行
 
@@ -35,16 +35,18 @@
 
 ## 検証
 
-- [ ] `perl -e 'alarm 180; exec @ARGV' python3 -m unittest discover -s tests` が通る
+- [x] （移行前から2件失敗、他は通る）`perl -e 'alarm 180; exec @ARGV' python3 -m unittest discover -s tests` が通る
 - [x] `grep -rn "adr/"` の結果が、works/ 内の新パスと触らない行を除いて0件
 - [x] 旧ファイル名（reports/、research_notes/、docs/design.md ほか）の残りが、触らない行を除いて0件
 - [x] Markdown の相対リンクの壊れ数を、移動前（HEAD の展開）と移動後で比べる
-- [ ] `prettier --check` と `markdownlint-cli2` を works/ 配下の新規・移動ファイルで実行する（バイト同一の2件は整形しない）
-- [ ] 最終確認: advisor（Opus 5.5）に統合された diff を見せる
+- [x] （移動した文書は移行前から未整形。新規ファイルは markdownlint 指摘なし）`prettier --check` と `markdownlint-cli2` を works/ 配下の新規・移動ファイルで実行する（バイト同一の2件は整形しない）
+- [x] 最終確認: advisor（Opus 5.5）に統合された diff を見せる
 
 - [x] 外部レビュー（俯瞰・詳細）を Codex・Antigravity に別々に依頼し、結果を記録する（`both`）
 
 ## 作業ログ
+
+- advisor の指摘: `evals/no-skill-comparison.md` は `plan_sha256` で凍結されているため、書き換えを取り消した。opq の runner と同じ扱いで、index.md に注記した。他の runner は、変更したファイルを凍結していないことを確認した。
 
 - 2026-11-28 外部レビュー（乱数 0.90 で割当）: 俯瞰は Antigravity、詳細は Codex。Antigravity の1回目は、ヘッドレスで git コマンドの権限が確認できず失敗した。権限を緩めず、差分一覧のファイルを読む形で再依頼して成功した。Codex の1回目は、サンドボックスが状態フォルダへの書き込みを拒否して失敗し、サンドボックスなしで再実行した。
 - 俯瞰の指摘への対応: AGENTS.md に works/README.md の導線を足した。README・environments の使用例は、利用者向けの docs/user-guide.md に戻した。for-agent の英訳待ちと for-human の要約なしは、計画どおりの過渡状態として残した。
