@@ -217,6 +217,120 @@ class NumberUnitTest(unittest.TestCase):
                                      (["3万円"], [expected]), after)
 
 
+class SignedClockNumberTest(unittest.TestCase):
+    def test_frozen_signed_clock_cases(self):
+        cases = json.loads((Path(__file__).parent / "fixtures" / "signed-clock-numbers.json").read_text(encoding="utf-8"))
+        for analyzer in ANALYZERS:
+            for case in cases:
+                with self.subTest(analyzer=analyzer.name, case=case["id"]):
+                    result = run(case["before"], case["after"], analyzer)["numbers"]
+                    self.assertEqual({key: texts(result[key]) for key in ("missing", "added")},
+                                     {key: case[key] for key in ("missing", "added")})
+
+    def test_other_padding_and_durations_keep_existing_differences(self):
+        for before, after in (("03時間", "3時間"), ("03人", "3人")):
+            with self.subTest(before=before):
+                result = run(before, after)["numbers"]
+                self.assertEqual(texts(result["missing"]), [before])
+                self.assertEqual(texts(result["added"]), [after])
+
+    def test_context_beyond_adjacent_signs_and_hours_needs_human_check(self):
+        cases = [
+            ("午後1時から5時", "午後1時から午後5時", ["5時"], ["午後5時"]),
+            ("▲3.2%", "マイナス3.2%", ["▲3.2%"], ["3.2%"]),
+            ("3時", "午後3時", ["3時"], ["午後3時"]),
+        ]
+        for before, after, missing, added in cases:
+            with self.subTest(before=before):
+                result = run(before, after)["numbers"]
+                self.assertEqual({key: texts(result[key]) for key in ("missing", "added")},
+                                 {"missing": missing, "added": added})
+
+    def test_numbers_after_url_punctuation_are_not_hidden(self):
+        for punctuation in ("。", ")", "」", "！", "？", "：", "；", "）", "】", "…", "］", "｝", "〉", "》", "〕", "‥"):
+            with self.subTest(punctuation=punctuation):
+                self.assertEqual(numbers("https://example.com/午後3時/▲120" + punctuation + "開場は午後5時。"),
+                                 ["午後5時"])
+
+    def test_signed_clock_items_keep_source_lines(self):
+        for analyzer in ANALYZERS:
+            result = run("見出し\n午後3時\n▲120円", "見出し\n午前3時\n120円", analyzer)["numbers"]
+            self.assertEqual([item.to_dict() for item in result["missing"]],
+                             [{"line": 2, "text": "午後3時"}, {"line": 3, "text": "▲120円"}])
+            self.assertEqual([item.to_dict() for item in result["added"]],
+                             [{"line": 2, "text": "午前3時"}, {"line": 3, "text": "120円"}])
+
+    def test_masked_identifier_hyphens_are_not_negative_signs(self):
+        self.assertEqual(numbers(r"090-\*\*\*\*-5678"), ["090", "5678"])
+        self.assertEqual(numbers("090-****-5678"), ["090", "5678"])
+
+    def test_bare_iri_tokens_end_at_a_delimiter(self):
+        for path in ("a午後3時", "で午後5時に配信", "docsを参照"):
+            with self.subTest(path=path):
+                self.assertEqual(numbers("https://example.com/" + path), [])
+        self.assertEqual(numbers("https://example.com/。開場は午後5時"), ["午後5時"])
+        before, after = "https://example.com/docsを参照", "https://example.com/docsをご覧ください"
+        result = run(before, after)["urls"]
+        self.assertEqual(texts(result["missing"]), [before])
+        self.assertEqual(texts(result["added"]), [after])
+
+    def test_non_ascii_url_changes_are_reported_as_urls(self):
+        before, after = "https://example.com/第3版", "https://example.com/第4版"
+        result = run(before, after)
+        self.assertEqual(texts(result["urls"]["missing"]), [before])
+        self.assertEqual(texts(result["urls"]["added"]), [after])
+        self.assertEqual(result["numbers"], {"missing": [], "added": []})
+
+    def test_url_paths_do_not_hide_markdown_table_cells(self):
+        result = run("|https://example.com/案内|120円|", "|https://example.com/案内|150円|")
+        self.assertEqual(texts(result["numbers"]["missing"]), ["120円"])
+        self.assertEqual(texts(result["numbers"]["added"]), ["150円"])
+
+    def test_url_paths_do_not_hide_numbers_after_markdown_emphasis(self):
+        for marker in ("*", "**", "_", "__", "~~"):
+            with self.subTest(marker=marker):
+                gap = " " if "_" in marker else ""
+                result = run(marker + "https://example.com/案内" + marker + gap + "料金120円",
+                             marker + "https://example.com/案内" + marker + gap + "料金150円")
+                self.assertEqual(texts(result["numbers"]["missing"]), ["120円"])
+                self.assertEqual(texts(result["numbers"]["added"]), ["150円"])
+                self.assertEqual(result["urls"], {"missing": [], "added": []})
+
+    def test_non_ascii_url_paths_keep_internal_markdown_characters(self):
+        for path in ("案内_続き", "a_第", "案内*続き", "案内~続き"):
+            for marker in ("", "**", "_"):
+                with self.subTest(path=path, marker=marker):
+                    before = "https://example.com/" + path + "3版"
+                    after = "https://example.com/" + path + "4版"
+                    result = run(marker + before + marker, marker + after + marker)
+                    self.assertEqual(texts(result["urls"]["missing"]), [before])
+                    self.assertEqual(texts(result["urls"]["added"]), [after])
+                    self.assertEqual(result["numbers"], {"missing": [], "added": []})
+
+    def test_negative_signs_inside_markdown_emphasis_are_preserved(self):
+        for marker in ("*", "**", "***"):
+            with self.subTest(marker=marker):
+                negative = marker + "-120円" + marker
+                equivalent = run(marker + "△120円" + marker, negative)
+                self.assertEqual(equivalent["numbers"], {"missing": [], "added": []})
+                result = run(negative, marker + "120円" + marker)
+                self.assertEqual(texts(result["numbers"]["missing"]), ["-120円"])
+                self.assertEqual(texts(result["numbers"]["added"]), ["120円"])
+
+    def test_recognized_counter_ranges_keep_equivalent_hyphens(self):
+        for unit in ("回", "年", "月", "日", "件", "kg"):
+            with self.subTest(unit=unit):
+                result = run("3" + unit + "-5" + unit, "3" + unit + "～5" + unit)
+                self.assertEqual(result["numbers"], {"missing": [], "added": []})
+        self.assertEqual(numbers("-3～-1 ▲3%～▲1%"), ["-3", "-1", "▲3%", "▲1%"])
+
+    def test_legacy_unrecognized_and_spaced_ranges_do_not_gain_alarms(self):
+        for before, after in (("3名-5名", "3名～5名"), ("第3章-2節", "第3章の2節"),
+                              ("3人 -5人", "3人～5人")):
+            with self.subTest(before=before):
+                self.assertEqual(run(before, after)["numbers"], {"missing": [], "added": []})
+
+
 class UnmatchedTest(unittest.TestCase):
     def test_a_closing_replaced_with_a_new_action_has_no_source(self):
         before = "設定ファイルは、すべてこのリポジトリにまとめてあります。今日から、チームの開発環境を一緒に育てていきましょう。\n"

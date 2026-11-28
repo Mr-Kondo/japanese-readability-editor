@@ -69,7 +69,9 @@ _SI_PREFIX = "ナノ|マイクロ|ミリ|センチ|キロ|メガ|ギガ|テラ"
 _KATAKANA_UNIT = "メートル|グラム|リットル|バイト|ビット|ヘルツ"
 _CURRENCY_UNIT = "ドル|ユーロ"
 _COUNTER_VARIANT = "ヶヵケカか箇"  # 「○か所」「○か月」の「か」の書き方
+# shortcut: 隣接する▲/△は負号とする。箇条書きとの区別が必要になったら文脈を解析する。
 NUMBER_RE = re.compile(
+    r"(?:[▲△]|(?<![\dA-Za-z.,*一-龥ァ-ヴー])[-−]|(?:午前|午後)(?=(?:0?\d|1[0-2])時(?!間)))?"
     r"\d+(?:[.,]\d+)*[万億兆]?"  # 3万円、1億2000万円(「1億」と「2000万円」に分かれる)の万・億・兆
     r"(?:\s?(?:%|[A-Za-z]+"
     r"|(?:ナノ|マイクロ|ミリ)秒"  # 「ミリ」だけで切れないよう、秒を伴う形を先に試す
@@ -136,7 +138,16 @@ def normalize(text: str) -> str:
 
 
 def number_key(text: str) -> str:
-    """表記が違うだけで同じ量になる数値を、同じ値にそろえる。「100パーセント」は「100%」、「3ヶ所」「7カ月」は「3か所」「7か月」。"""
+    """同じ量の符号・時刻・単位表記をそろえる。表示する原文は変えない。"""
+    if text.startswith(("▲", "△", "−")):
+        text = "-" + text[1:]
+    clock = re.fullmatch(r"(午前|午後)?(0?\d|1\d|2[0-3])時", text)
+    if clock:
+        period, hour = clock.groups()
+        hour = int(hour)
+        if period:
+            hour = hour % 12 + (12 if period == "午後" else 0)
+        return f"{hour}時"
     if text.endswith("パーセント"):
         return text[:-len("パーセント")] + "%"
     return COUNTER_VARIANT_RE.sub(r"か\1", text)
@@ -300,16 +311,36 @@ def collect_line_items(number: int, line: str, doc: Document, markdown: bool, an
         line = measure.IMAGE_RE.sub(" ", line)
         line = measure.LINK_RE.sub(split_link, line)
         line = measure.HTML_TAG_RE.sub(" ", line)
-    for match in measure.URL_RE.finditer(line):
-        doc.urls.append(Item(number, match.group(0).rstrip(".,)")))
+    # 非ASCIIパスの差はURLとして報告し、数値として重複検出しない。
+    # shortcut: 区切りのない後続文もURLパスとする。区別が必要ならURL構文を明示させる。
+    url_delimiters = r"\s<>`\"「」『』()。、！？：；（）［］｛｝〈〉《》【】〔〕…‥|"
+    url_pattern = "(?:" + measure.URL_RE.pattern + r")(?<=/)[^" + url_delimiters + "]*"
+    # 末尾の ? でパスを最短一致にし、最初の強調の閉じ記号までを URL とする。
+    wrapped_url = (r"(?P<emphasis>\*{1,3}|(?P<underscore>_{1,3})|~~)(?P<wrapped>" + url_pattern +
+                   r"?)(?P=emphasis)(?(underscore)(?!\w))|") if markdown else ""
+    url_re = re.compile(wrapped_url + url_pattern + "|(?:" + measure.URL_RE.pattern + ")", measure.URL_RE.flags)
+    for match in url_re.finditer(line):
+        url = match.group("wrapped") if markdown and match.group("wrapped") else match.group(0)
+        doc.urls.append(Item(number, url.rstrip(".,)")))
+    number_line = url_re.sub(" ", line)
     line = measure.URL_RE.sub(" ", line)
     if markdown:
-        line = measure.QUOTE_RE.sub("", line)
-        line = HEADING_MARK_RE.sub("", line)
-        line = measure.LIST_ITEM_RE.sub("", line)
+        for pattern in (measure.QUOTE_RE, HEADING_MARK_RE, measure.LIST_ITEM_RE):
+            line = pattern.sub("", line)
+            number_line = pattern.sub("", number_line)
     line = normalize(line)
-    for m in NUMBER_RE.finditer(line):
+    number_line = normalize(number_line)
+    if markdown:
+        number_line = re.sub(r"(?<![\\*])(\*{1,3})([-−]\d[^*\n]*?)\1(?!\*)", r" \2 ", number_line)
+    previous_end = -1
+    for m in NUMBER_RE.finditer(number_line):
         text = m.group(0).replace(" ", "")
+        # 単位付きや空白を挟む「9時 -17時」も、従来どおり範囲として扱う。
+        if text.startswith(("-", "−")) and previous_end >= 0 and (
+            m.start() == previous_end or number_line[previous_end:m.start()].isspace()
+        ):
+            text = text[1:]
+        previous_end = m.end()
         doc.numbers.append(Item(number, text, number_key(text)))
     doc.roles += [Item(number, m.group(0)) for m in ROLE_RE.finditer(line)]
     for pattern in (ASCII_TERM_RE, KATAKANA_TERM_RE):
