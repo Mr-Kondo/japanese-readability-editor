@@ -89,7 +89,7 @@ python3 tools/validate_public_corpus.py --manifest evals/public-documents/manife
 ## 評価の設定
 
 - モードBを明示し、対象読者（例: 開発者、OSPO 担当者、経営層）は生成前に決めて `audience` に書く。`request` も固定する。**対象読者・依頼は未決定。**
-- 比較・統計用の `document_id` は台帳の `source_id`、理解問題用は抜粋IDにする（[接続の制約](../works/for-agent/implementation-plan/002-public-document-corpus.md#既存ツールとの接続)）。
+- 比較・統計用の `document_id` は台帳の `source_id`、理解問題用は抜粋IDにする（[接続の制約](../works/for-agent/implementation-plan/002-public-document-corpus.md#integration-with-existing-tools)）。
 - 組織運営文書の群として独立に集計する。他の文書群と合算しない。
 - 読みやすさと、ポリシー内容の正しさを分ける。後者（法務の妥当性）は評価しない。
 - テンプレートの空欄を、事実として埋めない。
@@ -101,7 +101,7 @@ python3 tools/validate_public_corpus.py --manifest evals/public-documents/manife
 3. `preserve` の各項目と `questions` を原文と照合し、`confirmed_by`・`reason`、`verified_by`・`verification_reason` を記入する。修正や削除をしてよい。
 4. `ipo-checklist` を変更不要の対照例にしてよいか判断し、`no_change_reason` を確定する。
 5. 採用するものの `status` を `adopted` に変える。`--readiness` の出力が空になるまで繰り返す。
-6. 対象読者・依頼を決め、`cases` JSON を作って[計画の手順](../works/for-agent/implementation-plan/002-public-document-corpus.md#手順)に進む。
+6. 対象読者・依頼を決め、`cases` JSON を作って[計画の手順](../works/for-agent/implementation-plan/002-public-document-corpus.md#procedure)に進む。
 7. ワークブックなどの PDF を使う場合は、資料ごとの利用条件の表示を取得時に確認し、台帳へ追加する。
 
 ## 未実施

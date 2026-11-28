@@ -1,91 +1,91 @@
-# 人手評価ツールのライブラリ・運用方式・支援スキル調査
+# Survey of Libraries, Operating Models, and Supporting Skills for Human Evaluation
 
-調査日: 2026-10-16。公式ドキュメント、公式リポジトリを優先した机上調査。インストール・起動・日本語での操作検証は実施していない。以下の「推論」は本件に対する設計判断であり、製品の公式推奨ではない。
+Research date: 2026-10-16. Desk research prioritizing official documentation and repositories. Installation, launch, and Japanese-language interaction were not tested. “Inferences” below are design judgments for this project, not official product recommendations.
 
-## どのツールが本件に適するか
+## Which tools fit this project?
+
+### Takeaway: Tool Fit
+
+For a small evaluation focused on blind A/B choice, tie, unable to judge, rationale, and JSON storage, local HTML without external dependencies is the leading option. If many evaluators, ongoing assignment, or precise span annotation are needed from the start, try Label Studio first. Gradio and Streamlit are strong choices for a short Python prototype, but they do not replace experiment design or safe data storage.
+
+### Cited Findings: Tool Fit
+
+| Candidate                           | Verified capabilities and operation                                                                                                                                                                                                                                                                                                                | Project-specific work still needed                                                                                                                                                              |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Static HTML + standard browser APIs | FileReader can read a local file selected by the user. Blob URL creation is a standard API. These provide a basis for reading a local file and saving results as a file. [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader), [createObjectURL](https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL_static) | Implement the evaluation form, left/right assignment, input validation, resume, aggregation, and explicit save confirmation.                                                                    |
+| Gradio                              | A Python UI library. Flagging can record inputs and outputs to a CSV on the machine running the app. The current CSVLogger description accounts for concurrent processing. [Flagging](https://gradio.app/main/docs/gradio/flagging)                                                                                                                | Configure candidate sides, tie, and unable-to-judge in a custom form. The Flag button alone does not provide evaluator IDs, resume, duplicate-response prevention, or assignment management.    |
+| Streamlit                           | Provides selection, form submission, text input, evaluation buttons, and result download through `download_button`. [Widgets](https://docs.streamlit.io/develop/api-reference/widgets), [Download](https://docs.streamlit.io/develop/api-reference/widgets/st.download_button)                                                                     | Build the placement of the source and candidates, evaluation protocol, persistent storage, and left/right correspondence in the app.                                                            |
+| Label Studio                        | The Pairwise tag can compare two texts. Choices allows arbitrary options, and Labels annotates text spans. [Pairwise](https://labelstud.io/tags/pairwise.html), [Choices](https://labelstud.io/tags/choices.html), [Labels](https://labelstud.io/tags/labels.html)                                                                                 | Do not infer tie support from the Pairwise specification alone. Explicitly represent A / B / tie / unable to judge with Choices. Remove candidate names and assign sides while preparing input. |
+| Argilla                             | LabelQuestion, RatingQuestion, TextQuestion, RankingQuestion, and SpanQuestion can be combined. SpanQuestion supports a setting that permits overlapping spans. [Questions](https://docs.argilla.io/latest/reference/argilla/settings/questions/)                                                                                                  | Tie support through Ranking alone was not verified. Representing A / B / tie / unable to judge as a LabelQuestion is the reliable option.                                                       |
+
+- Label Studio supports JSON / CSV export. Its raw JSON retains source data, annotations, evaluator, elapsed time, and other fields. By default, unannotated tasks are omitted, so compare against the original ledger when calculating missingness. [Export](https://labelstud.io/guide/export)
+- Argilla stores settings and responses on local disk and can export records as dictionaries or lists. Publishing to the Hub is not required. [Import / Export](https://docs.argilla.io/latest/how_to_guides/import_export/)
+- Gradio’s current `main` pyproject lists Python >=3.10 and Apache-2.0. This may not match the Python compatibility range of the project itself. [pyproject](https://github.com/gradio-app/gradio/blob/main/pyproject.toml)
+- Apache-2.0 was confirmed in the official repositories for Streamlit, Label Studio, and Argilla. This checks the main projects’ licenses, not all dependencies or commercial-edition terms. [Streamlit LICENSE](https://github.com/streamlit/streamlit/blob/develop/LICENSE), [Label Studio LICENSE](https://github.com/HumanSignal/label-studio/blob/develop/LICENSE), [Argilla repository](https://github.com/argilla-io/argilla)
+- **Argilla’s official README says its original authors have moved to another project, are not adding new features, will continue necessary bug fixes and patches, and are seeking maintainers.** Do not select it as a foundation for ongoing expansion based only on its past feature list. [Argilla README](https://github.com/argilla-io/argilla)
+
+### Inferences: Tool Fit
+
+- Recommended order: static HTML for solo or small-group work; Label Studio where a shared operating base already exists; reuse Gradio / Streamlit if already adopted; consider Argilla for continuity if it is already in use. Evaluator count is not the only branching condition; assignment, access control, and span selection matter too.
+- The minimum version need not require precise mouse-based span annotation. Record “candidate A / sentence number / quoted problem text / problem type / desired change.” Adopt Labels or a similar tool when research requires exact character offsets. Custom span selection increases verification burden for Japanese, emoji, and selections across line breaks.
+- Gradio Flagging can support collection, but a simple “useful / not useful” flag does not capture why meaning changed or where. Do not use the built-in Flag unchanged as the final form.
+- Building authentication, a database, a public server, and real-time collaboration into the first static HTML version has a high opportunity cost. Until need is demonstrated, each evaluator can save a JSON file for later integration.
+
+### Gaps: Tool Fit
+
+- Japanese IME, spans across paragraphs, math and Markdown rendering, keyboard-only operation, concurrent saves, and browser differences have not been tested for any tool.
+- It was not confirmed that Label Studio Enterprise’s blind-review and assignment features are available in Community Edition. Do not treat overlap / blind review in official marketing articles as OSS functionality.
+- Current stable versions, all dependency licenses, vulnerabilities, and future maintenance SLAs have not been audited. Some Gradio official guides failed to redirect to the Markdown API when retrieved, so current defaults for public settings are not asserted.
+
+## How should local operation and data storage work?
+
+### Takeaway: Local Operation and Storage
+
+Running locally and making no external connections are different claims. The first version should send no text to an API, use no external CDN, and provide explicit JSON save and reload.
+
+### Cited Findings: Local Operation and Storage
+
+- Streamlit says it collects usage statistics but does not view or store information included in the app. `browser.gatherUsageStats = false` disables statistics reporting. [Configuration / Telemetry](https://docs.streamlit.io/develop/concepts/configuration/options)
+- Argilla’s Docker deployment uses a local server, database, and Elasticsearch configuration. This differs from installing only its Python SDK. [Docker deployment](https://docs.argilla.io/latest/getting_started/how-to-deploy-argilla-with-docker/)
+- Argilla sends anonymous usage information; `HF_HUB_DISABLE_TELEMETRY=1` disables it. Its documentation says it does not collect records or dataset names. [Telemetry](https://docs.argilla.io/latest/reference/argilla-server/telemetry/)
+- Gradio’s official 4.44.1 documentation describes `analytics_enabled` / `GRADIO_ANALYTICS_ENABLED` controls. This is a past-version specification; verify the API of the selected version at implementation time. [Versioned Interface docs](https://gradio.app/4.44.1/docs/gradio/interface)
+- Label Studio can be installed locally and stores annotations in SQLite and other storage. [Install](https://labelstud.io/guide/install.html), [Export storage](https://labelstud.io/guide/export.html)
+- The behavior of localStorage for `file:` URLs is not guaranteed by the specification. In private browsing, data is deleted when the last private tab is closed. [MDN localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
+- Using textContent prevents a string from being interpreted as HTML. This is a basic choice when evaluation text is inserted into the UI. [MDN textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)
+
+### Inferences: Local Operation and Storage
+
+- Do not make localStorage the only store in the static version. Allow interim results to be exported and imported as JSON, and show when there are unsaved changes. If real-world use requires automatic persistence, move storage to a local server while keeping the same JSON format.
+- Remove names, skill versions, and model names that might reveal candidate identity from the evaluator’s screen. Rejoin them through a mapping table during post-collection integration. Hiding the names in the display is not strict blinding if the distributed JSON contains the mapping. The author may also remember the original text, which remains a limit on blinding.
+- Even without an added dependency such as JSON Schema, the local version can explicitly validate required keys, types, duplicate IDs, text hashes, and known choices. Include the evaluation protocol version and source task ID in output so results can be traced to the input text and skill version.
+
+### Gaps: Local Operation and Storage
+
+- The execution machine’s installation state, startup without network access, traffic capture, and recovery from file-save failure were not tested. Official telemetry descriptions alone do not demonstrate complete network isolation.
+
+## How should aggregation libraries and skills divide responsibilities?
 
 ### Takeaway
 
-少人数の評価で、盲検の A/B 選択・同等・判断不能・理由・JSON 保存に絞るなら、外部依存のないローカル HTML が第一候補。多数の評価者、継続的な割当、厳密な範囲アノテーションが最初から必要なら Label Studio を先に試す。Gradio / Streamlit は短期 Python 試作に有力だが、評価実験の設計や安全な保存を代わりに担うものではない。
+Keep the evaluation UI separate from statistical processing. Initially aggregate counts, wins/losses, tie rate, missingness, and meaning-change counts. Once human data exists, use SciPy / statsmodels as optional dependencies in the analysis environment rather than required dependencies of the skill.
 
 ### Cited Findings
 
-| 候補 | 確認できた機能・運用 | 本件で必要な補完 |
-|---|---|---|
-| 静的 HTML + 標準ブラウザ API | FileReader は利用者が選択したローカルファイルを読める。Blob の URL 生成は標準 API。ローカルファイルを読み、結果をファイルとして出す実装の基盤になる。[FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)、[createObjectURL](https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL_static) | 評価フォーム、左右割当、入力検証、再開、集計、保存完了の明示を実装する。 |
-| Gradio | Python の UI ライブラリ。Flagging は入力と出力を実行機の CSV に記録できる。現行説明の CSVLogger は同時処理を考慮する。[Flagging](https://gradio.app/main/docs/gradio/flagging) | 左右の候補・同等・判断不能は独自フォームで設定。Flag ボタンだけでは評価者 ID、再開、重複回答・割当管理は完成しない。 |
-| Streamlit | 選択、フォーム送信、テキスト入力、評価用ボタン等を備え、download_button で結果をダウンロードできる。[Widgets](https://docs.streamlit.io/develop/api-reference/widgets)、[Download](https://docs.streamlit.io/develop/api-reference/widgets/st.download_button) | 原文と候補の配置、評価プロトコル、永続保存、左右の対応づけをアプリ側で作る。 |
-| Label Studio | Pairwise タグで二つの文章を比較できる。Choices は任意の選択肢を設定でき、Labels はテキストの範囲にラベルを付ける。[Pairwise](https://labelstud.io/tags/pairwise.html)、[Choices](https://labelstud.io/tags/choices.html)、[Labels](https://labelstud.io/tags/labels.html) | Pairwise 単体の仕様から「同等」対応を仮定しない。A / B / 同等 / 判断不能は Choices で明示。候補名の除去と左右の割当は入力生成側で担う。 |
-| Argilla | LabelQuestion、RatingQuestion、TextQuestion、RankingQuestion、SpanQuestion を組み合わせられる。SpanQuestion は重複範囲を許す設定を持つ。[Questions](https://docs.argilla.io/latest/reference/argilla/settings/questions/) | Ranking 単体で同順位を扱えるとの確認は取れていない。A / B / 同等 / 判断不能は LabelQuestion として持つのが確実。 |
-
-- Label Studio は JSON / CSV 出力を持ち、生 JSON には元データ、アノテーション結果、評価者、所要時間等を保持する。既定では未評価のタスクは除かれるため、欠測率の集計では元台帳と突合する。[Export](https://labelstud.io/guide/export)
-- Argilla は設定と回答をローカルディスクへ保存し、レコードを辞書・リストへ出せる。Hub への公開は必須ではない。[Import / Export](https://docs.argilla.io/latest/how_to_guides/import_export/)
-- Gradio の現行 main の pyproject は Python >=3.10 と Apache-2.0 を記載。プロジェクト本体の Python 互換範囲と同一とは限らない。[pyproject](https://github.com/gradio-app/gradio/blob/main/pyproject.toml)
-- Streamlit、Label Studio、Argilla の公式リポジトリで Apache-2.0 を確認した。これは本体のライセンスの確認であり、全依存物や商用版の条件の監査ではない。[Streamlit LICENSE](https://github.com/streamlit/streamlit/blob/develop/LICENSE)、[Label Studio LICENSE](https://github.com/HumanSignal/label-studio/blob/develop/LICENSE)、[Argilla repository](https://github.com/argilla-io/argilla)
-- **Argilla は公式 README に、原著者が別のプロジェクトへ移行し、新機能追加を行わず、必要なバグ修正・パッチを継続する方針と保守者募集を明記している。** 過去の機能一覧だけで継続拡張の基盤に採用しない。[Argilla README](https://github.com/argilla-io/argilla)
+- SciPy’s `stats.bootstrap` supports confidence intervals, paired data, resampling counts, and random-state control. [SciPy bootstrap](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html)
+- statsmodels’ `cohens_kappa` accepts a contingency table for two evaluators and supports unweighted, linear-weighted, and quadratic-weighted kappa. [Cohen kappa](https://www.statsmodels.org/stable/generated/statsmodels.stats.inter_rater.cohens_kappa.html)
+- statsmodels also provides `fleiss_kappa` for categorical ratings by multiple evaluators. [Fleiss kappa](https://www.statsmodels.org/stable/generated/statsmodels.stats.inter_rater.fleiss_kappa.html)
+- The session-provided hugging-face:huggingface-gradio skill supports Python UI components, Blocks, and event wiring. [Local SKILL.md](/Users/masatomiwada/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/gradio/SKILL.md)
+- The provided data:statistical-analysis skill covers effect sizes, confidence intervals, small samples, and multiple-comparison cautions. [Local SKILL.md](/Users/masatomiwada/.codex/plugins/cache/claude-cowork/data/1.0.0/skills/statistical-analysis/SKILL.md)
+- The provided skill-creator says to improve skills using actual use and demonstrated failures, and that passing a validation script does not prove decision quality. [Local SKILL.md](/Users/masatomiwada/.codex/skills/.system/skill-creator/SKILL.md)
 
 ### Inferences
 
-- 推奨順位は、単独・少人数なら静的 HTML、共同運用の既存基盤なら Label Studio、既に Gradio / Streamlit が採用されている場合はそれを再利用、Argilla は既存利用がある場合の継続候補とする。評価者数だけでなく、割当・アクセス権・範囲選択の要否が分岐条件。
-- 最小版はマウスによる精密な範囲アノテーションを必須にせず、「候補 A / 文番号 / 問題箇所の引用 / 問題の種類 / 望む修正」を記録する。正確な文字オフセットが必要な研究へ進む時点で Labels 等を採用する。日本語、絵文字、改行を跨ぐ範囲選択は独自実装の検証負担を増やす。
-- Gradio の Flagging は収集の足場にはなるが、「役立った / 役立たない」だけでは意味変更の理由や修正箇所が得られないため、単純な組込み Flag をそのまま最終形にしない。
-- 静的 HTML の初版で認証・DB・公開サーバー・リアルタイム共同編集を作る機会費用は大きい。必要が実証されるまでは、各評価者の JSON ファイルを後から統合する方式でよい。
+- The data unit here is the source text. Multiple votes on the same source text must not be treated as independent source texts. Resample at the source-text level while retaining all evaluators for each source. `paired=True` helps preserve pairing, but does not automatically resolve crossed evaluator/source structure.
+- Gradio skills can support UI usability, statistical skills can support aggregation choices, and skill-creator can support carrying evaluated failures into existing prompts or examples. None of these skills guarantees Japanese human-evaluation validity or replaces evaluators.
+- Use feedback to identify candidate improvements by failure type, then compare before and after revisions on separate, unused source texts. Do not automatically train on the feedback or immediately generalize a small number of preferences to every mode.
+- A reasonable expected benefit is better traceability and identification of recurring weaknesses through structured records. There is no project-specific evidence showing that adding a UI or library will improve prose quality or reduce rework by a particular percentage.
 
 ### Gaps
 
-- 各ツールの日本語 IME、段落を跨ぐ範囲、数式や Markdown 表示、キーボードのみの操作、同時保存、ブラウザ差は未検証。
-- Label Studio の Enterprise の盲検・割当機能を Community Edition で使えるとは確認していない。公式マーケティング記事にある overlap / blind review を OSS の機能と同一視しない。
-- 全製品の最新安定版番号、全依存物のライセンス、脆弱性、今後の保守 SLA は未監査。Gradio のいくつかの公式ガイドは取得時に markdown API へのリダイレクトが失敗したため、現在の公開設定の既定値を断定しない。
-
-## ローカル運用とデータの保存をどう扱うか
-
-### Takeaway
-
-ローカルで動くことと、外部通信が一切ないことは別である。初版は文章を API に送らず、外部 CDN も使わず、JSON の明示的な保存と再読込みを持つ方式が適する。
-
-### Cited Findings
-
-- Streamlit は利用統計を収集するが、アプリに含まれる情報を閲覧・保存しないと説明する。`browser.gatherUsageStats = false` で統計送信を停止できる。[Configuration / Telemetry](https://docs.streamlit.io/develop/concepts/configuration/options)
-- Argilla の Docker 展開は、サーバー・DB・Elasticsearch のローカル構成を持つ。Python SDK だけの導入とは異なる。[Docker deployment](https://docs.argilla.io/latest/getting_started/how-to-deploy-argilla-with-docker/)
-- Argilla は匿名利用情報を送信し、`HF_HUB_DISABLE_TELEMETRY=1` で停止できる。公式にはレコードやデータセット名等は収集しないと説明する。[Telemetry](https://docs.argilla.io/latest/reference/argilla-server/telemetry/)
-- Gradio の 4.44.1 公式文書には `analytics_enabled` / `GRADIO_ANALYTICS_ENABLED` の制御が記載される。ただしこれは過去版の仕様であり、実装時は採用版の API で確認する。[Versioned Interface docs](https://gradio.app/4.44.1/docs/gradio/interface)
-- Label Studio はローカル環境へインストールでき、SQLite 等へアノテーションを保存する。[Install](https://labelstud.io/guide/install.html)、[Export storage](https://labelstud.io/guide/export.html)
-- `file:` URL の localStorage の挙動は仕様上保証されない。プライベートブラウズでは最後のプライベートタブを閉じるとデータが削除される。[MDN localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
-- 表示に textContent を使うと文字列を HTML として解釈しない。評価対象文章を UI に埋め込む場合の基本選択になる。[MDN textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)
-
-### Inferences
-
-- 静的版は localStorage を唯一の保存先にしない。途中結果も JSON としてエクスポート・インポートでき、未保存を表示する。実運用で自動永続化が必要なら、同じ JSON 形式を保ってローカルサーバーの保存に移行する。
-- 評価者が候補を知り得る名称、skill version、モデル名を評価画面から除き、対応表を収集後の統合処理で結び直す。表示を隠すだけで、配布 JSON に識別子の対応表が入っていれば厳密な盲検とはいえない。作者本人の原稿記憶による盲検の限界も残る。
-- ローカル版の入力は JSON Schema 等の追加依存がなくても、必須キー・型・ID 重複・文章ハッシュ・既知の選択肢を明示検証できる。保存結果を入力文章やスキル版へ追跡できるよう、出力に評価プロトコル版と元タスク ID を含める。
-
-### Gaps
-
-- 実行機のインストール状態、ネットワーク遮断下での起動、通信キャプチャ、ファイル保存の復旧試験は行っていない。公式の telemetry 説明だけで完全な無通信を実証したとはいえない。
-
-## 集計ライブラリとスキルをどう役割分担するか
-
-### Takeaway
-
-評価 UI と統計処理は切り分け、最初は件数・勝敗・同等率・欠測・意味変更の件数を集計する。人手データが揃ってから SciPy / statsmodels を分析環境の任意依存として使い、スキル本体に必須依存として組み込まない。
-
-### Cited Findings
-
-- SciPy の `stats.bootstrap` は信頼区間、paired データ、再標本化回数、乱数制御を持つ。[SciPy bootstrap](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html)
-- statsmodels の `cohens_kappa` は二人の評価者の分割表を受け取り、単純 kappa と線形・二次重み等に対応する。[Cohen kappa](https://www.statsmodels.org/stable/generated/statsmodels.stats.inter_rater.cohens_kappa.html)
-- statsmodels は複数評価者のカテゴリ評価用 `fleiss_kappa` も提供する。[Fleiss kappa](https://www.statsmodels.org/stable/generated/statsmodels.stats.inter_rater.fleiss_kappa.html)
-- セッションで提供された hugging-face:huggingface-gradio スキルは、Python の UI 部品、Blocks、イベント配線を支援する。[ローカル SKILL.md](/Users/masatomiwada/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/gradio/SKILL.md)
-- 提供された data:statistical-analysis スキルは効果量、信頼区間、小標本、多重比較の注意を含む。[ローカル SKILL.md](/Users/masatomiwada/.codex/plugins/cache/claude-cowork/data/1.0.0/skills/statistical-analysis/SKILL.md)
-- 提供された skill-creator は、実際の利用や実証された失敗からスキルを改善し、検証スクリプトの通過が判断品質を証明するわけではないと明記する。[ローカル SKILL.md](/Users/masatomiwada/.codex/skills/.system/skill-creator/SKILL.md)
-
-### Inferences
-
-- 本件のデータ単位は原稿であり、同じ原稿に対する複数人の投票を独立した原稿数として扱わない。原稿単位で resample し、その中の全評価者を保持する設計が妥当。`paired=True` は対応の保持に有用だが、評価者間・原稿間の交差構造を自動で解決する機能ではない。
-- UI の使いやすさを Gradio スキル、集計の検討を統計スキル、評価で見つけた失敗を既存プロンプトや例へ反映する作業を skill-creator と役割分担できる。どのスキルも日本語人手評価の妥当性の保証や評価者の代用にはならない。
-- フィードバックから「失敗タイプ別の改善候補」を作り、別の未使用原稿で改訂前後を比較する。得られた評価をそのまま学習させたり、少数の好みを全モードへ即座に反映したりする必要はない。
-- 効果予測として、記録の構造化・追跡性・繰り返し起こる欠点の特定には有用と見込める。一方、UI やライブラリを導入するだけで文章の品質や手戻り時間が何 % 改善するかを示す本件固有の証拠はない。
-
-### Gaps
-
-- SciPy / statsmodels の導入有無、採用環境の互換性、kappa の欠測・カテゴリ偏りへの適合性、cluster bootstrap の具体実装は未検証。数値計算を実施していない。
-- 「ライブラリの利用」「スキルの配置」は、ホスト上での実呼出し・保存・品質改善の実証とは区別する必要がある。今回参照したスキルは調査対象であり、ツールの作成やスキル改訂は行っていない。
+- Whether SciPy / statsmodels are installed, compatibility with the selected environment, suitability of kappa under missingness or category imbalance, and a specific cluster-bootstrap implementation are unverified. No numerical analysis was run.
+- “Using a library” or “installing a skill” is distinct from demonstrating actual invocation, storage, or quality improvement on the host. The referenced skills were inspected as research subjects; no tool was built and no skill was revised.

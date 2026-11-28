@@ -1,6 +1,9 @@
-# 要求定義書の索引
+# Requirements Definition Index
 
-| 番号 | 文書 | 言語 | 何について書かれているか |
-| ---- | ---- | ---- | ---------------------- |
-| 001 | [評価ツールの選定](001-evaluation-tool-selection.md) | ja（英訳待ち） | 日本語文章の人手評価に使うツールの候補と、選定の観点 |
-| 002 | [人手評価の方法](002-human-evaluation-methods.md) | ja（英訳待ち） | 日本語文章の人手評価の方法と、その設計上の考え方 |
+| Number | Document                                                      | Language | Contents                                                                   | Japanese original                                                                                                                                                                                  |
+| ------ | ------------------------------------------------------------- | -------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 001    | [Evaluation tool selection](001-evaluation-tool-selection.md) | en       | Candidates and selection criteria for human evaluation of Japanese writing | [Original](https://github.com/Mr-Kondo/japanese-readability-editor/blob/07b5c6dd68f12b745d3a5a6e5b177c6c28696498/works/for-agent/requirement-definition-document/001-evaluation-tool-selection.md) |
+| 002    | [Human evaluation methods](002-human-evaluation-methods.md)   | en       | Methods and design considerations for human evaluation of Japanese writing | [Original](https://github.com/Mr-Kondo/japanese-readability-editor/blob/07b5c6dd68f12b745d3a5a6e5b177c6c28696498/works/for-agent/requirement-definition-document/002-human-evaluation-methods.md)  |
+
+The originals are pinned to pre-translation commit `07b5c6dd68f12b745d3a5a6e5b177c6c28696498`.
+Retrieve them through these immutable links or `git show <commit>:<path>`.

@@ -1,93 +1,101 @@
-# 公開文書による評価データ整備の計画
+# Plan for Preparing Evaluation Data from Public Documents
 
-Issue #38 の確定事項です。公開された実文書で、意味を保った読みやすさの改善と、不必要に変更しない判断を調べます。公開文書は正解ラベル付きデータではありません。既存の人工例に追加する予備評価であり、効果は未測定です。
+These decisions were finalized in Issue #38. Use real, publicly available documents to investigate meaning-preserving readability improvements and decisions not to change text unnecessarily. Public documents are not ground-truth-labeled data. This is a preliminary evaluation added to existing artificial examples; effects have not been measured.
 
-## 文書群と優先順
+## Document Groups and Priorities
 
-| 優先 | 文書群 | Issue | 状態 |
-|---|---|---|---|
-| P0 | デジタル庁（手順・責任・要件） | #40、[文書群の手順](../../../docs/public-documents-digital-agency.md) | 原本取得済み。候補11件・採用0件（人の確認待ち） |
-| P0 | Python日本語文書 | #41、[文書群の手順](../../../docs/public-documents-python.md) | 原本取得済み。候補18件・採用0件（人の確認待ち） |
-| P0 | Kubernetes日本語文書 | #42、[文書群の手順](../../../docs/public-documents-kubernetes.md) | 原本取得済み。候補25件・採用0件（人の確認待ち） |
-| P0 | 青空文庫の随筆（補助群） | #39、[文書群の手順](../../../docs/public-documents-aozora.md) | 原本取得済み。候補21件・採用0件（人の確認待ち） |
-| P1 | IPAのOSS・OSPO資料 | #43、[文書群の手順](../../../docs/public-documents-ipa.md) | スターターキットのみ取得済み（PDF は未収集）。候補18件・採用0件（人の確認待ち） |
-| P1 | 評価結果に基づくスキル改良 | #44 | 本データの整備後 |
-| P0 | Ragas等の自動指標の校正 | #45 | 別計画 |
+| Priority | Document group                                              | Issue / procedure                                                        | Status                                                                                             |
+| -------- | ----------------------------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| P0       | Digital Agency (procedures, responsibilities, requirements) | #40, [group procedure](../../../docs/public-documents-digital-agency.md) | Sources collected. 11 candidates, 0 adopted (awaiting human review).                               |
+| P0       | Python documents in Japanese                                | #41, [group procedure](../../../docs/public-documents-python.md)         | Sources collected. 18 candidates, 0 adopted (awaiting human review).                               |
+| P0       | Kubernetes documents in Japanese                            | #42, [group procedure](../../../docs/public-documents-kubernetes.md)     | Sources collected. 25 candidates, 0 adopted (awaiting human review).                               |
+| P0       | Aozora Bunko essays (supplementary group)                   | #39, [group procedure](../../../docs/public-documents-aozora.md)         | Sources collected. 21 candidates, 0 adopted (awaiting human review).                               |
+| P1       | IPA OSS / OSPO materials                                    | #43, [group procedure](../../../docs/public-documents-ipa.md)            | Starter kit only collected (PDFs not collected). 18 candidates, 0 adopted (awaiting human review). |
+| P1       | Skill improvements based on evaluation results              | #44                                                                      | After preparing this data.                                                                         |
+| P0       | Calibration of automatic metrics such as Ragas              | #45                                                                      | Separate plan.                                                                                     |
 
-青空文庫は文学・歴史的文体の補助群です。業務・技術文書の結果と混ぜて集計しません。大量収集や新しい評価基盤より、文脈、保持要件、理解問題の人手確認を優先します。
+Aozora Bunko is a supplementary group of literary and historical prose. Do not aggregate it with business and technical documents. Prioritize human review of context, preservation requirements, and comprehension questions over large-scale collection or a new evaluation platform.
 
-## 共通の決定事項
+## Shared Decisions
 
-### 1. 台帳で追跡する
+### 1. Track Work in a Manifest
 
-出典・抜粋・保持要件・理解問題・分割は、文書群ごとではなく一つの台帳 `evals/public-documents/manifest.json` に記録します。形式の検査は `tools/validate_public_corpus.py` が行います（標準ライブラリのみ、通信・書き込みなし）。
+Record sources, excerpts, preservation requirements, comprehension questions, and splits in one manifest, `evals/public-documents/manifest.json`, rather than keeping separate records for each document group. `tools/validate_public_corpus.py` checks its format (standard library only; no network or writes).
 
-| 単位 | 必須の記録 |
-|---|---|
-| 出典（`sources[]`） | `group`、`title`、`provider`、`url`、`version`（版・コミット）、`format`、`retrieved_on`、原ファイルの `raw_sha256`、`lineage_id`（旧版・別形式・対訳があるとき同じ値） |
-| 利用条件（`license`） | 本文（`body`）と書誌情報（`bibliographic`）を分け、それぞれ `name`、`url`、`checked_on`、`redistribution`。本文には `attribution` と `modification_notice` |
-| 抜粋（`excerpts[]`） | `source_id`、`locator`（抜粋範囲）、`correspondence`（原本との対応の確認者・確認日）、`text`、`text_sha256`、`transform_history`、`status`、`split` |
-| 保持要件（`preserve[]`） | `kind`、抜粋内の `quote`、`allowed_changes`、`confirmed_by`、`reason` |
-| 理解問題（`questions[]`） | `comprehension_readability.py` と同じ項目。検証は同ツールの規則を再利用 |
+| Unit                                    | Required fields                                                                                                                                                                                                   |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Source (`sources[]`)                    | `group`, `title`, `provider`, `url`, `version` (release or commit), `format`, `retrieved_on`, original file's `raw_sha256`, and `lineage_id` (same value for prior versions, alternate formats, and translations) |
+| Usage terms (`license`)                 | Separate terms for content (`body`) and bibliographic information (`bibliographic`), each with `name`, `url`, `checked_on`, and `redistribution`; content also has `attribution` and `modification_notice`        |
+| Excerpt (`excerpts[]`)                  | `source_id`, `locator` (excerpt range), `correspondence` (who checked the match to the source and when), `text`, `text_sha256`, `transform_history`, `status`, and `split`                                        |
+| Preservation requirement (`preserve[]`) | `kind`, quoted text in the excerpt (`quote`), `allowed_changes`, `confirmed_by`, and `reason`                                                                                                                     |
+| Comprehension question (`questions[]`)  | Same fields as `comprehension_readability.py`. Reuse that tool's rules for validation.                                                                                                                            |
 
-- 原本（PDF・Word・HTML）はリポジトリへ置きません。取得元と SHA-256 で特定します。可変URLの内容だけで版を特定せず、`version` に版・コミット・取得時点を残します。
-- 台帳へ本文を入れてよいのは、出典の本文条件が `redistribution: allowed` のときだけです。検証ツールは、それ以外の出典の本文を拒否します。
-- Word（docx）は `tools/extract_docx_text.py`、HTML は `tools/extract_html_text.py`、Markdown は `tools/extract_markdown_text.py` で段落（ブロック）の順に取り出せる（標準ライブラリのみ。docx の自動番号と HTML の強調は復元しない）。抜粋範囲 `locator` はその識別子（P<連番>）で書く。
-- `transform_history` は、原本のハッシュから抜粋の `text_sha256` までの変換を一段ずつ記録します（抽出、ルビ・注記の処理、範囲の切り出し等）。最初の入力が `raw_sha256`、各段の入力が直前の出力、最後の出力が `text_sha256` と一致しなければ拒否します。原本は上書きしません。
-- 利用条件は、データの条件です。リポジトリのコード用ライセンス（`LICENSE`）で置き換えません。本文と書誌情報の条件、第三者の引用・図表も分けます。第三者の内容を含む抜粋は採用しません（`third_party_content: none`）。
-- 帰属・加工表示は採用文書ごとに `attribution` と `modification_notice` へ書きます。推敲文を出典元の公式文書として提示しません。
+Do not store source files (PDF, Word, or HTML) in the repository. Identify them by retrieval source and SHA-256. Do not identify a version only by a mutable URL; retain a release, commit, or retrieval point in `version`.
 
-### 2. 抜粋を選ぶ
+- Include source text in the manifest only when the source content terms say `redistribution: allowed`. The validator rejects body text from other sources.
+- Extract Word (docx), HTML, and Markdown in paragraph/block order with `tools/extract_docx_text.py`, `tools/extract_html_text.py`, and `tools/extract_markdown_text.py` (standard library only; automatic numbering in docx and emphasis in HTML are not restored). Use the paragraph identifier (P<連番>) for the excerpt `locator`.
+- `transform_history` records each transformation from the source hash to the excerpt's `text_sha256` (extraction, ruby or note processing, range selection, etc.). Reject the record unless the first input matches `raw_sha256`, each stage's input matches the preceding output, and the last output matches `text_sha256`. Never overwrite source files.
 
-- 文書群ごとに最初は10抜粋程度、複数の独立した原本から選びます。この件数は運用上の出発点で、統計的十分性の根拠ではありません。
-- 結果を見る前に、候補（`candidate`）を台帳へ記録します。採用（`adopted`）と除外（`excluded`、理由必須）の数と理由を残します。生成結果を見てから都合のよい抜粋だけを選びません。
-- 自己完結しない抜粋、前後の文脈に依存する抜粋、抽出で見出し・表・脚注・注記を失った抜粋は、修復するか除外します。
-- 変更不要の対照例（`role: no_change_control`、理由 `no_change_reason`）を各群に含めます。原文をそのまま返すことを失敗扱いにしません。
+Usage terms apply to the data. Do not substitute the repository's code license (`LICENSE`). Separate terms for the content and bibliographic information, and third-party quotations and figures. Do not adopt excerpts containing third-party content (`third_party_content: none`).
 
-### 3. 元文書単位で分割する
+- For every adopted document, record attribution and modification notices in `attribution` and `modification_notice`. Do not present an edited text as an official document from its source.
 
-- 調整用（`tuning`）と最終評価用（`final`）は原本単位で分けます。同じ `lineage_id` の章・抜粋・別形式・旧版・対訳は同じ側に置きます。同一本文のハッシュが両側にあれば拒否します。
-- 分割は、モデルの出力を見る前に決めて台帳へ固定します。可能なら著者・系列の偏りも抑えます（検証ツールは検査しません。人が確認します）。
-- 調整に使った抜粋は、スキル改良後の最終評価に使いません（#44）。
+### 2. Select Excerpts
 
-### 4. 原文を唯一の正解にしない
+- Initially select about 10 excerpts per document group from multiple independent source documents. This count is an operational starting point, not evidence of statistical adequacy.
 
-保持すべき主張・条件・例外・主体・数値・文の働きを `preserve` に書き、許容する変更を `allowed_changes` に書きます。人が原文と照合した確認者と理由を残します。確認者のいない保持要件は採用済みの抜粋に置けません。LLMの判定は補助であり、保持要件や理解問題の正解にしません。
+Record candidates (`candidate`) in the manifest before viewing generated results. Retain counts and reasons for adoption (`adopted`) and exclusion (`excluded`, reason required). Do not select only convenient excerpts after seeing generated results.
 
-### 5. 評価を分ける
+Repair or exclude excerpts that are not self-contained, depend on surrounding context, or lose headings, tables, footnotes, or notes during extraction.
 
-| 区分 | 内容 | 使うツール |
-|---|---|---|
-| 自動検査 | 数値・URL・コード・否定・条件等の差。意味保持の合格にはしない | `review_readability.py auto`、`compare_readability.py auto` |
-| 人手評価 | 意味保持、読みやすさ、引用付きの定性指摘 | `compare_readability.py` |
-| 理解問題 | 一候補だけを読んで答える | `comprehension_readability.py` |
-| LLM判定（補助） | `--judge` の評点・理由。人手判定との照合に使う | `feedback_readability.py calibrate` |
+Include unchanged control examples in each group (`role: no_change_control`, with reason `no_change_reason`). Returning the source text unchanged is not a failure.
 
-主観評点と実理解を合算した総合点は作りません。未実施・失敗・判断不能・欠測は合格にせず、文書群別に残します。
+### 3. Split at the Source-Document Level
 
-### 6. 実行条件を記録する
+Separate `tuning` and `final` data by original source document. Keep chapters, excerpts, alternate formats, older versions, and translations with the same `lineage_id` on the same side. Reject identical text hashes that appear on both sides.
 
-各ケースの `request`、`audience`、`provenance.model`、`provenance.skill_version` を記録します。生成設定（温度等）は `provenance` に追記します。割付は準備ツールが保存する `organizer.json` が持ちます。公開文書は学習データに含まれた可能性があり、不明として扱います。社内文書での効果を保証しません。
+- Fix the split in the manifest before looking at model outputs. Where possible, also reduce author and series imbalance (the validator does not check this; a person must review it).
 
-## 既存ツールとの接続
+Do not use excerpts used for tuning in the final evaluation after skill revision (#44).
 
-新しい評価基盤は作らず、既存の入力形式に合わせます。実際の入力検査から分かった制約です。
+### 4. Do Not Treat the Source as the Only Correct Answer
 
-| 制約 | 帰結 |
-|---|---|
-| `compare_readability.py`・`statistics_readability.py` は `document_id` を独立文書の単位として数え、同じ `document_id` は同じ向きで割り付ける | `document_id` は**原本（`source_id`）**にする。同じ原本の複数抜粋を独立文書にしない。#44 が確認を求めた点は、この設定で原本単位の集約になる |
-| `comprehension_readability.py` は `document_id` の重複を拒否する（一人に同じ原稿を一度だけ配る） | `document_id` は**抜粋ID**にし、1回の配布に含める抜粋は**1原本につき1つまで**にする。同じ原本の別抜粋は別の配布に回す |
-| 理解問題の集計は記述値で、区間推定はない | 理解問題から効果推定や信頼区間を作らない（#44 の注意と同じ） |
-| 匿名比較・理解問題はモードB専用 | 小説（モードD）や現代語化を、Bとして採点しない（#39 の境界） |
-| 確認記録は `compare_readability.py prepare` の `organizer.json` から作る | 回帰ケース化（`feedback_readability.py`）は匿名比較を実施した後 |
+Record claims, conditions, exceptions, agents, numbers, and sentence functions to preserve in `preserve`; record permitted changes in `allowed_changes`. Retain the reviewer and rationale for human comparison against the source. Do not include a preservation requirement in an adopted excerpt without a named reviewer. LLM judgments are supplementary and must not define preservation requirements or correct comprehension answers.
 
-`validate_public_corpus.py` は、これらを `--cases` で検査します。
+### 5. Separate Evaluation Tasks
 
-## 手順
+| Category                     | Content                                                                                                         | Tool                                                        |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Automatic checks             | Differences in numbers, URLs, code, negation, conditions, etc. Do not count as a pass for meaning preservation. | `review_readability.py auto`, `compare_readability.py auto` |
+| Human evaluation             | Meaning preservation, readability, and qualitative comments with quotes.                                        | `compare_readability.py`                                    |
+| Comprehension questions      | Answer after reading only one candidate.                                                                        | `comprehension_readability.py`                              |
+| LLM judgment (supplementary) | Scores and rationale from `--judge`; use for comparison with human judgments.                                   | `feedback_readability.py calibrate`                         |
 
-1. 出典を台帳へ `planned` で登録する。取得後に `collected` へ変え、版・取得日・`raw_sha256`・利用条件を記録する。
-2. 抜粋を `candidate` で登録し、原本と照合して `adopted` / `excluded` にする。保持要件と理解問題を人が確認する。
-3. 台帳を検査する。
+Do not combine subjective ratings and actual comprehension in an overall score. Retain unrun, failed, undecidable, and missing cases by document group; do not treat them as passes.
+
+### 6. Record Run Conditions
+
+For each case, record `request`, `audience`, `provenance.model`, and `provenance.skill_version`. Add generation settings such as temperature to `provenance`. The assignment mapping is stored in `organizer.json` by the preparation tool. Public documents may be included in training data; treat this as unknown. Do not claim results apply to internal company documents.
+
+## Integration with Existing Tools
+
+Do not build a new evaluation platform. Match the existing input formats. The following constraints were found by inspecting actual input validation:
+
+| Constraint                                                                                                                                                                             | Consequence                                                                                                                                                                                                                        |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `compare_readability.py` and `statistics_readability.py` count `document_id` as an independent document and assign repeated instances of the same `document_id` in the same direction. | Use the original source (`source_id`) for `document_id`. Do not treat multiple excerpts from one source as independent documents. The aggregation requested for #44 will be at the source-document level under this configuration. |
+| `comprehension_readability.py` rejects duplicate `document_id` values (give one person the same text only once).                                                                       | Use the excerpt ID as `document_id` and include no more than one excerpt per source in a single assignment. Assign other excerpts from that source in separate sessions.                                                           |
+| Comprehension-question aggregation is descriptive and has no interval estimates.                                                                                                       | Do not estimate effects or confidence intervals from comprehension questions (same caution as #44).                                                                                                                                |
+| Anonymous comparison and comprehension questions are Mode B only.                                                                                                                      | Do not score fiction (Mode D) or modernization as Mode B (boundary from #39).                                                                                                                                                      |
+| Review records are created from `organizer.json` produced by `compare_readability.py prepare`.                                                                                         | Convert to regression cases (`feedback_readability.py`) only after anonymous comparison.                                                                                                                                           |
+
+`validate_public_corpus.py` checks these constraints using `--cases`.
+
+## Procedure
+
+1. Register each source as `planned` in the manifest. After retrieval, change it to `collected` and record version, retrieval date, `raw_sha256`, and usage terms.
+2. Register excerpts as `candidate`, compare them with the source, then mark them `adopted` / `excluded`. Have a person verify preservation requirements and comprehension questions.
+3. Validate the manifest.
 
    ```bash
    python3 tools/validate_public_corpus.py --manifest evals/public-documents/manifest.json
@@ -95,7 +103,7 @@ Issue #38 の確定事項です。公開された実文書で、意味を保っ�
    python3 tools/validate_public_corpus.py --manifest evals/public-documents/manifest.json --readiness
    ```
 
-4. 既存CLI用の `cases` JSON を作る。`original` は台帳の `text` をそのまま使う。実行前に台帳との一致と分割を検査する。
+4. Create `cases` JSON for the existing CLIs. Use the manifest's `text` unchanged as `original`. Before running, validate correspondence with the manifest and the split.
 
    ```bash
    # 比較・統計: document_id は原本
@@ -104,21 +112,21 @@ Issue #38 の確定事項です。公開された実文書で、意味を保っ�
    python3 tools/validate_public_corpus.py --manifest evals/public-documents/manifest.json --cases comprehension.json --split tuning --document-id-by excerpt
    ```
 
-5. 以降は[文章評価ツール](../../../docs/human-evaluation.md)の手順に従う。
+5. Follow the procedure in the [text evaluation tools guide](../../../docs/human-evaluation.md).
 
-検証ツールの終了コードは `0=合格`、`1=台帳または cases に不備`、`2=入力を読めない`。検査するのは形式と整合性だけです。保持要件の意味、利用条件の解釈、抜粋と原本の一致、理解問題の正解は人が確認します。
+Validator exit codes: `0=合格`, `1=台帳または cases に不備`, `2=入力を読めない`. The tool checks only format and consistency. A person verifies the meaning of preservation requirements, interpretation of usage terms, excerpt-to-source correspondence, and correct answers to comprehension questions.
 
-## 対象外
+## Out of Scope
 
-社内実務での効果の保証、自律的なスキル更新、学習済みでないことの証明、改良率の事前断定。NTTの非営利・継承条件付き資料、他媒体利用の案内があるPostgreSQL日本語版、BCCWJは初回対象に含めません。必要になった時点で条件を別途確認します。
+Guaranteeing effects in internal business practice, autonomous skill updates, proving that a document was not used for training, and predicting an improvement rate in advance. The initial scope excludes NTT materials with nonprofit and inheritance conditions, the Japanese PostgreSQL edition with a notice about use in other media, and BCCWJ. Check their terms separately if they become necessary.
 
-## 現在の状態
+## Current Status
 
-- 共通の台帳形式、検証ツール、docx・HTML・Markdown の抽出器、全5群の文書群手順を用意した。
-- デジタル庁（#40）は原本5文書を取得し、候補11件・除外6件を台帳に記録した。保持要件・理解問題は草案で、**人の確認と採用は0件**。詳細は[文書群の手順](../../../docs/public-documents-digital-agency.md#状態2026-10-16-時点)。
-- Python（#41）は原本4ページを取得し、候補18件・除外4件を台帳に記録した。採用は0件。詳細は[文書群の手順](../../../docs/public-documents-python.md)。
-- Kubernetes（#42）は原本4ページを取得し、候補25件・除外5件を台帳に記録した。採用は0件。詳細は[文書群の手順](../../../docs/public-documents-kubernetes.md)。
-- 青空文庫（#39）は随筆5作品を取得し、候補21件・除外5件を台帳に記録した。採用は0件。詳細は[文書群の手順](../../../docs/public-documents-aozora.md)。
-- IPA（#43）はOSPOスターターキット（Markdown、CC0）9ファイルを取得し、候補18件・除外6件を台帳に記録した。PDF 資料は未収集。採用は0件。詳細は[文書群の手順](../../../docs/public-documents-ipa.md)。
-- 全5群の候補は合計93件（デジタル庁11、Python 18、Kubernetes 25、青空文庫21、IPA 18）。保持要件と理解問題は assistant の草案で、人の確認を経た採用は0件。
-- 生成・評価・自動指標（#45）は未実施。効果は未測定。
+- A shared manifest format, validator, docx / HTML / Markdown extractors, and procedures for all five groups are ready.
+- Digital Agency (#40): five source documents collected; 11 candidates and 6 exclusions recorded in the manifest. Preservation requirements and comprehension questions are drafts; **human review and adoption are both 0**. See the [group procedure](../../../docs/public-documents-digital-agency.md#状態2026-10-16-時点).
+- Python (#41): four source pages collected; 18 candidates and 4 exclusions recorded. Zero adopted. See the [group procedure](../../../docs/public-documents-python.md).
+- Kubernetes (#42): four source pages collected; 25 candidates and 5 exclusions recorded. Zero adopted. See the [group procedure](../../../docs/public-documents-kubernetes.md).
+- Aozora Bunko (#39): five essay works collected; 21 candidates and 5 exclusions recorded. Zero adopted. See the [group procedure](../../../docs/public-documents-aozora.md).
+- IPA (#43): nine Markdown files from the OSPO Starter Kit (CC0) collected; 18 candidates and 6 exclusions recorded. PDF materials have not been collected. Zero adopted. See the [group procedure](../../../docs/public-documents-ipa.md).
+- Across all five groups, there are 93 candidates (Digital Agency 11, Python 18, Kubernetes 25, Aozora Bunko 21, IPA 18). Preservation requirements and comprehension questions are assistant drafts; none has been adopted after human review.
+- Generation, evaluation, and automatic metrics (#45) have not been run. Effects are unmeasured.

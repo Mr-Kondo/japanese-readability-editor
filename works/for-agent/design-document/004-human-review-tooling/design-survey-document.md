@@ -1,117 +1,117 @@
-# 人手評価を、根拠を残す改善サイクルにつなぐ
+# Connect Human Evaluation to an Evidence-Preserving Improvement Cycle
 
-調査後の実装手順は[文章評価ツール](../../../../docs/human-evaluation.md)を参照。単独評価・自動検査に加え、モードBの匿名二候補比較、評価者別の固定割付、引用付き問題記録、欠測を含む集計を実装した。以下は調査時点の記録であり、人手実験による効果の実証はまだ行っていない。
+For implementation steps after the survey, see the [text evaluation tool](../../../../docs/human-evaluation.md). In addition to single-candidate evaluation and automated checks, the implementation includes anonymous two-candidate comparison for Mode B, fixed assignments by evaluator, issue records with quotations, and aggregation that includes missing data. This is a record of the survey at that time; effectiveness has not yet been demonstrated through a human study.
 
-## 1. 文脈：初版はモードBの人手比較に絞る
+## 1. Context: Limit the First Version to Human Comparison in Mode B
 
-**少人数がローカルで使う評価画面を作り、意味保持と読みやすさを分けて記録する案を推奨する。** まずモードB（既存文章の推敲）を対象に、問題箇所・理由・任意の修正案を保存する。集まった指摘を人が検討してスキルを改訂し、未使用文書で再評価する。ツールを導入しただけで文章品質が向上するとはいえない。
+**The recommendation is to build a local evaluation interface for a small number of people, recording meaning preservation separately from readability.** The first version should target Mode B (editing existing text) and save problem locations, reasons, and optional revision suggestions. People can review the collected findings, revise the Skill, and reevaluate on unused documents. Introducing a tool alone does not establish that text quality improves.
 
-調査日は2026年10月16日。対象はリポジトリのコミット `26ec2c1d04da69409702f49408311c80af79174b`。今回は調査・設計検討であり、実装・導入・人手実験は行っていない。評価者数と利用環境は未指定のため、本人または数人が使う前提を置く。「読みやすさ」は対象読者の理解しやすさ、「意味保持」は数量・条件・否定・主体・文の働きなどを変えないこと。「盲検」は候補のスキル版やモデル名を評価者に知らせないことを指す。
+The survey date was 2026-10-16. The target was repository commit `26ec2c1d04da69409702f49408311c80af79174b`. This was research and design review only; no implementation, deployment, or human study was conducted. Since evaluator count and usage environment were unspecified, the assumption is that the author or a few people would use it. "Readability" means ease of understanding for the target reader. "Meaning preservation" means not changing quantities, conditions, negation, agent, sentence function, and similar elements. "Blind" means evaluators are not told the candidate's skill version or model name.
 
-## 2. 核心的な論理：意味保持を入口条件にし、理解は別に測る
+## 2. Core Rationale: Use Meaning Preservation as an Entry Condition, and Measure Comprehension Separately
 
-### 証拠：既存評価と先行研究が示す範囲
+### Evidence: What Existing Evaluations and Prior Research Show
 
-本スキルは短縮自体を目的とせず、意味・精度・必要情報を保って認知負荷を下げる。既存の比較手順にも、版名を伏せ、意味保持が両版とも合格した場合に読みやすさを比較する規定がある。[スキル正本](/Volumes/SSD/Programming/japanese-readability-editor/skill/japanese-readability-editor/SKILL.md:10)、[比較手順](/Volumes/SSD/Programming/japanese-readability-editor/evals/readability-comparison.md:30)
+This Skill does not aim merely to shorten text; it aims to reduce cognitive load while preserving meaning, accuracy, and necessary information. The existing comparison procedure also requires hiding version names and comparing readability only when both versions pass the meaning-preservation check. [Canonical Skill](/Volumes/SSD/Programming/japanese-readability-editor/skill/japanese-readability-editor/SKILL.md:10), [comparison procedure](/Volumes/SSD/Programming/japanese-readability-editor/evals/readability-comparison.md:30)
 
-既存の一般化評価は16文書×3反復の48出力に対するモデル採点で、意味保持は46合格・1不合格・1未判定、総合判定はHOLDだった。これは独立した人間の確認結果でも、48文書の調査でもない。Bの45出力中13出力は前後の空白を除き原文と同じであり、**意味保持の合格率を読みやすさの改善率に読み替えることはできない。** [既存評価結果](/Volumes/SSD/Programming/japanese-readability-editor/evals/readability-generalization-result.md:18)
+The existing generalization evaluation used model scoring on 48 outputs from 16 documents × 3 repetitions: meaning preservation was 46 pass, 1 fail, and 1 uncertain, and the overall decision was HOLD. This was not an independent human check or a study of 48 documents. Of the 45 Mode B outputs, 13 were identical to the original after trimming leading and trailing whitespace. **The meaning-preservation pass rate cannot be treated as a readability improvement rate.** [Existing evaluation result](/Volumes/SSD/Programming/japanese-readability-editor/evals/readability-generalization-result.md:18)
 
-日本語の文書単位平易化研究では、188原文からの1,128対を母語話者5名で評価し、必須情報・主要内容の保持と文・文書の平易さを分離している。ただし小学6年生向けの大幅な短縮が対象であり、このスキルの技術文書・メール・創作へ基準をそのまま移せない。[Yamashita et al., 2026](https://aclanthology.org/2026.lrec-1.85/)
+A study of Japanese document-level simplification evaluated 1,128 pairs from 188 source texts with five native speakers, distinguishing retention of required information and main content from sentence- and document-level simplicity. However, it focused on substantial simplification for sixth-grade readers, so its criteria cannot be transferred directly to this Skill's technical documents, emails, or creative writing. [Yamashita et al., 2026](https://aclanthology.org/2026.lrec-1.85/)
 
-理解問題による評価は、削除で答えられなくなった情報を検出できる。一方、質問が触れない情報の保持は保証しない。またドイツ語の人手評価では主観的難易度と実際の理解に差があり、自動平易化後の編集が手作業より速いという有意な結果も得られなかった。[Agrawal & Carpuat, 2024](https://aclanthology.org/2024.tacl-1.24.pdf)、[Carrer et al., 2024](https://aclanthology.org/2024.humeval-1.7.pdf)
+Comprehension questions can detect information removed such that a question can no longer be answered. They do not guarantee retention of information that the questions do not address. A human study in German also found a gap between subjective difficulty and actual comprehension, and no significant result showing that post-editing after automatic simplification was faster than manual editing. [Agrawal & Carpuat, 2024](https://aclanthology.org/2024.tacl-1.24.pdf), [Carrer et al., 2024](https://aclanthology.org/2024.humeval-1.7.pdf)
 
-### 仮説：二段階評価が改善箇所を特定しやすい
+### Hypothesis: Two-Stage Evaluation Makes Problems Easier to Locate
 
-提案する一次評価は、原文・依頼・資料と候補を照合し、各候補に「合格／不合格／未判定」を付ける。意味改変やモード違反は独立した不具合として残し、自然さの高得点で相殺しない。次に、合格した候補同士を匿名の左右表示で比較し、「左／右／同等／判断不能」と根拠を記録する。単一候補の点検にも対応する。最初は差分表示を必須にせず、文章全体を読める形にする。
+The proposed primary evaluation compares each candidate with the source, request, and materials, then labels it "pass / fail / uncertain." Record meaning changes and mode violations as separate defects; do not offset them with a high naturalness score. Then compare anonymous left/right displays among passing candidates and record "left / right / tie / uncertain" with evidence. The tool should also support single-candidate checks. At first, do not require a diff display; make the full text readable.
 
-**集計は全件を母数にした不合格・未判定・欠測と、両候補合格の部分集合での選好を別々に示す。** 不合格を消して残った候補の勝率だけを出すと、全体の改善を過大評価する。原文も比較基準に残し、「変更しない方がよかった」を検出する。初期のスキル効果は同一モデル・同一依頼のスキル有無で、改訂効果は同一生成条件の旧版・新版で比較し、二つの問いを混ぜない。
+**Report failures, uncertain judgments, and missing data using all cases as the denominator, separately from preferences among pairs where both candidates pass.** If failed cases are removed and only the win rate among remaining candidates is shown, overall improvement will be overstated. Keep the original as a comparison baseline to detect cases where "it would have been better not to change it." Initially measure the effect of the Skill by comparing the same model and request with and without the Skill; measure revision effects by comparing old and new versions under the same generation conditions. Do not conflate these questions.
 
-対象読者の理解を検証する段階では、同じ内容の原文と推敲文を同じ人に続けて読ませない。読者を割り当て、一方だけで理解問題に答えてもらう。編集上の点検と読者の理解実験を分離することで、既読内容の記憶を理解改善と誤認するのを避ける。評価者属性、表示順、独立評価と不一致の記録は、人手評価の報告指針にも沿う。[van der Lee et al., 2019](https://aclanthology.org/W19-8643.pdf)
+When checking comprehension by target readers, do not have the same person read both the original and revision of the same content in sequence. Assign readers and ask comprehension questions using only one version. Separating editorial review from a reader-comprehension study avoids mistaking memory of already-read content for improved comprehension. Recording evaluator characteristics, display order, independent ratings, and disagreements also follows human-evaluation reporting guidance. [van der Lee et al., 2019](https://aclanthology.org/W19-8643.pdf)
 
-### 反論：既存の点数や自由記述で十分ではないか
+### Counterargument: Are Existing Scores or Free-Text Feedback Sufficient?
 
-個人の文章を本人が選ぶだけなら、自由記述は準備負担が最小で、用途に適している。SARIなどの自動指標にも、特定の理解課題でシステム順位と対応した実績がある。ただし指標と人間評価の関係は課題・生成方式・参照文に依存し、本スキルの意味保証にはならない。[Alva-Manchego et al., 2021](https://aclanthology.org/2021.cl-4.28.pdf)、[Agrawal & Carpuat, 2024](https://aclanthology.org/2024.tacl-1.24.pdf)
+If a person is choosing for their own writing, free-text feedback has minimal preparation burden and may fit the purpose. Automatic metrics such as SARI have also aligned with system rankings in particular comprehension tasks. However, the relationship between a metric and human evaluation depends on the task, generation method, and reference text; it does not guarantee meaning preservation for this Skill. [Alva-Manchego et al., 2021](https://aclanthology.org/2021.cl-4.28.pdf), [Agrawal & Carpuat, 2024](https://aclanthology.org/2024.tacl-1.24.pdf)
 
-したがって初版も多数の評点を要求せず、判定・引用・理由に絞る。自動警告やLLM採点は一次評価後に見せる。二者比較は好みの方向を把握しやすいが、改善の大きさは測れない。本人一人の評価から一般読者の品質向上を主張しない。[Ethayarajh & Jurafsky, 2022](https://aclanthology.org/2022.emnlp-main.406.pdf)
+Therefore, the first version should not require many ratings; limit them to a judgment, quotation, and reason. Show automatic warnings or LLM scores only after the primary human evaluation. Pairwise comparison makes preference direction easier to see, but does not measure the magnitude of improvement. Do not claim improved quality for general readers based on one person's evaluation. [Ethayarajh & Jurafsky, 2022](https://aclanthology.org/2022.emnlp-main.406.pdf)
 
-## 3. 重要ポイント：既存記録を再利用し、小さく導入する
+## 3. Key Points: Reuse Existing Records and Start Small
 
-### モード別に成功条件を変える
+### Define Success Differently by Mode
 
-| モード | 契約・保持の確認 | 人が評価する品質 |
-|---|---|---|
-| A：新規生成 | 依頼・資料・必須事項との一致、根拠のない追加 | 読者の問いへの回答、構造、自然さ |
-| B：推敲 | 条件・否定・主体・数量・時制・文の働き | 理解しやすさ、読み戻り、文体保持 |
-| C：改行挿入 | 許可された改行以外を変えていないか。元の文字・既存空白も照合 | 話題境界、分割過多、読み進めやすさ |
-| D：小説 | plan/draft/continue/revise/critiqueそれぞれの操作契約、設定・視点・開示順 | 語り口、会話、呼吸、意図しない混乱 |
+| Mode                  | Contract and preservation checks                                                                    | Quality judged by people                                |
+| --------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| A: Generate new text  | Agreement with request, source materials, and required items; unsupported additions                 | Answers to readers' questions, structure, naturalness   |
+| B: Edit text          | Conditions, negation, agent, quantities, tense, sentence function                                   | Ease of understanding, rereading, preservation of style |
+| C: Insert line breaks | Whether only permitted line breaks changed; compare original characters and existing whitespace too | Topic boundaries, over-segmentation, reading flow       |
+| D: Fiction            | Operation contract for plan/draft/continue/revise/critique, setting, viewpoint, and disclosure      | Voice, dialogue, rhythm, unintended confusion           |
 
-Dのdraft/continueに原文完全保持を求めたり、小説へ一律に短文化や結論先出しを適用したりしない。Cの既存strict検査もBOM・CRLFを正規化するため、厳密な保持には元データとの追加照合が必要。[モード規定](/Volumes/SSD/Programming/japanese-readability-editor/skill/japanese-readability-editor/SKILL.md:18)、[小説の評価](/Volumes/SSD/Programming/japanese-readability-editor/skill/japanese-readability-editor/references/fiction-writing.md:79)、[機械検査の限界](/Volumes/SSD/Programming/japanese-readability-editor/evals/README.md:21)
+Do not require exact source preservation for D draft/continue, or apply uniform shortening and conclusion-first rules to fiction. The existing strict check for C also normalizes BOM and CRLF, so strict preservation requires additional comparison against the original data. [Mode requirements](/Volumes/SSD/Programming/japanese-readability-editor/skill/japanese-readability-editor/SKILL.md:18), [fiction evaluation](/Volumes/SSD/Programming/japanese-readability-editor/skill/japanese-readability-editor/references/fiction-writing.md:79), [machine-check limits](/Volumes/SSD/Programming/japanese-readability-editor/evals/README.md:21)
 
-### ツール・ライブラリの比較
+### Compare Tools and Libraries
 
-| 候補 | 活かせる機能 | 本件の判断・追加負担 |
-|---|---|---|
-| ローカルHTML＋標準API | 選択したJSONの読込、フォーム、結果ダウンロード | **初版の第一候補**。少人数向け。割付・検証・再開は実装が必要。[FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader) |
-| Gradio | Python UI、Flaggingによる入力・出力の記録 | 既存採用時は再利用。Flagだけでは割当・理由・再開管理が不足。[公式文書](https://gradio.app/main/docs/gradio/flagging) |
-| Streamlit | フォーム、選択、結果ダウンロード | Pythonでの試作向き。永続保存と評価手順は別途設計。[公式文書](https://docs.streamlit.io/develop/api-reference/widgets) |
-| Label Studio | 二者比較、選択肢、範囲ラベル、JSON出力 | 複数人の継続運用・範囲注釈が必要なら優先。同等／不明はChoicesで明示。[Pairwise](https://labelstud.io/tags/pairwise.html)、[Choices](https://labelstud.io/tags/choices.html) |
-| Argilla | 評点、ラベル、自由記述、範囲注釈 | 既存利用があれば検討。公式READMEは新機能追加を行わない方針を示し、新規基盤としては優先しない。[公式リポジトリ](https://github.com/argilla-io/argilla) |
-| SciPy／statsmodels | 信頼区間・評価者間一致の集計 | データが集まった分析段階の任意依存。スキル本体へ追加しない。[bootstrap](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html)、[kappa](https://www.statsmodels.org/stable/generated/statsmodels.stats.inter_rater.cohens_kappa.html) |
+| Candidate                  | Useful capability                                        | Decision and added burden for this case                                                                                                                                                                                                                                                                       |
+| -------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Local HTML + standard APIs | Load selected JSON, forms, download results              | **First choice for the initial version.** Suitable for a small group. Assignment, validation, and resume need implementation. [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)                                                                                                       |
+| Gradio                     | Python UI, record inputs and outputs through Flagging    | Reuse if already adopted. Flag alone does not provide assignment, reasons, or resume management. [Official docs](https://gradio.app/main/docs/gradio/flagging)                                                                                                                                                |
+| Streamlit                  | Forms, selection, result download                        | Suitable for a Python prototype. Persistence and evaluation procedures need separate design. [Official docs](https://docs.streamlit.io/develop/api-reference/widgets)                                                                                                                                         |
+| Label Studio               | Pairwise comparison, choices, span labels, JSON output   | Prefer if ongoing multi-person use or span annotation is needed. Represent tie/uncertain explicitly through Choices. [Pairwise](https://labelstud.io/tags/pairwise.html), [Choices](https://labelstud.io/tags/choices.html)                                                                                   |
+| Argilla                    | Ratings, labels, free text, span annotation              | Consider if already in use. Its official README says new feature development is not planned, so it is not preferred as a new platform. [Official repository](https://github.com/argilla-io/argilla)                                                                                                           |
+| SciPy / statsmodels        | Aggregate confidence intervals and inter-rater agreement | Optional dependencies at the analysis stage after data is collected. Do not add them to the Skill itself. [bootstrap](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html), [kappa](https://www.statsmodels.org/stable/generated/statsmodels.stats.inter_rater.cohens_kappa.html) |
 
-ローカルHTMLは外部CDNを使わず、文章を文字列として表示する。保存は明示的なJSON出力・再取込を基本とする。`file:`でのlocalStorage動作は保証されないため、そこだけに回答を保存しない。これは実装上の提案であり、通信遮断下の動作は未検証である。[MDN localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
+Local HTML should use no external CDN and display text as strings. Make explicit JSON export and reimport the default for saving. Since localStorage behavior under `file:` is not guaranteed, do not rely on it as the only place to save responses. This is an implementation proposal; behavior with network access blocked has not been verified. [MDN localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
 
-支援スキルは役割を限定して使う。[huggingface-gradio](/Users/masatomiwada/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/gradio/SKILL.md)はGradioを選んだ場合のUI構築、[statistical-analysis](/Users/masatomiwada/.codex/plugins/cache/claude-cowork/data/1.0.0/skills/statistical-analysis/SKILL.md)は効果量・区間推定・小標本の検討、[skill-creator](/Users/masatomiwada/.codex/skills/.system/skill-creator/SKILL.md)は実証された失敗をルールや例へ反映する作業に適する。いずれも人間の日本語評価や実際の品質検証を代替しない。
+Use supporting Skills for limited roles. [huggingface-gradio](/Users/masatomiwada/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/gradio/SKILL.md) is suited to building the UI if Gradio is selected; [statistical-analysis](/Users/masatomiwada/.codex/plugins/cache/claude-cowork/data/1.0.0/skills/statistical-analysis/SKILL.md) to considering effect sizes, interval estimates, and small samples; and [skill-creator](/Users/masatomiwada/.codex/skills/.system/skill-creator/SKILL.md) to incorporating demonstrated failures into rules or examples. None substitutes for human Japanese evaluation or verification of actual quality.
 
-### 保存する情報と改善サイクル
+### Information to Save and Improvement Cycle
 
-| 記録 | 最小項目 |
-|---|---|
-| task | 文書ID、依頼、対象読者、モード／操作、原文・資料、候補本文とハッシュ、生成条件、スキル版、評価基準版、データ区分 |
-| assignment | タスクID、仮名評価者ID、専門性、固定した左右割付、日時 |
-| annotation | 各候補の保持判定、品質選好、問題箇所の引用・文番号、種類・重大度・理由、任意修正案、回答改訂番号、所要時間 |
+| Record     | Minimum fields                                                                                                                                                                                             |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| task       | Document ID, request, target reader, mode/operation, source/materials, candidate text and hash, generation conditions, skill version, evaluation-criteria version, data split                              |
+| assignment | Task ID, pseudonymous evaluator ID, expertise, fixed left/right assignment, date/time                                                                                                                      |
+| annotation | Preservation judgment for each candidate, quality preference, quotation and sentence number for issue location, type/severity/reason, optional revision suggestion, response revision number, elapsed time |
 
-候補の実名対応表は評価配布ファイルから分ける。画面だけで名称を隠しても厳密な盲検にはならない。未回答・不明・同等を別値にし、一次評価と裁定を別記録にする。初版では精密な文字範囲選択を必須にせず、引用と文番号で始める。
+Keep the table mapping candidate names to identities separate from evaluation files. Hiding names in the UI alone does not ensure strict blinding. Use distinct values for unanswered, uncertain, and tie; keep primary ratings and adjudication in separate records. For the first version, do not require precise character-span selection; start with quotations and sentence numbers.
 
-既存の`run.json`は原文・候補・生成条件・ハッシュを持つため、読取専用で取り込み、その外側へ人手評価記録を足す。既存の生成・採点schemaは変えない。流れは「生成条件固定→独立評価→不一致の裁定→反復する失敗を回帰ケース化→人が最小修正→未使用文書で旧新版比較」とする。**評価を保存することと、スキルを更新することは別工程**であり、自動反映は初版に含めない。[既存評価CLI](/Volumes/SSD/Programming/japanese-readability-editor/tools/evaluate_readability.py:108)
+Existing `run.json` contains source, candidates, generation conditions, and hashes, so import it read-only and add human evaluation records alongside it. Do not change the existing generation or scoring schema. The flow is "freeze generation conditions → independent evaluation → adjudicate disagreements → turn recurring failures into regression cases → minimal human revision → compare old/new on unused documents." **Saving an evaluation and updating a Skill are separate steps**; automatic application is not part of the first version. [Existing evaluation CLI](/Volumes/SSD/Programming/japanese-readability-editor/tools/evaluate_readability.py:108)
 
-| 優先度 | 次に作るもの | 機会費用・判断条件 |
-|---|---|---|
-| P0 | Bの評価基準、JSON形式、3–5件の練習例 | UIより先に基準を揃える。準備工数はかかるが比較不能な回答の収集を減らす |
-| P1 | `tools/`のローカル評価画面、回答再開・集計、必要なtests/fixturesと手順 | 認証・DB・公開サーバーを省き、評価運用に時間を使う。JSON統合の手間は残る |
-| P2 | パイロットと未使用文書での再評価、実証された問題のスキル修正 | 単発の好みへの追随を抑える代わりに、改善確定まで時間が必要 |
-| P3 | A/C/Dの専用フォーム、理解試験、必要なら既存共同評価基盤 | 初回から全モードを作ると評価軸・UI検証が膨らむ。利用実績に応じて拡張 |
+| Priority | Next item                                                                                                       | Opportunity cost and decision condition                                                                                  |
+| -------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| P0       | Mode B criteria, JSON format, 3–5 practice examples                                                             | Align criteria before the UI. It takes preparation time but reduces collection of incomparable responses.                |
+| P1       | Local evaluation interface in `tools/`, response resume and aggregation, required tests/fixtures and procedures | Avoid authentication, database, and public server; spend time on evaluation operations. JSON integration effort remains. |
+| P2       | Pilot and reevaluation on unused documents; revise Skill for demonstrated problems                              | Reduces overreaction to one-off preferences, but takes time to establish improvement.                                    |
+| P3       | Dedicated forms for A/C/D, comprehension tests, and an existing collaborative evaluation platform if needed     | Building every mode at the start expands evaluation axes and UI validation. Expand based on actual use.                  |
 
-初版の変更先は開発ツール・テスト・手順に限定でき、`skill/`正本、配布・インストール処理、スキル必須依存は変更不要と考える。既存記録の非上書き、不正入力、再開時の割付、HTML混入、日本語表示・キーボード操作を実装時に確認する。
+The initial changes can be limited to development tools, tests, and procedures; the `skill/` canonical source, distribution and installation process, and required Skill dependencies need not change. At implementation time, check that existing records cannot be overwritten, inputs are valid, assignments persist when resuming, HTML is handled safely, and Japanese text and keyboard operation work.
 
-## 4. 具体例：短くなっても、指示の意味が変われば不合格
+## 4. Example: A Shorter Text Fails if It Changes the Meaning of an Instruction
 
-既存評価では「広げないようにします」という方針表明が、「広げないでください」という相手への依頼へ変わった。人手フォームでは「意味保持：不合格」「分類：文の働き／主体」「根拠：該当二表現」「理由：誰が行動するかと発話目的が変化」と記録できる。修正案は任意とし、短さや自然さで合格にしない。[実際の評価記録](/Volumes/SSD/Programming/japanese-readability-editor/evals/readability-generalization-result.md:29)
+In an existing evaluation, the policy statement "広げないようにします" ("I will try not to expand it") changed into the request "広げないでください" ("Please do not expand it"). A human evaluation form could record "meaning preservation: fail," "category: sentence function / agent," "evidence: the two relevant expressions," and "reason: who acts and the purpose of the utterance changed." A revision suggestion is optional; brevity and naturalness do not make it pass. [Actual evaluation record](/Volumes/SSD/Programming/japanese-readability-editor/evals/readability-generalization-result.md:29)
 
-この一例を直すために同種の抽象ルールを増やすより、方針表明・依頼・禁止の対比例と、改稿前後で発話目的を照合する手順を検討する。使った例は回帰用へ移し、未使用の例で同種の失敗が減るかを確認する。[既存の文の働きの確認規定](/Volumes/SSD/Programming/japanese-readability-editor/skill/japanese-readability-editor/SKILL.md:55)
+Rather than adding another abstract rule to fix this one example, consider contrastive examples for policy statements, requests, and prohibitions, plus a procedure to compare communicative intent before and after editing. Move the used example into regression data and check whether similar failures decrease on unused examples. [Existing rule for checking sentence function](/Volumes/SSD/Programming/japanese-readability-editor/skill/japanese-readability-editor/SKILL.md:55)
 
-## 5. 平易な説明
+## 5. Plain-Language Explanation
 
-わかりやすく言うと、文章に点数を付ける箱ではなく、「何が、どこで、なぜ読みづらいか、何を変えてはいけなかったか」を残し、次の改訂が本当に良くなったか確かめる道具を作るということである。
+Put simply, this is not a box for scoring text; it is a tool for recording "what is hard to read, where, why, and what must not have changed," then checking whether the next revision really improved it.
 
-## 6. 自己批判的考察：改善率は予測できず、まず測れる設計にする
+## 6. Critical Self-Assessment: Improvement Rates Cannot Be Predicted; First Design for Measurability
 
-**期待できる直接効果は指摘の追跡性と再現性の向上、条件付きの間接効果は同種の失敗の減少である。** 後者は、指摘から有効な修正を作り、未使用文書で確認できた場合に限る。理解率・読解速度・後編集時間が何％改善するかを予測する基礎データはない。評価負担や裁定工数が増えたり、意味保持を恐れて原文を残すだけになったりする逆効果もある。
+**The direct effect that can reasonably be expected is better traceability and reproducibility of findings; a conditional indirect effect is fewer recurring failures.** The latter depends on producing an effective revision from findings and confirming it on unused documents. There is no basis to predict a percentage improvement in comprehension, reading speed, or post-editing time. Evaluation burden and adjudication work may increase, or excessive concern about preservation may lead only to retaining the original text.
 
-探索用パイロットはBの24–40文書、各2–3名を出発点とする。これは実務上の計画値で、十分な検出力を保証しない。文種・長さ・読者を記録し、既知の失敗だけの診断集合と通常用途の集合を分ける。評価済み文書をスキル改善に使った後は、成果確認用の未使用集合へ戻さない。[小標本と検出力：Card et al., 2020](https://aclanthology.org/2020.emnlp-main.745.pdf)
+For an exploratory pilot, start with 24–40 Mode B documents and 2–3 evaluators per document. These are practical planning values, not a guarantee of adequate statistical power. Record document type, length, and reader; separate a diagnostic set of known failures from a set representing ordinary use. After an evaluated document has been used to improve the Skill, do not return it to the unused set for confirming results. [Small samples and power: Card et al., 2020](https://aclanthology.org/2020.emnlp-main.745.pdf)
 
-30文書×3人の90票は90独立文書ではない。単純一致率、判定分布、尺度に合う一致係数を併記し、区間推定は文書単位で全票をまとめて再抽出する案が妥当。ただし、その区間は参加評価者に条件づけられ、評価者一般への推定には別の設計が必要である。[Artstein & Poesio, 2008](https://aclanthology.org/J08-4004.pdf)
+Thirty documents × three people yields 90 ratings, not 90 independent documents. Report simple agreement, judgment distributions, and an agreement coefficient suited to the scale. A suitable proposal for interval estimates is to resample all ratings grouped by document. However, such an interval is conditional on the participating evaluators; estimating across evaluators generally requires a separate design. [Artstein & Poesio, 2008](https://aclanthology.org/J08-4004.pdf)
 
-不確実性の規模を説明すると、独立な二項観測・勝率50％付近という仮定の近似95％区間は、30件で約±18ポイント、100件で約±10ポイントとなる。これは効果予測でも、同点や相関を含む本試験の区間でもない。工数も未実測であり、仮に1文書対5–10分と置けば24–40文書×2–3人で約4–20人時、練習・裁定は別途必要となる。通常の評価所要時間は注釈・UI操作を含み、読解速度として扱えない。
+To illustrate the scale of uncertainty, under the approximation of independent binomial observations and a success rate near 50%, the approximate 95% interval is ±18 percentage points for 30 cases and ±10 points for 100. This is not an effect forecast or an interval for the planned study, which includes ties and correlation. Workload is also unmeasured. If each document pair took an assumed 5–10 minutes, 24–40 documents × 2–3 evaluators would require about 4–20 person-hours, with practice and adjudication additional. Typical evaluation time includes annotation and UI operation; do not treat it as reading speed.
 
-設計方針への主観的信頼度は**0.8**。既存契約と研究知見の整合性に対する判断であり、校正済み確率や品質改善成功率ではない。日本語操作、ライブラリ互換性、通信、保存復旧、対象読者に対する効果は未検証である。
+Subjective confidence in the design direction is **0.8**. This reflects confidence in the fit with existing contracts and research, not a calibrated probability or likelihood of quality improvement. Japanese interaction, library compatibility, networking, save recovery, and effects for target readers are unverified.
 
-## 7. 結論
+## 7. Conclusion
 
-Bの匿名比較・保持判定・根拠付き指摘・JSON保存から着手するのが、現状に対して最小で検証可能な案である。最初の成果判定は「高評価が増えたか」だけにせず、意味改変の全件集計と、どの問題が修正され未使用文書でも改善したかを結びつける。共同作業や他モードの需要が確認できた段階で拡張する。
+Starting with anonymous Mode B comparison, preservation judgments, evidence-backed findings, and JSON storage is a minimal, verifiable proposal for the current state. The first outcome check should not ask only whether high ratings increased; it should connect the full count of meaning changes with which problems were fixed and whether they also improved on unused documents. Expand when demand for collaboration or other modes is confirmed.
 
-## 8. 参考文献
+## 8. References
 
-主要な一次資料は本文中の直接リンクを参照。人手評価設計は[van der Lee et al.（2019）](https://aclanthology.org/W19-8643.pdf)、日本語文書評価は[Yamashita et al.（2026）](https://aclanthology.org/2026.lrec-1.85/)、意味保持は[Agrawal & Carpuat（2024）](https://aclanthology.org/2024.tacl-1.24.pdf)、理解と編集工数は[Carrer et al.（2024）](https://aclanthology.org/2024.humeval-1.7.pdf)、検出力は[Card et al.（2020）](https://aclanthology.org/2020.emnlp-main.745.pdf)、評価者間一致は[Artstein & Poesio（2008）](https://aclanthology.org/J08-4004.pdf)を中心に検討した。詳細な調査根拠は[手法メモ](</Volumes/SSD/Programming/japanese-readability-editor/works/for-agent/requirement-definition-document/002-human-evaluation-methods.md>)、[ツールメモ](</Volumes/SSD/Programming/japanese-readability-editor/works/for-agent/requirement-definition-document/001-evaluation-tool-selection.md>)、[既存スキル統合メモ](</Volumes/SSD/Programming/japanese-readability-editor/works/for-agent/design-document/004-human-review-tooling/integration-document.md>)に保存した。
+See the direct links to primary sources in the text. The main sources considered were [van der Lee et al. (2019)](https://aclanthology.org/W19-8643.pdf) for human-evaluation design, [Yamashita et al. (2026)](https://aclanthology.org/2026.lrec-1.85/) for Japanese document evaluation, [Agrawal & Carpuat (2024)](https://aclanthology.org/2024.tacl-1.24.pdf) for meaning preservation, [Carrer et al. (2024)](https://aclanthology.org/2024.humeval-1.7.pdf) for comprehension and editing effort, [Card et al. (2020)](https://aclanthology.org/2020.emnlp-main.745.pdf) for statistical power, and [Artstein & Poesio (2008)](https://aclanthology.org/J08-4004.pdf) for inter-rater agreement. Detailed survey evidence is in the [methods memo](/Volumes/SSD/Programming/japanese-readability-editor/works/for-agent/requirement-definition-document/002-human-evaluation-methods.md), [tool memo](/Volumes/SSD/Programming/japanese-readability-editor/works/for-agent/requirement-definition-document/001-evaluation-tool-selection.md), and [existing Skill integration memo](/Volumes/SSD/Programming/japanese-readability-editor/works/for-agent/design-document/004-human-review-tooling/integration-document.md).
 
-未実施：実装、依存導入、ブラウザ操作検証、人手実験、テスト再実行。機能調査は公式資料の机上確認である。
-主なリスク：少数評価者の好みへの過適合と、合格候補だけの選好を全体の改善と誤認することである。
+Not performed: implementation, dependency installation, browser-interaction testing, human study, or test reruns. The feature review was a desk check of official documentation.
+Main risks: overfitting to a small number of evaluators' preferences and mistaking preferences among passing candidates for overall improvement.

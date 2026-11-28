@@ -1,62 +1,62 @@
-# 万能動詞の具体化例を修正する実装案・追加調査
+# Implementation Proposal and Additional Research for Fixing the Over-Concretization Example
 
-## 文脈と状態
+## Context and Status
 
-2026-10-16。対象は `references/readability-rules.md` の「万能動詞」に残っていた矛盾。基点は v0.8.0（`69188f6`）、作業ブランチは `codex/fix-concretization-example`。以下は実装前にまとめた調査・設計であり、その後ユーザーの指示により修正と比較評価まで実施した。[実施結果](../../../evals/concretization-result.md)では、指示の矛盾除去と、改善効果が保留だったことを分けて報告している。追加調査で、根拠を確認してから書き換える案は維持し、変更後の情報の追加・欠落を別方向から確認する方法と、評価の分離を補った。
+2026-10-16. The target is a contradiction remaining under “万能動詞” (“all-purpose verbs”) in `references/readability-rules.md`. Baseline: v0.8.0 (`69188f6`); working branch: `codex/fix-concretization-example`. The following research and design were prepared before implementation. At the user's later direction, the fix and comparative evaluation were completed. The [results](../../../evals/concretization-result.md) distinguish removal of the instruction contradiction from the effect on quality, which remained unresolved. Additional research retained the proposal to check evidence before rewriting, and added separate checks for information added or omitted after a change and separation of evaluation axes.
 
-## 証拠と原因の仮説
+## Evidence and Hypothesis About the Cause
 
-- 基点版の[参照文書](https://github.com/Mr-Kondo/japanese-readability-editor/blob/69188f6fc505ae44b64187a03cd29eb4713aa69c/skills/japanese-readability-editor/references/readability-rules.md)の「万能動詞」は、「再試行が安定性に効く」を「通信が失敗しても再試行するため、一時的な障害でジョブが止まらない」へ展開できるとしている。原文にない通信という対象、失敗・障害という条件、停止しないという保証を足している。
-- 直前の確認手順も「何をするのか」「その結果、何が変わるのか」の有無だけを問う。根拠が足りない場合の扱いが、この節内にない。
-- [共通指示](../../../skills/japanese-readability-editor/SKILL.md)は、元の述語が伝わるなら保ち、抽象的という理由だけで評価の種類や強さを変えないよう求めている。
-- [例集の例7](../../../skills/japanese-readability-editor/assets/examples.md)は既に、対象を通信やジョブへ限定せず、「支える」「高める」を残す例に修正されている。同種の保証への変更は誤りとして示されている。
+- “万能動詞” in the baseline [reference document](https://github.com/Mr-Kondo/japanese-readability-editor/blob/69188f6fc505ae44b64187a03cd29eb4713aa69c/skills/japanese-readability-editor/references/readability-rules.md) says 「再試行が安定性に効く」 can be expanded to 「通信が失敗しても再試行するため、一時的な障害でジョブが止まらない」. This adds a communication target, failure/outage conditions, and a guarantee of no stoppage that are absent from the source.
+- The preceding check also asks only whether “what is done” and “what changes as a result” are present. This section says nothing about what to do when evidence is insufficient.
+- The [shared instructions](../../../skills/japanese-readability-editor/SKILL.md) say to preserve the original predicate when its meaning is conveyed, and not to change the type or strength of the evaluation merely because it is abstract.
+- [Example 7 in the examples](../../../skills/japanese-readability-editor/assets/examples.md) has already been revised to retain “supports” and “increases” without narrowing the target to communication or jobs. It shows changes to similar guarantees as errors.
 
-以上は実装前のファイルで確認した事実。局所的な例が共通指示より優先され、根拠のない具体化を誘発する可能性がある、というのは仮説である。実施した比較では手順と例を同時に変更しており、この例だけを既存のモデル失敗の原因だとは断定しない。
+The statements above are facts observed in the pre-implementation files. The possibility that a local example takes precedence over shared instructions and induces concretization without evidence is a hypothesis. The completed comparison changed the procedure and example together; it does not establish that this example alone caused prior model failures.
 
-## 外部資料から取り入れる判断
+## Decisions Informed by External Sources
 
-[yomiyasu の現行指示](https://github.com/nanaism/yomiyasu/blob/main/skills/yomiyasu/SKILL.md)の「主語と目的語の明確化」「比喩動詞の具体化」「情報の不増補」を確認した。主述の対応を直す際には原文の動詞をまず保ち、意味を保てる自然な言い換えができなければ残す。また、ぼかした語を狭い事実へ置き換えず、提供資料も根拠として扱う。この判断を対象節へ適用する。
+I reviewed the current [yomiyasu instructions](https://github.com/nanaism/yomiyasu/blob/main/skills/yomiyasu/SKILL.md) on clarifying subject/object relationships, concretizing figurative verbs, and avoiding information addition. When fixing subject-predicate relationships, first preserve the source verb; if a natural paraphrase cannot preserve meaning, leave it unchanged. Also do not replace a vague term with a narrower fact, and treat supplied materials as evidence. Apply this judgment to the target section.
 
-[解説記事](https://zenn.dev/algoartis/articles/0b1c731881b25c)は背景資料とする。今回の修正文の根拠は、上記の指示本文と、うちの共通指示・修正済み例7との整合性に置く。他スキルの指示があること自体を、改善効果の証拠にはしない。
+Use the [explanatory article](https://zenn.dev/algoartis/articles/0b1c731881b25c) as background. The proposed revision is grounded in consistency with the instruction text above, the shared instructions here, and revised Example 7. The existence of instructions in another skill is not itself evidence of improved effects.
 
-## 追加で確認した資料と採否
+## Additional Sources Reviewed and Adoption Decisions
 
-検索範囲は、日本語の文章推敲用の公開スキル、技術文書用リンター、公的な文章作成指針、文体変換とモデル採点の評価研究。以下は2026-10-16に一次資料を確認した代表例であり、網羅的な文献レビューではない。公開スキルは指示本文を読んだもので、インストールや実行による効果検証はしていない。GitHubのリンクは可変のmain等を指すため、後の実装で本文を取り込む場合はコミットとライセンスも記録する。
+The search covered public Japanese proofreading skills, technical-writing linters, public-sector writing guidance, and research on style transfer and model evaluation. The following are representative primary sources checked on 2026-10-16, not an exhaustive literature review. Public skills were read as instruction text; they were not installed or tested for effectiveness. GitHub links point to mutable branches such as `main`, so record commit and license if their content is incorporated in later implementation.
 
-| 資料 | 確認できた内容 | 今回の使い方と限界 |
-|---|---|---|
-| [geonwoo-jeong/japanese-humanizer：SKILL.md](https://github.com/geonwoo-jeong/japanese-humanizer/blob/main/plugins/japanese-humanizer/skills/japanese-humanizer/SKILL.md)、[監査手順](https://github.com/geonwoo-jeong/japanese-humanizer/blob/main/plugins/japanese-humanizer/skills/japanese-humanizer/references/revision-playbook.md) | 表層修正・文脈判断・高次判断の優先度を区別し、事実性、専門性、明示化、誤検出を監査する。 | 対象や保証に触る具体化を、単純な語句整理と区別する考え方を採用候補にする。優先度のスコアや全出力形式は導入しない。指示の存在は効果の証拠ではない。 |
-| [coji/natural-japanese：SKILL.md](https://github.com/coji/natural-japanese/blob/main/skills/natural-japanese/SKILL.md) | 検出と文脈判断を分け、執筆前の読者・主メッセージ・骨組みの設計を重視する。 | 既に採用している構造確認を活用する。今回、自然度スコア、追加の収束ループ、並列レビューの仕組みまでは導入しない。 |
-| [blader/humanizer：SKILL.md](https://github.com/blader/humanizer/blob/main/SKILL.md) | 不要な対比、反復する結び、誇張、装飾などを類型化し、改稿後に情報の追加・欠落を再確認する。 | 語の数より文章内での働きを見る点を参考にする。一方、声に応じた反応の追加を認める部分、ダッシュの一律制限、個別の変換例は、うちの意味保持方針へそのまま移さない。英語向けの実装である。 |
-| [textlint-rule-preset-ja-technical-writing：README](https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing) | 文長、助詞、二重否定、文体などを検出する。既定設定は厳しめで、文書に応じた調整と例外を想定する。 | 検出結果を修正命令にしない設計を支持する。対象・因果・保証の同一性はこのリンターだけでは確認できず、今回は依存を追加しない。 |
-| [文化庁「公用文作成の考え方」発表資料](https://www.bunka.go.jp/koho_hodo_oshirase/hodohappyo/93650001.html) | 文書の種類を区別し、広報等では読み手に合わせた分かりやすい書き方を認める。 | 用途に応じた判断の背景とする。AI文の識別や推敲モデルの性能を裏付ける資料としては使わない。今回確認したのは公式発表ページであり、解説書全体を精読したとは扱わない。 |
-| [Mir et al., 2019, Evaluating Style Transfer for Text](https://aclanthology.org/N19-1049/) | 文体変換の強さ、内容保持、自然さを別の評価軸として扱い、それらのトレードオフを論じる。 | 意味保持・不自然な表現の改善・自然な読み心地を別々に判定する根拠とする。Yelpの感情変換に基づく研究で、日本語技術文書への効果は別途確認が必要。 |
-| [Babakov et al., 2022, A large-scale computational study of content preservation measures](https://aclanthology.org/2022.acl-srw.23/) | 内容保持の尺度を比較し、相互の含意に基づくMISを提案する。 | 情報の追加と欠落を両方向で調べる発想を採用候補にする。今回の確認手順はMISの実装や再現実験ではない。日本語の自動含意判定モデルも追加しない。 |
-| [Wang et al., 2024, Large Language Models are not Fair Evaluators](https://aclanthology.org/2024.acl-long.511/) | モデル採点に、候補の提示順で順位が変わる位置バイアスがあることを報告する。 | 版名を伏せるだけでなく、同じペアを左右反転して採点し、不一致を未判定として残す案へ反映する。この処置だけで全ての採点バイアスが消えるとは考えない。 |
+| Source                                                                                                                                                                                                                                                                                                                                           | What was verified                                                                                                                                             | Use here and limitations                                                                                                                                                                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [geonwoo-jeong/japanese-humanizer: SKILL.md](https://github.com/geonwoo-jeong/japanese-humanizer/blob/main/plugins/japanese-humanizer/skills/japanese-humanizer/SKILL.md), [audit procedure](https://github.com/geonwoo-jeong/japanese-humanizer/blob/main/plugins/japanese-humanizer/skills/japanese-humanizer/references/revision-playbook.md) | Distinguishes priorities for surface edits, contextual judgment, and higher-order judgment; audits factuality, expertise, clarification, and false positives. | Consider adopting its distinction between simple wording cleanup and concretization that changes a target or guarantee. Do not import its priority scores or full output format. The existence of instructions is not evidence of effectiveness.                                     |
+| [coji/natural-japanese: SKILL.md](https://github.com/coji/natural-japanese/blob/main/skills/natural-japanese/SKILL.md)                                                                                                                                                                                                                           | Separates detection from contextual judgment and emphasizes planning the audience, main message, and structure before drafting.                               | Reuse structural checks already adopted. Do not introduce its naturalness scores, additional convergence loop, or parallel-review mechanism here.                                                                                                                                    |
+| [blader/humanizer: SKILL.md](https://github.com/blader/humanizer/blob/main/SKILL.md)                                                                                                                                                                                                                                                             | Categorizes unnecessary contrast, repeated conclusions, exaggeration, and ornamentation; rechecks added and omitted information after revision.               | Use the idea of judging a phrase by its role in the text rather than word counts. Do not directly transfer permission to add reactions based on voice, blanket dash restrictions, or individual conversion examples to this meaning-preservation policy. It is designed for English. |
+| [textlint-rule-preset-ja-technical-writing: README](https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing)                                                                                                                                                                                                                    | Detects sentence length, particles, double negatives, style, and other issues. Defaults are strict and allow for document-specific tuning and exceptions.     | Supports treating detections as suggestions rather than editing commands. This linter cannot verify identity of target, causality, or guarantee; add no dependency.                                                                                                                  |
+| Agency for Cultural Affairs, [public-document writing guidance announcement](https://www.bunka.go.jp/koho_hodo_oshirase/hodohappyo/93650001.html)                                                                                                                                                                                                | Distinguishes document types and accepts reader-focused plain language for public relations and similar materials.                                            | Use as background for audience-dependent judgment. Do not use it as evidence for identifying AI-written text or proofreading-model performance. Only the official announcement page was reviewed, not the full guidance.                                                             |
+| [Mir et al., 2019, Evaluating Style Transfer for Text](https://aclanthology.org/N19-1049/)                                                                                                                                                                                                                                                       | Treats style-transfer strength, content preservation, and naturalness as distinct criteria and discusses their trade-offs.                                    | Grounds separate judgments of meaning preservation, improvement to unnatural phrasing, and natural flow. The study uses Yelp sentiment transfer; effects on Japanese technical writing require separate verification.                                                                |
+| [Babakov et al., 2022, A large-scale computational study of content preservation measures](https://aclanthology.org/2022.acl-srw.23/)                                                                                                                                                                                                            | Compares content-preservation measures and proposes MIS based on mutual entailment.                                                                           | Consider checking information additions and omissions in both directions. This procedure is not an MIS implementation or reproduction study. No Japanese automatic-entailment model is added.                                                                                        |
+| [Wang et al., 2024, Large Language Models are not Fair Evaluators](https://aclanthology.org/2024.acl-long.511/)                                                                                                                                                                                                                                  | Reports position bias in model ratings, where candidate order changes rankings.                                                                               | Reflect in the proposal by hiding version names, scoring the same pair with sides reversed, and retaining inconsistent judgments as undecided. This alone will not remove every rating bias.                                                                                         |
 
-論文について今回確認したのはACL Anthologyの書誌と抄録であり、実験の再現や全文の精査は行っていない。上の「今回の使い方」は資料から導いた設計判断であって、論文がうちのスキルの有効性を実証したという意味ではない。
+For the papers, only ACL Anthology bibliographic information and abstracts were checked; experiments were not reproduced and full papers were not reviewed in depth. The “use here” column presents design judgments derived from the sources; it does not mean the papers demonstrated the effectiveness of this skill.
 
-### 追加調査から導く方法
+### Method Derived from the Additional Research
 
-採用候補は、次の小さな確認に絞る。新しい推敲エンジンや総合点は作らない。
+Keep the adopted candidate to the following small check. Do not build a new editing engine or composite score.
 
-1. 修正前に、対象・条件・結果・評価のうち、どれが原文または資料で確定しているかを確認する。
-2. 修正後に、出力の新しい具体的主張を入力が支えるかを確かめる。対応する根拠がなければ追加として戻す。
-3. 逆に、原文の主張・条件・留保が出力にも残っているかを確かめる。単に矛盾がないだけでは、欠落や一般化を見逃すためである。
+1. Before editing, identify which target, condition, result, or evaluation is established by the source or materials.
+2. After editing, check whether the input supports any new concrete claim in the output. If no corresponding evidence exists, remove it as an addition.
+3. Conversely, check whether claims, conditions, and caveats from the source remain in the output. Checking only for contradictions can miss omission or generalization.
 
-資料は原文の曖昧さを解く根拠にも使えるが、資料にある全情報を本文へ追加するわけではない。資料の限定が原文にも掛かると確定できる場合にだけ使う。確認は意味の対応で行い、同じ単語の有無を要求しない。これは人またはモデルによる照合の手順であり、自動証明ではない。
+Materials may help resolve ambiguity in the source, but do not add every detail found in the materials. Use a qualification only when it is established that it applies to the source as well. Check semantic correspondence, not identical word occurrence. This is a human- or model-assisted comparison, not an automatic proof.
 
-## 選択肢
+## Options
 
-| 案 | 利点 | 残る問題・機会費用 | 判断 |
-|---|---|---|---|
-| 誤った例文だけ削除 | 最小の差分で矛盾を除ける | 確認手順が具体的な結果を要求するように読める点が残る | 不十分 |
-| 手順を根拠の確認から始め、例7を参照 | 根拠がある場合と不足する場合を区別でき、例の重複も減る | 短い説明の追加と挙動確認が必要 | 推奨 |
-| 禁止語・自動置換・新しい検出器を追加 | 表現の候補を機械的に拾える | 「効く」自体の適否や保証への変化を語の一致だけで判断できず、保守範囲が広がる | 今回は採らない |
+| Option                                                          | Benefit                                                                                              | Remaining issue / opportunity cost                                                                                 | Decision                     |
+| --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
+| Delete only the erroneous example                               | Removes the contradiction with the smallest change.                                                  | The procedure could still be read as requiring a concrete result.                                                  | Insufficient.                |
+| Start the procedure by checking evidence and refer to Example 7 | Distinguishes cases with sufficient evidence from those without it, and reduces duplicated examples. | Requires a short explanation and behavior check.                                                                   | Recommended.                 |
+| Add prohibited words, automatic replacements, or a new detector | Mechanically finds candidate expressions.                                                            | Word matches cannot determine whether “works” is suitable or whether a guarantee changed; maintenance scope grows. | Not adopted for this change. |
 
-## 推奨する差分案
+## Recommended Change Proposal
 
-最初の実装は、`skills/japanese-readability-editor/references/readability-rules.md` の「万能動詞」の確認手順と例文だけを、次の内容へ置き換える。
+The first implementation should replace only the check procedure and example under “万能動詞” in `skills/japanese-readability-editor/references/readability-rules.md` with the following:
 
 ```text
 確認の手順:
@@ -69,46 +69,46 @@
 「再試行が安定性に効く」だけでは、何を再試行するかや、失敗後にどう動くかは分からない。この一文だけを根拠に、通信やジョブへ対象を限定したり、「止まらない」と保証したりしない。原文の表現を残し、ほかに直せる箇所を整える。名詞の展開と評価の保持は、assets/examples.md の例7を参照する。
 ```
 
-実装時には例7への参照を `../assets/examples.md` へのMarkdownリンクにする。「効く」を「寄与する」「助けになる」に機械的に置き換える案も採らない。抽象性の解消を確かめられず、評価の意味まで変わりうるためである。
+During implementation, make the Example 7 reference a Markdown link to `../assets/examples.md`. Do not mechanically replace “works” with “contributes” or “helps” either. That may not resolve abstraction and can change the evaluation's meaning.
 
-「原文を残すだけではAIっぽさを減らせない」という反論は妥当である。そこで、根拠がある場合の具体化を禁止せず、同じ意味を保てる修正を認める。一方、根拠がない箇所を残した出力は、意味保持には合格しても、表現改善の成功には数えない。
+The objection “leaving the source unchanged does not reduce AI-sounding prose” is valid. Therefore, do not prohibit concretization when evidence supports it; permit revisions that preserve the same meaning. However, an output that retains an unsupported phrase may pass meaning preservation but must not count as a successful improvement in expression.
 
-## 変更範囲と波及先
+## Change Scope and Downstream Effects
 
-- 正本の修正は上記1節に限る。共通 `SKILL.md` と例7は既に同じ判断を示しており、重ねて禁止指示を足さない。
-- 挙動評価を実施する段階では、開発用の入力・採点観点と結果を `evals/` に追加し、`evals/README.md` から参照する。過去の実行記録は変更しない。
-- 配布物は `tools/package.py` が正本から生成する。ZIP、Gemini Apps、OpenCode、Hermesへの反映は再生成で確認し、`dist/` を手で修正しない。
-- API、設定、依存関係、既存CLIは変更しない。この調査では対象表現を正本・テスト・配布ツールから検索し、別の肯定例としての同文は見つからなかった。例7内の誤例は対照例として残す。
+- Limit the normative-source change to the section above. The shared `SKILL.md` and Example 7 already express the same judgment; do not add duplicative prohibitions.
+- When behavior evaluation is performed, add development inputs, rating criteria, and results under `evals/` and link them from `evals/README.md`. Do not change historical run records.
+- Generate distributions from the source of truth using `tools/package.py`. Verify propagation to ZIP, Gemini Apps, OpenCode, and Hermes by regenerating; do not edit `dist/` by hand.
+- Do not change APIs, configuration, dependencies, or existing CLIs. This research searched the source of truth, tests, and packaging tool for the target expression and found no identical affirmative example elsewhere. Keep the erroneous example in Example 7 as a contrast case.
 
-## 検証案と採否
+## Verification Proposal and Decision Criteria
 
-優先順位1は指示の整合性。差分レビューで、対象・条件・評価の強さを追加していないかを確認する。単なる禁止文言の一致をテストして、意味保持を確認したことにはしない。
+Priority 1 is instruction consistency. Review the diff to ensure it adds no target, condition, or strength of evaluation. Testing for matching prohibition phrases alone does not verify meaning preservation.
 
-優先順位2は小規模な比較。6入力を用意する。これらは今回の分析に基づく回帰確認であり、未使用文書による一般化の証拠とは呼ばない。
+Priority 2 is a small comparison using six inputs. These are regression checks based on this analysis, not evidence of generalization to unused documents.
 
-| 入力の種類 | 件数 | 確認すること |
-|---|---:|---|
-| 対象・結果が不明な抽象表現（再試行、別分野の例） | 2 | 対象・条件・保証を創作しない |
-| 同じ程度の抽象表現に、明示された動作・結果・失敗条件がある資料 | 2 | 提供情報を使える範囲で整理し、失敗条件や留保を落とさない |
-| 自然な抽象評価と、文字どおりの技術的な動作説明 | 2 | 抽象語や無生物主語という理由だけで改変しない |
+| Input type                                                                                            | Count | Check                                                                                             |
+| ----------------------------------------------------------------------------------------------------- | ----: | ------------------------------------------------------------------------------------------------- |
+| Abstract statements with unknown target/result (retrying and an example from another field)           |     2 | Do not invent target, condition, or guarantee.                                                    |
+| Abstract statements of similar degree with materials that state action, result, and failure condition |     2 | Organize available information within its supported scope; retain failure conditions and caveats. |
+| Natural abstract evaluation and literal technical action description                                  |     2 | Do not revise solely because of abstract wording or an inanimate subject.                         |
 
-不明な2入力と資料がある2入力は、同じ原文に根拠資料がない場合・ある場合の組にする。前者で創作しないことと、後者で分かっている関係まで不明扱いして残さないことの両方を見る。ただし資料があっても、無用な追加や機械的な全面改稿は求めない。
+Pair the two inputs with unknown information and the two with evidence so the same source has one case without supporting material and one with it. Check both that the model does not invent in the former and that it does not leave known relationships vague in the latter. Even where materials exist, do not require unnecessary additions or mechanical full rewrites.
 
-基点版と候補版を、同一のモデル・推論設定・入力で各3回、1入力ずつ別文脈で生成する（計36出力）。入力・スキル本文・ハッシュ・実モデル識別子を保存する。[既存の比較手順](../../../evals/readability-comparison.md)を使い、まず意味保持を採点する。採点理由は、追加された主張と失われた主張を別々に示す。既存の採点点検項目に加え、「有益という評価を停止しない保証へ変更した出力」と「異なる自然な言い回しで意味を保持した出力」を、正答を伏せて混ぜ、保証の見逃しと字面への過剰反応を点検する。
+Generate baseline and candidate versions with the same model, reasoning settings, and inputs, three times each, one input per separate context (36 outputs total). Save inputs, skill text, hashes, and actual model identifiers. Use the [existing comparison procedure](../../../evals/readability-comparison.md) to score meaning preservation first. State added and lost claims separately in rating rationales. In addition to existing rating audits, mix in a hidden gold example where an evaluation of usefulness is changed to a guarantee of no stoppage, and a meaning-preserving paraphrase with different natural wording. Use them to check missed guarantees and overreaction to wording.
 
-両方の意味保持が合格したペアだけ、次の2軸を別々に比較する。
+Compare the following two axes separately, and only for pairs where both versions pass meaning preservation:
 
-- 表現上の問題の改善: 曖昧な主述関係、根拠のない大げさな表現、内容のない予告や反復が、具体的にどこで減ったか。
-- 自然さ: 語の結び付きや文のつながりが自然か。別の抽象語や定型句へ置換しただけで、読みにくさが残っていないか。
+- Improvement to expression: identify exactly where ambiguous subject-predicate relationships, unsupported exaggeration, empty previews, or repetition decreased.
+- Naturalness: judge whether word combinations and sentence flow are natural, and whether readability problems remain after substitution with another abstract term or formulaic phrase.
 
-版名を伏せて左右を割り当て、同じペアを左右反転してもう一度採点する。反転で勝敗が整合しなければ未判定として残す。意味保持に失敗したペアの数は全体の分母から隠さず、表現比較の対象外数として併記する。原文保持は意味保持では合格しうるが、そのことだけで表現改善の勝ちにはしない。禁止語数や語尾の種類だけで勝敗を決めず、総合点で意味保持の失敗を相殺しない。人の独立確認を行っていなければ、その限界を明記する。
+Hide version names, randomize left/right assignment, and score the same pair again with sides reversed. If the outcome is inconsistent after reversal, retain it as undecided. Do not hide meaning-preservation failures from the full denominator; also report how many pairs were excluded from expression comparison. Retaining the source can pass meaning preservation, but alone does not count as a win for improvement in expression. Do not decide winners by prohibited-word counts or ending types, and do not offset a meaning-preservation failure with a composite score. State the limit if no independent human review was performed.
 
-`tools/evaluate_readability.py` は、指定したスイートでの単一版の生成・意味保持採点に使える。ただし、変更前後の比較と表現改善の採点は実装されていないため、このツールだけで比較が完結するとは扱わない。今回の規模では既存のプロンプトと記録形式を使って実行し、汎用の比較機能を新設するかは別途判断する。
+`tools/evaluate_readability.py` can generate and score meaning preservation for a single version on a specified suite. However, it does not implement before/after comparison or expression-improvement scoring, so the tool alone does not complete the comparison. For this scale, use existing prompts and record formats; decide separately whether to add general-purpose comparison features.
 
-候補版の意味保持のfail・uncertain、欠落、実モデルの不一致、採点点検の誤答があれば、挙動改善の判断は保留する。基点版の失敗は隠さず集計するが、その失敗自体を理由に候補版を不合格にはしない。表現比較の未判定が残る場合も保留する。候補版の意味保持が全件合格でも表現改善の勝ちが負けを上回らない、または自然さの比較で負け越す場合は、指示の矛盾を除去したことだけを報告する。この小規模な採否基準は今回の設計判断であり、論文由来の統計的保証ではない。改善効果や他の文章での無失敗は主張しない。
+Defer any conclusion of behavioral improvement if the candidate has a meaning-preservation `fail` or `uncertain`, omissions, a mismatch in actual model, or errors on the rating audit. Count baseline failures without hiding them, but do not fail the candidate solely because of a baseline failure. Also defer if expression comparisons remain undecided. Even if the candidate passes meaning preservation on every case, report only removal of the instruction contradiction if expression-improvement wins do not outnumber losses or if naturalness has more losses than wins. These small-sample criteria are design judgments for this work, not statistical guarantees from the cited papers. Do not claim measured effectiveness or absence of failures on other text.
 
-優先順位3は実装後の構造検証・テスト・配布物生成。`python3 tools/check_all.py` と `python3 tools/package.py` を実行し、配布物への反映を確認する。モデル評価は外部通信・利用枠を使うため、整合性のレビューより後に行う。設計時は未実行だったが、現在は[実施結果](../../../evals/concretization-result.md)のとおり完了している。
+Priority 3 is structural validation, tests, and distribution generation after implementation. Run `python3 tools/check_all.py` and `python3 tools/package.py` and verify the distributed files. Model evaluation uses external communication and usage quota, so do it after review of instruction consistency. These steps were unrun at design time, but have since been completed as reported in the [results](../../../evals/concretization-result.md).
 
-## 限界
+## Limits
 
-この案で、前回の長文における方針から依頼への変更や、時系列から因果への変化まで解決するとは考えない。それらは別の失敗として残す。指示矛盾の存在についての判断は高確度だが、この局所修正による出力の改善効果は実施した比較でも保留である。
+This proposal is not expected to resolve shifts from policy to request or from chronology to causality in the earlier long text. Those remain separate failures. Confidence is high that the instruction contradiction existed, but the output-improvement effect of this local fix remained unresolved in the completed comparison.
