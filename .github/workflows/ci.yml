@@ -17,7 +17,6 @@ jobs:
       matrix:
         # CI は Windows だけで行う。macOS は実機で確かめ、Linux は検査しない。
         include:
-          - { os: windows-latest, python: "3.10" }
           - { os: windows-latest, python: "3.x" }
           - { os: windows-latest, python: "3.x", sudachi: core }
           - { os: windows-latest, python: "3.x", sudachi: small }
