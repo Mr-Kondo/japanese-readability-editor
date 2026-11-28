@@ -1,8 +1,64 @@
-Completed: All 15 translations, index integration, original comparison, and both final reviews.
-Next: Publish the documentation PR and complete CI, merge, and cleanup.
-Open: Delivery remains pending. Issue #224 records the final delivery state after merge.
+Completed: Translation delivery and 44 link repairs; local checks and both review modes passed.
+Next: Publish the follow-up PR, pass CI, merge, and verify the published GitHub references.
+Open: Public verification and follow-up delivery; Issue #224 records the final state.
 
 # Issue #224: Agent Documents Translation Plan
+
+## Link Repair Follow-up
+
+On 2026-11-28, the user explicitly requested link repair and public verification.
+This completes the approved reference-checking scope after translation delivery.
+The existing approval covers the unchanged models and preservation strategy.
+The earlier decision to retain 44 local absolute links is superseded.
+
+**Scope:** The 44 occurrences in three translated human-evaluation documents.
+Use the recorded research commit `26ec2c1d04da69409702f49408311c80af79174b`
+for historical repository citations, retaining the original line as a GitHub `#L` fragment.
+Markdown line citations use `?plain=1` to open the source view.
+Use relative links for the three current memo destinations.
+The former `design.md:42` citation refers to historical `docs/design.md:42` at that commit.
+Its old line number no longer locates the dependency guidance in the translated counterpart.
+For installed supporting skills, find and verify public source identity before linking.
+If no identical public snapshot exists, distinguish the public reference from the local snapshot.
+Keep historical claims, examples, dates, numbers, runtime, and frozen evaluations unchanged.
+Do not add dependencies or a permanent link-checking framework.
+
+| Role                 | Model                                     | Effort             | Responsibility                                                   |
+| -------------------- | ----------------------------------------- | ------------------ | ---------------------------------------------------------------- |
+| Coordinator          | `gpt-6.1-sol`                             | `high`             | Source mapping, decisions, integration, Issue and delivery       |
+| Repair worker        | `gpt-6-luna`                              | `medium`           | Apply the approved URL mapping to the three documents            |
+| Independent verifier | `gpt-6-luna`                              | `medium`           | Read-only checks of occurrence coverage and public targets       |
+| External reviewers   | Sonnet 5.5 and `gemini-4-hydrogen-medium` | `medium` requested | Separate overview/detail reviews, freshly randomized per request |
+
+- [x] Record user authorization, scope, models, and completion conditions.
+- [x] Review the repair plan in both modes and resolve findings.
+- [x] Map and repair all 44 occurrences without changing historical evidence.
+- [x] Check destination files and line fragments, and confirm zero local absolute Markdown links in the three documents.
+- [x] Run the existing Markdown tools and inspect the scoped diff.
+- [x] Complete independent verification and both final review modes.
+- [ ] Publish and merge a scoped PR after required CI succeeds.
+- [ ] Verify the merged GitHub pages, rendered links, and all unique replacement destinations over HTTP.
+- [ ] Update Issue #224 with evidence, preserve unrelated work, and remove the merged branch and temporary worktree.
+
+This is a reference-only documentation repair. TDD and an effectiveness experiment do not apply.
+Use occurrence accounting, Git object/line checks, rendered GitHub HTML, and HTTP destination checks instead.
+The requirements survey contains only the three supporting-skill links; it has no repository line citations.
+Keep a pre-edit occurrence table under ignored `feedback/`, including the old and proposed destinations.
+Check inline links, definitions, images, raw HTML, and local-path patterns.
+When no public skill identity is verifiable, use explicit plain text instead of an invented link.
+Plan reviews: Claude Code overview; Antigravity detail, both supplied-text reviews.
+Adopted source-view line anchors, full occurrence accounting, and explicit public-snapshot limits.
+The historical commit was confirmed through GitHub's API and is an ancestor of `origin/main`.
+Formatting fixes are restricted to this change; textlint never runs with `--fix`.
+The changed documents are not frozen evaluation inputs; preserve all `evals/` files byte-for-byte.
+The staged allowlist includes these three documents and this existing checklist.
+Final overview: Claude Code; final detail: Antigravity. Both returned PASS with explicit read-only limits.
+Independent coverage and AST checks pass. Exact body comparisons permit only the URL mapping,
+two public-counterpart disclaimers, and three link-label clarifications.
+The original list structure is preserved. Prettier and markdownlint pass.
+The Japanese textlint preset reports 190 advisory findings in English prose; no automatic prose fixes were applied.
+The post-merge Issue checklist is authoritative for the remaining delivery steps.
+The original translation plan and its historical execution log follow below.
 
 **Goal:** Translate the 15 migrated documents. Preserve meaning and evaluation evidence.
 

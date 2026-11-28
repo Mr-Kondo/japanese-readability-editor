@@ -71,12 +71,14 @@ Keep the evaluation UI separate from statistical processing. Initially aggregate
 
 ### Cited Findings
 
+The supporting-skill links below identify pinned public counterparts; they are not byte-identical snapshots of the local copies consulted on 2026-10-16.
+
 - SciPy’s `stats.bootstrap` supports confidence intervals, paired data, resampling counts, and random-state control. [SciPy bootstrap](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.bootstrap.html)
 - statsmodels’ `cohens_kappa` accepts a contingency table for two evaluators and supports unweighted, linear-weighted, and quadratic-weighted kappa. [Cohen kappa](https://www.statsmodels.org/stable/generated/statsmodels.stats.inter_rater.cohens_kappa.html)
 - statsmodels also provides `fleiss_kappa` for categorical ratings by multiple evaluators. [Fleiss kappa](https://www.statsmodels.org/stable/generated/statsmodels.stats.inter_rater.fleiss_kappa.html)
-- The session-provided hugging-face:huggingface-gradio skill supports Python UI components, Blocks, and event wiring. [Local SKILL.md](/Users/masatomiwada/.codex/plugins/cache/openai-curated-remote/hugging-face/1.0.0/skills/gradio/SKILL.md)
-- The provided data:statistical-analysis skill covers effect sizes, confidence intervals, small samples, and multiple-comparison cautions. [Local SKILL.md](/Users/masatomiwada/.codex/plugins/cache/claude-cowork/data/1.0.0/skills/statistical-analysis/SKILL.md)
-- The provided skill-creator says to improve skills using actual use and demonstrated failures, and that passing a validation script does not prove decision quality. [Local SKILL.md](/Users/masatomiwada/.codex/skills/.system/skill-creator/SKILL.md)
+- The session-provided hugging-face:huggingface-gradio skill supports Python UI components, Blocks, and event wiring. [Public counterpart](https://github.com/huggingface/skills/blob/aafb3adfb80951cc90836cc6fd17bb345aa49eef/skills/huggingface-gradio/SKILL.md)
+- The provided data:statistical-analysis skill covers effect sizes, confidence intervals, small samples, and multiple-comparison cautions. [Public counterpart](https://github.com/anthropics/knowledge-work-plugins/blob/5e504ae11498f2b8daa30d86b7dab97b2ecd8092/data/skills/statistical-analysis/SKILL.md)
+- The provided skill-creator says to improve skills using actual use and demonstrated failures, and that passing a validation script does not prove decision quality. [Public counterpart](https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.system/skill-creator/SKILL.md)
 
 ### Inferences
 
