@@ -1,0 +1,9 @@
+{
+  "config": {
+    "default": true,
+    "MD013": false,
+    "MD060": false,
+    // works/README.md とチェックリストは、規則で先頭が見出しではなく日本語の案内・現在地になる。
+    "MD041": false
+  }
+}

@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-11-02
 decision-makers: Codex（利用者が承認した段階評価と採否判断の実施範囲内）
-supersedes: 2026-11-02-pilot-update-knowledge-index.md
+supersedes: pilot-plan-adr.md
 ---
 
 # 知識索引の試行を完了し、自動接続を採用しない

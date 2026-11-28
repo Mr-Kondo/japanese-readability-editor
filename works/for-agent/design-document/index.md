@@ -27,3 +27,5 @@
 ADR を追加したときや、状態・後継が変わったときは、この表も更新します。
 
 `003-structure-rules/` の `opq-analysis-adr.md` と `opq-reeval-adr.md` は、`evals/` の runner がハッシュで照合するため、本文を変えていません。そのため、本文中の相対リンクは旧位置（`adr/`）のままで、現在は解決しません。
+
+`evals/opq-run`・`opq2-run`・`opq3-run` の `runner.py` は、記録した実行（`run.json`）が自分のハッシュを検査するため、書き換えていません。`runner.py` が `prepare()` で読む ADR のパスは旧 `adr/` のままです。完了済みの実験で、`prepare()` の再実行は想定していません。再現するときは、旧パスに ADR を置くか、新しい記録を作ってください。

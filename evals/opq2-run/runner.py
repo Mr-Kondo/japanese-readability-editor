@@ -87,7 +87,7 @@ def prepare():
               "comparison_instruction": COMPARISON, "runner_sha256": evaluation.digest(Path(__file__).read_text()),
               "helper_sha256": evaluation.digest(Path(evaluation.__file__).read_text()),
               "skill_sha256": {arm: {k: evaluation.digest(v) for k, v in files.items()} for arm, files in snapshots.items()},
-              "adr_sha256": evaluation.digest((ROOT / "works/for-agent/design-document/003-structure-rules/opq-analysis-adr.md").read_text(encoding="utf-8")),  # 実行前の ADR（指標・撤退条件）の固定
+              "adr_sha256": evaluation.digest((ROOT / "adr/2026-11-11-opq-analysis.md").read_text(encoding="utf-8")),  # 実行前の ADR（指標・撤退条件）の固定
               "outputs": [], "grading_calls": [], "comparison_calls": []}
     first = json.loads(RUN1.read_text(encoding="utf-8"))
     if first["skill_sha256"]["baseline"] != record["skill_sha256"]["baseline"] or first["generation_instruction"] != record["generation_instruction"]:

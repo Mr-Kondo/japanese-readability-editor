@@ -112,7 +112,7 @@ Antigravity のユーザー全体と、Hermes のプロファイルなど、`npx
 
 ```text
 $japanese-readability-editor モード C
-works/for-agent/design-document/005-readability-principles/design-principles-document.md に適用して。
+docs/user-guide.md に適用して。
 ```
 
 指定がないときや、指定と依頼が食い違うときの扱いは、[使い方の詳細](docs/usage.md)にあります。
