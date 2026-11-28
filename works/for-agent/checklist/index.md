@@ -1,5 +1,6 @@
-# 作業チェックリストの索引
+# Work Checklist Index
 
-| 番号 | 名称 | 何について書かれているか |
-| ---- | ---- | ------------------------ |
-| 001  | [works-migration](001-works-migration.md) | 開発文書を `works/` の構成へ移す作業 |
+| Number | Name                                                              | Contents                                                                                     |
+| ------ | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| 001    | [works-migration](001-works-migration.md)                         | Historical checklist for migrating development documents into `works/`; retained in Japanese |
+| 002    | [agent-documents-translation](002-agent-documents-translation.md) | Issue #224: translate the 15 migrated documents and preserve frozen evaluation evidence      |

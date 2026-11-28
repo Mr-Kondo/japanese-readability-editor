@@ -1,107 +1,107 @@
 ---
 status: accepted
 date: 2026-11-11
-decision-makers: 利用者（4つを決めて始める・既定の5サイクルを承認）、Claude Code（調査と検証）
+decision-makers: User (approved defining four items before starting and the default five cycles), Claude Code (research and verification)
 ---
 
-# 節・項で伝える内容を一つのメッセージに絞る規則を、足すか見送るか（決定: 見送り）
+# Whether to add a rule that limits each section and subsection to one message (decision: not adopted)
 
-追跡: [Issue #158](https://github.com/Mr-Kondo/japanese-readability-editor/issues/158)
+Tracking: [Issue #158](https://github.com/Mr-Kondo/japanese-readability-editor/issues/158)
 
-## 文脈
+## Context
 
-利用者の提案: 部・章・節・項・目の各階層で書く内容を「一つの内容」に絞る（原子性のように、一つの塊に一つのメッセージ）と、読みやすくなるのではないか。
+User proposal: Readability might improve if each level—part, chapter, section, subsection, and item—were limited to “one piece of content” (as with atomicity, one message per chunk).
 
-既存の規則と重なる。
+This overlaps with existing rules.
 
-| 既存の箇所 | 内容 |
-|---|---|
-| `readability-rules.md` §1 見る点 | 「一つの段落や節に、複数の論点が混ざっていないか」 |
-| 同 直し方 | 「論点ごとに段落や節を分ける」 |
-| 同「見出し」 | 見出しだけで中身が分かるか。見出しと各段落の先頭文で内容を追えるか |
-| 同 §2 | 長い段落は、話題の境で改行だけで分ける |
-| SKILL.md 診断順序の1 | 論点が混ざっていないか。見出しと先頭文だけで追えるか |
+| Existing location                        | Content                                                                                                                                |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `readability-rules.md` §1, What to check | “Are multiple points mixed in one paragraph or section?”                                                                               |
+| Same section, How to fix                 | “Separate paragraphs or sections by point.”                                                                                            |
+| Same section, “Headings”                 | Can the content be understood from headings alone? Can the content be followed from headings and the first sentence of each paragraph? |
+| Same document §2                         | Split long paragraphs only with line breaks at topic boundaries.                                                                       |
+| `SKILL.md`, diagnostic order 1           | Check whether points are mixed and whether the content can be followed from headings and first sentences alone.                        |
 
-足りない可能性がある点は3つ。(1) 節という単位で「何を確かめるか」の具体的な手順がない（見出しが全段落を指しているか、段落の問いが同じか）。(2) 分けた後の結び（「どちらも」）の掛かり先の扱い。(3) 分けすぎない歯止めが節の単位にない（段落の細切れだけが問題として書かれている）。
+Three aspects may be missing: (1) a concrete procedure for checking “what to verify” at the section level (whether the heading describes all paragraphs and whether the paragraphs address the same question); (2) how to handle a concluding phrase such as “both” after splitting; and (3) a safeguard against over-splitting at the section level (only over-fragmented paragraphs are currently identified as a problem).
 
-## 先行研究（出典つき。いずれも仮説であり、このスキルの改善率の証拠にしない）
+## Prior research (with sources; all are hypotheses, not evidence of this skill's improvement rate)
 
-検索は2026-11-11。二次資料が多く、原典の本文は未確認のものがある。
+Search conducted on 2026-11-11. Many sources are secondary, and some original texts were not checked.
 
-| 領域 | 知見 | 出典と確度 |
-|---|---|---|
-| パラグラフライティング | 1段落は一つの話題（トピック）を述べ、冒頭のトピックセンテンスで示す。木下是雄『理科系の作文技術』第4章が典型 | 解説資料の記述を確認。**同書の本文は未確認** |
-| 見出しの実験 | 見出しがあると、文章の話題構造の記憶・要約への取り込みが改善する。事実の記憶への効果は一貫しない。見出しの一部だけに付けると、付けない話題が落ちやすい | Lorch ほか（2001）、Lorch・Lemarié・Chen（2013）の書誌・抄録を [Kentucky の書誌](https://scholars.uky.edu/en/publications/signaling-topic-structure-via-headings-or-preview-sentences/) 経由で確認。**本文は未確認** |
-| 情報マッピング | Horn の「チャンク化」は Miller の 7±2 に基づくとされるが、その根拠づけは弱く、Tufte らが批判している | [Information Mapping（ベンダー）](https://informationmapping.com/blogs/news/writing-for-the-web-the-magical-number-seven-plus-minus-two)、[Tufte](https://www.edwardtufte.com/notebook/the-magical-number-seven-plus-or-minus-two-not-relevant-for-design/)。「7±2 個」の数値は採用しない |
-| ミニマリズム・トピック単位の執筆 | Carroll のミニマル・マニュアルが、DITA の concept/task/reference の「小さく自己完結した単位」の考えに影響した | [Wikipedia](https://en.wikipedia.org/wiki/Minimalism_(technical_communication))、[Oxygen DITA ガイド](https://www.oxygenxml.com/dita/styleguide/Topics_and_Information_Types/c_How_Chunking_Works.html)。二次資料。技術文書の「トピック」は、このスキルの節とは粒度が異なる |
-| 分けすぎの害 | 統制実験は見つからなかった。「段落ごとに見出しを付けると見出しが意味を失う」「分け方を誤ると誤読を招く」は、ブログ・ツール文書・分割アルゴリズムの文献による主張 | 確度が低い。**害は仮説であり、このスキルで測る** |
-| 公用文 | 長い文書は、内容のまとまりごとに論点を端的に示す見出しを付ける。見出しだけで流れがつかめるようにし、標題と呼応させる。結論は冒頭に。一文の論点は一つ | [文化庁「公用文作成の考え方」解説](https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/pdf/93651301_01.pdf) を検索結果の要約で確認。**本文の該当箇所は未確認**。「一つの文書に一つの用件」は見つからなかった |
+| Area                               | Finding                                                                                                                                                                                                                                       | Source and confidence                                                                                                                                                                                                                                                                                              |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Paragraph writing                  | A paragraph discusses one topic and states it in an opening topic sentence. Chapter 4 of Takeo Kinoshita's _Rika-kei no sakubun gijutsu_ is a typical example.                                                                                | Confirmed in explanatory materials. **The book itself was not checked.**                                                                                                                                                                                                                                           |
+| Experiments on headings            | Headings improve memory for a text's topic structure and incorporation of it into summaries. Effects on memory for facts are inconsistent. If only some topics have headings, topics without headings are more likely to be omitted.          | Bibliographic records and abstracts for Lorch et al. (2001) and Lorch, Lemarié, and Chen (2013) checked via the [University of Kentucky record](https://scholars.uky.edu/en/publications/signaling-topic-structure-via-headings-or-preview-sentences/). **Full texts not checked.**                                |
+| Information mapping                | Horn's “chunking” is said to be based on Miller's 7±2, but that rationale is weak and has been criticized by Tufte and others.                                                                                                                | [Information Mapping (vendor)](https://informationmapping.com/blogs/news/writing-for-the-web-the-magical-number-seven-plus-minus-two), [Tufte](https://www.edwardtufte.com/notebook/the-magical-number-seven-plus-or-minus-two-not-relevant-for-design/). The “7±2” number is not adopted.                         |
+| Minimalism and topic-based writing | Carroll's _Minimalism Beyond the Nurnberg Funnel_ influenced DITA's concept/task/reference idea of “small, self-contained units.”                                                                                                             | [Wikipedia](<https://en.wikipedia.org/wiki/Minimalism_(technical_communication)>), [Oxygen DITA guide](https://www.oxygenxml.com/dita/styleguide/Topics_and_Information_Types/c_How_Chunking_Works.html). Secondary sources. A technical-document “topic” is at a different granularity from this skill's section. |
+| Harm from over-splitting           | No controlled experiments were found. Claims such as “a heading for every paragraph makes headings meaningless” and “wrong splits cause misreading” come from blogs, tool documentation, and literature on segmentation algorithms.           | Low confidence. **The harm is a hypothesis to be measured with this skill.**                                                                                                                                                                                                                                       |
+| Japanese public-sector writing     | Long documents should have concise headings that state the point of each content group. The flow should be understandable from headings, which should correspond to the title. Put the conclusion first. Each sentence should have one point. | Confirmed from a search-result summary of the [Agency for Cultural Affairs' guidance on public-sector writing](https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/pdf/93651301_01.pdf). **Relevant passages in the full text were not checked.** “One document, one purpose” was not found.              |
 
-読み取れること: 「見出しの下を一つの話題にする」は、パラグラフライティング・見出しの研究・公用文のどれとも整合する。ただし、これは**考え方としての支持**であり、「LLM が推敲した出力が読みやすくなる」ことの証拠ではない。分けすぎの害も、実験では確かめられていない。
+What can be inferred: “Keep one topic under each heading” is consistent with paragraph writing, heading research, and public-sector writing. However, this is **support for the idea**, not evidence that “LLM-revised output becomes easier to read.” The harm from over-splitting has also not been tested experimentally.
 
-## 決定の候補と選択
+## Options and selection
 
-| 案 | 内容 | 判断 |
-|---|---|---|
-| A. 新規の規則（番号つきの節） | 既存の §1 と別に立てる | 重複する。SKILL.md は 175 行の上限（`MAX_SKILL_LINES`）に達しており、導線を足せない。採らない |
-| B. 既存 §1 の補強（見出し節の下に小節を足す） | 「見る点」「直し方」「分けすぎない」「直さない場合」を足す。SKILL.md は変えない（または診断順序1の同じ行の語だけを直す） | **候補。下の検証で採否を決める** |
-| C. 見送り | 既存の規則で足りている | 旧版が既に満たす場合の結論 |
+| Option                    | Description                                                                                                                                                                                                         | Assessment                                                                                                                      |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| A. New numbered rule      | Create it separately from §1.                                                                                                                                                                                       | Overlaps with existing rules. `SKILL.md` is at its 175-line limit (`MAX_SKILL_LINES`), so no pointer can be added. Not adopted. |
+| B. Strengthen existing §1 | Add a subsection under “Headings” covering “what to check,” “how to fix,” “avoid over-splitting,” and “when not to fix.” Leave `SKILL.md` unchanged, or change only wording on the same line as diagnostic order 1. | **Candidate. Decide whether to adopt based on the evaluation below.**                                                           |
+| C. Do not adopt           | Existing rules are sufficient.                                                                                                                                                                                      | Conclusion if the existing version already meets the goal or the candidate is ineffective.                                      |
 
-`measure.py` への見出し単位の手がかり（節ごとの字数・段落数）は、今回は足さない。理由: 論点の混在は意味の問題で、長さでは決まらない。ラベルの付いた実文書がなく、手がかりの精度を測れない（未計測）。検証で候補版が有効だった場合も、別の課題として扱う。
+Do not add heading-level signals (character count and paragraph count per section) to `measure.py`. Mixing of points is a semantic issue and cannot be measured by a script. No labeled real documents are available to measure signal accuracy (not measured). Even if the candidate proves effective, handle this as a separate issue.
 
-## 仮説
+## Hypotheses
 
-H1: 候補版（案B）は、論点が混ざった節を、旧版より多く分けられる。
-H2: そのために、すでに一つの論点の節を分けすぎたり、統合したりしない。
-H3: 見出しの指定や Paragraph-only の制約を、旧版と同じく守る。
-H4: 意味・数値・コードの保持が悪化しない。
+H1: Candidate version (option B) splits sections that mix points more often than the old version.
+H2: It does not over-split or merge sections that already have one point.
+H3: It follows heading requirements and Paragraph-only constraints as the old version does.
+H4: Retention of meaning, numbers, and code does not worsen.
 
-## 検証の設計
+## Evaluation design
 
-- 評価集合: [自作11ケース](../../../../evals/section-single-message-cases.json)。分けてよい節 split（s01,s02,s03,s11 を主、s04 を別掲）、分けない control（s05,s06,s07）、Paragraph-only（s08）、見出し固定の指定（s09）、新規生成の判定のみ（s10）。意味保持の採点者の校正には、既存の12対照を借りる。
-- 旧版: main の 355a42e（v0.22.0）。候補版: `readability-rules.md` に小節を足したもの。`SKILL.md` と `examples.md` は同一。
-- 生成: 各ケース×各版×3回。`sonnet / medium`、ツールなし、新しい文脈（`tools/evaluate_readability.py` と同じ呼び出し）。
-- 決定的な確認: 見出し行の数と文言の変化、Paragraph-only の空白除去後の一致、見出し固定の一致。
-- ブラインドの判定: 意味保持が両版で pass したペアだけ、(a) 各節が一つの内容に絞られ見出しがそれを指しているか、(b) 細切れ・分けすぎでないか、を左右反転して判定する。
-- 段階: 先に旧版だけを生成して、旧版が既に混在を分けるか（天井）を見る。旧版が上限に近ければ、候補版を生成せず見送る。
+- Evaluation set: [11 self-authored cases](../../../../evals/section-single-message-cases.json). Sections that may be split (split: s01, s02, s03, and s11 as primary cases; s04 reported separately), controls not to split (s05, s06, s07), Paragraph-only (s08), fixed-heading requirement (s09), and judgment of new generation only (s10). Use the existing 12 controls to calibrate the meaning-retention evaluator.
+- Old version: `355a42e` on main (v0.22.0). Candidate version: add a subsection to `readability-rules.md`. `SKILL.md` and `examples.md` remain identical.
+- Generation: three runs per case per version; `sonnet / medium`, no tools, new context (same call as `tools/evaluate_readability.py`).
+- Deterministic checks: number and wording of heading lines, equality after removing whitespace for Paragraph-only, and fixed-heading equality.
+- Blind judgment: Only pairs where both versions pass meaning retention. Reverse left/right. Judge (a) whether each section is limited to one piece of content and its heading identifies it, and (b) whether the text is fragmented or over-split.
+- Stages: Generate the old version first and check whether it already splits mixed sections (ceiling). If it is near the ceiling, do not generate the candidate and do not adopt it.
 
-## 成功指標
+## Success criteria
 
-次のすべてを満たす場合だけ、候補版を採用する。
+Adopt the candidate only if all of the following hold.
 
-1. 保存: 候補版の33出力がすべて意味保持 pass。候補版の fail・uncertain が旧版より多くない。採点者の校正12対照がすべて期待どおり。実モデル識別子が一致。
-2. 分離（H1）: split 主4ケース×3回=12出力で、見出し行が増えた出力が、候補版で旧版より3件以上多い。
-3. 判定（H1）: ペア判定の「内容の絞り込み」で、候補版の勝ちが旧版の勝ちを上回る。
-4. 分けすぎ（H2）: control 9出力で、見出しが増えた・減った出力が、候補版で1件以下、かつ旧版より多くない。判定の「細切れ」で、候補版が負け越さない。
-5. 制約（H3）: s08 と s09 の候補版6出力で、違反が0件。
+1. Retention: All 33 candidate outputs pass meaning retention. Candidate fail and uncertain counts are no higher than the old version. All 12 evaluator calibration controls meet expectations. The actual model identifiers match.
+2. Separation (H1): Among 12 outputs from the four primary split cases × three runs, the candidate has at least three more outputs with an increased number of heading lines than the old version.
+3. Judgment (H1): The candidate wins more than the old version in pairwise “focus on one piece of content” judgments.
+4. Over-splitting (H2): Among nine control outputs, at most one candidate output has more or fewer headings, and the count is no higher than the old version. The candidate does not lose more “fragmented” judgments than it wins.
+5. Constraints (H3): Zero violations across the six candidate outputs for s08 and s09.
 
-## 撤退条件
+## Rollback criteria
 
-- 旧版が、split 主12出力のうち11件以上で既に見出しを増やしている（天井）。規則を足さず、見送る（案C）。
-- 上の指標のどれかを満たさない。規則を足さない。H2・H3 の失敗で、規則の分けすぎの歯止めや範囲を絞る修正が考えられる場合は、今回の記録を上書きせず、別の実験として行う（最大1回）。
-- 意味保持の悪化は、他の指標が良くても撤退。
+- If the old version already adds headings in 11 or more of the 12 primary split outputs (ceiling), do not add the rule; do not adopt it (option C).
+- If any criterion above is unmet, do not add the rule. If an H2 or H3 failure suggests a correction that narrows the rule or adds an over-splitting safeguard, conduct it as a separate experiment without overwriting this record (at most once).
+- Worse meaning retention is grounds to stop even if other criteria improve.
 
-## 限界（先に書く）
+## Limitations (stated in advance)
 
-- 自作11ケースは設計に使った開発用の入力である。未使用文書での一般化を示さない。s04 の結びの扱いは、候補版の規則の例と同じ形で、設計に合わせた入力のため、主集計に含めない。
-- 採点は同じモデル系統（sonnet）で、人間の採点はない。「読みやすさ」を見出し行の増減と、モデルによる比較で代用している。読者による理解度の測定ではない。
-- 3回の反復は独立した文章ではない。結果から一般的な改善率や失敗率を計算しない。
-- 製品のスキル起動（`--skill-dir`）とツール使用は、今回の対象外（貼り付け方式）。
+- The 11 self-authored cases are development inputs used to shape the design. They do not show generalization to unused documents. s04's handling of a concluding phrase uses an input shaped to match the candidate rule's example, so it is excluded from the primary tally.
+- Evaluation uses the same model family (sonnet), with no human scoring. “Readability” is represented by changes in heading count and model comparisons; reader comprehension is not measured.
+- Three repeated runs are not independent texts. Do not calculate general improvement or failure rates from the results.
+- Product skill invocation (`--skill-dir`) and tool use are out of scope (the skill was pasted into the prompt).
 
-## 結果
+## Results
 
-**決定: 案C（見送り）。規則は足さない。** 詳細は [結果](../../../../evals/section-single-message-result.md)。
+**Decision: Option C (not adopted). Do not add the rule.** Details: [results](../../../../evals/section-single-message-result.md).
 
-- 旧版は天井ではなかった（主4ケース12出力で見出しを増やしたのは0件）。そのため候補版を生成して比べた。
-- 候補版も、主4ケース12出力で0件。指標2（差3件以上）は未達。
-- 意味保持は、旧版・候補版とも32 pass・1 uncertain（どちらも s10）。候補版の全件 pass を求めた指標1は未達。
-- 候補版が見出しを増やした s04 は、規則の例示と同じ形の入力で、分けすぎと結びの掛かり先のずれが見えた。
-- ペア判定は、反転側の判定欠落で実行不能（`execution_failed`）。採否の根拠にしていない。
-- `measure.py` の見出し単位の手がかりは、足さない（上の理由のまま。候補が有効でなかったため、手がかりの価値を測る前提もない）。
-- 既存の §1「論点が混ざっていないか」と「見出し」の節は変えない。
+- The old version was not at ceiling (zero heading increases in 12 primary outputs across four cases), so the candidate was generated and compared.
+- The candidate also had zero heading increases in the 12 primary outputs. Criterion 2 (at least three more) was not met.
+- Meaning retention was 32 pass and 1 uncertain for both versions (both on s10). Criterion 1 requiring all candidate outputs to pass was not met.
+- The candidate added headings for s04, whose input matched the rule's example; this revealed over-splitting and a shift in what the concluding phrase applied to.
+- Pairwise judgment could not run because the reversed-side judgment was missing (`execution_failed`). It was not used as evidence for the decision.
+- Do not add heading-level signals to `measure.py` (for the reasons above; because the candidate was not effective, there is no basis for assessing the signal's value).
+- Leave the existing §1 rules “Are multiple points mixed?” and “Headings” unchanged.
 
-再検討するなら、構成の再設計を明示的に頼む依頼、またはモード A を対象にした別の実験として行う。
+To revisit this, explicitly request a redesign of the structure or run a separate experiment targeting Mode A.
 
-## レビューの記録
+## Review record
 
-Codex（読み取り専用）が、数値の整合と見送りの妥当性を確認した。指摘は2点で、どちらも採用した。(1) 指標4の判定条件のうち、ペア判定が未完了のため、「満たす」を「見出し数の条件だけ満たす、全体は未判定」に直した。(2) 実行前の ADR の固定記録（ハッシュ）がないことを、結果の文書に明記した。
+Codex (read-only) checked numerical consistency and whether not adopting the rule was justified. It raised two points, and both were adopted: (1) Because pairwise judgment was incomplete, changed criterion 4's status from “met” to “heading-count condition met; overall undetermined.” (2) Explicitly noted in the results that the ADR had not been pinned before execution.

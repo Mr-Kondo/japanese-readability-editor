@@ -92,7 +92,7 @@ python3 tools/validate_public_corpus.py --manifest evals/public-documents/manife
 ## 評価の設定
 
 - モードBを明示し、現代語化や科学内容の更新は依頼に含めない。対象読者は生成前に決めて `audience` に書く。**対象読者・依頼は未決定。**
-- 比較・統計用の `document_id` は台帳の `source_id`（作品）、理解問題用は抜粋IDにする（[接続の制約](../works/for-agent/implementation-plan/002-public-document-corpus.md#既存ツールとの接続)）。
+- 比較・統計用の `document_id` は台帳の `source_id`（作品）、理解問題用は抜粋IDにする（[接続の制約](../works/for-agent/implementation-plan/002-public-document-corpus.md#integration-with-existing-tools)）。
 - 随筆の補助群として独立に集計する。業務・技術文書や行政文書の結果と合算しない。
 - 理解問題は、抜粋だけから答えられる形にし、人手で原文と照合する。
 - 原文をそのまま返すことを失敗扱いにしない。
@@ -104,7 +104,7 @@ python3 tools/validate_public_corpus.py --manifest evals/public-documents/manife
 3. `preserve` の各項目と `questions` を原文と照合し、`confirmed_by`・`reason`、`verified_by`・`verification_reason` を記入する。修正や削除をしてよい。
 4. `azml-necessary` を変更不要の対照例にしてよいか判断し、`no_change_reason` を確定する。
 5. 採用するものの `status` を `adopted` に変える。`--readiness` の出力が空になるまで繰り返す。
-6. 対象読者・依頼を決め、`cases` JSON を作って[計画の手順](../works/for-agent/implementation-plan/002-public-document-corpus.md#手順)に進む。
+6. 対象読者・依頼を決め、`cases` JSON を作って[計画の手順](../works/for-agent/implementation-plan/002-public-document-corpus.md#procedure)に進む。
 
 ## 未実施
 

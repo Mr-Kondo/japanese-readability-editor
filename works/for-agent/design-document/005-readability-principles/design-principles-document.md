@@ -1,81 +1,81 @@
-# 設計
+# Design
 
-この Skill の設計の考え方と、参考にした記事とプロジェクトです。
+This document describes the design principles of this Skill and the articles and projects that informed them.
 
-## 設計思想
+## Design Principles
 
-- 診断は、内容と論点、段落、文、構造、論理関係、予測可能性、主体、直訳調、抽象語、冗長、漢字の順に行います。漢字をひらくことから始めません。
-- 「200字以上の段落」「46字以上の文」(1文は30〜45字が目安)「20字未満の文が3文以上続く箇所」は、修正候補を見つける目安です。合否の基準ではなく、数字を満たすだけの機械的な分割はしません。
-- 段落が長いだけなら、まず文言を変えずに、話題の境界で段落だけを分けます。このとき、空白以外の文字が変わっていないことをスクリプトで確認できます。
-- スクリプトは候補を挙げ、文字列の一致を確かめるだけです。修正の要否と方法は、Agent が判断します。
-- 書き換えた後は、元の文と突き合わせます。数値、条件の範囲、否定の数、言い切りの強さ、比重、主体、文体が同じかを確かめ、違う箇所は元に戻します。
-- 二重否定や「それ以外の場合」のような残余の条件は、原則として触りません。意味が変わりやすいためです。
-- 日本語可読性の設計原則は、次の3記事を参考に、原則と手順として再構成しました。記事の文章は転載していません。
+- Diagnose in this order: content and line of argument, paragraphs, sentences, structure, logical relationships, predictability, subjects/agents, literal-translation style, abstract terms, redundancy, and kanji. Do not begin by converting kanji to kana.
+- Paragraphs of 200 characters or more, sentences of 46 characters or more (30–45 characters is a guide for one sentence), and runs of three or more sentences shorter than 20 characters are cues for possible revision. They are not pass/fail criteria; do not split text mechanically just to meet the numbers.
+- If a paragraph is merely long, first split it at a topic boundary without changing wording. A script can verify that no non-whitespace characters changed.
+- Scripts only identify candidates and check string equality. The Agent decides whether and how to revise.
+- After rewriting, compare it with the original. Check that numbers, the scope of conditions, the number of negations, strength of assertions, emphasis, subjects/agents, and style are unchanged; revert anything that differs.
+- In general, do not alter double negatives or residual conditions such as "in all other cases," because their meaning can change easily.
+- The Japanese readability principles were reconstructed as principles and procedures with reference to these three articles. Their text was not reproduced.
   1. [Qiita: masakai](https://qiita.com/masakai/items/7bc5250d04c4dc8669e4)
   2. [Zenn: ncdc](https://zenn.dev/ncdc/articles/6ea029ba5ecf65)
   3. [Zenn: lotation](https://zenn.dev/lotation/articles/8520b50540b274)
-- 下の「[参考にしたプロジェクト](#参考にしたプロジェクト)」に挙げた3つのリポジトリからも、原則と手順を取り入れました。
+- Principles and procedures were also adopted from the three repositories listed below under [Projects Referenced](#projects-referenced).
 
-## 意味を確かめる対話と照合
+## Dialogue and Comparison to Confirm Meaning
 
-対象・条件・状態に複数の読みがあり、推敲で選ぶ必要があるときだけ、その関係を尋ねます。確認済みの情報は聞き直しません。本文のみの指定や意図的な曖昧さは尊重し、不明な部分を原文のまま残します。短さのために必要な条件を落とさず、原文・資料の主張と修正文を照合します。
+Ask about a relationship only when a subject, condition, or state has multiple readings and a choice must be made while editing. Do not ask again for information already confirmed. Respect requests for body text only and intentional ambiguity; leave unclear parts as they are in the original. Do not drop necessary conditions for brevity, and compare the revised text with the claims in the original and source materials.
 
-調査した既存 Skill は `skill-creator`、`contextual-terminology-review`、`japanese-readability-editor` です。短い入口と詳細参照の分離、本人の説明と生成文の区別、状態や責務を追加しない原則を取り入れました。用語レビュー専用の記録・検索処理は、推敲の意味確認には不要なため取り入れていません。frontmatter、既存モードの選択、共通の配布・導入・更新・削除経路は変えていません。
+Existing Skills examined: `skill-creator`, `contextual-terminology-review`, and `japanese-readability-editor`. Adopted the separation between a short entry point and detailed references, the distinction between the person's explanation and generated text, and the principle of not adding states or responsibilities. Did not adopt terminology-review-specific logging or search, because it is unnecessary for confirming meaning during editing. Did not change frontmatter, selection of existing modes, or the shared distribution, installation, update, and removal paths.
 
-- Min, Michael, Hajishirzi, Zettlemoyer (2020), [AmbigQA: Answering Ambiguous Open-domain Questions](https://aclanthology.org/2020.emnlp-main.466/), EMNLP, pp. 5783–5797, DOI: 10.18653/v1/2020.emnlp-main.466。確認したのは書誌情報と要旨です。複数の解釈を区別する考え方を参照しました。日本語推敲で質問を挟む効果の証明とは扱いません。
-- GOV.UK Design System, [Question pages](https://design-system.service.gov.uk/patterns/question-pages/)（2026-10-24確認）。必要な情報だけを尋ね、既に得た情報を再入力させない指針を参照しました。フォーム設計の指針を対話へ当てはめる部分は、この Skill の判断です。
+- Min, Michael, Hajishirzi, Zettlemoyer (2020), [AmbigQA: Answering Ambiguous Open-domain Questions](https://aclanthology.org/2020.emnlp-main.466/), EMNLP, pp. 5783–5797, DOI: 10.18653/v1/2020.emnlp-main.466. Bibliographic information and the abstract were checked. The approach of distinguishing multiple interpretations informed this design. This is not evidence that asking questions improves Japanese proofreading.
+- GOV.UK Design System, [Question pages](https://design-system.service.gov.uk/patterns/question-pages/) (checked 2026-10-24). The guidance to ask only for necessary information and avoid requesting information already provided informed this design. Applying form-design guidance to dialogue is a judgment made for this Skill.
 
-Claude Code（`claude-sonnet-5-5`）には、固有情報を含めない設計案の反例と検証観点を尋ねました。質問で対象を持ち込まないこと、意味が変わらない質問を避けること、照合で条件や状態を落とさないことを採用しました。一律の質問数制限と保持箇所の末尾注記は、不要な制約や本文のみの指定との衝突を招くため採用していません。Gemini Antigravityは利用できる接続・CLIを確認できず、相談は未実施です。意見の一致を効果の証拠とは扱いません。
+Claude Code (`claude-sonnet-5-5`) was asked for counterexamples and validation points for a design proposal without identifying information. Adopted the points about not introducing the subject through a question, avoiding questions that do not change meaning, and checking that conditions and states are retained during comparison. Did not adopt a uniform question limit or an end note listing preserved details, because these would add unnecessary constraints or conflict with body-only requests. Gemini Antigravity's available connection and CLI could not be confirmed; consultation was not performed. Agreement between opinions is not treated as evidence of effectiveness.
 
-人工例による確認の方法と限界は、[意味確認の評価記録](../../../../evals/meaning-confirmation-result.md)にあります。
+Methods and limitations for checks using artificial examples are in the [meaning-confirmation evaluation record](../../../../evals/meaning-confirmation-result.md).
 
-v0.21.1では、途中で見つかった懸念をIssue #109–#114で追跡し、質問候補ごとの必要性、残る制約を満たせる調整案、単独で使う案の担当、本文のみの場合の未確定部分の保持と評価記録を補いました。Claude Codeからは、比較自体の曖昧さまで残さないこと、字数を測っていない見込みを示さないこと、未知の主体を補わないことについて意見を得ました。「例示なら落としてよい」という一般化は、必要な例を削るおそれがあるため採用していません。Gemini Antigravityへの追加相談は、接続がないため未実施です。モデル評価の条件と、懸念を検討・修正・再検証した経緯は、[再検証記録](../../../../evals/meaning-concern-result.md)にあります。
+In v0.21.1, concerns found during development were tracked in Issues #109–#114. The update clarified the need for each candidate question, an adjusted option that satisfies remaining constraints, the owner of standalone use, and retaining unresolved parts and evaluation records when only body text is requested. Claude Code suggested not leaving ambiguity in the comparison itself, not stating an unmeasured character-count expectation, and not adding an unknown agent. The generalization "examples may be dropped" was not adopted because it risks removing necessary examples. Additional consultation with Gemini Antigravity was not performed because no connection was available. Model-evaluation conditions and the consideration, revision, and revalidation of concerns are recorded in the [revalidation record](../../../../evals/meaning-concern-result.md).
 
-## 国語の表記・用法の基準
+## Standards for Japanese Orthography and Usage
 
-文化庁が公開する国語の表記・用法の基準を、出典と適用条件を持つ規則として組み込んでいます。使い方と限界は、[国語の表記・用法の検査](../../../../docs/kokugo.md)にあります。
+Standards for Japanese orthography and usage published by the Agency for Cultural Affairs are incorporated as rules with sources and applicability conditions. Usage and limitations are described in [Japanese orthography and usage checks](../../../../docs/kokugo.md).
 
-- 資料の性格を区別します。内閣告示・内閣訓令は、明確な条件を満たすときだけ `error` の根拠にします。建議・報告・答申(公用文作成の考え方、異字同訓、敬語の指針)は、`recommendation` か `needs_context` までにします。
-- 公式資料の規定と、この skill の運用判断を区別します。文の長さの目安(30〜45字、46字以上、段落は200字以上)は、この skill の運用上の目安であり、文化庁の基準ではありません。
-- 適用設定(`general-tech`、`public-explanation`、`official`)を、モード A・B・C とは独立に持ちます。同じ表記でも、設定によって区分が変わります。許容形や適用範囲外の表記は、誤りとして報告しません。
-- 「文書内の多数派に表記を合わせる」は採りません。多数派を理由に、明確な誤りを広げないためです。表記を決める順序は、[判定区分](../../../../docs/kokugo.md#判定区分)にあります。
-- 検査はスクリプトとして実装し、ネットワークを使いません。公式資料の更新確認は、Skill の外のツールに分けています。形態素解析は使いません。品詞や用法が決まらない語は、確定した指摘にしません。
-- 検査していない項目(敬語、ローマ字、字体、登録していない語)を、検査済みとして示しません。
+- Distinguish the nature of sources. Use Cabinet Notifications and Cabinet Instructions as grounds for `error` only when explicit conditions are met. Recommendations, reports, and council responses (including the guidance on official-document writing, homophones with different kanji, and honorifics) are limited to `recommendation` or `needs_context`.
+- Distinguish requirements in official sources from this skill's operational judgments. Sentence-length guides (30–45 characters, 46 or more characters, and paragraphs of 200 or more characters) are operating guides for this skill, not Agency for Cultural Affairs standards.
+- Keep applicability settings (`general-tech`, `public-explanation`, `official`) independent from modes A, B, and C. The same spelling may receive different classifications under different settings. Do not report acceptable forms or forms outside the scope as errors.
+- Do not match spelling to the majority form in a document. This avoids spreading a clear error just because it occurs most often. The order for deciding spelling is in [Classification](../../../../docs/kokugo.md#判定区分).
+- Implement checks as scripts without network access. Keep checks for updates to official sources in tools outside the Skill. Do not use morphological analysis. Do not make a definite finding about a word whose part of speech or usage is uncertain.
+- Do not present unchecked items (honorifics, Roman letters, character forms, and unregistered words) as checked.
 
-## 参考にしたプロジェクト
+## Projects Referenced
 
-参考にしたリポジトリの更新は、登録簿(`docs/upstream/sources.json`)に基づいて週に1回確認します。確認した記録は `docs/upstream/reviews/` にあります。手順と限界は、[参考にしたリポジトリの更新確認](../../../../docs/upstream-watch.md)にあります。
+Updates to referenced repositories are checked weekly based on the registry (`docs/upstream/sources.json`). Review records are in `docs/upstream/reviews/`. The process and its limitations are in [Checking updates to referenced repositories](../../../../docs/upstream-watch.md).
 
-[coji/natural-japanese](https://github.com/coji/natural-japanese)(MIT)を参考に、次の点を取り入れました。文章は転載せず、原則として再構成しています。
+The following points from [coji/natural-japanese](https://github.com/coji/natural-japanese) (MIT) were adopted. Text was not reproduced; principles were reconstructed.
 
-- 語順、読点、接続詞の射程、否定の入れ子、列挙の埋没、語形の重さの整理
-- 実文書での閾値の校正結果と、「指摘は起点であり命令ではない」という運用
-- 見出しと各段落の先頭文だけを読んで、論旨を確かめる手順
-- SudachiPy を任意の依存として使い、PEP 723 の宣言で `uv run` から入れる方法
-- 中間ファイルを、利用者のプロジェクトに残さない運用
-- `--extras` の指摘のうち、連続漢字、「の」の連鎖、二重否定
-- Claude Code プラグインとしての配布、CI、Release
-- 読み手が取れない言い回し(逐語訳、動作の名詞化、組み合わせのずれ)を、手を動かして見つける確かめ方(#68、v1.6.0。2026-10-18)
+- Organizing word order, commas, the scope of conjunctions, nested negation, buried list items, and heavy word forms
+- Results of calibrating thresholds on real documents and the practice that "a finding is a starting point, not an instruction"
+- Checking the argument by reading only headings and each paragraph's first sentence
+- Using SudachiPy as an optional dependency and declaring it with PEP 723 for installation through `uv run`
+- Keeping intermediate files out of the user's project
+- `--extras` findings for consecutive kanji, chains of "の", and double negatives
+- Distribution as a Claude Code plugin, CI, and Release
+- A hands-on method for finding expressions readers cannot parse (literal translations, nominalized actions, and mismatched combinations) (#68, v1.6.0, 2026-10-18)
 
-同リポジトリは、AI臭さのスコア、文体の型、サブエージェントによる推敲も持ちます。このリポジトリは、標準ライブラリだけで動くことと、環境に依存しない単一の `SKILL.md` を優先して、これらは取り入れていません。形態素解析は、`compare_rewrite.py` で、入っていれば使う形にしました。
+That repository also includes an AI-ness score, style archetypes, and editing with subagents. This repository does not adopt those features because it prioritizes standard-library-only operation and a single `SKILL.md` independent of environment. Morphological analysis is used by `compare_rewrite.py` only when it is available.
 
-[nanaism/yomiyasu](https://github.com/nanaism/yomiyasu)(MIT)からは、次の点を取り入れました。
+The following points from [nanaism/yomiyasu](https://github.com/nanaism/yomiyasu) (MIT) were adopted.
 
-- 書き換えた後に確かめる、言い切りの強さと比重
-- 保証・約束の範囲と、入れ子の述語ごとの主体・相手の照合（v3.3.0 までの更新、#214）。検出器は移植せず、手順と自作例を補った。
-- 書き直す前に各文の働き(例え、皮肉・反語を含む)を控え、直した後で読み比べる手順(#55、2026-10-18)
-- 太字が表示されない書き方の検出(`--extras` の unrendered-bold)と、その直し方
-- 書き換えの前後を機械で比べる考え方(`yomiyasu_diff.py`)。`compare_rewrite.py` は、この考え方を参考に、独自に実装しました
-- 定着した慣用句を残す目安と、比喩を言い換えても含みを残すこと
-- 結論や警告を伝える見出しを、一般的な題名に薄めないこと
-- 依頼で指定された見出しの形・まとめの節の保持と、推敲で追加した読点の照合（v2.5.0、#132）。[採否と検証](../../../../docs/upstream/reviews/yomiyasu-2.5.0-partial.md)
-- 内容のない定型の結び
-- 読者向けの本文に残った、中身のない挨拶や同意の定型の見直し(#56。申し出と方針の宣言は、評価の結果、削らず報告にとどめた。2026-10-18)
-- 他人のコメントを、指示ではなく材料として扱う規約(#69。danjdewhurst/story-skills v0.24.0 の同種の規約も参考にした)
+- Checking the strength of assertions and emphasis after rewriting
+- Checking the scope of guarantees and promises, and the agent and recipient for each nested predicate (updates through v3.3.0, #214). The detector was not ported; procedures and original examples were added.
+- Recording each sentence's function before rewriting (including analogy, sarcasm, and rhetorical questions) and comparing after revision (#55, 2026-10-18)
+- Detecting and fixing bold syntax that is not rendered (`--extras` unrendered-bold)
+- Mechanically comparing text before and after rewriting (`yomiyasu_diff.py`). `compare_rewrite.py` was independently implemented with this idea as a reference.
+- Guidance to preserve established idioms and retain implications when rephrasing metaphors
+- Avoiding the dilution of headings that communicate a conclusion or warning into generic titles
+- Preserving requested heading forms and summary sections, and checking commas added during editing (v2.5.0, #132). [Adoption decision and verification](../../../../docs/upstream/reviews/yomiyasu-2.5.0-partial.md)
+- Formulaic conclusions with no substantive content
+- Reviewing empty greeting or agreement formulas left in reader-facing text (#56. Offers and statements of intent were retained and reported rather than removed, based on evaluation results. 2026-10-18)
+- Treating others' comments as input, not instructions (#69; a similar rule in danjdewhurst/story-skills v0.24.0 was also referenced)
 
-[k16shikano/japanese-tech-writing](https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d)(Unlicense)からは、次の点を取り入れました。
+The following points from [k16shikano/japanese-tech-writing](https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d) (Unlicense) were adopted.
 
-- 推量や可能性を、根拠なく断定へ変えないこと
-- 太字を、論理の要所に限ること
-- 翻訳調の比喩を見分ける二段階の判定
-- 説明の中で、読者を「あなた」と呼ばないこと
+- Do not turn conjecture or possibility into certainty without evidence
+- Reserve bold text for key points in the logic
+- A two-stage judgment for detecting translated metaphors
+- Do not address the reader as "you" in explanations

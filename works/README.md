@@ -2,7 +2,8 @@
 
 # works/
 
-Development documents: design intent, requirements, plans, and checklists, kept apart from the code.
+Development documents record design intent and requirements, plus plans and checklists.
+They are kept apart from the code.
 
 ## Folders
 
@@ -21,4 +22,8 @@ both
 
 ## Language
 
-All documents in this repository are still in Japanese. English versions are pending translation.
+The 15 documents migrated in Issue #223 are now in English, together with their indexes.
+The indexes link to immutable Japanese originals from before the Issue #224 translation.
+Japanese examples remain where their exact wording is evidence.
+The historical `for-agent/checklist/001-works-migration.md` remains in Japanese.
+It is outside the 15-document translation scope. `for-human/` contains Japanese summaries.

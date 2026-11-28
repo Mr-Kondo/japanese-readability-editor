@@ -1,70 +1,70 @@
 ---
 status: accepted
 date: 2026-11-02
-decision-makers: Codex（利用者が承認した段階評価と採否判断の実施範囲内）
+decision-makers: Codex (within the scope of staged evaluation and adoption decisions approved by the user)
 supersedes: pilot-plan-adr.md
 ---
 
-# 知識索引の試行を完了し、自動接続を採用しない
+# Complete the Knowledge-Index Pilot; Do Not Adopt Automatic Connection
 
-## 文脈
+## Context
 
-[当初のADR](pilot-plan-adr.md)の少数索引試行を、[Issue #144](https://github.com/Mr-Kondo/japanese-readability-editor/issues/144)、[Issue #146](https://github.com/Mr-Kondo/japanese-readability-editor/issues/146)、[Issue #148](https://github.com/Mr-Kondo/japanese-readability-editor/issues/148)で比較した。利用者の「最後まで進めて」に従い、試行を保留のまま増やさず、現時点の採否を決める。
+The small-index pilot described in the [original ADR](pilot-plan-adr.md) was evaluated across [Issue #144](https://github.com/Mr-Kondo/japanese-readability-editor/issues/144), [Issue #146](https://github.com/Mr-Kondo/japanese-readability-editor/issues/146), and [Issue #148](https://github.com/Mr-Kondo/japanese-readability-editor/issues/148). In response to the user's request to "see it through," complete the pilot rather than extend it while it is deferred, and decide what to adopt now.
 
-WikiSkillの、実行記録・再利用できる知見・実行用スキルを分ける考え方は、既存の確認・集約・提案・前後比較を補う候補である。一方、索引の有用性と実行用スキルの品質改善は別の主張である。
+The WikiSkill approach separates execution records, reusable knowledge, and executable skills. It is a candidate way to complement the existing workflow of review, aggregation, proposals, and before/after comparison. However, the usefulness of indexes and improvement in the quality of executable skills are separate claims.
 
-## 観測と解釈
+## Observations and Interpretation
 
-| 確認 | 観測 | 判断への限界 |
-|---|---|---|
-| 全文に索引を追加（#144） | 各条件2回。外部採点は両条件とも12点と14点（各16点満点）。経過時間中央値は索引なし31.210秒、あり57.128秒 | 検索方式の評価ではない。引用で条件が分かり、意味でなく字面に寄る採点もあった |
-| 6資料から最大2件を選び回答（#146） | 既知2課題。指定した直接根拠は索引なし1/4、あり4/4。意味に関わる判断と過去／現在の区別は両条件で満たした | 得点差7/10対10/10は直接根拠の引用3点分。書き換え品質の改善を示さない |
-| 同じ試行の作業量（#146） | 選択＋回答の経過時間合計は182.613秒対120.899秒。入力文字数合計は10,365対11,912 | 片方の課題は索引ありのほうが約3%遅い。文字数は約15%増。各条件1回、キャッシュ量も違い、安定した時間・料金削減ではない |
+| Check                                                       | Observation                                                                                                                                                                                                             | Limit on interpretation                                                                                                                                                              |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Add indexes to full text (#144)                             | Two runs per condition. External scores were 12 and 14 points in both conditions (out of 16 each). Median elapsed time was 31.210 seconds without an index and 57.128 seconds with an index.                            | This did not evaluate the search method. Citations revealed the condition, and some scoring focused on wording rather than meaning.                                                  |
+| Select up to two items from six materials and answer (#146) | Two known tasks. The specified direct evidence was cited in 1/4 answers without an index and 4/4 with an index. Meaning-relevant decisions and distinctions between past and present were satisfied in both conditions. | The score difference, 7/10 versus 10/10, came from three points for direct evidence citations. It does not show improved rewriting quality.                                          |
+| Workload in the same pilot (#146)                           | Total elapsed time for selection and answers was 182.613 seconds versus 120.899 seconds. Total input length was 10,365 versus 11,912 characters.                                                                        | One task was about 3% slower with an index. Input length increased by about 15%. Each condition was run once, and cache amounts differed; these are not stable time or cost savings. |
 
-最後に、索引を増やさず、未収録のD5（回答後の再質問）とD6（挨拶削除の採点・引用保持）を選ぶ2課題×2条件を追加した。4回すべて成功し、直接根拠への到達は索引なし2/2、あり2/2だった。選択のみの経過時間合計は35.418秒対46.161秒、入力文字数合計は1,217対2,285。新たな取りこぼしは観測しなかったが、目録だけでも到達しており、自動接続の便益の証拠にはならない。
+Finally, without adding any further indexes, two tasks were added using the unrecorded D5 (follow-up question after an answer) and D6 (scoring greeting removal and citation retention). Each task was run under both conditions, with an index and without one. All four runs succeeded. Direct evidence was found in 2/2 runs without an index and 2/2 runs with an index. Total elapsed time for selection alone was 35.418 seconds versus 46.161 seconds; total input length was 1,217 versus 2,285 characters. No new misses were observed, but the catalog alone also led to the evidence, so this is not evidence of benefit from automatic connection.
 
-これは公開済み資料の追加確認であり、未使用の最終評価や汎化性能の検証ではない。D5/D6は未収録でも既存索引と関連する概念があり、完全に独立した領域ではない。課題文で必要事項を明示しており、一般的な探索より容易な可能性もある。詳細はIssue #148に残す。回答生成と意味品質の追加採点は行わない。
+This was an additional check of published materials, not an unused final evaluation or a generalization test. Although D5/D6 were not recorded, related concepts existed in the current indexes; they were not entirely independent areas. The task text made the needed information explicit and may have made the search easier than ordinary exploration. Details are in Issue #148. No additional scoring of answer generation or semantic quality was done.
 
-料金の実額、索引の継続的な維持時間、実際の改良提案の採用率、同じ不採用案の再提案数は未測定。文書量やトークンの一部を、その代わりの測定値としない。全体として、既知領域の根拠探索を助けた観測はあるが、接続の便益と維持費の大小は判定できない。
+Actual costs, ongoing index-maintenance time, adoption rate of real improvement proposals, and number of repeated proposals of the same rejected idea remain unmeasured. Do not use document volume or some token counts as substitute measurements. Overall, there is an observation that indexes helped locate evidence in known areas, but the relative benefit and maintenance cost of connection cannot be determined.
 
-## 決定
+## Decision
 
-1. **今回の試行を完了し、`propose`への自動接続を採用しない。** 比較を続けること自体を必須の未完了作業にはしない。これはWikiSkill全般が無効という判断ではない。
-2. ローカルの4件の索引は、必要時に人またはエージェントが原資料へ到達する任意の補助として残す。網羅的な資料目録ではなく、未収録だから関連する記録がないとは判断しない。維持義務・自動読込・常駐更新・追加ページ作成を導入しない。
-3. 知見を利用するときは、原資料の対象版・条件・反例・不採用理由を確認し、現行版の証拠と区別する。新しい改修は従来どおりIssue、確認、提案、採否、変更前後の評価、配布へ進める。知識ページを追加しただけで実行規則を変えない。
-4. 索引に秘密情報、個人情報、未使用の最終評価用入力を入れない。非公開入力は既存の保管規則に従う。`feedback/`のGit除外を情報保護の代替としない。
+1. **Complete this pilot and do not adopt automatic connection to `propose`.** Continuing the comparison is not mandatory unfinished work. This does not mean that WikiSkill as a whole is ineffective.
+2. Keep the four local indexes as optional aids for a person or agent to reach source materials when needed. They are not comprehensive catalogs; absence of an item does not mean no relevant record exists. Introduce no maintenance obligation, automatic loading, persistent updates, or additional pages.
+3. When using a finding, check the source's target version, conditions, counterexamples, and reasons for non-adoption, and distinguish them from evidence for the current version. Continue new revisions through the existing Issue, review, proposal, adoption decision, before/after evaluation, and distribution process. Adding a knowledge page alone does not change an execution rule.
+4. Do not put confidential information, personal data, or unused final-evaluation inputs in indexes. Follow existing storage rules for non-public inputs. Do not treat Git exclusion of `feedback/` as a substitute for information protection.
 
-## 選択肢と機会費用
+## Options and Opportunity Cost
 
-- **自動接続**: 毎回根拠を参照できる可能性がある。一方、関連性の選別、更新への追随、引用の妥当性、保護対象の除外、回帰評価の実装と保守が増える。実提案の改善と費用の証拠が不足するため採らない。
-- **手動の補助として残して試行を完了（採用）**: 既にある4件を利用でき、実行や配布に新しい保守対象を持ち込まない。索引外の見落としを防ぐには通常の資料探索も必要で、手動利用の効果も未検証である。
-- **索引を全面廃止**: 保守が最小になるが、既に整理した過去判断への入口を失う。維持を必須にしない小さなローカル試作品として残す費用は限定できるため、直ちに削除しない。
+- **Automatic connection:** Could make evidence available on every run. It would also add selection of relevant references, update tracking, citation validation, exclusion of protected data, regression evaluation, and maintenance. Do not adopt because evidence of improved real proposals and their cost is insufficient.
+- **Keep as a manual aid and complete the pilot (adopted):** The four existing items remain available without adding a new maintenance target to execution or distribution. Ordinary document search is still needed to avoid missing items outside the indexes, and the effect of manual use is unverified.
+- **Remove all indexes:** Lowest maintenance, but loses an entry point to past decisions that have already been organized. Keep them as a small local prototype without mandatory maintenance; the cost of retaining it is limited, so do not delete it now.
 
-追加の索引実験・自動化に使う時間は、既存の公開文書評価や意味保持の改善に使える時間を減らす。必要性が具体化するまで、試験規模を拡大しない。
+Time spent on further index experiments or automation reduces time available for evaluating existing public documents and improving meaning preservation. Do not expand the experiment until a concrete need arises.
 
-## 実施内容と再検討条件
+## Work Performed and Conditions for Reconsideration
 
-- 公開差分は本ADR、旧ADRへの後継参照、READMEの説明。ログ・計画・実行スナップショット・レビューはGit対象外の`feedback/wikiskill-completion/`へ保存する。公開判断はこのADRとIssueの集計だけで理解できるようにする。
-- `tools/feedback_loop.py`、スキル本体、版、依存、インストーラー、設定を変更しない。版を上げないためリリース成果物の生成とMacへの再配置は不要。別作業の版更新を今回の配布実績としない。
-- Markdownは3環境から読める形式だが、Claude Code・Codex・Antigravityの実機読込を検証したとは扱わない。
-- 将来、実改修で根拠探索の反復負担が記録され、費用・維持時間を比較できるときだけ、別Issueで再検討する。その際は索引を固定してから対象課題を決め、索引内外の双方を含め、意味判断と引用を別に採点する。未使用の最終評価入力を知識化しない。採用閾値・計測単位・費用上限・撤退条件を先に固定し、今回の単発値を基準値にしない。
+- Published changes are this ADR, a successor reference in the old ADR, and the README explanation. Logs, plans, execution snapshots, and reviews are stored outside Git in `feedback/wikiskill-completion/`. The public decision can be understood from this ADR and the Issue summary alone.
+- Do not change `tools/feedback_loop.py`, the skill itself, version, dependencies, installer, or settings. Since the version is not raised, no release artifact or Mac redeployment is needed. Do not count a version update from other work as delivery for this pilot.
+- Markdown is in a format readable by all three environments, but do not claim that it was loaded in Claude Code, Codex, or Antigravity at runtime.
+- Reconsider in a separate Issue only if repeated evidence-search burden is recorded in real revisions and cost and maintenance time can be compared. Freeze the indexes before selecting tasks, include both indexed and unindexed material, and score semantic judgment separately from citations. Do not convert unused final-evaluation inputs into knowledge. Set adoption thresholds, measurement units, cost limits, and exit conditions in advance; do not use the isolated values from this pilot as a baseline.
 
-## 検証と完了条件
+## Verification and Completion Conditions
 
-- [x] 固定した追加4回の結果と失敗の有無、入力ハッシュを確認した。
-- [x] 他エージェントの静的レビューを受け、採否と理由をローカル結果に記した。
-- [x] READMEと前後ADRのリンク、差分の空白、feedbackの除外、既存編集の保持を確認した。
-- [x] 文書PRのCI・マージ・両側のブランチ削除をIssue #148の完了条件に含めた。実施結果は同Issueで確認する。
+- [x] Checked the results of the four fixed additional runs, whether any failed, and input hashes.
+- [x] Obtained static review from another agent and recorded adoption decisions and reasons in local results.
+- [x] Checked README and predecessor/successor ADR links, whitespace in the diff, `feedback` exclusion, and preservation of existing edits.
+- [x] Included checking the documentation PR, CI, merge, and deletion of both branches in the completion conditions for Issue #148. Check the actual result in that Issue.
 
-Antigravity `gemini-4-argon-medium`の静的レビューは、追加4回の集計を本ADRにも載せる指摘を採用した。完了項目の更新漏れを防ぐ指摘も採用した。人間による独立レビューやホスト実行の検証ではない。
+The static review by Antigravity `gemini-4-argon-medium` resulted in adopting the suggestion to include the aggregate results of the four additional runs in this ADR. A suggestion to avoid forgetting to update completed items was also adopted. This was not an independent human review or host execution test.
 
-## 根拠への入口
+## Evidence Entry Points
 
-- [意味保持の修正評価（D1）](../../../../evals/readability-preservation-result.md)
-- [追加評価（D2）](../../../../evals/readability-generalization-result.md)
-- [具体化評価（D3）](../../../../evals/concretization-result.md)
-- [上流の採否（D4）](../../../../docs/upstream/reviews/natural-japanese-v1.6.0.md)
-- [意味確認（D5）](../../../../evals/meaning-confirmation-result.md)
-- [文の働きと挨拶等（D6）](../../../../evals/sentence-kind-residue-result.md)
+- [Meaning-preservation revision evaluation (D1)](../../../../evals/readability-preservation-result.md)
+- [Additional evaluation (D2)](../../../../evals/readability-generalization-result.md)
+- [Concretization evaluation (D3)](../../../../evals/concretization-result.md)
+- [Upstream adoption (D4)](../../../../docs/upstream/reviews/natural-japanese-v1.6.0.md)
+- [Meaning confirmation (D5)](../../../../evals/meaning-confirmation-result.md)
+- [Sentence function and greetings, etc. (D6)](../../../../evals/sentence-kind-residue-result.md)
 
-論文や紹介記事の成績を、このリポジトリでの効果の根拠にはしていない。
+Results from papers or introductory articles were not used as evidence of effects in this repository.

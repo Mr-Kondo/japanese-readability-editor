@@ -1,96 +1,116 @@
-# 日本語文章生成・推敲の人間評価とフィードバック手法
+# Human Evaluation and Feedback Methods for Japanese Text Generation and Editing
 
-調査日・アクセス日: 2026-10-16（利用者のクライアント日付）。以下の「Cited Findings」は閲覧した一次資料の報告内容、「Inferences」は本ツールへの提案・推論。効果予測値の実測はない。学会の日付は各論文の書誌情報に基づく。
+Research and access date: 2026-10-16 (the user's client date). “Cited Findings” reports what the inspected primary sources say; “Inferences” are proposals and reasoning for this tool. No projected effects have been measured. Conference dates follow each paper's bibliographic record.
 
-## 何を評価するべきか
+## What should be evaluated?
 
-### Takeaway
-読みやすさと意味維持は分離する。さらに、対象読者の理解を測る試験と、原文と推敲文を比較する編集者の点検は別の課題として設計する。
+### Takeaway: What to Evaluate
 
-### Cited Findings
-- Yamashita et al. (LREC 2026, 11–16 May 2026), “Evaluation of Document-Level Text Simplification in Japanese”: JADOSの188原文×6種類、計1,128対を日本語母語話者5名が評価。必須情報の保持（0/1）、主要内容の保持（1–3）、文単位の平易さ（1–3）、文書全体の平易さ（1–3）を分離する。原文は最大2,000字、約150字・小学6年生向けへの簡略化という設定。文書全体を対象にする日本語の直接的先行研究である。— [論文本文§3](https://aclanthology.org/2026.lrec-1.85.pdf), [書誌情報](https://aclanthology.org/2026.lrec-1.85/)
-- Agrawal & Carpuat (TACL 2024), “Do Text Simplification Systems Preserve Meaning?”: 英語の段落理解問題に「本文からは回答できない」を加え、削除による意味損失を検出。問題は情報の一部しかカバーせず、正答しても完全な情報保持の証明にはならない。— [本文§3](https://aclanthology.org/2024.tacl-1.24.pdf)
-- Carrer et al. (HumEval 2024), “Towards Holistic Human Evaluation of Automatic Text Simplification”: ドイツ語の対象読者と対照群各18名、12文章を用い、主観的な難易度と実際の理解に差を観測した。自動平易化の後編集が手動平易化より速いという有意な結果も得られなかった。— [本文§3–4](https://aclanthology.org/2024.humeval-1.7.pdf)
+Separate readability from meaning preservation. Also design reader-comprehension tests and editor checks comparing source and edited text as different tasks.
 
-### Inferences
-- 本スキルは一般的な意味維持型推敲であり、児童向け要約とは目的が異なる。2026年論文の「短い・簡単な語ほど良い」「主旨だけ保てばよい」をそのまま採用しない。対象読者・目的・文種を事前にケースへ固定し、専門用語の適切な保持と著者の声も点検する。
-- 最小評価軸案: (1) 原意・事実・条件の保持、(2) 対象読者にとっての理解しやすさ、(3) 日本語の自然さ、(4) 依頼への適合・文体保持。意味改変は総合平均に埋もれない独立フラグにする。
-- 編集者には原文と推敲文を提示する。理解試験の読者には同じ内容の一方のみを見せる。同じ人に両方を読ませてから正答率を測ると、原文で学んだ内容が推敲文の理解を助ける。
-- 理解試験は将来の第二段階でよい。原文から独立に作り、人が正答・根拠箇所を確認した2–3問を用意し、数値・否定・条件・因果・指示対象を含める。本文にない情報を「答えられない」と識別できるかも記録する。
+### Cited Findings: What to Evaluate
 
-### Gaps
-- 本スキルで実際に想定する読者層、文種、許容される情報省略の範囲は未確定。読みやすい印象から理解向上を推定できない。
-- Wikipedia児童向け短縮の評価基準を、技術文書・メール・創作文へそのまま一般化する根拠はない。
+- Yamashita et al. (LREC 2026, 11–16 May 2026), “Evaluation of Document-Level Text Simplification in Japanese”: Five native Japanese speakers evaluated 1,128 pairs from 188 JADOS source texts and six system types. They separately rated preservation of essential information (0/1), preservation of main content (1–3), sentence-level simplicity (1–3), and document-level simplicity (1–3). The setup used sources up to 2,000 characters and simplification to about 150 characters for sixth-grade readers. This is direct prior work on Japanese at document level. — [Paper §3](https://aclanthology.org/2026.lrec-1.85.pdf), [bibliographic record](https://aclanthology.org/2026.lrec-1.85/)
+- Agrawal & Carpuat (TACL 2024), “Do Text Simplification Systems Preserve Meaning?”: English paragraph-comprehension questions included “cannot be answered from the text” to detect meaning loss through deletion. Questions cover only some information; correct answers do not prove that all information was preserved. — [Paper §3](https://aclanthology.org/2024.tacl-1.24.pdf)
+- Carrer et al. (HumEval 2024), “Towards Holistic Human Evaluation of Automatic Text Simplification”: Using 18 target readers and 18 controls for 12 texts in German, the study found a gap between subjective difficulty and actual comprehension. It also found no significant evidence that post-editing automatic simplifications was faster than manual simplification. — [Paper §§3–4](https://aclanthology.org/2024.humeval-1.7.pdf)
 
-## 二択比較と評点をどう組み合わせるか
+### Inferences: What to Evaluate
 
-### Takeaway
-改良前後の比較には匿名化した二者比較が扱いやすいが、それだけでは改善理由や絶対的な許容品質は分からない。選好、欠陥分類、該当箇所、修正案を組み合わせる。
+- This skill is for general meaning-preserving editing, not summaries for children. Do not adopt the 2026 paper's premises “shorter and simpler words are always better” or “preserving only the gist is enough.” Fix audience, purpose, and genre in each case beforehand; also check appropriate retention of technical terms and the author's voice.
+- Proposed minimum evaluation axes: (1) preservation of original meaning, facts, and conditions; (2) comprehensibility for the target reader; (3) natural Japanese; and (4) adherence to the request and preservation of style. Give meaning changes a separate flag so they are not hidden in an overall average.
+- Show the source and edited text to editors. Show readers in a comprehension test only one version of the same content. If the same person reads both versions before answering, information learned from the source can help comprehension of the edited version.
+- A comprehension test can be a second phase later. Prepare 2–3 questions independently from the source, with human-verified answers and evidence locations. Include numbers, negation, conditions, causality, and referents. Also record whether the reader recognizes information absent from the text as unanswerable.
 
-### Cited Findings
-- van der Lee et al. (INLG 2019), “Best practices for the human evaluation of automatically generated text”: 評価者の属性・人数・根拠の報告、順序の無作為化・相殺、複数評価者、評定者間一致率と区間推定を勧める。探索的分析と確認的仮説検証を区別している。— [本文Table 3, §4](https://aclanthology.org/W19-8643.pdf)
-- Ethayarajh & Jurafsky (EMNLP 2022), “The Authenticity Gap in Human Evaluation”: 順序評定の平均でシステムを順位づける方法は、人の選好について強い仮定を置き、特定条件では選好を逆転させる。同論文の新方式SPAは通常の二者比較とは別の方式であり、優位確率を測っても優位の大きさは測れない。— [本文§3, §8, Limitations](https://aclanthology.org/2022.emnlp-main.406.pdf)
+### Gaps: What to Evaluate
 
-### Inferences
-- 最小UIは原文と匿名化A/B（旧・新の生成条件名を隠す）、軸ごとの「A / 同程度 / B / 判定できない」。A/B左右と項目順を無作為化して表示順を保存する。二者比較が常に評点より優れると断言しない。
-- 単一出力を点検する場合は、短いアンカーを持つ3段階を候補にする。例: 意味保持「重要な改変あり / 小さな疑義あり / 確認範囲で問題なし」。数値を平均した総合品質点より、カテゴリ分布と不良率を優先して示す。
-- 選好理由: 「どこが」「何の問題か」「なぜ困るか」「どう直すか」。原文/出力の該当引用と文字位置を保存し、修正文は任意にする。点数だけで改善則を作らない。
-- 例: 「条件を満たす場合は申請できる」→「申請できる」。短く自然でも、条件脱落として意味保持を不合格にできる必要がある。これは説明用の人工例であり実測ケースではない。
+- The actual target audience, genres, and acceptable scope for omitting information in this skill are not yet defined. An impression of readability does not establish improved comprehension.
+- There is no basis for directly generalizing evaluation criteria for child-oriented Wikipedia summaries to technical documents, email, or creative writing.
 
-### Gaps
-- この日本語スキルでの二者比較と3段階評定の時間・一致率の優劣は未検証。評価者が読みやすさに引かれて意味変化を見落とすハロー効果も残る。
+## How should pairwise comparison and ratings be combined?
 
-## 少人数パイロットと信頼性をどう扱うか
+### Takeaway: Pairwise Comparison and Ratings
 
-### Takeaway
-最初の24–40文書は、運用可能性と評価基準の問題を調べる探索用と位置づける。評価票数を独立な文章数と取り違えない。
+Anonymous pairwise comparison is convenient for before/after revisions, but alone it does not reveal why one is better or whether either meets an absolute quality threshold. Combine preference with defect categories, locations, and proposed fixes.
 
-### Cited Findings
-- Card et al. (EMNLP 2020), “With Little Power Comes Great Responsibility”: NLPの典型的な少数人評定研究は小さな差を検出する力が不足しやすい。文書と評価者それぞれのばらつきを扱い、仮定を明示したシミュレーションで検出力を計画する。— [本文§2, §5](https://aclanthology.org/2020.emnlp-main.745.pdf), [著者の公開ノートブック](https://github.com/dallascard/NLP-power-analysis)
-- Artstein & Poesio (Computational Linguistics 2008), “Inter-Coder Agreement for Computational Linguistics”: 一致係数は前提と尺度に依存し、Krippendorffのαは名義・順序などの距離を扱える。一致係数の数値だけの解釈には注意が必要。— [本文§3](https://aclanthology.org/J08-4004.pdf)
+### Cited Findings: Pairwise Comparison and Ratings
 
-### Inferences
-- 提案: まず24–40文書を主要文種・長さ・変更モードに偏りが出ないよう選び、各対を2–3名が独立評価。3–5件の練習で基準を調整し、本評価は合議前の記録を保存する。人数は実務上の出発点であり、統計的十分性を保証しない。
-- 改良前後は同じ原文集合で比較し、文書IDごとの勝敗・同点・意味保持不良率を出す。評価者ごとの票も保持する。30文書×3評価者=90票を90個の独立標本として扱わない。
-- 区間推定を出すなら文書単位で全評価者の票をまとめて再抽出するクラスターブートストラップを最小案にする。これはその評価者集合に条件づけた不確実性であり、評価者一般への拡張には評価者効果も扱う混合モデルや二方向再標本化が必要。
-- 不一致は原則として削除理由にしない。名義ラベルのα、順序評定なら順序距離のα、単純一致率、ラベル分布を併記し、誤解された定義・読者差・正当な好みを調べる。単一ユーザーなら一致率は算出せず「本人の選好」と記載する。
-- 概算の説明: 独立な二項観測で勝率50%付近なら通常の近似95%幅は±1.96√(0.25/n)。n=30で約±18ポイント、n=100で約±10ポイント。これは誤差の説明用計算であり、同点・評定者/文書相関を含む実試験の区間でも、期待効果量でもない。
+- van der Lee et al. (INLG 2019), “Best practices for the human evaluation of automatically generated text”: Recommends reporting evaluator characteristics, counts, and rationale; randomizing and counterbalancing order; using multiple evaluators; and reporting inter-rater agreement and interval estimates. It distinguishes exploratory analysis from confirmatory hypothesis testing. — [Paper Table 3, §4](https://aclanthology.org/W19-8643.pdf)
+- Ethayarajh & Jurafsky (EMNLP 2022), “The Authenticity Gap in Human Evaluation”: Ranking systems by mean ratings assumes strong properties about human preferences and can reverse preferences under certain conditions. Their proposed SPA method is different from ordinary pairwise comparison; measuring the probability of superiority does not measure its magnitude. — [Paper §§3, 8, Limitations](https://aclanthology.org/2022.emnlp-main.406.pdf)
 
-### Gaps
-- 本スキルの基準不良率、文種間分散、評定者分散がないため、効果検証に必要な人数・文書数は確定できない。少数パイロットで有意差が出ないことは「効果なし」の証明にならない。
+### Inferences: Pairwise Comparison and Ratings
 
-## 自動指標と人間フィードバックをどう接続するか
+- Minimum UI: show the source and anonymized A/B versions, hiding old/new generation-condition names, with “A / about the same / B / unable to judge” for each axis. Randomize A/B sides and item order, and save display order. Do not claim pairwise comparison is always better than ratings.
+- For a single-output review, consider three levels with short anchors. Example for meaning preservation: “material change / minor concern / no issue within the reviewed scope.” Prefer category distributions and defect rates to a composite quality score averaging numerical ratings.
+- Preference rationale: “where,” “what problem,” “why it matters,” and “how to fix it.” Save relevant source/output excerpts and character locations; proposed revisions are optional. Do not derive improvement rules from scores alone.
+- Example: 「条件を満たす場合は申請できる」→「申請できる」. Even if shorter and natural, the evaluation must be able to fail meaning preservation because a condition was dropped. This is an illustrative artificial example, not a measured case.
 
-### Takeaway
-自動指標は人に見せる補助的な兆候であり、人の結論を置き換えない。フィードバックを保存するだけではスキルの振る舞いは変わらない。
+### Gaps: Pairwise Comparison and Ratings
 
-### Cited Findings
-- Alva-Manchego et al. (Computational Linguistics 2021), “The (Un)Suitability of Automatic Evaluation Metrics for Text Simplification”: 単純化の質、生成方式、参照文集合によって指標と人間評価の相関が変動し、SARIなど操作単位の指標には全体的な平易さを測る限界がある。— [本文§4–6](https://aclanthology.org/2021.cl-4.28.pdf)
-- ただしAgrawal & Carpuat (2024)の英語段落理解課題では、SARIは他の比較指標よりシステム順位とよく相関した。2021研究と評価対象・粒度・判断基準が異なるため、「SARIは無価値」という一律の結論は不適切。— [本文§6, Table 3](https://aclanthology.org/2024.tacl-1.24.pdf)
-- Yamashita et al. (2026)ではLLM採点の一致はモデル・軸によって異なり、漢字密度・長い文などで文書単位の平易さを低く評価する傾向を報告。— [本文§4–5](https://aclanthology.org/2026.lrec-1.85.pdf)
+- The relative time and agreement of pairwise comparison versus three-level ratings for this Japanese skill have not been tested. A halo effect also remains: evaluators attracted to readability may miss meaning changes.
 
-### Inferences
-- 改善ループ: 人の指摘→内容/言語/依頼適合の分類→代表失敗例を回帰用ケースへ追加→ルールまたは説明例を人が見直す→未使用文書で旧新版を匿名比較。指摘を自動でスキル本文に取り込む仕組みは初版には不要。
-- 原文・推敲文・人手修正文・指摘の根拠・生成モデル/条件・スキル版・評価基準版を関連づける。集計は文種・読者・モード別に行う。
-- 人が採点する前には自動スコアを隠す案が妥当。スコアに引かれた判断を減らせるかはパイロットで確認する。
+## How should small pilots and reliability be handled?
 
-### Gaps
-- このスキル上の自動指標と人の判断の対応はまだ不明。文章類似度が高くても数値・否定・行為者・条件の変更は起こりうるため、意味保持の保証には使えない。
+### Takeaway: Small Pilots and Reliability
 
-## どのような効果を予測できるか
+Treat the first 24–40 documents as an exploratory study of operational feasibility and evaluation criteria. Do not confuse the number of rating forms with the number of independent texts.
 
-### Takeaway
-予測できるのは、改善点の追跡可能性と次の修正判断の質の向上である。理解率・所要時間・文章品質が何%改善するかは現段階では予測できない。
+### Cited Findings: Small Pilots and Reliability
 
-### Cited Findings
-- 読者の印象と理解の不一致、後編集の時間短縮が確認できなかった結果は、読みやすそうな出力が直ちに実務上の便益になるとは限らないという反例を与える。— [Carrer et al. 2024](https://aclanthology.org/2024.humeval-1.7.pdf)
-- 小標本・少数評定で小さなモデル差を確実に発見できると考える根拠は乏しい。— [Card et al. 2020](https://aclanthology.org/2020.emnlp-main.745.pdf)
+- Card et al. (EMNLP 2020), “With Little Power Comes Great Responsibility”: Typical small-rater NLP studies may lack power to detect small differences. Plan power with explicit assumptions and simulation, accounting for both document-level and evaluator-level variation. — [Paper §§2, 5](https://aclanthology.org/2020.emnlp-main.745.pdf), [authors' public notebook](https://github.com/dallascard/NLP-power-analysis)
+- Artstein & Poesio (Computational Linguistics 2008), “Inter-Coder Agreement for Computational Linguistics”: Agreement coefficients depend on assumptions and scales. Krippendorff's α can handle nominal and ordinal distances. Interpret a coefficient's number with care. — [Paper §3](https://aclanthology.org/J08-4004.pdf)
 
-### Inferences
-- 直接効果（合理的な期待、未実測）: 「どの文章のどの箇所をなぜ直すか」を保持し、繰り返す不具合の分類と優先づけが可能になる。自由記述だけの運用より集計しやすいが、入力負荷が増えて評価継続率が下がる可能性がある。
-- 間接効果（条件付き）: 指摘をスキルのルール/例へ実際に反映し、未使用文書で改善を再評価したときに限り、同種の失敗を減らせる可能性がある。人間評価ツール自体には生成品質を上げる機能はない。
-- 予測の失敗条件: 評価者の好みだけを全読者へ一般化、文種を混ぜた総合点で最適化、短さへの過剰最適化、改善用データをそのまま成果検証に再利用すること。
-- 目標と予測を分離する。例として「重大な意味改変率を悪化させず選好を改善」「1件の入力を短時間で完了」は設計目標であり、達成の見込みの数値ではない。実測後に判断する。
+### Inferences: Small Pilots and Reliability
 
-### Gaps
-- 本ツール、本スキル、日本語の対象利用者に対する実験は未実施。改善率、作業時間短縮率、必要な反復回数の数値を付けるためのベースラインがない。仮の採用基準を期待効果として提示してはならない。
+- Proposal: first select 24–40 documents without imbalance across major genres, lengths, and editing modes. Have 2–3 people independently evaluate each pair. Adjust criteria in 3–5 practice items and preserve pre-adjudication records for the main evaluation. These counts are operational starting points, not a guarantee of statistical adequacy.
+- Compare revisions on the same set of sources; report wins, ties, and meaning-preservation failure rate by document ID. Retain each evaluator's vote. Do not treat 30 documents × 3 evaluators = 90 votes as 90 independent samples.
+- If interval estimates are reported, a minimal option is a cluster bootstrap that resamples documents while keeping all evaluators' votes for each document together. This uncertainty is conditional on that evaluator group. Generalizing to evaluators in general requires a mixed model that also handles evaluator effects or two-way resampling.
+- Disagreement is generally not a reason to delete a case. Report nominal-label α, ordinal-distance α for ordinal ratings, raw agreement, and label distribution; then investigate misunderstood definitions, reader differences, and legitimate preferences. With a single user, do not calculate agreement; label it “individual preference.”
+- Approximate explanation: near a 50% win rate for independent binomial observations, the usual approximate 95% margin is ±1.96√(0.25/n). At n=30 it is about ±18 percentage points; at n=100, about ±10 points. This illustrates error only; it is neither an interval for a real test accounting for ties and evaluator/document correlation nor an expected effect size.
+
+### Gaps: Small Pilots and Reliability
+
+- The skill's baseline defect rate and genre- and evaluator-level variation are unknown, so the number of people and documents needed to verify effects is undetermined. A nonsignificant result in a small pilot does not prove “no effect.”
+
+## How should automatic metrics connect to human feedback?
+
+### Takeaway: Automatic Metrics and Human Feedback
+
+Automatic metrics are supporting signals for people, not replacements for human conclusions. Saving feedback alone does not change the skill's behavior.
+
+### Cited Findings: Automatic Metrics and Human Feedback
+
+- Alva-Manchego et al. (Computational Linguistics 2021), “The (Un)Suitability of Automatic Evaluation Metrics for Text Simplification”: Correlation between metrics and human ratings varies with simplification quality, generation method, and reference set. Operation-level metrics such as SARI have limits for measuring overall simplicity. — [Paper §§4–6](https://aclanthology.org/2021.cl-4.28.pdf)
+- However, in Agrawal & Carpuat's (2024) English paragraph-comprehension task, SARI correlated with system ranking better than the other comparison metrics. Because the target, granularity, and criteria differ from the 2021 study, it is inappropriate to conclude categorically that “SARI is worthless.” — [Paper §6, Table 3](https://aclanthology.org/2024.tacl-1.24.pdf)
+- Yamashita et al. (2026) report that agreement with LLM ratings varies by model and axis, and that document-level simplicity tends to be rated lower for texts with higher kanji density and longer sentences. — [Paper §§4–5](https://aclanthology.org/2026.lrec-1.85.pdf)
+
+### Inferences: Automatic Metrics and Human Feedback
+
+- Improvement loop: human feedback → classify content/language/request-adherence issues → add representative failures as regression cases → have a person review rules or examples → anonymously compare old and new versions on unused documents. The first version does not need to insert feedback into the skill automatically.
+- Link source and edited texts, human revisions, evidence for comments, generation model/conditions, skill version, and evaluation-criteria version. Aggregate by genre, reader, and mode.
+- It is reasonable to hide automatic scores before human review. Whether this reduces score-induced bias should be checked in a pilot.
+
+### Gaps: Automatic Metrics and Human Feedback
+
+- The correspondence between automatic metrics and human judgments for this skill remains unknown. Even high text similarity can conceal changes to numbers, negation, agents, or conditions, so similarity cannot guarantee meaning preservation.
+
+## What effects can be predicted?
+
+### Takeaway: Predicted Effects
+
+What can reasonably be expected is improved traceability of improvement points and better-informed next revision decisions. The current evidence cannot predict a percentage improvement in comprehension, time, or prose quality.
+
+### Cited Findings: Predicted Effects
+
+- The observed gap between readers' impressions and comprehension, and the absence of confirmed post-editing time savings, show that text that looks easier does not necessarily provide immediate practical benefit. — [Carrer et al. 2024](https://aclanthology.org/2024.humeval-1.7.pdf)
+- There is little basis for assuming a small sample with few evaluators can reliably detect small differences between models. — [Card et al. 2020](https://aclanthology.org/2020.emnlp-main.745.pdf)
+
+### Inferences: Predicted Effects
+
+- Direct effect (reasonable expectation, unmeasured): Preserve which text and passage should be fixed and why, making recurring defects easier to classify and prioritize. This is easier to aggregate than free-text feedback alone, but the additional input burden may reduce continued participation.
+- Indirect effect (conditional): Similar failures may decrease only if feedback is actually reflected in skill rules/examples and improvements are re-evaluated on unused documents. The human-evaluation tool itself does not improve generated text.
+- Conditions that could defeat the prediction: generalizing one evaluator's preferences to all readers; optimizing one score across mixed genres; over-optimizing for brevity; or reusing improvement data as outcome-validation data.
+- Separate goals from predictions. For example, “improve preference without worsening the rate of material meaning changes” and “complete one input quickly” are design goals, not numerical predictions of likely achievement. Decide after measurement.
+
+### Gaps: Predicted Effects
+
+- No experiment has been run on this tool, this skill, or its Japanese target users. There is no baseline for assigning a numerical improvement rate, time saving, or number of iterations. Do not present a provisional adoption criterion as an expected effect.

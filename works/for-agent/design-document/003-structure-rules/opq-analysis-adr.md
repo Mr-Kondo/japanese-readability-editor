@@ -1,179 +1,184 @@
 ---
 status: accepted
 date: 2026-11-11
-decision-makers: 利用者（OPQ 分析の導入を希望し、効果が見込めれば実装を依頼）、Claude Code（調査と検証）
+decision-makers: User (requested adding OPQ analysis and asked for research and testing if useful, with implementation if effective), Claude Code (research and verification)
 ---
 
-# 読み手の疑問（OPQ: 目標・問題・疑問）から結論を決める規則を、足すか見送るか（決定: 見送り）
+# Whether to add a rule for reaching a conclusion from the reader's questions (OPQ: objective, problem, question) (decision: not adopted)
 
-追跡: [Issue #160](https://github.com/Mr-Kondo/japanese-readability-editor/issues/160)。前の検証: [ADR 2026-11-11-section-single-message](2026-11-11-section-single-message.md)（節で一つのメッセージに絞る規則は見送り）。
+Tracking: [Issue #160](https://github.com/Mr-Kondo/japanese-readability-editor/issues/160). Prior evaluation: [ADR 2026-11-11-section-single-message](section-single-message-adr.md) (rule to limit each section to one message was not adopted).
 
-## 文脈
+## Provenance note
 
-利用者の依頼: ビジネス文書・プレゼン作成の「OPQ 分析」をスキルに入れたい。別の視点からの調査・検証が必要なら実施し、効果が見込めれば実装する。
+The historical `adr_sha256` values in `run.json` already differ from the pinned pre-translation Japanese originals. `check_frozen()` verifies runner and helper files, not ADR bodies. The preserved Japanese originals are not claimed to be experiment-time snapshots. See [pre-translation OPQ provenance](../index.md#pre-translation-opq-provenance).
 
-### OPQ 分析とは（調べた範囲）
+## Context
 
-| 要素 | 内容 |
-|---|---|
-| O（Objective、目標） | 読み手が達成したいこと |
-| P（Problem、問題） | 現状と目標のずれ |
-| Q（Question、疑問） | そのずれを埋めるにはどうするか。読み手が答えを求める問い |
-| 書く内容 | Q への答え。提案・依頼・決めてほしいことの形になる |
+User request: Add “OPQ analysis” for business documents and presentations to the skill. Conduct additional research and verification from another perspective if needed, and implement it if it appears effective.
 
-出典は、日本語の講座資料（[スライド1](https://speakerdeck.com/mssmkmr/kao-eruji-shu-shu-kuji-shu-matome)、[スライド2](https://speakerdeck.com/nyattx/pyramid-structure)）で、いずれも『考える技術・書く技術』（ピラミッド原則、Minto）に基づくと説明している。**OPQ という略称を Minto 本人が使ったかは確認できなかった。** 英語圏の資料では OPQ という名前は見つからず、近い手法として SCQA（状況・複雑化・疑問・答え）が、コンサルの資料で広く紹介されている（[Management Consulted](https://managementconsulted.com/scqa-framework/)、二次資料）。本文は未確認。したがって、OPQ は、ピラミッド原則の書き始めの整理の、日本語圏での教え方の一つと位置づける。確度は低く、「改善率の証拠」としては使わない。
+### OPQ analysis (as researched)
 
-OPQ は、書く前に「何を書くか」を決める道具であり、書かれた文章の推敲の道具としては設計されていない。
+| Element          | Description                                                                     |
+| ---------------- | ------------------------------------------------------------------------------- |
+| O (Objective)    | What the reader wants to achieve                                                |
+| P (Problem)      | The gap between the current state and the objective                             |
+| Q (Question)     | What to do to close the gap; the question the reader wants answered             |
+| Content to write | The answer to Q, in the form of a proposal, request, or decision for the reader |
 
-## 前の検証が効かなかった理由（今回の設計への反映）
+Japanese course materials ([slide 1](https://speakerdeck.com/mssmkmr/kao-eruji-shu-shu-kuji-shu-matome), [slide 2](https://speakerdeck.com/nyattx/pyramid-structure)) describe OPQ as based on _The Pyramid Principle_ by Minto. **It could not be confirmed whether Minto herself used the abbreviation OPQ.** No English-language source using the name OPQ was found. A related method, SCQA (situation, complication, question, answer), is widely introduced in consulting materials ([Management Consulted](https://managementconsulted.com/scqa-framework/), a secondary source). Its full text was not checked. Therefore, OPQ is positioned as one Japanese-language teaching approach for organizing ideas before writing, based on the Pyramid Principle. Confidence is low; do not use it as “evidence of an improvement rate.”
 
-前の検証（節の分割）は、先行研究に支持される考え方だったが、旧版・候補版とも、混在した節を分けなかった。その理由について、観測できたことと、推測を分ける。
+OPQ is a tool for deciding “what to write” before writing; it was not designed as a tool for revising written prose.
 
-| 区分 | 内容 |
-|---|---|
-| 観測 | 旧版は、s01（README の「使い方」に4つの話題）を3回とも原文のまま返した。候補版も同じ。候補版が動いたのは、規則の例と同形の s04 だけで、分けすぎと結びの掛かり先のずれを伴った |
-| 観測 | モード B は「意味を保つ範囲での書き換え」で、見出しの追加・分割は、既定では書き換えの外とモデルが扱った（出力から読み取れる範囲） |
-| 推測（未検証） | 先行研究が支持するのは、人が「書く時」の設計の原則と、人の読者の記憶への効果で、LLM が既存の文章を推敲する時の挙動を変える証拠ではない。そのため、規則の追加だけでは動かなかった |
-| 推測（未検証） | s01 などの混在が、読み手には一つの話題（「使い方」）に見えた可能性がある。判定の多くが tie だった |
+## Why the previous evaluation did not work and how that informs this design
 
-今回への反映: (1) 見出しの分割のように、モデルが既定で踏み込まない操作ではなく、**文や段落の順序（結論を冒頭へ寄せる）**という、モード B が既に許す操作を対象にする。(2) 書く時の道具である OPQ は、**モード A（資料から新規作成）**でも試す。(3) 旧版が既に満たす場合（天井）を先に判定する。(4) 判定の欠落を避けるため、ペア判定のバッチを小さくする。(5) このADRの本文のハッシュを、実行記録に残す。
+The previous evaluation (section splitting) tested an idea supported by prior research, but neither the old nor the candidate version split mixed sections. Separate observed facts from conjecture about why.
 
-## 既存の規則との重なり
+| Type                  | Description                                                                                                                                                                                                                                                                 |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Observation           | The old version returned s01 (four topics under “How to use” in a README) unchanged in all three runs. The candidate did the same. The candidate acted only on s04, which matched the example in the rule; it over-split and shifted what the concluding phrase applied to. |
+| Observation           | Mode B was “rewrite within the bounds of preserving meaning.” The model treated adding or splitting headings as outside the default scope of rewriting (as inferred from the outputs).                                                                                      |
+| Conjecture (untested) | Prior research supports a design principle for people while writing and an effect on human readers' memory; it does not show that a rule changes LLM behavior when revising existing prose. Therefore, adding the rule alone did not change the behavior.                   |
+| Conjecture (untested) | Readers may have perceived mixed sections such as s01 as one topic (“How to use”). Most judgments were ties.                                                                                                                                                                |
 
-| 既存の箇所 | 内容 |
-|---|---|
-| `readability-rules.md` §1 見る点 | 「この文章は誰が何のために読むのか」「各段落は読者のどの問いに答えているか」「結論が最後まで出てこない構成になっていないか」 |
-| 同 §13（新規生成時の準備）、SKILL.md モード A | 読者、読者が必要とする情報、結論、結論を支える事実…を書く前に整理する |
-| 同 §6「未解決の疑問」 | 読者に期待させた内容へ答える |
-| 同 §3 付近の「結論 → 補足」 | 先に結論、条件や理由は後ろ |
+Applied to this evaluation: (1) Target **the order of sentences and paragraphs (move the conclusion toward the beginning)**, an operation already allowed by Mode B, rather than an operation such as splitting headings that the model does not take by default. (2) Try OPQ, a tool for writing, in **Mode A (create new text from source material)** as well. (3) First check whether the old version already meets the goal (ceiling). (4) Use smaller pairwise-judgment batches to avoid missing judgments. (5) Record this ADR's body hash in the run record.
 
-重なりは大きい。OPQ が足すのは、(a) 結論を、読み手の目標・問題・疑問への答えとして決める語彙と手順、(b) 「結論が最後まで出てこない」と見たときの直し方（答えを冒頭の段落へ寄せる）、(c) 資料にない目標・問題を作らない歯止め、の3点。
+## Overlap with existing rules
 
-## 決定の候補と選択
+| Existing location                                                         | Content                                                                                                                                       |
+| ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `readability-rules.md` §1, What to check                                  | “Who will read this, and for what purpose?” “Which reader question does each paragraph answer?” “Does the conclusion appear only at the end?” |
+| Same document §13 (preparation for new generation), and `SKILL.md` Mode A | Before writing, organize the reader, information needed by the reader, the conclusion, and facts that support the conclusion.                 |
+| Same document §6, “Unresolved questions”                                  | Answer what the reader has been led to expect.                                                                                                |
+| Around §3, “Conclusion and supporting details”                            | Give the conclusion first, then conditions and reasons.                                                                                       |
 
-| 案 | 内容 | 判断 |
-|---|---|---|
-| A. 新規の規則（番号つきの節） | §1 と別に立てる | 重複する。SKILL.md は 175 行の上限に達している。採らない |
-| B. 既存の補強 | §1 に小節「読み手の疑問に答えているか(OPQ)」を足し、§13 の項目と SKILL.md の診断順序1・モード A の2行の語を直す（行数は増やさない） | **候補。下の検証で採否を決める** |
-| C. 見送り | 既存の規則で足りている | 旧版が既に満たす、または候補が効かない場合の結論 |
+There is substantial overlap. OPQ would add three things: (a) vocabulary and a procedure for defining the conclusion as the answer to the reader's objective, problem, and question; (b) a way to fix a “conclusion appears only at the end” structure (move the answer to the opening paragraph); and (c) a safeguard against inventing objectives or problems that are absent from the source material.
 
-`measure.py` への手がかりは、足さない。OPQ は意味の問題で、スクリプトで数えられない。
+## Options and selection
 
-## 仮説
+| Option                       | Description                                                                                                                                                                                                | Assessment                                                                            |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| A. New numbered rule         | Create it separately from §1.                                                                                                                                                                              | Overlaps with existing rules. `SKILL.md` has reached its 175-line limit. Not adopted. |
+| B. Strengthen existing rules | Add a subsection to §1 called “Does it answer the reader's question (OPQ)?” and revise wording in the §13 item and two lines in `SKILL.md` (diagnostic order 1 and Mode A), without increasing line count. | **Candidate. Decide whether to adopt based on the evaluation below.**                 |
+| C. Do not adopt              | Existing rules are sufficient.                                                                                                                                                                             | Conclusion if the old version already meets the goal or the candidate is ineffective. |
 
-H1: 候補版は、結論・依頼が後ろに埋もれた文書（モード B）と、資料から作る文書（モード A）で、結論・依頼を冒頭に置く割合が、旧版より高い。
-H2: そのために、すでに結論先行の文書や、時系列で順序が意味を持つ文書の順序を、崩さない。
-H3: 順序や構成の指定、Paragraph-only を守る。
-H4: 意味・数値・コードの保持と、「原文・資料にない目標・課題・背景を足さない」が悪化しない。
+Do not add OPQ signals to `measure.py`. OPQ concerns meaning and cannot be counted by a script.
 
-## 検証の設計
+## Hypotheses
 
-- 評価集合: [自作11ケース](../evals/opq-cases.json)。結論が埋もれた B 3件（o01〜o03）、資料から作る A 3件（o04〜o06）、変えない対照 3件（o07 結論先行、o08 時系列、o09 短い案内）、Paragraph-only（o10）、順序固定の指定（o11）。意味保持の採点者の校正には既存の12対照を借りる。
-- 旧版: main の `b589a94`（スキルは v0.22.0）。候補版: `SKILL.md`（診断順序1とモード A の2行の語）と `readability-rules.md`（§1 の小節と §13）。`examples.md` は同一。
-- 生成: 各ケース×各版×3回。`sonnet / medium`、ツールなし、新しい文脈（前回と同じ呼び出し）。
-- 決定的な確認: 結論・依頼を示す語（`lead_terms`）が、見出しと空白を除いた本文の先頭220字に、すべて出るか。対照と順序固定は、冒頭の条件（`first_must_have` など）が保たれるか。Paragraph-only は空白除去後の一致。
-- ブラインドの判定（意味保持が両版で pass したペアのみ、左右反転、4件ずつ）: answer_first（答えが冒頭にあり、経緯が後ろか）、no_additions（原文・資料にない目標・課題・背景・効果・事例を足していないか）。
-- 段階: 旧版→候補版の順に生成する。旧版の冒頭への配置が、主6ケース18出力のうち14件以上なら天井として、見送る。
+H1: The candidate places conclusions and requests near the beginning more often than the old version for documents where the conclusion or request is buried (Mode B) and documents created from source material (Mode A).
+H2: It does so without disrupting the order of documents that already lead with the conclusion or documents where chronology carries meaning.
+H3: It follows ordering and structure requirements, and Paragraph-only constraints.
+H4: It does not worsen retention of meaning, numbers, and code, or the rule against adding objectives, issues, and background absent from the original or source material.
 
-## 成功指標
+## Evaluation design
 
-次のすべてを満たす場合だけ、候補版を採用する。
+Evaluation set: [11 self-authored cases](../../../../evals/opq-cases.json). Three B cases with buried conclusions (o01–o03), three A cases created from source material (o04–o06), three unchanged controls (o07 conclusion-first, o08 chronological order, o09 short notice), Paragraph-only (o10), and fixed-order instruction (o11). Use the existing 12 controls to calibrate the meaning-retention evaluator.
 
-1. 保存: 候補版の33出力がすべて意味保持 pass、fail・uncertain が旧版より多くない。校正12対照が全問期待どおり。実モデル識別子が一致。
-2. 冒頭への配置（H1）: 主6ケース18出力で、`lead_terms` が冒頭220字に出た数が、候補版で旧版より4件以上多い。
-3. ペア判定 answer_first（H1）: 候補版の勝ちが旧版の勝ちを上回る。
-4. ペア判定 no_additions（H4）: 候補版の勝ちが旧版の勝ち以上。
-5. 変えない対照（H2）: o07〜o09 の9出力で、冒頭の条件が崩れた数が、候補版で1件以下、かつ旧版より多くない。
-6. 制約（H3）: o10・o11 の候補版6出力で、違反が0件。
+- Old version: `b589a94` on main (skill v0.22.0). Candidate: `SKILL.md` (wording in diagnostic order 1 and two Mode A lines) and `readability-rules.md` (subsections in §1 and §13). `examples.md` is identical.
+- Generation: three runs per case per version; `sonnet / medium`, no tools, new context (same call as the prior evaluation).
+- Deterministic check: whether all terms indicating the conclusion or request (`lead_terms`) appear within the first 220 characters of the body, excluding headings and whitespace. For controls and fixed-order constraints, check whether opening requirements (`first_must_have`, etc.) are preserved. For Paragraph-only, compare after removing whitespace.
+- Blind judgment (only pairs that pass meaning retention in both versions, left/right reversed, batches of four): `answer_first` (whether the answer is at the beginning and background later) and `no_additions` (whether it adds objectives, issues, background, effects, or examples absent from the original or source material).
+- Staging: generate the old version, then the candidate. If the old version already puts conclusions in the opening in at least 14 of the 18 outputs for the six primary cases, treat it as ceiling and do not adopt the rule.
 
-## 撤退条件
+## Success criteria
 
-- 旧版が、主6ケースの18出力のうち14件以上で、すでに結論・依頼を冒頭に置いている（天井）。規則を足さず、見送る。
-- 指標のどれかを満たさない。規則を足さない。H2・H3・H4 の失敗で、規則の範囲を絞る修正が考えられる場合は、今回の記録を上書きせず、別の実験として行う（最大1回）。
-- ペア判定が実行できなかった場合（判定の欠落）は、指標3・4を満たせなかったものとして、採用しない。再実行はしない。
+Adopt the candidate only if all of the following hold.
 
-## 限界（先に書く）
+1. Retention: All 33 candidate outputs pass meaning retention; its fail and uncertain counts are no higher than the old version. All 12 calibration controls meet expectations. Actual model identifiers match.
+2. Placement near the beginning (H1): Across 18 outputs for the six primary cases, the candidate has at least four more cases than the old version where all `lead_terms` appear within the first 220 characters.
+3. Pairwise `answer_first` judgment (H1): The candidate wins more often than the old version.
+4. Pairwise `no_additions` judgment (H4): The candidate wins at least as often as the old version.
+5. Unchanged controls (H2): Across nine outputs for o07–o09, at most one candidate output violates the opening requirement, and the count is no higher than the old version.
+6. Constraints (H3): Zero violations in the six candidate outputs for o10 and o11.
 
-- 自作11ケースは設計に使った開発用の入力で、未使用文書での一般化を示さない。ケースは、「目標・問題・疑問」が資料に書かれているもの、読み手が明記されているものに偏る（OPQ が使いやすい条件）。読み手が不明な文書での挙動は未計測。
-- 「冒頭に結論がある」ことと「読みやすい」ことは別である。冒頭の配置は、決定的に数えられる代理指標で、人間の読者の理解度は測らない。
-- 採点は同じモデル系統（sonnet）、人間の採点なし、3反復は独立ではない。結果から一般的な改善率を計算しない。
-- 製品のスキル起動（`--skill-dir`）とツール使用は、対象外（貼り付け方式）。
-- プレゼン（スライド）の作成は、今回の対象外（文章の構成のみ）。
+## Rollback criteria
 
-## 結果（実験1。記録: `evals/opq-run/`）
+- If the old version already puts conclusions or requests at the beginning in at least 14 of 18 outputs for the six primary cases (ceiling), do not add the rule; do not adopt it.
+- If any criterion is unmet, do not add the rule. If an H2, H3, or H4 failure suggests narrowing the rule, run it as a separate experiment without overwriting this record (at most once).
+- If pairwise judgment cannot be run (missing judgments), treat criteria 3 and 4 as unmet and do not adopt the rule. Do not rerun.
 
-実行前の ADR のハッシュは、実行記録の `adr_sha256`。旧版は天井ではなかった（冒頭配置 8/18）ので、候補版を生成した。
+## Limitations (stated in advance)
 
-| 指標 | 旧版 | 候補版 | 判定 |
-|---|---|---|---|
-| 2. 冒頭配置（主6ケース18出力） | 8/18（B 2/9、A 6/9） | **18/18**（B 9/9、A 9/9） | 満たす（差10、条件は4以上） |
-| 5. 変えない対照 9出力の崩れ | 0 | 0 | 満たす |
-| 6. 制約（o10・o11）の違反 | 0 | 0 | 満たす |
-| 1. 意味保持（33出力） | pass 31、fail 1、uncertain 1 | pass 29、**fail 4** | **未達**。校正12対照は全問期待どおり |
-| 3・4. ペア判定 | — | — | **実行不能**（`execution_failed`）。判定の後ろに説明文が付き、パースに失敗した。判定済みの2バッチは記録に残る |
+- The 11 self-authored cases are development inputs used to shape the design and do not show generalization to unused documents. They are biased toward cases where the source states the objective, problem, and question and identifies the reader (conditions favorable to OPQ). Behavior when the reader is unknown was not measured.
+- “The conclusion appears at the beginning” and “the text is easy to read” are different. Opening placement is a deterministic proxy; human reader comprehension is not measured.
+- Evaluation uses the same model family (sonnet), with no human scoring. Three repeated runs are not independent; do not calculate general improvement rates from them.
+- Product skill invocation (`--skill-dir`) and tool use are out of scope (the skill was pasted into the prompt).
+- Creating presentations (slides) is out of scope; only prose structure is evaluated.
 
-候補版の fail 4件は、冒頭へ寄せるときの追加だった。「以下は…の経緯です」「承認をお願いする背景は…です」の導入文（o02 の2件）、「9月は5%減で、減少幅が広がっています」の評価（o05）、依頼を「ご推薦ください」「負担が大きくないかをご確認のうえ」とした性格・条件の追加（o06）。旧版の fail 1件（o06）と uncertain 1件（o04、「見込み」の脱落）は、別の種類。
+## Results (experiment 1; records: `evals/opq-run/`)
 
-実験1の結論: **規則は、結論を冒頭へ寄せる点で効くが、事前の指標1（意味保持）を満たさなかったため、採用しない。** 追加の種類が特定できたので、ADR の撤退条件にある「範囲を絞る修正を、別の実験として最大1回」を行う。
+The ADR hash before execution is `adr_sha256` in the run record. The old version was not at ceiling (opening placement 8/18), so the candidate was generated.
 
-実行中に、`runner.py` の判定の不具合を1件直した（旧版の生成後、候補版の生成前）。対照の短い文書で、「後ろに置く語」が冒頭の窓に入ると誤って「変更あり」とした。原文自身がこの判定を通らなかったため、出現位置の比較に直し、原文自身が判定を通る自己点検を足した。指標・ケース・出力は変えていない。実行記録の `amendments` にある。
+| Criterion                                            | Old version                  | Candidate                | Assessment                                                                                                                                                    |
+| ---------------------------------------------------- | ---------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2. Opening placement (six primary cases, 18 outputs) | 8/18 (B 2/9, A 6/9)          | **18/18** (B 9/9, A 9/9) | Met (difference 10; threshold is 4)                                                                                                                           |
+| 5. Violations in nine unchanged-control outputs      | 0                            | 0                        | Met                                                                                                                                                           |
+| 6. Constraint violations (o10 and o11)               | 0                            | 0                        | Met                                                                                                                                                           |
+| 1. Meaning retention (33 outputs)                    | pass 31, fail 1, uncertain 1 | pass 29, **fail 4**      | **Not met**. All 12 calibration controls met expectations.                                                                                                    |
+| 3–4. Pairwise judgment                               | —                            | —                        | **Could not run** (`execution_failed`). Explanatory text followed the judgment, causing a parse failure. The two batches already judged remain in the record. |
 
-## 実験2の事前登録（結果を見る前に書く）
+The four candidate fails were additions made while moving content toward the beginning: introductory statements “以下は…の経緯です” and “承認をお願いする背景は…です” (two cases in o02); an evaluation, “9月は5%減で、減少幅が広がっています” (o05); and added character or conditions to the request, “ご推薦ください” and “負担が大きくないかをご確認のうえ” (o06). The old version had one fail (o06) and one uncertain (o04, omission of “見込み”), which were different types.
 
-実験1の失敗を見て規則を直した候補版2を、実験1の旧版の出力（同一のスキル・同一の指示。ハッシュ一致を確認して再利用）と比べる。
+Experiment 1 conclusion: **The rule helps move conclusions toward the beginning, but it did not meet the pre-registered criterion 1 (meaning retention), so it was not adopted.** Since the types of additions were identifiable, conduct the “narrow the scope in a separate experiment, at most once” work specified in the rollback criteria.
 
-変えるもの:
+During execution, one defect in `runner.py` judgment was fixed (after old-version generation and before candidate generation). In a short control document, if a term intended for later appeared within the opening window, it was incorrectly reported as “changed.” Since the original itself did not pass this check, comparison of occurrence positions replaced it, with a self-check that the original passes. Criteria, cases, and outputs did not change. See `amendments` in the run record.
 
-- 候補版2: 候補版の `readability-rules.md` に、次を足した。(a) 寄せた文が単独で読めるのに要る語だけを補い、「以下は〜の経緯です」のようなつなぎの文を足さない。(b) 原文・資料にない評価・解釈を足さない。(c) 依頼の性格（必須・推薦・任意）や条件を、原文・資料にない形で足さない。§13 にも、同じ趣旨の1文を足した。`SKILL.md` は実験1の候補版と同じ。
-- ケース: [15ケース](../evals/opq2-cases.json)。実験1の11件（o01〜o11）に、新しい4件（n01〜n04: B の埋もれ2、A 1、変えない対照1）を足す。**o01〜o11 は、実験1の失敗を見て規則を直した後の再利用で、独立していない。n01〜n04 は、どの版にも流していない新規だが、失敗の種類を知った後に作った。** 旧版は、n01〜n04 の12出力だけを新しく生成し、o01〜o11 は再利用する。
-- ペア判定: パースを、先頭の JSON だけ読む方式に直し、判定の指示に「説明や補足を付けない」を足した。実験1の判定は、実験2のすべてのペアで、新しくやり直す（実験1の判定の結果は使わない）。
-- 指標1の変更: 実験1の「全33出力が pass」は、旧版自身が満たしていない（fail 1、uncertain 1）。実験2では、**候補版2の fail が旧版以下、かつ fail+uncertain が旧版以下（各45出力）、校正12対照が全問期待どおり、実モデル識別子が一致**に変える。理由は、旧版以下であることが「悪化しない」の意図で、全件 pass は旧版より厳しい基準になるため。この変更は、実験1の結果を見たあとで行うことを明記する。
+## Experiment 2 pre-registration (written before seeing results)
 
-指標（実験1と同じ構成。数だけ、27出力・45出力に合わせて直す）:
+Compare revised candidate 2 with the experiment 1 old-version outputs (same skill and instructions; verify matching hashes before reuse).
 
-1. 保存: 上の通り。
-2. 冒頭配置: 主9ケース27出力で、候補版2が旧版より6件以上多い。
-3. ペア判定 answer_first: 候補版2の勝ちが旧版の勝ちを上回る。
-4. ペア判定 no_additions: 候補版2の勝ちが旧版の勝ち以上。
-5. 変えない対照（o07〜o09、n04 の12出力）で、冒頭の条件が崩れた数が1件以下、かつ旧版以下。
-6. 制約（o10・o11 の6出力）の違反が0件。
+Changes:
 
-撤退: 旧版の冒頭配置が27件中21件以上（天井）、または指標のどれかが未達なら、規則は足さず、見送る。再実験はしない（実験2が最後）。判定の欠落があれば、指標3・4を満たさないものとして扱い、採用しない。
+- Candidate 2: Add to the candidate's `readability-rules.md`: (a) add only words needed for the moved sentence to read on its own, and do not add transition sentences such as “以下は〜の経緯です”; (b) do not add evaluations or interpretations absent from the original or source material; (c) do not add a request's character (mandatory, recommended, optional) or conditions absent from the original or source material. Add one sentence with the same intent to §13. `SKILL.md` is unchanged from experiment 1's candidate.
+- Cases: [15 cases](../../../../evals/opq2-cases.json). Add four new cases (n01–n04: two buried B, one A, one unchanged control) to the 11 experiment 1 cases (o01–o11). **o01–o11 are reused after seeing experiment 1 failures and revising the rules, so they are not independent.** n01–n04 are new and were not run against either version, but were created after the failure types were known. Generate only 12 new outputs for the old version on n01–n04; reuse o01–o11.
+- Pairwise judgment: Change parsing to read only the first JSON object and add “Do not add explanations or supplementary text” to the judgment instructions. Rerun all experiment 1 judgments for experiment 2; do not use experiment 1 judgment results.
+- Criterion 1 change: The experiment 1 requirement that “all 33 outputs pass” was not met by the old version itself (one fail, one uncertain). In experiment 2, change it to **candidate 2 has no more fails than the old version, and no more fail+uncertain combined (45 outputs each); all 12 calibration controls meet expectations; actual model identifiers match**. The intent of “does not worsen” is to be no worse than the old version; requiring every output to pass would be stricter than the old version. State that this change is made after seeing experiment 1 results.
 
-限界: 実験1と同じ（自作、同じモデル系統、人間の採点なし、冒頭配置は代理指標）。加えて、o01〜o11 を規則の調整に使ったため、独立した検証として数えるのは、n01〜n04 だけである。n01〜n04 だけでは件数が少ないため、採用する場合も、一般的な改善率とは言えない。
+Criteria (same structure as experiment 1, with counts adjusted to 27 and 45 outputs):
 
-## 結果（実験2。記録: `evals/opq2-run/`）
+1. Retention: As above.
+2. Opening placement: Among 27 outputs for nine primary cases, candidate 2 exceeds the old version by at least six.
+3. Pairwise `answer_first`: Candidate 2 wins more often than the old version.
+4. Pairwise `no_additions`: Candidate 2 wins at least as often as the old version.
+5. Among 12 unchanged-control outputs (o07–o09 and n04), opening requirement violations are at most one and no higher than the old version.
+6. Zero violations among the six outputs for constraints (o10 and o11).
 
-実験2の判定は **HOLD（見送り）**。事前の指標1（意味保持）を満たさなかった。
+Rollback: If the old version has opening placement in at least 21 of 27 cases (ceiling), or any criterion is unmet, do not add the rule; do not adopt it. Do not rerun (experiment 2 is the last). Treat missing judgments as failure to meet criteria 3 and 4; do not adopt.
 
-| 指標 | 旧版 | 候補版2 | 判定 |
-|---|---|---|---|
-| 2. 冒頭配置（主9ケース27出力） | 17/27 | 25/27 | 満たす（差8、条件は6以上） |
-| 〃 のうち判別力のある o01〜o06（18出力） | 8/18 | 16/18 | 参考 |
-| 3. ペア判定 answer_first（対象32ペア。左右反転の2回の判定が一致したものだけを勝敗・tie に数え、不一致は uncertain） | 勝ち0 | 勝ち15、tie 10、uncertain 7 | 満たす |
-| 4. ペア判定 no_additions | 勝ち0 | 勝ち0（tie 23、uncertain 9） | 満たす |
-| 5. 変えない対照12出力の崩れ | 0 | 0 | 満たす |
-| 6. 制約（6出力）の違反 | 0 | 0 | 満たす |
-| 1. 意味保持（45出力） | pass 43、fail 1、uncertain 1 | pass 40、**fail 4**、uncertain 1 | **未達**。校正12対照は全問期待どおり。実モデル識別子は一致 |
+Limitations: Same as experiment 1 (self-authored cases, same model family, no human scoring, opening placement is a proxy). In addition, o01–o11 were used to adjust the rule, so only n01–n04 count as independent evaluation. There are too few n01–n04 cases to claim a general improvement rate even if adopted.
 
-候補版2の fail 4件: (1) o03 と n02 は、依頼を冒頭へ寄せた順序の入れ替え自体を、採点者が「構成の変更」「依頼の根拠関係が変わる」と判定した（n02 は、値上げの情報より前に「回答がない場合は更新されない」が来る点）。(2) o05 は「減少幅が広がっています」の評価を、実験1に続いて再び足した。(3) n03 は「製造工程を確認します」を、メモにない確認計画として足した。uncertain 1件は o03（「見直しにあたり」の結びつきが弱まった）。旧版の fail 1件は o04（「見込み」を落として断定）、uncertain 1件は n03（工程の確認を手段とした）。
+## Results (experiment 2; records: `evals/opq2-run/`)
 
-観察と限界:
+Experiment 2 judgment: **HOLD (not adopted)**. It failed the pre-registered criterion 1 (meaning retention).
 
-- 実験2の新規 n01〜n03 は、判別力がなかった。原文自身が、冒頭の判定（先頭220字に結論・依頼の語が出る）を既に満たしていた（n01・n02 は埋もれ方が足りない、n03 は資料の並びが既に先頭）。冒頭配置の差は、o01〜o06 だけで生じ、これらは規則の調整に使った入力である。**実験2の冒頭配置の差を、独立した検証とは言えない。**
-- 意味保持の fail のうち2件は、「順序の入れ替えを構成の変更とみなす」という採点者の基準による。採点の指示は、確認項目に「順序」を含み、意味を保つ並べ替えの許容範囲は明記していない（許容範囲が曖昧だった）。この基準を後から変えると、指標を動かすことになるため、変えていない。ただし、n02 の指摘（回答がない場合の扱いが、値上げの根拠より前に来る）は、入れ替えが意味の関係に影響しうる、実質的な懸念でもある。
-- 実験1と実験2で、評価の足し（「減少幅が広がっている」）が、禁止の文を足した後も再発した。規則の文だけで、この癖を抑えられるかは、未確認。
-- 実験2が最後（ADR の撤退条件）。判定は実行できた。
-- 順序の判定（o08、o11）は、先頭の語と後ろに置く語の前後だけを見る。語の移動を伴う他の順序違反（例: 承認依頼を末尾から第2段落へ移す）を見逃しうる。「違反0」は、弱い保証である。
+| Criterion                                                                                                                             | Old version                  | Candidate 2                      | Assessment                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------- |
+| 2. Opening placement (nine primary cases, 27 outputs)                                                                                 | 17/27                        | 25/27                            | Met (difference 8; threshold 6)                                                              |
+| Of these, discriminating cases o01–o06 (18 outputs)                                                                                   | 8/18                         | 16/18                            | Reference only                                                                               |
+| 3. Pairwise `answer_first` (32 pairs; count wins/ties only when judgments from both reversed runs agree; disagreements are uncertain) | 0 wins                       | 15 wins, 10 ties, 7 uncertain    | Met                                                                                          |
+| 4. Pairwise `no_additions`                                                                                                            | 0 wins                       | 0 wins (23 ties, 9 uncertain)    | Met                                                                                          |
+| 5. Violations in 12 unchanged-control outputs                                                                                         | 0                            | 0                                | Met                                                                                          |
+| 6. Constraint violations (6 outputs)                                                                                                  | 0                            | 0                                | Met                                                                                          |
+| 1. Meaning retention (45 outputs)                                                                                                     | pass 43, fail 1, uncertain 1 | pass 40, **fail 4**, uncertain 1 | **Not met**. All 12 calibration controls met expectations. Actual model identifiers matched. |
 
-## 決定
+The four candidate 2 fails: (1) For o03 and n02, the evaluator treated the reordering to move the request to the beginning as “a change in structure” and “a change in the basis for the request” (for n02, “if there is no response, it will not renew” appeared before the price increase information). (2) In o05, it again added the evaluation “減少幅が広がっています,” as in experiment 1. (3) In n03, it added “製造工程を確認します” as a check plan absent from the notes. One uncertain case was o03 (the relation in “見直しにあたり” became weaker). The old version had one fail in o04 (dropped “見込み,” making it definitive) and one uncertain in n03 (used process verification as a method).
 
-**見送り。OPQ の規則は、スキルに足さない。** `SKILL.md` と `readability-rules.md` は変えない（候補版・候補版2の全文は、各 `run.json` の `skill_files.candidate` に残る）。
+Observations and limitations:
 
-根拠: 「結論・依頼を冒頭に置く」効果は、2回の実験で観測できた（実験1: 8/18 → 18/18、実験2の o01〜o06: 8/18 → 16/18、ペア判定 answer_first でも候補版が優位）。一方、順序の入れ替えと、評価・計画の足しによる意味保持の悪化が、事前の指標を2回とも満たさなかった。効果が確認できても、意味保持の必須条件を満たさない規則は入れない。
+- New experiment 2 cases n01–n03 were not discriminating. The original itself already met the opening test (conclusion/request terms within the first 220 characters): n01 and n02 were not buried enough; n03 already placed source material first. The opening-placement difference arose only in o01–o06, inputs used to adjust the rule. **The experiment 2 opening-placement difference cannot be considered an independent evaluation.**
+- Two of the meaning-retention fails came from the evaluator's criterion that “reordering counts as a structural change.” Its instructions included “order” among the checks and did not specify permissible meaning-preserving reordering (the permissible range was ambiguous). Changing this criterion after the fact would change the metric, so it was not changed. However, the n02 finding (the response-if-no-reply condition precedes the price increase rationale) is also a substantive concern that reordering can affect semantic relations.
+- In experiments 1 and 2, the added evaluation (“減少幅が広がっている”) recurred even after a prohibition was added. Whether rule wording alone can suppress this tendency remains unchecked.
+- Experiment 2 was the last (per this ADR's rollback criteria). Judgment ran successfully.
+- The order check (o08, o11) checks only the relative order of terms required at the beginning and terms required later. It may miss other order violations involving moving terms (for example, moving an approval request from the end to the second paragraph). “Zero violations” is a weak guarantee.
 
-利用者の判断に残すこと（未解決事項）:
+## Decision
 
-1. 意味保持の判定で、依頼を冒頭へ寄せる順序の入れ替えを許す基準に変えたうえで、再評価するか。基準を後から変えると指標を動かすことになるため、新しい ADR として事前登録し直す必要がある。→ 実施した: [実験3（2026-11-11-opq-analysis-reeval）](2026-11-11-opq-analysis-reeval.md)。決定は見送り（制約の指標が未達）。
-2. 規則を足さず、利用者が明示的に「結論を先に」と頼んだときだけ、冒頭へ寄せる（既存の規則の範囲）運用にとどめるか。この運用は、旧版でも o03 で 2/3 の出力が結論を先頭に置くなど、一部は既に動いている（未計測の範囲が大きい）。
-3. 評価の足しの癖（o05、n03）を、別の方法（例: モード A の素材の書き方に「評価語を使わない」を足す）で抑えられるかの検証。
+**Not adopted. Do not add the OPQ rule to the skill.** Leave `SKILL.md` and `readability-rules.md` unchanged (full candidate versions 1 and 2 are retained in `skill_files.candidate` in each `run.json`).
+
+Rationale: The effect of placing conclusions and requests at the beginning was observed in two experiments (experiment 1: 8/18 → 18/18; experiment 2 o01–o06: 8/18 → 16/18; candidate also led in pairwise `answer_first` judgments). However, worsened meaning retention from reordering and added evaluations or plans failed the pre-registered criterion twice. Do not add a rule that fails the required meaning-retention condition, even when an effect is observed.
+
+Items left for the user's decision (unresolved):
+
+1. Whether to reevaluate after changing the meaning-retention criterion to allow reordering when moving requests to the beginning. Changing the criterion after seeing results changes the metric, so preregister it in a new ADR. → Done: [experiment 3 (2026-11-11-opq-analysis-reeval)](opq-reeval-adr.md). Decision: not adopted (constraint criterion unmet).
+2. Whether to keep current practice without adding the rule, moving content toward the beginning only when the user explicitly asks to “put the conclusion first” (within the existing rules). Some of this already occurs in the old version: for example, 2/3 o03 outputs put the conclusion first, though much remains unmeasured.
+3. Whether another method could suppress added evaluations (o05, n03), such as adding “do not use evaluative terms” to Mode A source material.

@@ -4,3 +4,7 @@
 - 設計判断を調べるときは、[設計文書と ADR の索引](works/for-agent/design-document/index.md)を開き、関連する ADR を読む。
 - 評価、レビュー、引き継ぎのローカル記録を調べるときは、まず `feedback/index.md` を開く。`feedback/` は Git の管理対象外なので、索引がある場合に参照する。
 - ADR の追加や更新、または `feedback/` への案件記録の追加に合わせて、対応する索引を更新する。
+
+## Codex の既定値
+
+- このプロジェクトで使う Codex の既定モデルは `gpt-6.1-sol`、推論強度は `high` とする。

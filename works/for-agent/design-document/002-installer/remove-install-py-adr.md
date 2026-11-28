@@ -1,52 +1,52 @@
 ---
 status: accepted
 date: 2026-11-10
-decision-makers: 利用者（Q1〜Q6 の推奨案を承認）、Claude Code（実測と実装）
+decision-makers: User (approved recommendations Q1–Q6), Claude Code (measurement and implementation)
 ---
 
-# install.py と uninstall.py を廃止し、導入を `npx skills add` に一本化する
+# Retire install.py and uninstall.py and standardize installation on `npx skills add`
 
-## 文脈
+## Context
 
-`skills/*/SKILL.md` の配置により、`npx skills add` で導入できるようになった（[Issue #155 の PR](https://github.com/Mr-Kondo/japanese-readability-editor/pull/155)）。一方、`tools/install.py`（455行）、`tools/uninstall.py`（140行）、それらのテスト（865行）は、配置先の表、OpenCode と Hermes の配置先の解決、退避、リンクなどを自前で保守している。導入手段が2つあると、README と手順が煩雑になる。追跡: [Issue #156](https://github.com/Mr-Kondo/japanese-readability-editor/issues/156)。
+Placing skills under `skills/*/SKILL.md` made them installable with `npx skills add` ([Issue #155 PR](https://github.com/Mr-Kondo/japanese-readability-editor/pull/155)). Meanwhile, `tools/install.py` (455 lines), `tools/uninstall.py` (140 lines), and their tests (865 lines) maintain their own destination table, OpenCode and Hermes destination resolution, backups, links, and other behavior. Two installation methods make the README and procedures cumbersome. Tracking: [Issue #156](https://github.com/Mr-Kondo/japanese-readability-editor/issues/156).
 
-## 仮説と撤退条件
+## Hypothesis and rollback criteria
 
-- 仮説: `npx skills add` が、`install.py` の担っていた配置を全環境で置き換えられ、`install.py` は保守費だけを生む。
-- 反証の指標: 削除前に、隔離した HOME で5環境（Codex、Claude Code、OpenCode、Hermes、Antigravity）へ入れ、配置先が `install.py` と同じ場所か、`verify_install.py` が「正本と一致」と「同梱スクリプトの動作」を通すか、2回入れて上書きされるかを見る。通らない環境は、その環境の手順を残す。
+- Hypothesis: `npx skills add` can replace the placement performed by `install.py` in every environment, leaving `install.py` as maintenance cost only.
+- Falsification criteria: Before deletion, install into five environments (Codex, Claude Code, OpenCode, Hermes, Antigravity) under an isolated HOME. Check whether destinations match those used by `install.py`, whether `verify_install.py` passes both “matches the canonical source” and “bundled scripts work,” and whether a second install overwrites the first. Keep the procedure for any environment that does not pass.
 
-## 観測（2026-11-10、macOS、skills 1.7.6、隔離した HOME）
+## Observations (2026-11-10, macOS, skills 1.7.6, isolated HOME)
 
-| 確認 | 結果 |
-|---|---|
-| Codex、OpenCode | `~/.agents/skills/` に入る。`install.py` の共通配置と一致。OpenCode は `.agents/skills/` を読む（公式文書） |
-| Claude Code | 1環境だけなら `~/.claude/skills/` へ実体をコピー。複数環境なら `~/.agents/skills/` の実体へのリンク |
-| Hermes | `~/.hermes/skills/` へのリンク。`install.py` の既定と一致。`HERMES_HOME`・プロファイルの指定は未確認 |
-| Antigravity IDE・CLI | ユーザー全体では `~/.agents/skills/` に入る。`install.py` は `~/.gemini/config/skills/` と `~/.gemini/antigravity-cli/skills/` に置いていた。**一致しない** |
-| 再実行 | 同名のものを上書きした（追加した余分なファイルも消えた） |
-| `remove` | 動作した |
-| `verify_install.py` | `~/.agents/skills/` と `~/.claude/skills/` の両方で、0 error、0 warning |
+| Check                   | Result                                                                                                                                                                        |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Codex, OpenCode         | Installed under `~/.agents/skills/`, matching the shared destination used by `install.py`. OpenCode reads `.agents/skills/` (official documentation).                         |
+| Claude Code             | With one environment, files are copied to `~/.claude/skills/`. With multiple environments, they are linked to the files under `~/.agents/skills/`.                            |
+| Hermes                  | Linked to `~/.hermes/skills/`, matching the `install.py` default. `HERMES_HOME` and profile selection were not checked.                                                       |
+| Antigravity IDE and CLI | For all users, installed under `~/.agents/skills/`. `install.py` placed them under `~/.gemini/config/skills/` and `~/.gemini/antigravity-cli/skills/`. **They do not match.** |
+| Reinstall               | An item with the same name was overwritten (extra files added to it were also removed).                                                                                       |
+| `remove`                | Worked.                                                                                                                                                                       |
+| `verify_install.py`     | 0 errors and 0 warnings under both `~/.agents/skills/` and `~/.claude/skills/`.                                                                                               |
 
-## 決定
+## Decision
 
-1. `tools/install.py`、`tools/uninstall.py`、`tests/test_install.py`、`tests/test_uninstall.py` を削除する。
-2. `package.py` と `verify_install.py` は残す。両者が使う配置先の表と解決は `skill_env.py` へ移す。
-3. 同名 Skill の重複検出（`verify_install.py` の警告と、`skill_env.py` の探索）は、上書きで足りるため削除する。
-4. 失う機能: リポジトリへの直接リンク（`--link`）、上書き前の退避、`--dry-run`、重複の警告。複数環境への導入は失わない（`-a` に環境を並べる）。
-5. リポジトリへの直接リンクは、`ln -s` の1行を docs に残す。
-6. Antigravity のユーザー全体の配置先は、`npx skills` では入らないため、手動コピー（`cp -R`）の手順を docs に残す。
-7. `package.py` が作る OpenCode・Hermes 配布物の INSTALL.md は、`npx skills add <パス>` と手動コピーの2本にする。
-8. 過去の検証記録（`docs/user-guide-validation.md`、`docs/opencode-hermes-checks.md`、`evals/`）は書き換えない。
-9. 導入手順が変わるため、VERSION を上げてリリースする。
+1. Delete `tools/install.py`, `tools/uninstall.py`, `tests/test_install.py`, and `tests/test_uninstall.py`.
+2. Keep `package.py` and `verify_install.py`. Move the destination table and resolution they use to `skill_env.py`.
+3. Remove duplicate same-name Skill detection (the warning in `verify_install.py` and search in `skill_env.py`), because overwriting is sufficient.
+4. Lost features: direct links to repositories (`--link`), backups before overwrite, `--dry-run`, and duplicate warnings. Installing to multiple environments remains possible (list environments with `-a`).
+5. Keep the one-line `ln -s` procedure for direct links to repositories in the docs.
+6. Because `npx skills` does not install to Antigravity's all-user destination, keep manual-copy instructions (`cp -R`) in the docs.
+7. For OpenCode and Hermes distributions created by `package.py`, provide two procedures in INSTALL.md: `npx skills add <パス>` and manual copying.
+8. Do not rewrite historical verification records (`docs/user-guide-validation.md`, `docs/opencode-hermes-checks.md`, or `evals/`).
+9. Because installation procedures change, increment VERSION and release.
 
-## 選択肢と機会費用
+## Options and opportunity costs
 
-- **`install.py` を残す**: 配置先の細かい指定と退避を保てる。一方、約3200行の保守と、2つの導入手順の説明が続く。
-- **配置系をすべて削除（`verify_install.py`、`package.py` の配布物生成を含む）**: 削減は最大。一方、CI と release.yml が使う配布物の生成と検証を作り直す必要がある。今回は見送る。
-- **`install.py` だけ削除**: 孤立した `uninstall.py` が残るため採らない。
+- **Keep `install.py`**: Retains fine-grained destination selection and backups. However, about 3200 lines of maintenance and explanations for two installation procedures continue.
+- **Delete all placement tooling, including `verify_install.py` and distribution generation in `package.py`**: Maximizes reduction. However, distribution generation and verification used by CI and `release.yml` would need to be rebuilt. Not adopted this time.
+- **Delete only `install.py`**: Not adopted because the now-orphaned `uninstall.py` would remain.
 
-## 失うもの・未確認
+## Lost capabilities and unchecked items
 
-- 上書き前の退避が無くなるため、上書きで失う内容は戻せない。
-- `npx skills` の GitHub からの実インストール、`update`、Hermes のプロファイル指定は未確認。確認前は「確認済み」と書かない。
-- `install.py` で入れた既存の複製は、`npx skills` では消えない。docs に、古い複製を消してから入れ直す注意を書く。
+- Without backups before overwriting, overwritten content cannot be restored.
+- Actual installation from GitHub with `npx skills`, `update`, and Hermes profile selection were not checked. Do not describe them as verified before checking.
+- Existing copies installed with `install.py` are not removed by `npx skills`. The docs must tell users to remove old copies before reinstalling.

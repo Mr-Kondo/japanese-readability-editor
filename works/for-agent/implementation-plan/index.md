@@ -1,7 +1,10 @@
-# 計画書の索引
+# Implementation Plan Index
 
-| 番号 | 文書 | 言語 | 何について書かれているか |
-| ---- | ---- | ---- | ---------------------- |
-| 001 | [次期改良案](001-next-improvement-plan.md) | ja（英訳待ち） | 文章評価ツールの次期改良の計画 |
-| 002 | [公開文書による評価データ整備の計画](002-public-document-corpus.md) | ja（英訳待ち） | 公開文書を評価データに加える計画、出典と利用条件の台帳 |
-| 003 | [万能動詞の具体化例の計画](003-concretization-example-plan.md) | ja（英訳待ち） | 万能動詞の具体化例の実装案と追加調査 |
+| Number | Document                                                                   | Language | Contents                                                                                 | Japanese original                                                                                                                                                                        |
+| ------ | -------------------------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 001    | [Next improvement plan](001-next-improvement-plan.md)                      | en       | Planned improvements to the writing evaluation tool                                      | [Original](https://github.com/Mr-Kondo/japanese-readability-editor/blob/07b5c6dd68f12b745d3a5a6e5b177c6c28696498/works/for-agent/implementation-plan/001-next-improvement-plan.md)       |
+| 002    | [Public-document corpus](002-public-document-corpus.md)                    | en       | Plan for adding public documents to evaluation data; source and usage-condition registry | [Original](https://github.com/Mr-Kondo/japanese-readability-editor/blob/07b5c6dd68f12b745d3a5a6e5b177c6c28696498/works/for-agent/implementation-plan/002-public-document-corpus.md)      |
+| 003    | [Examples of concretizing vague verbs](003-concretization-example-plan.md) | en       | Implementation proposal and further research for verb-concretization examples            | [Original](https://github.com/Mr-Kondo/japanese-readability-editor/blob/07b5c6dd68f12b745d3a5a6e5b177c6c28696498/works/for-agent/implementation-plan/003-concretization-example-plan.md) |
+
+The originals are pinned to pre-translation commit `07b5c6dd68f12b745d3a5a6e5b177c6c28696498`.
+Retrieve them through these immutable links or `git show <commit>:<path>`.
