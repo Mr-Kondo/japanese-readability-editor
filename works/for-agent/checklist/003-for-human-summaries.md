@@ -1,6 +1,6 @@
-Completed: User approved the checklist; stage-1 review done in both modes and findings folded into this revision.
-Next: Pilot on `001-knowledge-index`, check that the index alone is enough, then draft the other 13 summaries.
-Open: Source documents are not yet read in full; Mermaid validation method depends on the tool loaded in this session.
+Completed: 15 summaries, 3 indexes, and the README are written and committed; lint, links, audit, and both stage-3 reviews are done.
+Next: `advisor` checks the integrated diff, then PR, CI, merge, and cleanup.
+Open: Seven of ten Mermaid diagrams were checked by eye only; whether the summaries are easier for people to read is not measured.
 
 # Issue #225: Japanese Summaries in works/for-human
 
@@ -57,28 +57,28 @@ Formatting and fixes are done by the writer on the work branch. A fix made after
 
 ## Acceptance (Issue #225)
 
-- [ ] Summaries of the design documents are made, diagram and table centered (10 files).
-- [ ] Summaries of the requirements and plans are made (2 + 3 files).
-- [ ] `for-human/README.md` and the three `index.md` files are updated; the "not made yet" sentence is removed.
-- [ ] After the translation (Issue #224, merged), each summary is checked against `for-agent` for conflicts; the result is recorded.
+- [x] Summaries of the design documents are made, diagram and table centered (10 files).
+- [x] Summaries of the requirements and plans are made (2 + 3 files).
+- [x] `for-human/README.md` and the three `index.md` files are updated; the "not made yet" sentence is removed.
+- [x] After the translation (Issue #224, merged), each summary is checked against `for-agent` for conflicts; the result is recorded.
 
 ## Steps
 
 - [x] User approves this checklist (models and delegation included).
 - [x] Stage-1 review of this plan: overview (Codex) and detail (Antigravity); findings handled or recorded (see work log).
-- [ ] Read the `001-knowledge-index` sources in full and finalize the summary template (heading order, source link, diagram rule).
-- [ ] Pilot: draft the 2 summaries of `001-knowledge-index` and its rows in the design index.
+- [x] Read the `001-knowledge-index` sources in full and finalize the summary template (heading order, source link, diagram rule).
+- [x] Pilot: draft the 2 summaries of `001-knowledge-index` and its rows in the design index.
       Check that the index alone shows the purpose, the current conclusion, and the related summaries. Adjust the template, then delegate the rest.
-- [ ] Draft the remaining 13 summaries in three Haiku batches.
-- [ ] Write the three `index.md` files and update `for-human/README.md`.
-- [ ] Linting by the writer, with `node_modules` linked from the main checkout: Prettier, markdownlint-cli2, then textlint, in that order, via `sh tools/lint_md.sh`. The `for-agent` files are English, so textlint runs only on `for-human/`.
+- [x] Draft the remaining 13 summaries in three Haiku batches.
+- [x] Write the three `index.md` files and update `for-human/README.md`.
+- [x] Linting by the writer, with `node_modules` linked from the main checkout: Prettier, markdownlint-cli2, then textlint, in that order, via `sh tools/lint_md.sh`. The `for-agent` files are English, so textlint runs only on `for-human/`.
       No `--fix` for textlint. `ja-no-mixed-period` is off, so check missing sentence-final periods in paragraphs by eye. Record any finding left unfixed with the reason.
-- [ ] Validate every Mermaid block with the Mermaid validator tool of this session; if it is unavailable, check syntax by eye and record that as a limit.
-- [ ] Check every relative link resolves, including the link back to each source.
-- [ ] Commit, then `audit` checks consistency for all 15 summaries: numbers, dates, identifiers, and names match `for-agent`.
-- [ ] Coordinator checks all 6 ADR summaries: `status`, date, and the adoption result in the Decision column match the source (a record can be `accepted` and still "not adopted").
-- [ ] `git diff --name-only origin/main` lists only `works/for-human/**`, this checklist, and `checklist/index.md`. No `evals/` or source-document change.
-- [ ] Stage-3 review of the diff: overview (Codex) and detail (Antigravity); findings handled or recorded.
+- [x] Validate every Mermaid block with the Mermaid validator tool of this session; if it is unavailable, check syntax by eye and record that as a limit.
+- [x] Check every relative link resolves, including the link back to each source.
+- [x] Commit, then `audit` checks consistency for all 15 summaries: numbers, dates, identifiers, and names match `for-agent`.
+- [x] Coordinator checks all 6 ADR summaries: `status`, date, and the adoption result in the Decision column match the source (a record can be `accepted` and still "not adopted").
+- [x] `git diff --name-only origin/main` lists only `works/for-human/**`, this checklist, and `checklist/index.md`. No `evals/` or source-document change.
+- [x] Stage-3 review of the diff: overview (Codex) and detail (Antigravity); findings handled or recorded.
 - [ ] `advisor` checks the integrated diff.
 
 ## Common completion
@@ -92,6 +92,18 @@ Formatting and fixes are done by the writer on the work branch. A fix made after
 ## Work log
 
 New entries go at the top of this section.
+
+- 2026-11-29 drafting and checks, target commit `32525ae` and later.
+  - Pilot on `001-knowledge-index` passed: the design index row alone showed purpose, conclusion, and links. Template then fixed (body in desu/masu, bullets in dearu, no line starting with `#NNN`).
+  - Drafting: 4 Haiku 5.5 subagents with disjoint files. Indexes and README written by the coordinator.
+  - Lint (Prettier, markdownlint-cli2, textlint) on all `for-human` files: 0 findings after fixes. 53 relative links resolve. `git diff --name-only origin/main` shows only `for-human/`, this checklist, and `checklist/index.md`.
+  - Mermaid: 3 of 10 diagrams validated with the validator tool (`valid: true`: the decision flow with diamonds, the conclusion branch with a `#` label, the survey flow with edge labels). The other 7 are plain flowcharts with quoted labels and were checked by eye only.
+  - `audit` (Haiku 5.5), target `878e116`, read-only: 14 of 15 matched the sources; 1 sentence in `implementation-plan/001` overstated "no study exists". Also fixed: a proposal written as settled (`integration-document`), unlabeled condition order in `conclude-pilot-adr` (now stated as not given in the source), and dropped decisions or reasons in `remove-install-py-adr` and `opq-analysis-adr`.
+    The reported incomplete design index was an older commit; the index was completed afterward. Not checked by `audit`: GitHub state of Issues #32 to #36, the raw data behind the pilot timings.
+  - Coordinator check of the 6 ADRs: `status` and date match the sources, and the Decision column shows adopted, not adopted, or superseded as in the source index.
+  - Stage-3 review, target commit `32525ae`.
+    - Overview, Codex (requested `gpt-6.1-sol`, medium; actual model unconfirmed): this log was stale (accepted, updated now); two summaries carry too much operational detail (trimmed: the validator and tool-ID details in `implementation-plan/002`, three method details in `requirement-definition-document/002`; still above the 40-line guide at 62 and 51 lines). Not checked by Codex: Git diff, tool runs, rendering.
+    - Detail, Antigravity (requested `gemini-4-hydrogen-medium`, medium; actual model unconfirmed; no shell): no factual finding. Two paragraphs in dearu style were changed to desu/masu. Not checked by Antigravity: the diff list, lint results, Mermaid tool results.
 
 - 2026-11-29 stage-1 review, target commit `08dfa3c`.
   - Overview, Codex (requested `gpt-6.1-sol`, medium; actual model unconfirmed):
