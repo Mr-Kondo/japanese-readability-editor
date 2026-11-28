@@ -1,5 +1,5 @@
 Current: evaluation done; the new version is declined because the old version never swapped (0 of 18 in the S group; the gate needs 3). Result recorded in `evals/assignment-swap-result.md`.
-Next: `audit` consistency check, stage-3 reviews (Codex overview, Antigravity detail), `advisor` final check, then PR.
+Next: `advisor` final check, then PR, auto-merge, and cleanup.
 Open: the effect holds only for the 12 artificial cases; real-use frequency is unmeasured.
 
 # Issue #218: Evaluate a manual check for swapped per-topic assignments
@@ -65,13 +65,16 @@ Delegation happens only after approval. Haiku does not decide cases, counting, o
 - [x] Record the result in `evals/assignment-swap-result.md` and the Issue; update `evals/README.md` if it lists evaluations.
 - [x] (Not applicable: declined.) If adopted: write the guard test first and confirm it fails, add rule, phrase and example, bump the version, and run `python3 -m unittest discover -s tests`.
 - [x] Lint (Prettier, markdownlint-cli2, textlint, in that order) on the changed Markdown.
-- [ ] `audit` checks consistency; stage-3 review by both reviewers; `advisor` final check.
+- [x] `audit` checks consistency; stage-3 review by both reviewers.
+- [ ] `advisor` final check.
 - [ ] `git diff --name-only origin/main` lists only files named in Scope.
 - [ ] PR, auto-merge, release if the skill changed, then delete the work branch and temporary files and report what was kept.
 
 ## Work log
 
 (newest first)
+
+- 2026-11-29: Stage-3/4 review on commit 8151baf. Random draw (second): overview = Codex gpt-6.1-sol, detail = Antigravity gemini-4-hydrogen-medium. Both returned no findings; raw output in `feedback/assignment-swap-stage3/`. The first Antigravity run produced no output because my prompt asked for `git diff`, which headless mode auto-denies; permissions were not changed, and the prompt was rewritten to read files only (the second attempt repeated the mistake through a failed `sed`; the third worked). Not checked by either reviewer: an independent re-judgment of all outputs, SHA-256 values, and whether labeling was actually blind (the coordinator read blind.md and labeled; the case ids stayed visible). `audit` (Haiku 5.5) found no mismatch in numbers, hashes, links or the changed-file list.
 
 - 2026-11-29: Result. 72 outputs, claude-sonnet-5-5, cost 4.918 USD, plan frozen at 639d688. Blind reading: 0 swaps, 0 unclear in all groups and both versions. Gate (old S swaps below 3) applied: new version not adopted, skill stays v0.25.1, no release. Lint: Prettier and markdownlint pass; textlint leaves 2 findings in the frozen plan (sentence length, a doubled conjunction; not edited because the plan hash is recorded in `run.json`) and 8 in `evals/README.md` that predate this change (same count before and after). The `for-agent` checklist is English and is not textlint-checked. Prettier had reformatted the frozen plan; it was restored from the commit and the recorded SHA-256 matches again. Automated remark counts mostly matched the word 照合 in "the script was not run" notes, not assignment remarks; they did not affect the outcome.
 
