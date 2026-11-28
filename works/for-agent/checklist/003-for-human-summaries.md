@@ -1,6 +1,6 @@
-Completed: 15 summaries, 3 indexes, and the README are written and committed; lint, links, audit, and both stage-3 reviews are done.
-Next: `advisor` checks the integrated diff, then PR, CI, merge, and cleanup.
-Open: Seven of ten Mermaid diagrams were checked by eye only; whether the summaries are easier for people to read is not measured.
+Completed: 15 summaries, 3 indexes, and the README are written and committed; lint, links, audit, both stage-3 reviews, and the `advisor` check are done.
+Next: PR, CI, merge, and cleanup.
+Open: GitHub rendering is checked after the PR; whether the summaries are easier for people to read is not measured.
 
 # Issue #225: Japanese Summaries in works/for-human
 
@@ -79,7 +79,7 @@ Formatting and fixes are done by the writer on the work branch. A fix made after
 - [x] Coordinator checks all 6 ADR summaries: `status`, date, and the adoption result in the Decision column match the source (a record can be `accepted` and still "not adopted").
 - [x] `git diff --name-only origin/main` lists only `works/for-human/**`, this checklist, and `checklist/index.md`. No `evals/` or source-document change.
 - [x] Stage-3 review of the diff: overview (Codex) and detail (Antigravity); findings handled or recorded.
-- [ ] `advisor` checks the integrated diff.
+- [x] `advisor` checks the integrated diff.
 
 ## Common completion
 
@@ -97,12 +97,13 @@ New entries go at the top of this section.
   - Pilot on `001-knowledge-index` passed: the design index row alone showed purpose, conclusion, and links. Template then fixed (body in desu/masu, bullets in dearu, no line starting with `#NNN`).
   - Drafting: 4 Haiku 5.5 subagents with disjoint files. Indexes and README written by the coordinator.
   - Lint (Prettier, markdownlint-cli2, textlint) on all `for-human` files: 0 findings after fixes. 53 relative links resolve. `git diff --name-only origin/main` shows only `for-human/`, this checklist, and `checklist/index.md`.
-  - Mermaid: 3 of 10 diagrams validated with the validator tool (`valid: true`: the decision flow with diamonds, the conclusion branch with a `#` label, the survey flow with edge labels). The other 7 are plain flowcharts with quoted labels and were checked by eye only.
+  - Mermaid: all 10 diagrams validated with the validator tool (`valid: true`, flowchart). 3 were run first by the coordinator; the other 7 were run later by a Haiku subagent after `advisor` pointed out that the first pass had skipped them. Rendering in GitHub is checked after the PR.
+  - `advisor` (Opus 5.5, run on 3afe03d): four findings, all fixed in the next commit. A mistranslation of an unrecorded-item label, an overgeneralized preservation-requirement sentence, the line counts in this log, and the Mermaid record. No secret, private address, or `for-agent` source change was found.
   - `audit` (Haiku 5.5), target `878e116`, read-only: 14 of 15 matched the sources; 1 sentence in `implementation-plan/001` overstated "no study exists". Also fixed: a proposal written as settled (`integration-document`), unlabeled condition order in `conclude-pilot-adr` (now stated as not given in the source), and dropped decisions or reasons in `remove-install-py-adr` and `opq-analysis-adr`.
     The reported incomplete design index was an older commit; the index was completed afterward. Not checked by `audit`: GitHub state of Issues #32 to #36, the raw data behind the pilot timings.
   - Coordinator check of the 6 ADRs: `status` and date match the sources, and the Decision column shows adopted, not adopted, or superseded as in the source index.
   - Stage-3 review, target commit `32525ae`.
-    - Overview, Codex (requested `gpt-6.1-sol`, medium; actual model unconfirmed): this log was stale (accepted, updated now); two summaries carry too much operational detail (trimmed: the validator and tool-ID details in `implementation-plan/002`, three method details in `requirement-definition-document/002`; still above the 40-line guide at 62 and 51 lines). Not checked by Codex: Git diff, tool runs, rendering.
+    - Overview, Codex (requested `gpt-6.1-sol`, medium; actual model unconfirmed): this log was stale (accepted, updated now); two summaries carry too much operational detail (trimmed: the validator and tool-ID details in `implementation-plan/002`, three method details in `requirement-definition-document/002`; 10 of the 15 summaries remain above the 40-line guide: 41, 41, 41, 43, 44, 44, 47, 48, 51, and 62 lines; the guide is a target, not a limit). Not checked by Codex: Git diff, tool runs, rendering.
     - Detail, Antigravity (requested `gemini-4-hydrogen-medium`, medium; actual model unconfirmed; no shell): no factual finding. Two paragraphs in dearu style were changed to desu/masu. Not checked by Antigravity: the diff list, lint results, Mermaid tool results.
 
 - 2026-11-29 stage-1 review, target commit `08dfa3c`.
