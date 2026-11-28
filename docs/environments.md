@@ -202,7 +202,7 @@ japanese-readability-editor を使って、モード B で、README.md を読み
 ```
 
 ```text
-japanese-readability-editor を使って、モード C で、docs/design.md の段落だけ分けて。
+japanese-readability-editor を使って、モード C で、docs/user-guide.md の段落だけ分けて。
 ```
 
 モデルによっては、Skill を読み込んでも、スクリプトを実行しません。実行させるには、依頼に「`scripts/measure.py` を、Skill の Base directory を基準にした絶対パスで実行して」のように書きます。パスに空白があると、引用符で囲まずに失敗するモデルがありました。モード C は、返ってきた文章を、`verify_preservation.py --strict` で確かめてください。
@@ -241,7 +241,7 @@ Hermes は、同名の Skill が複数あると、プロジェクト、プロフ
 
 ```text
 /japanese-readability-editor モード C
-docs/design.md に適用して。
+docs/user-guide.md に適用して。
 ```
 
 ```bash

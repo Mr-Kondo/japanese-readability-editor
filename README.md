@@ -27,7 +27,7 @@
 
 入れた方法に合わせて、[更新手順](docs/installation.md#更新する)を選んでください。
 
-開発時の知見を次の更新に使うための[知識索引の試行は完了](adr/2026-11-02-conclude-update-knowledge-pilot.md)しました。索引は任意の手動探索用に残します。効果と維持費の根拠が不足するため、提案機能への自動接続は採用しません。実行用スキルと配布方法は従来どおりです。
+開発時の知見を次の更新に使うための[知識索引の試行は完了](works/for-agent/design-document/001-knowledge-index/conclude-pilot-adr.md)しました。索引は任意の手動探索用に残します。効果と維持費の根拠が不足するため、提案機能への自動接続は採用しません。実行用スキルと配布方法は従来どおりです。
 
 | 入れた方法 | 更新方法 |
 |---|---|
@@ -112,7 +112,7 @@ Antigravity のユーザー全体と、Hermes のプロファイルなど、`npx
 
 ```text
 $japanese-readability-editor モード C
-docs/design.md に適用して。
+docs/user-guide.md に適用して。
 ```
 
 指定がないときや、指定と依頼が食い違うときの扱いは、[使い方の詳細](docs/usage.md)にあります。
@@ -151,7 +151,7 @@ japanese-readability-editor を paragraph-only モードで適用。
 - [小説の契約](skills/japanese-readability-editor/references/fiction-writing.md)
 - 任意の[文脈メモ](skills/japanese-readability-editor/assets/fiction-context-template.md)
 - [補助検査](skills/japanese-readability-editor/references/fiction-checks.md)
-- [設計参考と限界](docs/fiction-design.md)
+- [設計参考と限界](works/for-agent/design-document/006-fiction-mode/design-references-document.md)
 
 D のモデル挙動・評価の実施範囲は [評価ケース](evals/README.md)に記録します。既存製品の確認記録を、D の検証結果としては扱いません。
 
@@ -174,7 +174,7 @@ D のモデル挙動・評価の実施範囲は [評価ケース](evals/README.m
 
 ## ドキュメント
 
-過去の設計判断を調べるときは、まず [ADR の索引](adr/index.md)を開いてください。ローカルに保存した評価・レビュー・引き継ぎの記録は、手元の `feedback/index.md` から探せます。
+過去の設計判断を調べるときは、まず [ADR の索引](works/for-agent/design-document/index.md)を開いてください。ローカルに保存した評価・レビュー・引き継ぎの記録は、手元の `feedback/index.md` から探せます。
 
 | ファイル | 内容 |
 |---|---|
@@ -185,10 +185,10 @@ D のモデル挙動・評価の実施範囲は [評価ケース](evals/README.m
 | [docs/usage.md](docs/usage.md) | モードの指定の扱いと、動作の確認 |
 | [docs/scripts.md](docs/scripts.md) | 計測と照合のスクリプトの使い方と限界 |
 | [docs/kokugo.md](docs/kokugo.md) | 国語の表記・用法の検査。適用設定、区分、終了コード、JSON の形式、用語集、規則の更新、限界 |
-| [docs/design.md](docs/design.md) | 設計の考え方と、参考にした記事とプロジェクト |
+| [works/for-agent/design-document/005-readability-principles/design-principles-document.md](works/for-agent/design-document/005-readability-principles/design-principles-document.md) | 設計の考え方と、参考にした記事とプロジェクト |
 | [docs/feedback.md](docs/feedback.md) | 結果の問題を報告する手順と、メンテナーが改良に使う手順。同意、送付、保管、効果の根拠と限界 |
 | [docs/upstream-watch.md](docs/upstream-watch.md) | 参考にしたリポジトリの更新を、定期的に確認して解析・Issue・改良へつなぐ仕組み。登録簿、自動化の段階、信頼できない入力の扱い、他のプロジェクトでの使い方 |
-| [docs/development.md](docs/development.md) | ディレクトリ構成、パッケージ生成、検証、テスト。評価用ツール（[文章評価](docs/human-evaluation.md)、[公開文書](docs/public-document-evaluation.md)、[Ragas](docs/ragas-evaluation.md)）への入口 |
+| [docs/development.md](docs/development.md) | ディレクトリ構成、パッケージ生成、検証、テスト。評価用ツール（[文章評価](docs/human-evaluation.md)、[公開文書](works/for-agent/implementation-plan/002-public-document-corpus.md)、[Ragas](docs/ragas-evaluation.md)）への入口 |
 
 実測の記録は、次の4つです。
 
@@ -199,6 +199,6 @@ D のモデル挙動・評価の実施範囲は [評価ケース](evals/README.m
 
 ## 参考とライセンス
 
-日本語可読性の設計原則は、3つの記事と3つのリポジトリを参考にしました。記事とリポジトリの一覧(ライセンスを含む)と、何を取り入れたかは、[設計](docs/design.md)にあります。
+日本語可読性の設計原則は、3つの記事と3つのリポジトリを参考にしました。記事とリポジトリの一覧(ライセンスを含む)と、何を取り入れたかは、[設計](works/for-agent/design-document/005-readability-principles/design-principles-document.md)にあります。
 
 ライセンスは [MIT](LICENSE) です。

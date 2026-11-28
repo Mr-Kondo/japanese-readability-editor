@@ -2,7 +2,7 @@
 
 ## 対象と事前条件
 
-基点は v0.8.0（`69188f6fc505ae44b64187a03cd29eb4713aa69c`）。候補版は `references/readability-rules.md` の「万能動詞」の確認手順と例文だけを修正したもの。[実装案](../docs/concretization-example-plan.md)の採否条件を使う。
+基点は v0.8.0（`69188f6fc505ae44b64187a03cd29eb4713aa69c`）。候補版は `references/readability-rules.md` の「万能動詞」の確認手順と例文だけを修正したもの。[実装案](../works/for-agent/implementation-plan/003-concretization-example-plan.md)の採否条件を使う。
 
 [自作6入力](concretization-cases.json)について各版3回、計36出力を得る。v01/v02とv03/v04は同じ原文で資料の有無だけが異なる。v05/v06は過剰修正を調べる。公開文章や実利用文書は入力に含めない。生成側にはrequest/context/textとスキル3ファイルだけを渡す。preserve/forbid/expressionや採点正答は渡さない。
 

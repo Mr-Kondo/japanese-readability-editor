@@ -1,6 +1,6 @@
 # 人手評価を、根拠を残す改善サイクルにつなぐ
 
-調査後の実装手順は[文章評価ツール](../docs/human-evaluation.md)を参照。単独評価・自動検査に加え、モードBの匿名二候補比較、評価者別の固定割付、引用付き問題記録、欠測を含む集計を実装した。以下は調査時点の記録であり、人手実験による効果の実証はまだ行っていない。
+調査後の実装手順は[文章評価ツール](../../../../docs/human-evaluation.md)を参照。単独評価・自動検査に加え、モードBの匿名二候補比較、評価者別の固定割付、引用付き問題記録、欠測を含む集計を実装した。以下は調査時点の記録であり、人手実験による効果の実証はまだ行っていない。
 
 ## 1. 文脈：初版はモードBの人手比較に絞る
 
@@ -111,7 +111,7 @@ Bの匿名比較・保持判定・根拠付き指摘・JSON保存から着手す
 
 ## 8. 参考文献
 
-主要な一次資料は本文中の直接リンクを参照。人手評価設計は[van der Lee et al.（2019）](https://aclanthology.org/W19-8643.pdf)、日本語文書評価は[Yamashita et al.（2026）](https://aclanthology.org/2026.lrec-1.85/)、意味保持は[Agrawal & Carpuat（2024）](https://aclanthology.org/2024.tacl-1.24.pdf)、理解と編集工数は[Carrer et al.（2024）](https://aclanthology.org/2024.humeval-1.7.pdf)、検出力は[Card et al.（2020）](https://aclanthology.org/2020.emnlp-main.745.pdf)、評価者間一致は[Artstein & Poesio（2008）](https://aclanthology.org/J08-4004.pdf)を中心に検討した。詳細な調査根拠は[手法メモ](</Volumes/SSD/Programming/japanese-readability-editor/research_notes/日本語文章の人手評価 設計調査/methods.md>)、[ツールメモ](</Volumes/SSD/Programming/japanese-readability-editor/research_notes/日本語文章の人手評価 設計調査/tools.md>)、[既存スキル統合メモ](</Volumes/SSD/Programming/japanese-readability-editor/research_notes/日本語文章の人手評価 設計調査/integration.md>)に保存した。
+主要な一次資料は本文中の直接リンクを参照。人手評価設計は[van der Lee et al.（2019）](https://aclanthology.org/W19-8643.pdf)、日本語文書評価は[Yamashita et al.（2026）](https://aclanthology.org/2026.lrec-1.85/)、意味保持は[Agrawal & Carpuat（2024）](https://aclanthology.org/2024.tacl-1.24.pdf)、理解と編集工数は[Carrer et al.（2024）](https://aclanthology.org/2024.humeval-1.7.pdf)、検出力は[Card et al.（2020）](https://aclanthology.org/2020.emnlp-main.745.pdf)、評価者間一致は[Artstein & Poesio（2008）](https://aclanthology.org/J08-4004.pdf)を中心に検討した。詳細な調査根拠は[手法メモ](</Volumes/SSD/Programming/japanese-readability-editor/works/for-agent/requirement-definition-document/002-human-evaluation-methods.md>)、[ツールメモ](</Volumes/SSD/Programming/japanese-readability-editor/works/for-agent/requirement-definition-document/001-evaluation-tool-selection.md>)、[既存スキル統合メモ](</Volumes/SSD/Programming/japanese-readability-editor/works/for-agent/design-document/004-human-review-tooling/integration-document.md>)に保存した。
 
 未実施：実装、依存導入、ブラウザ操作検証、人手実験、テスト再実行。機能調査は公式資料の机上確認である。
 主なリスク：少数評価者の好みへの過適合と、合格候補だけの選好を全体の改善と誤認することである。

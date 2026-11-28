@@ -1,6 +1,6 @@
 # OPQ（目標・問題・疑問）から結論を決める規則の比較結果（見送り）
 
-仮説・成功指標・撤退条件は [ADR](../adr/2026-11-11-opq-analysis.md) に、実行前に書いた（ADR のハッシュは各 `run.json` の `adr_sha256`）。ケースは [実験1の11件](opq-cases.json)、[実験2の15件](opq2-cases.json)。実行記録と生の出力は [opq-run/](opq-run/)（実験1）、[opq2-run/](opq2-run/)（実験2）にある。
+仮説・成功指標・撤退条件は [ADR](../works/for-agent/design-document/003-structure-rules/opq-analysis-adr.md) に、実行前に書いた（ADR のハッシュは各 `run.json` の `adr_sha256`）。ケースは [実験1の11件](opq-cases.json)、[実験2の15件](opq2-cases.json)。実行記録と生の出力は [opq-run/](opq-run/)（実験1）、[opq2-run/](opq2-run/)（実験2）にある。
 
 ## 結論
 
@@ -35,7 +35,7 @@
 
 ## 実験3（意味保持の基準を事前登録し直した再評価）
 
-[ADR](../adr/2026-11-11-opq-analysis-reeval.md)、[13ケース](opq3-cases.json)、[実行記録](opq3-run/)。旧版 `f062b66`、候補版3は[差分](opq3-run/candidate3.diff)。結論: **見送り（HOLD）**。6つの指標のうち5つを満たしたが、制約（c4・c5）の違反0件は、旧版・候補版3に1件ずつ違反があり、満たさなかった。
+[ADR](../works/for-agent/design-document/003-structure-rules/opq-reeval-adr.md)、[13ケース](opq3-cases.json)、[実行記録](opq3-run/)。旧版 `f062b66`、候補版3は[差分](opq3-run/candidate3.diff)。結論: **見送り（HOLD）**。6つの指標のうち5つを満たしたが、制約（c4・c5）の違反0件は、旧版・候補版3に1件ずつ違反があり、満たさなかった。
 
 | | 旧版 | 候補版3 |
 |---|---|---|

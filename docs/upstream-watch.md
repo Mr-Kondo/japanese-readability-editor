@@ -80,7 +80,7 @@ python3 tools/upstream_watch.py add ID --repo OWNER/NAME --role rule-source --pa
 3. 項目ごとに、採る／評価してから決める／当面見送る／採らない、を決め、理由を書く。上流の文章・実装は転載しない。考え方だけを、こちらの言葉で書く。ライセンスが許すかを確かめる。
 4. 採用候補ごとに Issue を作る（目的、背景、現状（実測）、提案、採用しない、検証、完了条件、限界、出典）。外部の意見（Codex、Antigravity）と、必要な文献の調査を取り入れる。
 5. 確認の記録を `docs/upstream/reviews/<id>-<基準>.md` に書く（範囲、変更の要約、照合、採否、外部の意見の反映、限界）。
-6. `mark-reviewed` で基準を進め、`docs/design.md` の「参考にしたプロジェクト」を、取り入れた時点で更新する。
+6. `mark-reviewed` で基準を進め、`works/for-agent/design-document/005-readability-principles/design-principles-document.md` の「参考にしたプロジェクト」を、取り入れた時点で更新する。
 7. 確認の記録と登録簿の更新は PR にし、段階の既定に従ってマージする。基準を進めた参考先の追跡 Issue は閉じる。採用候補の Issue を実装する PR は、定期実行では作らない（Issue を作るところまで）。
 
 ## 定期実行
