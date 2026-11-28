@@ -50,11 +50,9 @@ flowchart LR
 
 ### 検証と既存ツール
 
-- 検証は `tools/validate_public_corpus.py` で行う。終了コードは、0 が合格、1 が台帳か cases の不備、2 が入力を読めない、である。
-- ツールは形式と整合だけを検証する。保持要件の意味、利用条件の解釈、抜粋と原本の対応、理解問題の正答は人が確認する。
-- `compare_readability.py` と `statistics_readability.py` は `document_id` を独立文書として数える。原本の `source_id` を使う。
-- `comprehension_readability.py` は `document_id` の重複を拒否する。抜粋 ID を使い、1回の割当に同じ原本の抜粋は1件までにする。
-- 理解問題の集計は記述的で、区間推定はない。比較と理解問題は Mode B だけに使い、小説（Mode D）や現代化は採点しない。
+- 検証は `tools/validate_public_corpus.py` が、形式と整合だけを見る。保持要件の意味、利用条件の解釈、抜粋と原本の対応は、人が確認する。
+- 既存の比較・統計・理解問題のツールには、`document_id` の数え方に制約がある。使い方は原文に従う。
+- 比較と理解問題は Mode B だけに使い、小説（Mode D）や現代化は採点しない。
 
 ## 限界・未確認
 
